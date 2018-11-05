@@ -14,6 +14,6 @@ Set NoCount On
 		Select @Id = min(Id) From dbo.Accounts Where Id > @Id
 		
 		Update dbo.Accounts
-		Set ParentID = ParentID
+		Set ParentId = ParentId
 		Where Id = @Id
 	End 

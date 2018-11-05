@@ -29,9 +29,9 @@ Set NoCount On
 	Where (C IN (Select Id From Deleted) 
 		Or C IN (Select C From Accounts_H 
 			Where P IN (Select Id From Deleted)))
-	And (P IN (Select ParentID From Deleted) 
+	And (P IN (Select ParentId From Deleted) 
 		Or P IN (Select P From Accounts_H 
-			Where C IN (Select ParentID From Deleted)))
+			Where C IN (Select ParentId From Deleted)))
 
 GO
 CREATE TRIGGER [dbo].[trI_Accounts]
@@ -46,10 +46,10 @@ Set NoCount On
 	Select C From Accounts_H Where C IN (Select Id From Inserted) 
 				OR P IN (Select Id From Inserted)
 	) T1 cross Join	
-	(Select ParentID As P From Inserted Where ParentID is Not Null
+	(Select ParentId As P From Inserted Where ParentId is Not Null
 	Union 
-	Select P From Accounts_H Where P IN (Select ParentID From Inserted) 
-				OR C IN (Select ParentID From inserted)
+	Select P From Accounts_H Where P IN (Select ParentId From Inserted) 
+				OR C IN (Select ParentId From inserted)
 	) T2
 
 GO
@@ -57,16 +57,16 @@ CREATE TRIGGER [dbo].[trU_Accounts]
 ON [dbo].[Accounts]
 FOR UPDATE
 AS
-IF Update(Id) Or Update(ParentID)
+IF Update(Id) Or Update(ParentId)
 Begin
 Set NoCount On
 	Delete Accounts_H
 	Where (C IN (Select Id From Deleted) 
 		Or C IN (Select C From Accounts_H 
 			Where P IN (Select Id From Deleted)))
-	And (P IN (Select ParentID From Deleted) 
+	And (P IN (Select ParentId From Deleted) 
 		Or P IN (Select P From Accounts_H 
-			Where C IN (Select ParentID From Deleted)))
+			Where C IN (Select ParentId From Deleted)))
 
 	Insert Into Accounts_H -- insert x y where x = A or below and y = parentid and above
 	Select T1.C, T2.P From
@@ -75,10 +75,10 @@ Set NoCount On
 	Select C From Accounts_H Where C IN (Select Id From Inserted) 
 				OR P IN (Select Id From Inserted)
 	) T1 cross Join	
-	(Select ParentID As P From Inserted Where ParentID is Not Null
+	(Select ParentId As P From Inserted Where ParentId is Not Null
 	Union 
-	Select P From Accounts_H Where P IN (Select ParentID From Inserted) 
-				OR C IN (Select ParentID From inserted)
+	Select P From Accounts_H Where P IN (Select ParentId From Inserted) 
+				OR C IN (Select ParentId From inserted)
 	) T2
 Set NoCount Off
 End

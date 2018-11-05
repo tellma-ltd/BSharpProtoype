@@ -1,7 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[ral_Documents_lines_Entries__Insert]
+CREATE PROCEDURE [dbo].[ral_Documents_Lines_Entries__Insert]
 @Documents DocumentList READONLY,
-@Lines Linelist READONLY,
+@Lines LineList READONLY,
 @Entries EntryList READONLY
 AS
 BEGIN TRY

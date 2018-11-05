@@ -13,7 +13,7 @@ RETURN
 	WHERE UnitType = (
 		SELECT UnitType 
 		FROM dbo.UnitsOfMeasure 
-		WHERE Id = dbo.fn_Resource__UnitofMeasure(@Resource)
+		WHERE Id = dbo.fn_Resource__UnitOfMeasure(@Resource)
 	)
 )
 
