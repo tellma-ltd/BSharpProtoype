@@ -27,6 +27,7 @@
     <GenerateCreateScript>True</GenerateCreateScript>
     <DefaultCollation>Arabic_CI_AS</DefaultCollation>
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <CompatibilityMode>150</CompatibilityMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -159,6 +160,7 @@
     <Build Include="dbo\User Defined Types\dbo.LineList.sql" />
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
+    <None Include="PopulateAccounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -166,5 +168,13 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IntegrationTesting.sql" />
+    <None Include="PopulateNotes.sql" />
+    <None Include="PopulateLineTemplates.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PopulateTables.sql" />
   </ItemGroup>
 </Project>
