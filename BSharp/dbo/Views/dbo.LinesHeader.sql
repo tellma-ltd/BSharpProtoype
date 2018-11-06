@@ -1,7 +1,7 @@
 ﻿
 CREATE VIEW [dbo].[LinesHeader]   
 AS
-SELECT LineType, 
+SELECT [TransactionType], 
 	MAX(CASE WHEN EntryNumber = 1 THEN [Operation] ELSE NULL END) AS Operation1,
 	MAX(CASE WHEN EntryNumber = 1 THEN [Account] ELSE NULL END) AS Account1,
 	MAX(CASE WHEN EntryNumber = 1 THEN [Custody] ELSE NULL END) AS Custody1,
@@ -40,7 +40,7 @@ SELECT LineType,
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedAgent] ELSE NULL END) AS RelatedAgent3,
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedResource] ELSE NULL END) AS RelatedResource3,
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedAmount] ELSE NULL END) AS RelatedAmount3
-FROM dbo.LineTemplates 
+FROM dbo.[TransactionTemplates] 
 WHERE Definition = N'Label'
-GROUP BY LineType
+GROUP BY [TransactionType]
 

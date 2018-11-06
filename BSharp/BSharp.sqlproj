@@ -78,8 +78,7 @@
     <Build Include="dbo\Tables\dbo.States.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
-    <Build Include="dbo\Tables\dbo.OrganizationShares.sql" />
-    <Build Include="dbo\Tables\dbo.LineTemplates.sql" />
+    <Build Include="dbo\Tables\dbo.TransactionTemplates.sql" />
     <Build Include="dbo\Tables\dbo.AccountTypes.sql" />
     <Build Include="dbo\Tables\dbo.CustodyTypes.sql" />
     <Build Include="dbo\Tables\dbo.AgentTypes.sql" />
@@ -91,17 +90,14 @@
     <Build Include="dbo\Tables\dbo.Notes.sql" />
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
     <Build Include="dbo\Tables\dbo.Entries.sql" />
-    <Build Include="dbo\Tables\dbo.EntryDetails.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
-    <Build Include="dbo\Tables\dbo.LineTypes.sql" />
+    <Build Include="dbo\Tables\dbo.TransactionTypes.sql" />
     <Build Include="dbo\Tables\dbo.UnitsOfMeasure.sql" />
     <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionTypes.sql" />
     <Build Include="dbo\Tables\dbo.Operations.sql" />
     <Build Include="dbo\Tables\dbo.OperationTypes.sql" />
-    <Build Include="dbo\Tables\dbo.LineTypeCategories.sql" />
     <Build Include="dbo\Tables\dbo.LocationTypes.sql" />
     <Build Include="dbo\Views\dbo.DocumentsView.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
@@ -126,7 +122,6 @@
     <Build Include="dbo\Functions\dbo.fn_Resource__UnitOfMeasure.sql" />
     <Build Include="dbo\Functions\dbo.ft_Account__Statement.sql" />
     <Build Include="dbo\Functions\dbo.ft_Journal.sql" />
-    <Build Include="dbo\Functions\dbo.fn_Resource__UnitsOfMeasure.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sub_Line__Entries.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_DocumentRecipient__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bdb_Document_Values__Update.sql" />
@@ -140,7 +135,6 @@
     <Build Include="dbo\Stored Procedures\dbo.sbs_Organization__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Warehouse__Insert.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Bank__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_OrganizationUnit__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Forward.sql" />
@@ -176,5 +170,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="BSharp.refactorlog" />
   </ItemGroup>
 </Project>

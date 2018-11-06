@@ -1,11 +1,13 @@
 ﻿
 CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries]1,1,N'ManualJV'
 	@DocumentId int,
+	@TransactionType nvarchar(50),
 	@LineNumber int,
-	@LineType nvarchar(50),
+
 --	@ResponsibleAgentId int = NULL,
 --	@StartDateTime datetimeoffset(7) = NULL,
 --	@EndDateTime datetimeoffset(7) = NULL,
+-- @Memo nvarchar(255) = NULL
 
 	@Operation1 int = NULL,
 	@Reference1 nvarchar(50) = NULL,
@@ -58,7 +60,6 @@ BEGIN
 			@RelatedReference nvarchar(50), @RelatedAgentId int, @RelatedResourceId int, @RelatedAmount decimal;
 
 	BEGIN TRY
-		IF @LineType iS NULL RAISERROR(N'Missing Line type', 16, 1);
 
 		INSERT INTO @Entries
 			(DocumentId, LineNumber, EntryNumber, OperationId, Reference, AccountId, CustodyId, ResourceId, Direction, Amount, Value, NoteId, RelatedReference, RelatedAgentId, RelatedResourceId, RelatedAmount)
@@ -67,7 +68,7 @@ BEGIN
 			(@DocumentId, @LineNumber, 2, @Operation2, @Reference2, @Account2, @Custody2, @Resource2 , @Direction2 , @Amount2, @Value2, @Note2, @RelatedReference2 , @RelatedAgent2, @RelatedResource2, @RelatedAmount2),
 			(@DocumentId, @LineNumber, 3, @Operation3, @Reference3, @Account3, @Custody3, @Resource3 , @Direction3 , @Amount3, @Value3, @Note3, @RelatedReference3 , @RelatedAgent3, @RelatedResource3, @RelatedAmount3);
 
-		SELECT @EntriesCount = max(EntryNumber) FROM dbo.LineTemplates WHERE LineType = @LineType
+		SELECT @EntriesCount = max(EntryNumber) FROM dbo.[TransactionTemplates] WHERE [TransactionType] = @TransactionType
 		DELETE FROM @Entries WHERE EntryNumber > @EntriesCount;
 
 		-- Calculate the remaining fields based on the logic in line templates 	
@@ -77,7 +78,7 @@ BEGIN
 		BEGIN
 			SELECT @AccountCalculation = Account, @CustodyCalculation = Custody, @ResourceCalculation = Resource, @DirectionCalculation = Direction, @AmountCalculation = Amount, @ValueCalculation = Value, @NoteCalculation = Note,
 				@RelatedReferenceCalculation = RelatedReference, @RelatedAgentCalculation = RelatedAgent, @RelatedResourceCalculation = RelatedResource, @RelatedAmountCalculation = RelatedAmount
-			FROM dbo.LineTemplatesCalculationView WHERE LineType = @LineType AND EntryNumber = @EntryNumber;
+			FROM dbo.LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber;
 
 			-- Account calculation may need to be done in bulk, as when receiving thousands of items in stocks, then each item type may end up with different inventory classification.
 			SET @AccountCalculation = N'SELECT @Account = ' + @AccountCalculation; EXEC sp_executesql @AccountCalculation, N'@Account nvarchar(255) OUTPUT', @Account = @AccountId OUTPUT
@@ -120,7 +121,7 @@ BEGIN
 		WHILE @EntryNumber <= @EntriesCount
 		BEGIN
 			SELECT @ValueCalculation = Value
-			FROM dbo.LineTemplatesCalculationView WHERE LineType = @LineType AND EntryNumber = @EntryNumber;
+			FROM dbo.LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber;
 			
 			IF LEFT(@ValueCalculation, 6) <> N'@BULK:' 
 			BEGIN

@@ -8,14 +8,14 @@ RETURN
 (
 	SELECT 	
 		Id,
-		TransactionType,
+		[TransactionType],
 		SerialNumber As [Serial Number],
 		RecordedByUserId,
 		RecordedOnDateTime,
-		LineType,
 		ResponsibleAgentId,
 		StartDateTime,
 		EndDateTime,
+		Memo,
 		CoveringRatio,
 		OperationId,
 		Reference,

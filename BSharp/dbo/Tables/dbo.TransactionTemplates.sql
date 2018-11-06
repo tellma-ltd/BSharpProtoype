@@ -1,5 +1,5 @@
-﻿CREATE TABLE [dbo].[LineTemplates] (
-    [LineType]         NVARCHAR (50)  NOT NULL,
+﻿CREATE TABLE [dbo].[TransactionTemplates] (
+    [TransactionType]         NVARCHAR (50)  NOT NULL,
     [EntryNumber]      TINYINT        NOT NULL,
     [Definition]       NVARCHAR (50)  NOT NULL,
     [Operation]        NVARCHAR (255) NULL,
@@ -15,7 +15,7 @@
     [RelatedResource]  NVARCHAR (255) NULL,
     [RelatedAmount]    NVARCHAR (255) NULL,
     [RelatedUDLMember] NVARCHAR (255) NULL,
-    CONSTRAINT [PK_LineTemplates] PRIMARY KEY CLUSTERED ([LineType] ASC, [EntryNumber] ASC, [Definition] ASC),
-    CONSTRAINT [FK_LineTemplates_LineTypes] FOREIGN KEY ([LineType]) REFERENCES [dbo].[LineTypes] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT [PK_TransactionTemplates] PRIMARY KEY CLUSTERED ([TransactionType] ASC, [EntryNumber] ASC, [Definition] ASC),
+    CONSTRAINT [FK_TransactionTemplates_TransactionTypes] FOREIGN KEY ([TransactionType]) REFERENCES [dbo].[TransactionTypes] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

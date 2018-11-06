@@ -1,10 +1,11 @@
 ﻿CREATE TYPE [dbo].[WideLineList] AS TABLE (
     [DocumentId]         INT                NOT NULL,
+	[TransactionType]    NVARCHAR (50)      NOT NULL,
     [LineNumber]         INT                NOT NULL,
-    [LineType]           NVARCHAR (50)      NULL,
     [ResponsibleAgentId] INT                NULL,
     [StartDateTime]      DATETIMEOFFSET (7) NULL,
     [EndDateTime]        DATETIMEOFFSET (7) NULL,
+	[Memo]				 NVARCHAR (255)     NULL,
     [Operation1]         INT                NULL,
     [Reference1]         NVARCHAR (50)      NULL,
     [Account1]           NVARCHAR (255)     NULL,

@@ -1,13 +1,12 @@
 ﻿CREATE TABLE [dbo].[Lines] (
     [DocumentId]         INT                NOT NULL,
     [LineNumber]         INT                NOT NULL,
-    [LineType]           NVARCHAR (50)      NOT NULL,
     [ResponsibleAgentId] INT                NOT NULL,
     [StartDateTime]      DATETIMEOFFSET (7) NOT NULL,
     [EndDateTime]        DATETIMEOFFSET (7) NOT NULL,
+    [Memo] NVARCHAR(50) NULL, 
     CONSTRAINT [PK_Lines] PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC),
     CONSTRAINT [FK_Lines_Documents] FOREIGN KEY ([DocumentId]) REFERENCES [dbo].[Documents] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Lines_LineTypes] FOREIGN KEY ([LineType]) REFERENCES [dbo].[LineTypes] ([Id]) ON UPDATE CASCADE
 );
 
 

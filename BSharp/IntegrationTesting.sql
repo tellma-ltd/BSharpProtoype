@@ -1,19 +1,4 @@
-﻿DECLARE -- Workflow control
-	/* Journal Voucher */
-	@InvestCapital bit = 0,
-	/* Purchase */
-	@PurchaseContractWithLifan bit = 00,
-	@PayMoneyFromCashToLifan bit = 0,
-	@ReceiveCamryFromLifan bit = 0,
-	@ReceiveInvoiceFromLifan bit = 0,
-	@ReceiveTeddyBearFromLifan bit = 0,
-	/* Payroll */
-	@EmploymentsContract bit = 0,
-	@ReceivedServiceFromEmployees bit = 0,
-	@AggregateBenefits bit = 0,
-	@PaySalaries bit = 0,
-	@ShowAccountStatement nvarchar(50) = N'CashOnHand' -- NULL--
-BEGIN -- Cleanup
+﻿BEGIN -- Cleanup
 	SET NOCOUNT ON;
 	DELETE FROM dbo.Entries; 
 	DELETE FROM dbo.Lines;
@@ -30,7 +15,7 @@ BEGIN -- Cleanup
 	Truncate Table dbo.Settings;
 
 	DECLARE @DocumentId int = 0, @State nvarchar(50), @TransactionType nvarchar(50), @SerialNumber int, @Mode nvarchar(10), @RecordedByUserId nvarchar(450), @RecordedOnDateTime datetimeoffset(7), @ResponsibleAgent int;
-	DECLARE @LineNumber int = 0, @LineType nvarchar(50);
+	DECLARE @LineNumber int = 0;
 	DECLARE @EntryNumber int = 0, @Operation int, @Memo nvarchar(255), @Reference nvarchar(50), @Account nvarchar(255), @Custody int,  @Resource int, @Direction smallint, @Amount money, @Value money, @Note nvarchar(255);
 	DECLARE @Documents DocumentList, @Lines LineList, @Entries EntryList, @WideLines WideLineList, @ValidationMessage nvarchar(1024);
 	
@@ -103,8 +88,8 @@ BEGIN -- Custodies: Agents & Locations
 	EXEC  [dbo].[sbs_Organization__Insert] @LongName = N'Best Plastic Industry', @ShortName = N'Best Plastic', @TaxIdentificationNumber = N'',  @Organization = @Plastic OUTPUT
 	
 	DECLARE @CBE int, @AWB int
-	EXEC  [dbo].[sbs_Bank__Insert] @LongName = N'Commercial Bank of Ethiopia', @ShortName = N'CBE', @TaxIdentificationNumber = N'',  @Bank = @CBE OUTPUT
-	EXEC  [dbo].[sbs_Bank__Insert] @LongName = N'Awash Bank', @ShortName = N'AWB', @TaxIdentificationNumber = N'',  @Bank = @AWB OUTPUT
+	EXEC  [dbo].[sbs_Organization__Insert] @LongName = N'Commercial Bank of Ethiopia', @ShortName = N'CBE', @TaxIdentificationNumber = N'',  @Organization = @CBE OUTPUT
+	EXEC  [dbo].[sbs_Organization__Insert] @LongName = N'Awash Bank', @ShortName = N'AWB', @TaxIdentificationNumber = N'',  @Organization = @AWB OUTPUT
 
 	DECLARE @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int; 
 	EXEC [dbo].[sbs_Warehouse__Insert] @Name = N'Raw Materials Warehouse', @Address = N'Oromia', @Warehouse = @RawMaterialsWarehouse OUTPUT
@@ -139,20 +124,20 @@ BEGIN -- Operations
 	DECLARE @Existing int; EXEC  [dbo].[sbs_Operation__Insert] @OperationType = N'Investment', @Name = N'Existing', @Parent = @BusinessEntity, @Operation = @Existing OUTPUT;
 	DECLARE @Expansion int; EXEC  [dbo].[sbs_Operation__Insert] @OperationType = N'Investment', @Name = N'Expansion', @Parent = @BusinessEntity, @Operation = @Expansion OUTPUT;
 END
-IF (1=0)-- Journal Voucher
+IF (1=1)-- Journal Voucher
 BEGIN 
 	-- Adding New General Journal. It accepts only manual JV
-	SELECT  @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'GeneralJournal', @Mode = N'Draft', @RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.01';
+	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Event', @TransactionType = N'ManualJournalVoucher', @Mode = N'Draft', @RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.01';
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
 
 -- Line 1: A point in time transaction
-	SELECT @LineNumber = 1, @LineType = N'ManualJournalVoucher', @ResponsibleAgent = @TizitaNigussie;
+	SELECT @LineNumber = @LineNumber + 1, @EntryNumber = 0, @ResponsibleAgent = @TizitaNigussie, @Memo = N'Capital payment';
 	--Defaults, can be modified
 	SELECT @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
 
-	INSERT INTO @Lines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDatetime, @EndDatetime)
+	INSERT INTO @Lines(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
+	VALUES(@DocumentId, @LineNumber, @ResponsibleAgent, @StartDatetime, @EndDatetime, @Memo)
 
 -- Entry 1
 	SELECT @EntryNumber = @EntryNumber + 1;
@@ -171,13 +156,16 @@ BEGIN
 	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction,@Amount, @Value, @Note)
 
 -- Line 2: A period of time transaction
-	SELECT @LineNumber = @LineNumber + 1, @LineType = N'ManualJournalVoucherExtended', @ResponsibleAgent = @TizitaNigussie, @EntryNumber = 0;
+	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Event', @TransactionType = N'ManualJournalVoucherExtended', @Mode = N'Draft', @RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.01';
+	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
+	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
+
+	SELECT @LineNumber = @LineNumber + 1, @EntryNumber = 0, @ResponsibleAgent = @TizitaNigussie, @EntryNumber = 0, @Memo = N'Yearly Depreciation ';
 	--Defaults, can be modified
 	SELECT @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(YEAR, 1, @RecordedOnDateTime);
 
-	INSERT INTO @Lines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDatetime, @EndDatetime)
-
+	INSERT INTO @Lines(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
+	VALUES(@DocumentId, @LineNumber, @ResponsibleAgent, @StartDatetime, @EndDatetime, @Memo)
 	-- Entry 1
 	SELECT @EntryNumber = @EntryNumber + 1;
 	SELECT @Operation = @BusinessEntity, @Account = N'AdministrativeExpense', @Custody = @ExecutiveOffice, @Resource = @ETB, @Direction = 1, @Amount = 120000, @Value = 120000	, @Note = N'DepreciationExpense';
@@ -192,50 +180,54 @@ BEGIN
 	EXEC ui_Documents_Lines_Entries__Validate @Documents = @Documents, @Lines = @Lines, @Entries = @Entries, @ValidationMessage = @ValidationMessage OUTPUT
 	IF @ValidationMessage IS NOT NULL GOTO UI_Error;
 END
-IF (1=0)-- Purchase Order
+IF (1=1)-- Purchase Order
 BEGIN 
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Purchase', @Mode = N'Draft', 
 			@RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.02';
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
 
-	SELECT @LineType = N'Purchase', @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
+	SELECT  @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
 -- Line 1: Camry
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Existing, @item = @Camry2018, @Quantity = 2, @PriceVATExclusive = 30000;
 	SELECT @VAT = 0.15 * @PriceVATExclusive, @LineTotal = @PriceVATExclusive + @VAT;
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Resource1, Amount1, Amount2, RelatedAmount2, Amount3)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @item, @Quantity, @VAT, @PriceVATExclusive, @LineTotal);	
+	INSERT INTO @WideLines(DocumentId, LineNumber, TransactionType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Resource1, Amount1, Amount2, RelatedAmount2, Amount3)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @item, @Quantity, @VAT, @PriceVATExclusive, @LineTotal);	
 -- Line 2: Teddy bear
-/*
+
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Existing, @item = @TeddyBear, @Quantity = 5, @PriceVATExclusive = 500;
 	SELECT @VAT = 0.15 * @PriceVATExclusive, @LineTotal = @PriceVATExclusive + @VAT;
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Resource1, Amount1, Amount2, RelatedAmount2, Amount3)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @item, @Quantity, @VAT, @PriceVATExclusive, @LineTotal);	
-	*/
+	INSERT INTO @WideLines(DocumentId, LineNumber, TransactionType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Resource1, Amount1, Amount2, RelatedAmount2, Amount3)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @item, @Quantity, @VAT, @PriceVATExclusive, @LineTotal);	
+	
 	EXEC ui_Documents_WideLines__Validate @Documents = @Documents, @WideLines = @WideLines, @ValidationMessage = @ValidationMessage OUTPUT
 	IF @ValidationMessage IS NOT NULL GOTO UI_Error;
-	
 END
-IF (1=0)-- Purchase Event
+IF (1=1)-- Purchase Event
 BEGIN
-	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'Purchase', @Mode = N'Draft', 
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'CashIssueToSupplier', @Mode = N'Draft', 
 			@RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.03';
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
 
-	SELECT @LineType = N'CashIssueToSupplier', @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
+	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
 -- Payment
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount1, Custody2, Reference2)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount1, Custody2, Reference2)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 
-	SELECT @LineType = N'PurchaseWitholdingTax', @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'PurchaseWitholdingTax', @Mode = N'Draft', 
+			@RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.03';
+	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
+	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
+
+	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime), @Memo = N'Assets Purchase';
 -- Witholding tax: 
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006', @TypeOfTransaction = N'Assets Purchase'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006';
 	SELECT @TaxableAmount = @AmountWithheld/0.02;
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, 
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, 
 		Operation1, Custody1, Amount1, Reference2, RelatedAmount2, RelatedReference2)
-	VALUES(@DocumentId,	@LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, 
+	VALUES(@DocumentId,	@LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo,
 		@Operation, @Supplier, @AmountWithheld, @WithholdingNumber, @TaxableAmount, @TypeOfTransaction);
 	/*
 	SELECT @LineType = N'StockReceiptFromSupplier', @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
@@ -250,58 +242,65 @@ BEGIN
 	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Resource1, Amount1, Custody2)
 	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Warehouse, @item, @Quantity, @Supplier);
 	*/
-	SELECT @LineType = N'Purchase', @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
+
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'Purchase', @Mode = N'Draft', 
+			@RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.03';
+		
+	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
+	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
+
+	SELECT @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = @RecordedOnDateTime, @EndDatetime = DATEADD(D, 1, @RecordedOnDateTime);
 -- Purchase invoice
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Expansion,  @VAT = 4575, @InvoiceNumber = N'0913', @MachineNumber = N'fs4512219',
 			@item = @Camry2018, @Quantity = 2, @PriceVATExclusive = 300000;
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, 
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, 
 			Operation1, Custody1, Resource1, Amount1,	Value1,				Amount2, Reference2, RelatedReference2)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime,			
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime,			
 			@Operation,	@Supplier,@item,	@Quantity, @PriceVATExclusive, @VAT, @InvoiceNumber, @MachineNumber);
 END
-IF (1=1)-- Employment Contract
+IF (1=0)-- Employment Contract
 BEGIN
-	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Payroll', @Mode = N'Draft', 
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Labor', @Mode = N'Draft', 
 			@RecordedByUserId = N'system@banan-it.com', @RecordedOnDateTime = '2018.01.31'; 
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [RecordedByUserId], [RecordedOnDateTime])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, @RecordedByUserId, @RecordedOnDateTime)
 
-	SELECT @LineType = N'Labor', @ResponsibleAgent = @BadegeKebede, @Employee = @MohamadAkra, 
+	SELECT  @ResponsibleAgent = @BadegeKebede, @Employee = @MohamadAkra, 
 		@StartDatetime = '2019.01.01', @EndDatetime = DATEADD(MONTH, 24, @StartDatetime);
 
 -- Line 1: MA, Basic
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Existing, @Employee = @MohamadAkra, @BasicSalary = 7000, @TransportationAllowance = 1750
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount2, Amount3)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Employee, @BasicSalary, @TransportationAllowance);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount2, Amount3)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Employee, @BasicSalary, @TransportationAllowance);
 -- Line 3: AA, Basic
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Existing, @Employee = @AhmadAkra, @BasicSalary = 7000, @TransportationAllowance = 0
-	INSERT INTO @WideLines(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount2, Amount3)
-	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Employee, @BasicSalary, @TransportationAllowance);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount2, Amount3)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @BasicSalary, @TransportationAllowance);
 END
 IF (1=0)-- Attendance Event
 BEGIN
 	DELETE FROM @WideLines;
 	SELECT  @State = N'Event', @TransactionType = N'Payroll', @RecordedOnDateTime = '2018.01.03';
 
-	SELECT @LineType = N'LaborReceiptFromEmployee';
+	SELECT @TransactionType = N'LaborReceiptFromEmployee';
 -- Labor receipt
 -- MA
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Expansion, @Employee = @MohamadAkra, @Attendance = 208, @Department = @ExecutiveOffice;
-	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, Custody2)
-	VALUES(@LineNumber, @LineType, @Operation, @Department, @Attendance, @Employee);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, Custody2)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Department, @Attendance, @Employee);
 -- Ahmad
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @Expansion, @Employee = @AhmadAkra, @Attendance = 208, @Department = @ProductionDept;
-	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, Custody2)
-	VALUES(@LineNumber, @LineType, @Operation, @Department, @Attendance, @Employee);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, Custody2)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Department, @Attendance, @Employee);
 
-	SELECT @LineType = N'EmployeeIncomeTax';
+	SELECT @TransactionType = N'EmployeeIncomeTax';
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Employee = @MohamadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
-	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, RelatedAmount2)
-	VALUES(		@LineNumber, @LineType, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Employee = @AhmadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
-	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, RelatedAmount2)
-	VALUES(		@LineNumber, @LineType, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo,  @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 /*
 --	SELECT @LineType = N'CashPaymentToEmployee';
 -- Payment
@@ -315,26 +314,16 @@ BEGIN
 	DELETE FROM @WideLines;
 	SELECT  @State = N'Order', @TransactionType = N'InventoryTransfer', @RecordedOnDateTime = '2018.01.03';
 
-	SELECT @LineType = N'InventoryTransferOrder';
+	SELECT @TransactionType = N'InventoryTransferOrder';
 -- Payment
 	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
-	INSERT INTO @WideLines(LineNumber, LineType, StartDateTime, Operation1, Custody2, Custody1, Resource1, Amount1, Value1)
-	VALUES(		@LineNumber, @LineType, @EventDateTime, @Operation, @IssuingWarehouse, @ReceivingWarehouse, @Item, @Quantity, @Value);
+	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody2, Custody1, Resource1, Amount1, Value1)
+	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @IssuingWarehouse, @ReceivingWarehouse, @Item, @Quantity, @Value);
 END
-IF (1=0)-- Inventory transfer event
-BEGIN
-	DELETE FROM @WideLines;
-	SELECT  @State = N'Event', @TransactionType = N'InventoryTransfer', @RecordedOnDateTime = '2018.01.03';
-
-	SELECT @LineType = N'InventoryTransfer';
--- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
-	INSERT INTO @WideLines(LineNumber, LineType, StartDateTime, Operation1, Custody2, Custody1, Resource1, Amount1, Value1)
-	VALUES(		@LineNumber, @LineType, @EventDateTime, @Operation, @IssuingWarehouse, @ReceivingWarehouse, @Item, @Quantity, @Value);
-END
+--	IF (1=0)-- Inventory transfer event
 
 EXEC [dbo].[api_Documents__Save] @Documents = @Documents, @WideLines = @WideLines, @Lines = @Lines, @Entries = @Entries
-EXEC [dbo].[api_Documents__Post] @Documents = @Documents
+EXEC [dbo].[api_Documents__Post] @Documents = @Documents;
 RETURN
 
 SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY Id, LineNumber, EntryNumber;

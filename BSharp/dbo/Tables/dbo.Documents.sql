@@ -20,11 +20,11 @@
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Cancellation/Request/Proposal/Order/Event/Voucher/Invoice', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Documents', @level2type = N'COLUMN', @level2name = N'State';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Plan/Request/Order/Event', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Documents', @level2type = N'COLUMN', @level2name = N'State';
 
 
 GO
-EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Limits the line types that can fit inside a document', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Documents', @level2type = N'COLUMN', @level2name = N'TransactionType';
+EXECUTE sp_addextendedproperty @name = N'MS_Description', @value = N'Limits the line types that can fit inside a document', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Documents', @level2type = N'COLUMN', @level2name = 'TransactionType';
 
 
 GO

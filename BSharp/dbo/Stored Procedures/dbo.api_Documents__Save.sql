@@ -7,10 +7,11 @@ CREATE PROCEDURE [dbo].[api_Documents__Save]
 AS
 DECLARE
 	@DocumentId int = 0,
-	@LineType nvarchar(50),
+	@TransactionType nvarchar(50),
 	@ResponsibleAgentId int,
 	@StartDateTime datetimeoffset(7),
 	@EndDateTime datetimeoffset(7),	
+	@Memo  nvarchar(255),
 
 	@Operation1 int,
 	@Reference1 nvarchar(50),
@@ -71,10 +72,11 @@ BEGIN TRY
 			--Print 'Document ' + cast(@DocumentId as nvarchar(50)) + ', Line ' + Cast(@LineNumber as nvarchar(50));
 			SELECT
 				@DocumentId = DocumentId,
-				@LineType = LineType,
+				@TransactionType = TransactionType,
 				@ResponsibleAgentId = ResponsibleAgentId,
 				@StartDateTime = StartDateTime,
-				@EndDateTime = EndDateTime,	
+				@EndDateTime = EndDateTime,
+				@Memo = Memo,
 
 				@Operation1 = Operation1,
 				@Reference1 = Reference1,
@@ -123,8 +125,9 @@ BEGIN TRY
 			INSERT INTO @EntriesTransit 
 			EXEC [dbo].[sub_Line__Entries] 
 				@DocumentId = @DocumentId,
+				@TransactionType = @TransactionType,
 				@LineNumber = @LineNumber,
-				@LineType = @LineType,
+
 
 				@Operation1 = @Operation1,
 				@Reference1 = @Reference1,
@@ -177,8 +180,8 @@ BEGIN TRY
 	EXEC [dbo].[bdb_Document_Values__Update] 
 			@WideLines = @WideLines, @Entries = @EntriesTransit
 	
-	INSERT INTO @LinesLocal(DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime)
-	SELECT DocumentId, LineNumber, LineType, ResponsibleAgentId, StartDateTime, EndDateTime FROM @WideLines;
+	INSERT INTO @LinesLocal(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
+	SELECT DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
 
 	INSERT INTO @LinesLocal SELECT * FROM @Lines;
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries;
@@ -210,7 +213,7 @@ BEGIN TRY
 	-- Bulk validation
 
 	-- Persist in Db
-	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents,@Lines = @LinesLocal, @Entries = @EntriesLocal
+	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal
 END TRY
 
 BEGIN CATCH

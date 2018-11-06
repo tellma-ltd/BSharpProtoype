@@ -8,7 +8,7 @@ SELECT
 	A.TaxIdentificationNumber As [Withholdee TIN],
 	A.LongName As [Organization/Person Name],
 	A.RegisteredAddress As [Withholdee Address], 
-	S.RelatedReference As [Withholding Type],
+	S.Memo As [Withholding Type],
 	S.RelatedAmount As [Taxable Amount], 
 	S.Amount As [Tax Withheld], 
 	S.Reference As [Receipt Number], 

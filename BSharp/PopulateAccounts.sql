@@ -1,4 +1,15 @@
-﻿INSERT INTO dbo.Accounts( AccountType, IsActive, Code, Id, Name) VALUES
+﻿CREATE TABLE #Accounts (
+    [Id]              NVARCHAR (255)  NOT NULL,
+    [Name]            NVARCHAR (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [Code]            NVARCHAR (10)   COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [IsActive]        BIT             NOT NULL,
+    [ParentId]        NVARCHAR (255)  NULL,
+    [AccountType]     NVARCHAR (10)   CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom') NOT NULL,
+    [AccountTemplate] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountTemplate] DEFAULT (N'Basic') NOT NULL,
+    [IsExtensible]    BIT             CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT ((1)) NOT NULL,
+    CONSTRAINT [PK_Accounts_1] PRIMARY KEY NONCLUSTERED ([Id] ASC)
+);
+INSERT INTO #Accounts(AccountType, IsActive, Code, Id, [Name]) VALUES
 ('Regulatory', 1, '1', 'Assets', 'Assets')
 ,('Regulatory', 1, '11', 'NoncurrentAssets', 'Non-current assets')
 ,('Regulatory', 1, '1101', 'PropertyPlantAndEquipment', 'Property, plant and equipment')
@@ -373,3 +384,34 @@
 ,('Regulatory', 1, '5272', 'ReclassificationAdjustmentsOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeNetOfTax', 'Reclassification adjustments on financial assets measured at fair value through other comprehensive income, net of tax')
 ,('Regulatory', 1, '5273', 'AmountsRemovedFromEquityAndAdjustedAgainstFairValueOfFinancialAssetsOnReclassificationOutOfFairValueThroughOtherComprehensiveIncomeMeasurementCategoryNetOfTax', 'Amounts removed from equity and adjusted against fair value of financial assets on reclassification out of fair value through other comprehensive income measurement category, net of tax')
 ,('Regulatory', 1, '528', 'ShareOfOtherComprehensiveIncomeOfAssociatesAndJointVenturesAccountedForUsingEquityMethodThatWillBeReclassifiedToProfitOrLossNetOfTax', 'Share of other comprehensive income of associates and joint ventures accounted for using equity method that will be reclassified to profit or loss, net of tax');
+
+MERGE dbo.Accounts AS t
+USING #Accounts AS s
+ON s.Code = t.Code --AND s.tenantId = t.tenantId
+WHEN MATCHED AND
+(
+    t.[Name]			<>	s.[Name]			OR
+    t.[Code]			<>	s.[Code]			OR
+    t.[IsActive]		<>	s.[IsActive]		OR
+    t.[AccountType]		<>	s.[AccountType]		OR
+    t.[AccountTemplate]	<>	s.[AccountTemplate]	OR
+    t.[IsExtensible]	<>	s.[IsExtensible]
+) THEN
+UPDATE SET
+    t.[Name]			=	s.[Name],  
+    t.[Code]			=	s.[Code],
+    t.[IsActive]		=	s.[IsActive],
+    t.[AccountType]		=	s.[AccountType], 
+    t.[AccountTemplate]	=	s.[AccountTemplate],
+    t.[IsExtensible]	=	s.[IsExtensible]
+WHEN NOT MATCHED BY SOURCE THEN
+        DELETE
+WHEN NOT MATCHED BY TARGET THEN
+        INSERT ([Id], [Name], [Code], [IsActive], [AccountType], [AccountTemplate], [IsExtensible])
+        VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], s.[AccountTemplate], s.[IsExtensible]);
+--OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
+
+DROP TABLE #Accounts;​
+
+
+

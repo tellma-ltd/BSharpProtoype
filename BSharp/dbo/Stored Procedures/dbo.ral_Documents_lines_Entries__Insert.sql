@@ -5,18 +5,18 @@ CREATE PROCEDURE [dbo].[ral_Documents_Lines_Entries__Insert]
 @Entries EntryList READONLY
 AS
 BEGIN TRY
---	SELECT * FROM @Documents;
---	SELECT * FROM @Lines;
---	SELECT * FROM @Entries;
+	--SELECT * FROM @Documents;
+	--SELECT * FROM @Lines;
+	--SELECT * FROM @Entries;
 	DECLARE @DocumentOffset int = 0;
 	BEGIN TRANSACTION
 		SELECT @DocumentOffset = ISNULL(MAX(Id), 0) FROM dbo.Documents;
-		INSERT INTO dbo.Documents(Id, [State], TransactionType, SerialNumber, Mode, RecordedByUserId, RecordedOnDateTime, Reference)
+		INSERT INTO dbo.Documents(Id, [State], [TransactionType], SerialNumber, Mode, RecordedByUserId, RecordedOnDateTime, Reference)
 		SELECT Id + @DocumentOffset, [State], TransactionType, SerialNumber, Mode, RecordedByUserId, RecordedOnDateTime, Reference
 		FROM @Documents
 
-		INSERT INTO  dbo.Lines(DocumentId, LineNumber, LineType, ResponsibleAgentId, [StartDateTime], [EndDateTime]) 
-		SELECT DocumentId + @DocumentOffset, LineNumber, LineType, ResponsibleAgentId, [StartDateTime], [EndDateTime] FROM @Lines;
+		INSERT INTO  dbo.Lines(DocumentId, LineNumber, ResponsibleAgentId, [StartDateTime], [EndDateTime], [Memo]) 
+		SELECT DocumentId + @DocumentOffset, LineNumber, ResponsibleAgentId, [StartDateTime], [EndDateTime], [Memo] FROM @Lines;
 
 		INSERT INTO dbo.Entries(DocumentId, LineNumber,	[EntryNumber], [OperationId], [Reference], [AccountId], [CustodyId], [ResourceId], 
 				[Direction], [Amount], [Value], [NoteId], [RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount]	)

@@ -9,13 +9,11 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-DELETE FROM dbo.Accounts;
-DELETE FROM dbo.Notes; -- better use MERGE
-DELETE FROM dbo.LineTemplates;
+-- DELETE FROM dbo.Accounts; Replaced with MERGE
+
+DELETE FROM dbo.[TransactionTemplates];
 DELETE FROM dbo.EventTypes;
-DELETE FROM dbo.LineTypes;
-DELETE FROM dbo.States;
-DELETE FROM dbo.LineTypeCategories;
+DELETE FROM dbo.[TransactionTypes];
 DELETE FROM dbo.AccountTemplates;
 DELETE FROM dbo.AccountTypes;
 DELETE FROM dbo.AgentTypes;
@@ -23,8 +21,9 @@ DELETE FROM dbo.CustodyTypes;
 DELETE FROM dbo.LocationTypes;
 DELETE FROM dbo.Modes;
 DELETE FROM dbo.OperationTypes;
-DELETE FROM dbo.TransactionTypes;
 DELETE FROM dbo.UnitsOfMeasure;
+DELETE FROM dbo.Notes;
+DELETE FROM dbo.States;
 
 :r .\PopulateAccounts.sql
 
@@ -38,38 +37,27 @@ INSERT [dbo].[States] ([Id], [Name]) VALUES
 	(N'Plan', N'Plan'),
 	(N'Request', N'Request');
 
-INSERT [dbo].[LineTypeCategories] ([Id], [Name]) VALUES
-	(N'Adjustment', N'Adjustment'),
-	(N'MoneyIssue', N'Payment'),
-	(N'MoneyReceipt', N'Collection'),
-	(N'MoneyTansfer', N'Transfer'),
-	(N'Purchase', N'Purchase'),
-	(N'ResourceIssue', N'Issue'),
-	(N'ResourceReceipt', N'Receipt'),
-	(N'ResourceTransfer', N'Transfer'),
-	(N'Sale', N'Sale');
-
-INSERT [dbo].[LineTypes] ([Id], [Category], [IsInstant]) VALUES
-	(N'CashIssueToSupplier', N'MoneyIssue', 1),
-	(N'CashReceiptFromCustomer', N'MoneyReceipt', 1),
-	(N'EmployeeIncomeTax', N'MoneyIssue', 0),
-	(N'InventoryTransfer', N'ResourceTransfer', 0),
-	(N'Labor', N'Purchase', 1),
-	(N'LaborReceiptFromEmployee', N'ResourceReceipt', 0),
-	(N'LeaseIssueToCustomer', N'Sale', 0),
-	(N'LeaseReceiptFromSupplier', N'Purchase', 0),
-	(N'ManualJournalVoucher', N'Adjustment', 1),
-	(N'ManualJournalVoucherExtended', N'Adjustment', 0),
-	(N'Purchase', N'Purchase', 1),
-	(N'PurchaseWitholdingTax', N'MoneyIssue', 1),
-	(N'Sale', N'Sale', 1),
-	(N'SaleWitholdingTax', N'MoneyReceipt', 1),
-	(N'StockIssueToCustomer', N'ResourceIssue', 1),
-	(N'StockReceiptFromSupplier', N'ResourceReceipt', 1);
+INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
+	(N'CashIssueToSupplier',  1),
+	(N'CashReceiptFromCustomer',  1),
+	(N'EmployeeIncomeTax',  0),
+	(N'InventoryTransfer',0),
+	(N'Labor', 1),
+	(N'LaborReceiptFromEmployee',  0),
+	(N'LeaseIssueToCustomer', 0),
+	(N'LeaseReceiptFromSupplier',  0),
+	(N'ManualJournalVoucher',  1),
+	(N'ManualJournalVoucherExtended',  0),
+	(N'Purchase',  1),
+	(N'PurchaseWitholdingTax',  1),
+	(N'Sale',  1),
+	(N'SaleWitholdingTax',  1),
+	(N'StockIssueToCustomer',  1),
+	(N'StockReceiptFromSupplier', 1);
 
 :R .\PopulateLineTemplates.sql
 
-INSERT [dbo].[EventTypes] ([LineType], [State], [Name]) VALUES
+INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
 	(N'CashIssueToSupplier', N'Event', N'Payments'),
 	(N'CashReceiptFromCustomer', N'Event', N'Payments'),
 	(N'EmployeeIncomeTax', N'Event', N'Employee Income Tax'),
@@ -100,31 +88,28 @@ INSERT [dbo].[AccountTypes] ([Id], [Name]) VALUES
 	(N'Regulatory', N'Regulatory');
 
 INSERT [dbo].[AgentTypes] ([Id], [Name]) VALUES 
-	(N'Bank', N'Bank'),
 	(N'Individual', N'Individual'),
 	(N'Organization', N'Organization'),
 	(N'OrganizationUnit', N'Organization Unit');
 
-INSERT [dbo].[CustodyTypes] ([Id], [Name]) VALUES
-	(N'Agent', N'Agent'),
-	(N'Bank', N'Bank'),
-	(N'BankAccount', N'Bank Account'),
-	(N'V', N'vernment Body'),
-	(N'Individual', N'Individual'),
-	(N'Location', N'Location'),
-	(N'OperatingSegment', N'Operating Segment'),
-	(N'Organization', N'Organization'),
-	(N'OrganizationUnit', N'Organization Unit'),
-	(N'ProductionPoint', N'Production Point'),
-	(N'ResponsibilityCenter', N'Responsibility Center'),
-	(N'Warehouse', N'Warehouse');
-
 INSERT [dbo].[LocationTypes] ([Id], [Name]) VALUES
+	(N'Address', N'Address'),
 	(N'BankAccount', N'Bank Account'),
 	(N'Farm', N'Farm'),
 	(N'ProductionPoint', N'Production Point'),
 	(N'Warehouse', N'Warehouse');
 
+INSERT [dbo].[CustodyTypes] ([Id], [Name]) VALUES
+	(N'Address', N'Address'),
+	(N'Agent', N'Agent'),
+	(N'BankAccount', N'Bank Account'),
+	(N'Individual', N'Individual'),
+	(N'Location', N'Location'),
+	(N'Organization', N'Organization'),
+	(N'OrganizationUnit', N'Organization Unit'),
+	(N'ProductionPoint', N'Production Point'),
+	(N'Warehouse', N'Warehouse');
+	   
 INSERT [dbo].[Modes] ([Id], [Name]) VALUES
 	(N'Draft', N'Draft'),
 	(N'Posted', N'Posted'),
@@ -136,15 +121,6 @@ INSERT [dbo].[OperationTypes] ([Id], [Name]) VALUES
 	(N'Investment', N'Investment'),
 	(N'OperatingSegment', N'Operating Segment'),
 	(N'Project', N'Project');
-
-INSERT [dbo].[TransactionTypes] ([Id], [Name]) VALUES
-	(N'CashSale', N'Cash Sale'),
-	(N'DueEmploymentContract', N'DueEmploymentContract'),
-	(N'GeneralJournal', N'General Journal'),
-	(N'InventoryTransfer', N'InventoryTransfer'),
-	(N'Payroll', N'Payroll'),
-	(N'Paysheet', N'Paysheet'),
-	(N'Purchase', N'Purchase');
 
 INSERT [dbo].[UnitsOfMeasure] ([Id], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive], [AsOfDateTime]) VALUES
 	(N'AED', N'Money', N'AE Dirhams', 3.67, 1, 0, CAST(N'01.01.0001' AS DateTimeOffset)),

@@ -2,7 +2,7 @@
 CREATE VIEW [dbo].[LineTemplatesCalculationView]
 AS
 SELECT *
-FROM dbo.LineTemplates
+FROM dbo.[TransactionTemplates]
 WHERE (Definition = N'Calculation') 
 
 GO

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="ffb7fac3-9c9f-41fd-b25c-c37b481dc11c" ChangeDateTime="11/06/2018 10:58:12">
+    <Property Name="ElementName" Value="[dbo].[Documents].[TransactionType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LineType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="961419e9-076d-4a44-877c-10cfc5bd0aea" ChangeDateTime="11/06/2018 11:20:20">
+    <Property Name="ElementName" Value="[dbo].[LineTypes]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionTypes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cfc91629-b5e1-44eb-9c48-327962e436a5" ChangeDateTime="11/06/2018 11:20:36">
+    <Property Name="ElementName" Value="[dbo].[PK_LineTypes]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_TransactionTypes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="acccf037-3dba-4440-936d-a27cacf10422" ChangeDateTime="11/06/2018 11:21:03">
+    <Property Name="ElementName" Value="[dbo].[Documents].[LineType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[TransactionType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="465f973a-2cc5-4763-a9ad-32a12478e482" ChangeDateTime="11/06/2018 11:21:57">
+    <Property Name="ElementName" Value="[dbo].[LineTemplates]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionTemplates]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="91ab1447-b87c-4486-bb64-60adc0a5ec3f" ChangeDateTime="11/06/2018 11:22:10">
+    <Property Name="ElementName" Value="[dbo].[TransactionTemplates].[LineType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionTemplates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[TransactionType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7dd6a97a-db95-4c12-b520-8989baae46b6" ChangeDateTime="11/06/2018 11:22:29">
+    <Property Name="ElementName" Value="[dbo].[PK_LineTemplates]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionTemplates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_TransactionTemplates]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="08e913cb-7ab5-4527-8f39-3e2de0aa2f56" ChangeDateTime="11/06/2018 11:22:55">
+    <Property Name="ElementName" Value="[dbo].[FK_LineTemplates_LineTypes]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionTemplates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_TransactionTemplates_TransactionTypes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e164f2bc-03f3-44a7-8ca0-f6afd5248304" ChangeDateTime="11/06/2018 11:23:47">
+    <Property Name="ElementName" Value="[dbo].[FK_Documents_LineTypes]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Documents_TransactionTypes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fa23633b-02de-4d51-a8ce-26acae65cb2e" ChangeDateTime="11/06/2018 11:24:38">
+    <Property Name="ElementName" Value="[dbo].[EventTypes].[LineType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[EventTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[TransactionType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="37023243-b973-482e-8f20-5931f04b58f0" ChangeDateTime="11/06/2018 11:25:01">
+    <Property Name="ElementName" Value="[dbo].[FK_EventTypes_LineTypes]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[EventTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_EventTypes_TransactionTypes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d6a3bdf8-eae6-425e-9e31-fcf4f4b69e78" ChangeDateTime="11/06/2018 11:27:05">
+    <Property Name="ElementName" Value="[dbo].[Reconciliation].[EntryId1]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Reconciliation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Documentd1" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4f11d7c9-1659-4915-a570-fc21655e3a4f" ChangeDateTime="11/06/2018 11:27:11">
+    <Property Name="ElementName" Value="[dbo].[Reconciliation].[EntryId2]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Reconciliation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DocumentId2" />
+  </Operation>
+</Operations>

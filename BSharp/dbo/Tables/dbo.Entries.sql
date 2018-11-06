@@ -3,7 +3,6 @@
     [LineNumber]        INT            NOT NULL,
     [EntryNumber]       INT            NOT NULL,
     [OperationId]       INT            NOT NULL,
-    [Memo_Remove]       NVARCHAR (255) NULL,
     [Reference]         NVARCHAR (50)  NULL,
     [AccountId]         NVARCHAR (255) NOT NULL,
     [CustodyId]         INT            NOT NULL,
