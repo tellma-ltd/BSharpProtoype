@@ -45,5 +45,6 @@
     [RelatedAgent3]      INT                NULL,
     [RelatedResource3]   INT                NULL,
     [RelatedAmount3]     MONEY              NULL,
+	[Status]			 NVARCHAR(50)	NULL,
     PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC));
 

@@ -6,14 +6,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT
-		A.LongName As [Supplier], 
+		C.[Name] As [Supplier], 
 		A.TaxIdentificationNumber As TIN, 
 		S.Reference As [Invoice #], S.RelatedReference As [Cash M/C #],
 		SUM(S.Amount) AS VAT,
 		SUM(S.RelatedAmount) AS TaxableAmount,
 		S.StartDateTime As InvoiceDate
 	FROM dbo.ft_Account__Statement(N'CurrentValueAddedTaxReceivables' , @fromDate, @toDate) S
-	JOIN dbo.Agents A ON S.RelatedAgentId = A.Id
+	JOIN dbo.Custodies C ON S.RelatedAgentId = C.Id
+	JOIN dbo.Agents A ON C.Id = A.Id
 	WHERE S.Direction = 1
-	GROUP BY A.LongName, A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime
+	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime
 END

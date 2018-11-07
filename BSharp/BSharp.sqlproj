@@ -73,18 +73,18 @@
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Agents.sql" />
     <Build Include="dbo\Tables\dbo.Locations.sql" />
-    <Build Include="dbo\Tables\dbo.EventTypes.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
     <Build Include="dbo\Tables\dbo.Modes.sql" />
     <Build Include="dbo\Tables\dbo.States.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionTemplates.sql" />
+    <Build Include="dbo\Tables\dbo.TransactionSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.AccountTypes.sql" />
     <Build Include="dbo\Tables\dbo.CustodyTypes.sql" />
     <Build Include="dbo\Tables\dbo.AgentTypes.sql" />
     <Build Include="dbo\Tables\dbo.Users.sql" />
     <Build Include="dbo\Tables\dbo.DocumentForwardings.sql" />
-    <Build Include="dbo\Tables\dbo.AccountTemplates.sql" />
+    <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.Lines.sql" />
     <Build Include="dbo\Tables\dbo.Accounts.sql" />
     <Build Include="dbo\Tables\dbo.Notes.sql" />
@@ -166,7 +166,7 @@
   <ItemGroup>
     <None Include="IntegrationTesting.sql" />
     <None Include="PopulateNotes.sql" />
-    <None Include="PopulateLineTemplates.sql" />
+    <None Include="PopulateTransactionSpecifications.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

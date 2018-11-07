@@ -1,4 +1,4 @@
-﻿INSERT [dbo].[TransactionTemplates] ([TransactionType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [Resource], [Direction], [Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount], [RelatedUDLMember]) VALUES
+﻿INSERT [dbo].[TransactionSpecifications] ([TransactionType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [Resource], [Direction], [Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount], [RelatedUDLMember]) VALUES
 	(N'CashIssueToSupplier', 1, N'Calculation', NULL, N'''CurrentPayablesToTradeSuppliers''', NULL, N'dbo.fn_FunctionalCurrency()', N'1', NULL, N'dbo.Amount(1,@Entries)', NULL, NULL, NULL, NULL, NULL, NULL),
 	(N'CashIssueToSupplier', 1, N'Label', NULL, NULL, N'Supplier', N'Currency', NULL, N'Amount', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 	(N'CashIssueToSupplier', 1, N'Validation', NULL, N'''PurchaseContracts''', NULL, NULL, N'1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),

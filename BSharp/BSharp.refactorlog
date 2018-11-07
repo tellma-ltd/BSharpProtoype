@@ -91,4 +91,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="DocumentId2" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="ae051c62-4cbc-488a-8b4a-f084378db3fd" ChangeDateTime="11/07/2018 08:19:28">
+    <Property Name="ElementName" Value="[dbo].[TransactionTemplates]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionSpecifications]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d224e06-558b-4a6c-b09e-f719f89cd4ae" ChangeDateTime="11/07/2018 08:30:41">
+    <Property Name="ElementName" Value="[dbo].[AccountTemplates]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[AccountSpecifications]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fbfb982a-5769-4e4e-b510-9a039697c5d3" ChangeDateTime="11/07/2018 09:32:57">
+    <Property Name="ElementName" Value="[dbo].[Accounts].[AccountTemplate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Accounts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[AccountSpecification]" />
+  </Operation>
 </Operations>

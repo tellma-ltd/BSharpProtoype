@@ -10,11 +10,10 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 -- DELETE FROM dbo.Accounts; Replaced with MERGE
-
-DELETE FROM dbo.[TransactionTemplates];
+DELETE FROM dbo.[TransactionSpecifications];
 DELETE FROM dbo.EventTypes;
 DELETE FROM dbo.[TransactionTypes];
-DELETE FROM dbo.AccountTemplates;
+DELETE FROM dbo.[AccountSpecifications];
 DELETE FROM dbo.AccountTypes;
 DELETE FROM dbo.AgentTypes;
 DELETE FROM dbo.CustodyTypes;
@@ -35,7 +34,8 @@ INSERT [dbo].[States] ([Id], [Name]) VALUES
 	(N'Event', N'Event'), 
 	(N'Order', N'Order'),
 	(N'Plan', N'Plan'),
-	(N'Request', N'Request');
+	(N'Request', N'Request'),
+	(N'Template', N'Template');
 
 INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
 	(N'CashIssueToSupplier',  1),
@@ -50,7 +50,7 @@ INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
 	(N'ManualJournalVoucherExtended',  0),
 	(N'Purchase',  1),
 	(N'PurchaseWitholdingTax',  1),
-	(N'Sale',  1),
+	
 	(N'SaleWitholdingTax',  1),
 	(N'StockIssueToCustomer',  1),
 	(N'StockReceiptFromSupplier', 1);
@@ -58,8 +58,8 @@ INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
 :R .\PopulateLineTemplates.sql
 
 INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
-	(N'CashIssueToSupplier', N'Event', N'Payments'),
-	(N'CashReceiptFromCustomer', N'Event', N'Payments'),
+	(N'CashIssueToSupplier', N'Event', N'Suppliers Payments'),
+	(N'CashReceiptFromCustomer', N'Event', N'Customers Payments'),
 	(N'EmployeeIncomeTax', N'Event', N'Employee Income Tax'),
 	(N'InventoryTransfer', N'Event', N'Inventory Transfer'),
 	(N'InventoryTransfer', N'Order', N'Inventory transfer Order'),
@@ -73,7 +73,7 @@ INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
 	(N'StockIssueToCustomer', N'Event', N'Issues'),
 	(N'StockReceiptFromSupplier', N'Event', N'Receipts')
 
-INSERT [dbo].[AccountTemplates] ([Id]) VALUES 
+INSERT [dbo].[AccountSpecifications] ([Id]) VALUES 
 	(N'Agent'),
 	(N'Basic'),
 	(N'Capital'),
@@ -104,7 +104,6 @@ INSERT [dbo].[CustodyTypes] ([Id], [Name]) VALUES
 	(N'Agent', N'Agent'),
 	(N'BankAccount', N'Bank Account'),
 	(N'Individual', N'Individual'),
-	(N'Location', N'Location'),
 	(N'Organization', N'Organization'),
 	(N'OrganizationUnit', N'Organization Unit'),
 	(N'ProductionPoint', N'Production Point'),
@@ -123,28 +122,28 @@ INSERT [dbo].[OperationTypes] ([Id], [Name]) VALUES
 	(N'Project', N'Project');
 
 INSERT [dbo].[UnitsOfMeasure] ([Id], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive], [AsOfDateTime]) VALUES
-	(N'AED', N'Money', N'AE Dirhams', 3.67, 1, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'd', N'Time', N'Day', 1, 86400, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'dozen', N'count', N'Dozen', 1, 12, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'ea', N'Pure', N'Each', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'ETB', N'Money', N'ET Birr', 27.8, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'g', N'Mass', N'Gram', 1, 1, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'hr', N'Time', N'Hour', 1, 3600, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'in', N'Distance', N'inch', 1, 2.541, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'kg', N'Mass', N'Kilogram', 1, 1000, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'ltr', N'volume', N'Liter', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'm', N'Distance', N'meter', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'min', N'Time', N'minute', 1, 60, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'mo', N'Time', N'Month', 1, 2592000, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'mt', N'Mass', N'Metric ton', 1, 1000000, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'pcs', N'count', N'Pieces', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N's', N'Time', N'second', 1, 1, 0, CAST(N'2018-10-25T17:55:18.6733333+00:00' AS DateTimeOffset)),
-	(N'share', N'Pure', N'Shares', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'USD', N'Money', N'US Dollars', 1, 1, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'usg', N'Volume', N'US Gallon', 1, 3.785411784, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'wd', N'Time', N'work day', 1, 8, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'wk', N'Time', N'week', 1, 604800, 0, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'wmo', N'Time', N'work month', 1, 1248, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'wwk', N'Time', N'work week', 1, 48, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'wyr', N'Time', N'work year', 1, 14976, 1, CAST(N'01.01.0001' AS DateTimeOffset)),
-	(N'yr', N'Time', N'Year', 1, 31104000, 0, CAST(N'01.01.0001' AS DateTimeOffset));
+	(N'AED', N'Money', N'AE Dirhams', 3.67, 1, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'd', N'Time', N'Day', 1, 86400, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'dozen', N'count', N'Dozen', 1, 12, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'ea', N'Pure', N'Each', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'ETB', N'Money', N'ET Birr', 27.8, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'g', N'Mass', N'Gram', 1, 1, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'hr', N'Time', N'Hour', 1, 3600, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'in', N'Distance', N'inch', 1, 2.541, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'kg', N'Mass', N'Kilogram', 1, 1000, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'ltr', N'volume', N'Liter', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'm', N'Distance', N'meter', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'min', N'Time', N'minute', 1, 60, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'mo', N'Time', N'Month', 1, 2592000, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'mt', N'Mass', N'Metric ton', 1, 1000000, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'pcs', N'count', N'Pieces', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N's', N'Time', N'second', 1, 1, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'share', N'Pure', N'Shares', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'USD', N'Money', N'US Dollars', 1, 1, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'usg', N'Volume', N'US Gallon', 1, 3.785411784, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'wd', N'Time', N'work day', 1, 8, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'wk', N'Time', N'week', 1, 604800, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'wmo', N'Time', N'work month', 1, 1248, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'wwk', N'Time', N'work week', 1, 48, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'wyr', N'Time', N'work year', 1, 14976, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
+	(N'yr', N'Time', N'Year', 1, 31104000, 0, CAST(N'01.01.2000' AS DateTimeOffset));

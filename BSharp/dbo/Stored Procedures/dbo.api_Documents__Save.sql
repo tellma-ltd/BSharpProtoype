@@ -1,9 +1,9 @@
-﻿
-CREATE PROCEDURE [dbo].[api_Documents__Save] 
+﻿CREATE PROCEDURE [dbo].[api_Documents__Save] 
 	@Documents DocumentList READONLY, 
 	@WideLines WideLineList READONLY, 
 	@Lines LineList READONLY, 
-	@Entries EntryList READONLY
+	@Entries EntryList READONLY,
+	@DocumentOffset int OUTPUT
 AS
 DECLARE
 	@DocumentId int = 0,
@@ -128,7 +128,6 @@ BEGIN TRY
 				@TransactionType = @TransactionType,
 				@LineNumber = @LineNumber,
 
-
 				@Operation1 = @Operation1,
 				@Reference1 = @Reference1,
 				@Account1 = @Account1,
@@ -176,9 +175,9 @@ BEGIN TRY
 	END
 
 	IF EXISTS(SELECT * FROM @EntriesTransit)
-	INSERT INTO @EntriesLocal
-	EXEC [dbo].[bdb_Document_Values__Update] 
-			@WideLines = @WideLines, @Entries = @EntriesTransit
+		INSERT INTO @EntriesLocal
+		EXEC [dbo].[bdb_Document_Values__Update] 
+				@WideLines = @WideLines, @Entries = @EntriesTransit
 	
 	INSERT INTO @LinesLocal(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
 	SELECT DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
@@ -213,7 +212,7 @@ BEGIN TRY
 	-- Bulk validation
 
 	-- Persist in Db
-	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal
+	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal, @DocumentOffset = @DocumentOffset OUTPUT
 END TRY
 
 BEGIN CATCH

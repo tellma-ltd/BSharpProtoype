@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[TransactionTemplates] (
+﻿CREATE TABLE [dbo].[TransactionSpecifications] (
     [TransactionType]         NVARCHAR (50)  NOT NULL,
     [EntryNumber]      TINYINT        NOT NULL,
     [Definition]       NVARCHAR (50)  NOT NULL,

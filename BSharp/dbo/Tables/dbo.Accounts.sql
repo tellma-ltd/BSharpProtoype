@@ -5,7 +5,7 @@
     [IsActive]        BIT             NOT NULL,
     [ParentId]        NVARCHAR (255)  NULL,
     [AccountType]     NVARCHAR (10)   CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom') NOT NULL,
-    [AccountTemplate] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountTemplate] DEFAULT (N'Basic') NOT NULL,
+    [AccountSpecification] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountTemplate] DEFAULT (N'Basic') NOT NULL,
     [IsExtensible]    BIT             CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_Accounts_1] PRIMARY KEY NONCLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[Accounts] ([Id])

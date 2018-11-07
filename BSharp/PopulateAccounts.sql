@@ -402,16 +402,13 @@ UPDATE SET
     t.[Code]			=	s.[Code],
     t.[IsActive]		=	s.[IsActive],
     t.[AccountType]		=	s.[AccountType], 
-    t.[AccountTemplate]	=	s.[AccountTemplate],
+    t.[AccountSpecification]	=	s.[AccountTemplate],
     t.[IsExtensible]	=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
         DELETE
 WHEN NOT MATCHED BY TARGET THEN
-        INSERT ([Id], [Name], [Code], [IsActive], [AccountType], [AccountTemplate], [IsExtensible])
+        INSERT ([Id], [Name], [Code], [IsActive], [AccountType], [AccountSpecification], [IsExtensible])
         VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], s.[AccountTemplate], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 
 DROP TABLE #Accounts;​
-
-
-

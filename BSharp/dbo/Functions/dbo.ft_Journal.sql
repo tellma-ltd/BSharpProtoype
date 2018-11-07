@@ -9,8 +9,6 @@ RETURN
 		D.Id,
 		D.[TransactionType],
 		D.SerialNumber,
-		D.RecordedByUserId,
-		CONVERT(nvarchar(50), D.RecordedOnDateTime, 104) AS RecordedOnDateTime,
 		L.LineNumber,
 		L.ResponsibleAgentId,
 		CONVERT(nvarchar(50), 

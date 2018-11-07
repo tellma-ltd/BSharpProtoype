@@ -63,43 +63,43 @@ BEGIN
 	END
 
 	UPDATE dbo.Accounts -- Agent/Location
-	SET AccountTemplate = N'PropertyPlantAndEquipment'
+	SET [AccountSpecification] = N'PropertyPlantAndEquipment'
 	WHERE Code Like '1101%' AND IsExtensible = 1
 
 	UPDATE dbo.Accounts -- Location
-	SET AccountTemplate = N'InvestmentProperty'
+	SET [AccountSpecification] = N'InvestmentProperty'
 	WHERE Code Like '1102%' AND IsExtensible = 1
 
 	UPDATE dbo.Accounts -- Agent
-	SET AccountTemplate = N'IntangibleAssetsOtherThanGoodwill'
+	SET [AccountSpecification] = N'IntangibleAssetsOtherThanGoodwill'
 	WHERE Code Like '1104%' AND IsExtensible = 1
 
 	UPDATE dbo.Accounts -- Agent
-	SET AccountTemplate = N'Investments'
+	SET [AccountSpecification] = N'Investments'
 	WHERE Code Like '1106%' AND IsExtensible = 1
 
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'BiologicalAssets'
+	SET [AccountSpecification] = N'BiologicalAssets'
 	WHERE (Code Like '1107%' OR Code Like '1214%') AND IsExtensible = 1
 
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'Agents' -- Agent
+	SET [AccountSpecification] = N'Agents' -- Agent
 	WHERE (Code Like '1108%' OR Code Like '1212%' OR Code Like '312%' OR Code Like '3212%') AND IsExtensible = 1
 	
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'Inventories' -- location
+	SET [AccountSpecification] = N'Inventories' -- location
 	WHERE (Code Like '1109%' OR Code Like '1211%') AND IsExtensible = 1
 
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'Cash' -- location
+	SET [AccountSpecification] = N'Cash' -- location
 	WHERE (Code Like '1217') AND IsExtensible = 1
 
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'Capital' -- location
+	SET [AccountSpecification] = N'Capital' -- location
 	WHERE (Code Like '211%') AND IsExtensible = 1
 
 	UPDATE dbo.Accounts
-	SET AccountTemplate = N'Basic' -- location
-	WHERE AccountTemplate IS NULL
+	SET [AccountSpecification] = N'Basic' -- location
+	WHERE [AccountSpecification] IS NULL
 
 END

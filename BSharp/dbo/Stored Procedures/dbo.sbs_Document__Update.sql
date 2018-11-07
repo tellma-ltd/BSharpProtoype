@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[sbs_Document__Update] 
 -- Does not handle delete event lines from an event group yet. It assumes only insertion/update.
 	@Document int,
-	@Reference nvarchar(50) = NULL,
+	@LLinesReference1 nvarchar(50) = NULL,
 	@Custody int = NULL, 
 	@Location int = NULL,
 	@Resource int = NULL,
@@ -25,7 +25,7 @@ BEGIN
 			RAISERROR( N'The document is committed. Set it in draft mode before editing it.', 16, 1)
 		
 		UPDATE dbo.Documents
-		SET Reference = @Reference
+		SET LinesReference1 = @LLinesReference1
 
 		WHERE Id = @Document		
 	END TRY

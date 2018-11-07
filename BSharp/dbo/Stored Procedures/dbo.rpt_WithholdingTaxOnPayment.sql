@@ -6,7 +6,7 @@ AS
 SET NOCOUNT ON
 SELECT
 	A.TaxIdentificationNumber As [Withholdee TIN],
-	A.LongName As [Organization/Person Name],
+	C.Name As [Organization/Person Name],
 	A.RegisteredAddress As [Withholdee Address], 
 	S.Memo As [Withholding Type],
 	S.RelatedAmount As [Taxable Amount], 
@@ -14,5 +14,6 @@ SELECT
 	S.Reference As [Receipt Number], 
 	S.StartDateTime As [Receipt Date]
 FROM dbo.ft_Account__Statement(N'CurrentWithholdingTaxPayable', @fromDate, @toDate) S
-LEFT JOIN dbo.Agents A ON S.RelatedAgentId = A.Id
+LEFT JOIN dbo.Custodies C ON S.RelatedAgentId = C.Id
+LEFT JOIN dbo.Agents A ON C.Id = A.Id
 WHERE S.Direction = -1

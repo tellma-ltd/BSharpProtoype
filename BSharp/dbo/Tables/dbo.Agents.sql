@@ -1,8 +1,6 @@
 ﻿CREATE TABLE [dbo].[Agents] (
     [Id]                      INT                NOT NULL,
     [AgentType]               NVARCHAR (50)      NOT NULL,
-    [ShortName]               NVARCHAR (50)      NOT NULL,
-    [LongName]                NVARCHAR (255)     NOT NULL,
     [IsRelated]               BIT                CONSTRAINT [DF_Agents_IsRelated] DEFAULT ((0)) NOT NULL,
     [UserId]                  NVARCHAR (450)     NULL,
     [TaxIdentificationNumber] NVARCHAR (50)      NULL,

@@ -10,8 +10,6 @@ RETURN
 		Id,
 		[TransactionType],
 		SerialNumber As [Serial Number],
-		RecordedByUserId,
-		RecordedOnDateTime,
 		ResponsibleAgentId,
 		StartDateTime,
 		EndDateTime,

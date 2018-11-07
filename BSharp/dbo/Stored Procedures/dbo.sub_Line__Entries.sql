@@ -68,7 +68,7 @@ BEGIN
 			(@DocumentId, @LineNumber, 2, @Operation2, @Reference2, @Account2, @Custody2, @Resource2 , @Direction2 , @Amount2, @Value2, @Note2, @RelatedReference2 , @RelatedAgent2, @RelatedResource2, @RelatedAmount2),
 			(@DocumentId, @LineNumber, 3, @Operation3, @Reference3, @Account3, @Custody3, @Resource3 , @Direction3 , @Amount3, @Value3, @Note3, @RelatedReference3 , @RelatedAgent3, @RelatedResource3, @RelatedAmount3);
 
-		SELECT @EntriesCount = max(EntryNumber) FROM dbo.[TransactionTemplates] WHERE [TransactionType] = @TransactionType
+		SELECT @EntriesCount = max(EntryNumber) FROM dbo.[TransactionSpecifications] WHERE [TransactionType] = @TransactionType
 		DELETE FROM @Entries WHERE EntryNumber > @EntriesCount;
 
 		-- Calculate the remaining fields based on the logic in line templates 	

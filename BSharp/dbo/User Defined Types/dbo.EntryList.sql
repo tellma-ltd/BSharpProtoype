@@ -7,7 +7,7 @@
     [AccountId]         NVARCHAR (255) NULL,
     [CustodyId]         INT            NULL,
     [ResourceId]        INT            NULL,
-    [Direction]         INT            NULL,
+    [Direction]         SMALLINT       NULL,
     [Amount]            MONEY          NULL,
     [Value]             MONEY          NULL,
     [NoteId]            NVARCHAR (255) NULL,
@@ -15,5 +15,5 @@
     [RelatedAgentId]    INT            NULL,
     [RelatedResourceId] INT            NULL,
     [RelatedAmount]     MONEY          NULL,
+    [Status]			NVARCHAR(50)	NULL,
     PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC, [EntryNumber] ASC));
-
