@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[Resources] (
     [Id]                     INT            IDENTITY (1, 1) NOT NULL,
     [ResourceType]           NVARCHAR (50)  NOT NULL,
-    [SerialNumber]           INT            NOT NULL,
     [Name]                   NVARCHAR (50)  NOT NULL,
     [Code]                   NVARCHAR (50)  NULL,
     [UnitOfMeasure]          NVARCHAR (5)   NOT NULL,

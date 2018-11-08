@@ -18,8 +18,8 @@ BEGIN
 
 		SET @Warehouse = SCOPE_IDENTITY();
 
-		INSERT INTO dbo.Locations(Id, LocationType, [Name], [Address])
-		VALUES(@Warehouse, @Type, @Name, @Address)
+		INSERT INTO dbo.Locations(Id, LocationType, [Address])
+		VALUES(@Warehouse, @Type, @Address)
 	END TRY
 
 	BEGIN CATCH

@@ -17,14 +17,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRY
-		DECLARE @SerialNumber int;
-		SELECT @SerialNumber = 
-			isNull(MAX(SerialNumber) ,0) + 1
-			FROM dbo.Resources
-			WHERE ResourceType = @ResourceType
-		
-		INSERT INTO dbo.Resources(ResourceType, SerialNumber, Name, Code, UnitOfMeasure, Memo, Lookup1, Lookup2, Lookup3, Lookup4, GoodForServiceParentId, FungibleParentId)
-		VALUES(@ResourceType, @SerialNumber, @Name, @Code, @UnitOfMeasure, @Memo, @Lookup1, @Lookup2, @Lookup3, @Lookup4, @GoodForServiceParent, @FungibleParent)
+		INSERT INTO dbo.Resources(ResourceType, [Name], Code, UnitOfMeasure, Memo, Lookup1, Lookup2, Lookup3, Lookup4, GoodForServiceParentId, FungibleParentId)
+		VALUES(@ResourceType, @Name, @Code, @UnitOfMeasure, @Memo, @Lookup1, @Lookup2, @Lookup3, @Lookup4, @GoodForServiceParent, @FungibleParent)
 
 		SET @Resource = SCOPE_IDENTITY()
 	END TRY

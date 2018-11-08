@@ -50,12 +50,12 @@ INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
 	(N'ManualJournalVoucherExtended',  0),
 	(N'Purchase',  1),
 	(N'PurchaseWitholdingTax',  1),
-	
+	(N'Sale',  1),
 	(N'SaleWitholdingTax',  1),
 	(N'StockIssueToCustomer',  1),
 	(N'StockReceiptFromSupplier', 1);
 
-:R .\PopulateLineTemplates.sql
+:R .\PopulateTransactionSpecifications.sql
 
 INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
 	(N'CashIssueToSupplier', N'Event', N'Suppliers Payments'),

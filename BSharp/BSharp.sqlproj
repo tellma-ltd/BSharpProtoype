@@ -155,6 +155,9 @@
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
     <None Include="PopulateAccounts.sql" />
+    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IdMappingList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -164,9 +167,11 @@
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="IntegrationTesting.sql" />
+    <None Include="TestingToBeCleaned.sql" />
     <None Include="PopulateNotes.sql" />
     <None Include="PopulateTransactionSpecifications.sql" />
+    <None Include="TestingAgents.sql" />
+    <None Include="TestingToBeCleaned2.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

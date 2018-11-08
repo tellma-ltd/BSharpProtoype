@@ -8,7 +8,6 @@
     [Title]                   NVARCHAR (50)      NULL,
     [Gender]                  NCHAR (1)          NULL,
     [BirthDateTime]           DATETIMEOFFSET (7) NULL,
-    [DeathDateTime]           DATETIMEOFFSET (7) NULL,
     CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Agents_AgentTypes] FOREIGN KEY ([AgentType]) REFERENCES [dbo].[AgentTypes] ([Id]),
     CONSTRAINT [FK_Agents_Custodies] FOREIGN KEY ([Id], [AgentType]) REFERENCES [dbo].[Custodies] ([Id], [CustodyType]) ON DELETE CASCADE ON UPDATE CASCADE,

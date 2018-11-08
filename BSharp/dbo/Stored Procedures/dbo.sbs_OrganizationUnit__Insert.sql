@@ -1,10 +1,9 @@
 ﻿
 CREATE PROCEDURE [dbo].[sbs_OrganizationUnit__Insert] 
 --	DECLARE @SWDepartment int; EXEC [dbo].[sbs_OrganizationUnit__Insert] @LongName = N'Software Design and Development Department', @ShortName = N'Development', @BirthDateTime = '2017.08.09',  @OrganizationUnit = @SWDepartment OUTPUT
-	@LongName nvarchar(255),
-	@ShortName nvarchar(50),
+	@Name nvarchar(50),
 	@BirthDateTime datetimeoffset(7) = NULL,
-	@DeathDateTime datetimeoffset(7) = NULL,
+	@IsActive bit = 1,
 	@OrganizationUnit int OUTPUT
 AS
 BEGIN
@@ -15,13 +14,13 @@ BEGIN
 		DECLARE @Type nvarchar(50)
 		SET @Type = N'OrganizationUnit'
 
-		INSERT INTO dbo.Custodies(CustodyType, [Name])
-		VALUES(@Type, @ShortName);
+		INSERT INTO dbo.Custodies(CustodyType, [Name], IsActive)
+		VALUES(@Type, @Name, @IsActive);
 
 		SET @OrganizationUnit = SCOPE_IDENTITY();
 
-		INSERT INTO dbo.Agents(Id, AgentType, LongName, ShortName, BirthDateTime, DeathDateTime)
-		VALUES(@OrganizationUnit, @Type, @LongName, @ShortName, @BirthDateTime, @DeathDateTime)
+		INSERT INTO dbo.Agents(Id, AgentType, BirthDateTime)
+		VALUES(@OrganizationUnit, @Type, @BirthDateTime)
 
 	END TRY
 

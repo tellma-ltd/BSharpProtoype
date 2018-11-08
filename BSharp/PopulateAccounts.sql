@@ -5,7 +5,7 @@
     [IsActive]        BIT             NOT NULL,
     [ParentId]        NVARCHAR (255)  NULL,
     [AccountType]     NVARCHAR (10)   CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom') NOT NULL,
-    [AccountTemplate] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountTemplate] DEFAULT (N'Basic') NOT NULL,
+    [AccountSpecification] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountSpecification] DEFAULT (N'Basic') NOT NULL,
     [IsExtensible]    BIT             CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_Accounts_1] PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
@@ -390,25 +390,25 @@ USING #Accounts AS s
 ON s.Code = t.Code --AND s.tenantId = t.tenantId
 WHEN MATCHED AND
 (
-    t.[Name]			<>	s.[Name]			OR
-    t.[Code]			<>	s.[Code]			OR
-    t.[IsActive]		<>	s.[IsActive]		OR
-    t.[AccountType]		<>	s.[AccountType]		OR
-    t.[AccountTemplate]	<>	s.[AccountTemplate]	OR
-    t.[IsExtensible]	<>	s.[IsExtensible]
+    t.[Name]					<>	s.[Name]			OR
+    t.[Code]					<>	s.[Code]			OR
+    t.[IsActive]				<>	s.[IsActive]		OR
+    t.[AccountType]				<>	s.[AccountType]		OR
+    t.[AccountSpecification]	<>	s.[AccountSpecification]	OR
+    t.[IsExtensible]			<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-    t.[Name]			=	s.[Name],  
-    t.[Code]			=	s.[Code],
-    t.[IsActive]		=	s.[IsActive],
-    t.[AccountType]		=	s.[AccountType], 
-    t.[AccountSpecification]	=	s.[AccountTemplate],
-    t.[IsExtensible]	=	s.[IsExtensible]
+    t.[Name]					=	s.[Name],  
+    t.[Code]					=	s.[Code],
+    t.[IsActive]				=	s.[IsActive],
+    t.[AccountType]				=	s.[AccountType], 
+    t.[AccountSpecification]	=	s.[AccountSpecification],
+    t.[IsExtensible]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
         DELETE
 WHEN NOT MATCHED BY TARGET THEN
         INSERT ([Id], [Name], [Code], [IsActive], [AccountType], [AccountSpecification], [IsExtensible])
-        VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], s.[AccountTemplate], s.[IsExtensible]);
+        VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], s.[AccountSpecification], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 
 DROP TABLE #Accounts;​

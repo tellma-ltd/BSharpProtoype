@@ -112,4 +112,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[AccountSpecification]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e43d45b5-c25f-4b2c-b832-2f209a152a14" ChangeDateTime="11/07/2018 13:32:27">
+    <Property Name="ElementName" Value="[dbo].[Custodies].[AvailableTo]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Custodies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsActive" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="957fc195-8149-4900-bfe3-2d9cdee9a397" ChangeDateTime="11/07/2018 21:49:04">
+    <Property Name="ElementName" Value="[dbo].[Individuals]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IndividualList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="015fb160-d2a9-4f5c-a59d-e9bc32455d3b" ChangeDateTime="11/08/2018 07:56:09">
+    <Property Name="ElementName" Value="[dbo].[IndividualList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[AgentList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ac611c04-305a-4fdb-a021-4d66b008e287" ChangeDateTime="11/08/2018 08:05:57">
+    <Property Name="ElementName" Value="[dbo].[api_Individuals__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_Agents__Save]" />
+  </Operation>
 </Operations>

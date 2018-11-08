@@ -1,13 +1,12 @@
 ﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
-    [Id]                       INT                NOT NULL,
-    [State]                    NVARCHAR (10)      NULL,
-    [TransactionType]          NVARCHAR (50)      NOT NULL,
-    [SerialNumber]             INT                NULL,
-    [Mode]                     NVARCHAR (10)      NOT NULL,
-	[FolderId]				   INT                NULL,
-	-- Common properties
-	[LinesMemo]                     NVARCHAR (255)     NULL,
-    [LinesResponsibleAgentId]	   INT                NULL,
+    [Id]						INT                NOT NULL,
+    [State]						NVARCHAR (10)      NULL,
+    [TransactionType]			NVARCHAR (50)      NOT NULL,
+    [SerialNumber]				INT                NULL,
+    [Mode]						NVARCHAR (10)      NOT NULL,
+	[FolderId]					INT                NULL,
+	[LinesMemo]					NVARCHAR (255)     NULL,
+    [LinesResponsibleAgentId]	INT                NULL,
     [LinesStartDateTime]      DATETIMEOFFSET (7) NULL,
     [LinesEndDateTime]        DATETIMEOFFSET (7) NULL,
 	[LinesCustody1]				INT NULL,
@@ -19,6 +18,3 @@
     [ForwardedToUserId]        NVARCHAR (255)     NULL,
 	[Status]					NVARCHAR(50)	NULL,
 	PRIMARY KEY CLUSTERED ([Id] ASC));
-
-
-
