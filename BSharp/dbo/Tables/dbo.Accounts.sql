@@ -1,22 +1,19 @@
 ﻿CREATE TABLE [dbo].[Accounts] (
     [Id]              NVARCHAR (255)  NOT NULL,
-    [Name]            NVARCHAR (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-    [Code]            NVARCHAR (10)   COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [Name]            NVARCHAR (1024) NOT NULL,
+    [Code]            NVARCHAR (10)   NOT NULL,
     [IsActive]        BIT             NOT NULL,
     [ParentId]        NVARCHAR (255)  NULL,
     [AccountType]     NVARCHAR (10)   CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom') NOT NULL,
-    [AccountSpecification] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountTemplate] DEFAULT (N'Basic') NOT NULL,
+    [AccountSpecification] NVARCHAR (50)   CONSTRAINT [DF_Accounts_AccountSpecifications] DEFAULT (N'Basic') NOT NULL,
     [IsExtensible]    BIT             CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT ((1)) NOT NULL,
-    CONSTRAINT [PK_Accounts_1] PRIMARY KEY NONCLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[Accounts] ([Id])
+    CONSTRAINT [PK_Accounts] PRIMARY KEY NONCLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[Accounts] ([Id]), 
+    CONSTRAINT [CK_Accounts_AccountType] CHECK ([AccountType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory'))
 );
-
-
 GO
 CREATE UNIQUE CLUSTERED INDEX [IX_Accounts__Code]
     ON [dbo].[Accounts]([Code] ASC);
-
-
 GO
 CREATE TRIGGER [dbo].[trD_Accounts]
 ON [dbo].[Accounts]
@@ -31,8 +28,7 @@ Set NoCount On
 			Where P IN (Select Id From Deleted)))
 	And (P IN (Select ParentId From Deleted) 
 		Or P IN (Select P From Accounts_H 
-			Where C IN (Select ParentId From Deleted)))
-
+			Where C IN (Select ParentId From Deleted)));
 GO
 CREATE TRIGGER [dbo].[trI_Accounts]
 ON [dbo].[Accounts]
@@ -51,8 +47,7 @@ Set NoCount On
 	Select P From Accounts_H Where P IN (Select ParentId From Inserted) 
 				OR C IN (Select ParentId From inserted)
 	) T2
-
-GO
+GO;
 CREATE TRIGGER [dbo].[trU_Accounts]
 ON [dbo].[Accounts]
 FOR UPDATE

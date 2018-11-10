@@ -44,14 +44,14 @@ AS
 			t.[Gender]					= s.[Gender],
 			t.[BirthDateTime]			= s.[BirthDateTime]
 	WHEN NOT MATCHED THEN
-		INSERT ([Id], [AgentType],		[IsRelated] ,	[UserId],	[TaxIdentificationNumber],	[RegisteredAddress], [Title], [Gender], [BirthDateTime])
+		INSERT ([Id], [AgentType]	,	[IsRelated] ,	[UserId],	[TaxIdentificationNumber],	[RegisteredAddress], [Title], [Gender], [BirthDateTime])
 		VALUES (s.[Id], s.[AgentType], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[RegisteredAddress], s.[Title], s.[Gender], s.[BirthDateTime]);
 
 		--WHEN NOT MATCHED BY SOURCE THEN 
 		--	DELETE
 
 --INSERT INTO @AgentsLocal([Id], [Name], [IsActive], [CustodyType], [IsRelated] , [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime])
-SELECT C.[Id], A.[AgentType], C.[Name], C.[IsActive], A.[IsRelated], A.[UserId], A.[TaxIdentificationNumber], A.[RegisteredAddress], A.[Title], A.[Gender], A.[BirthDateTime], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
+SELECT C.[Id], A.[AgentType], C.[Name], C.[IsActive], A.[IsRelated], A.[UserId], A.[TaxIdentificationNumber], A.[RegisteredAddress], A.[Title], A.[Gender], A.[BirthDateTime], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
 FROM dbo.Custodies C JOIN dbo.Agents A ON C.Id = A.Id
 LEFT JOIN @IdMappings M ON C.[Id] = M.[NewId]
 WHERE C.[Id] IN (

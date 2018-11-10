@@ -6,8 +6,6 @@
     CONSTRAINT [PK_Custodies] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Custodies_CustodyTypes] FOREIGN KEY ([CustodyType]) REFERENCES [dbo].[CustodyTypes] ([Id])
 );
-
-
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Id_CustodyType]
     ON [dbo].[Custodies]([Id] ASC, [CustodyType] ASC);

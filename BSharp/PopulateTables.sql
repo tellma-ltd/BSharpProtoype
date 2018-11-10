@@ -1,65 +1,27 @@
-﻿/*
-Post-Deployment Script Template							
---------------------------------------------------------------------------------------
- This file contains SQL statements that will be appended to the build script.		
- Use SQLCMD syntax to include a file in the post-deployment script.			
- Example:      :r .\myfile.sql								
- Use SQLCMD syntax to reference a variable in the post-deployment script.		
- Example:      :setvar TableName MyTable							
-               SELECT * FROM [$(TableName)]					
---------------------------------------------------------------------------------------
-*/
--- DELETE FROM dbo.Accounts; Replaced with MERGE
-DELETE FROM dbo.[TransactionSpecifications];
-DELETE FROM dbo.EventTypes;
-DELETE FROM dbo.[TransactionTypes];
-DELETE FROM dbo.[AccountSpecifications];
-DELETE FROM dbo.AccountTypes;
-DELETE FROM dbo.AgentTypes;
-DELETE FROM dbo.CustodyTypes;
-DELETE FROM dbo.LocationTypes;
-DELETE FROM dbo.Modes;
-DELETE FROM dbo.OperationTypes;
-DELETE FROM dbo.UnitsOfMeasure;
-DELETE FROM dbo.Notes;
-DELETE FROM dbo.States;
+﻿DECLARE @Translations TABLE
+(
+	[Key]			nvarchar(255) NOT NULL,
+    [Language]		nchar (2) NOT NULL,
+    [Country]       nchar(2)  NOT NULL DEFAULT N'',
+	[Singular]		nvarchar(1024) NOT NULL,
+	[Plural]		nvarchar(1024) NULL,
+    PRIMARY KEY NONCLUSTERED ([Key] ASC, [Language] ASC, [Country] ASC)
+);
 
 :r .\PopulateAccounts.sql
-
 :r .\PopulateNotes.sql
+:r .\PopulateTransactionTypes.sql
+:r .\PopulateTransactionSpecifications.sql
+:r .\PopulateCustodyTypes.sql
+:r .\PopulateOperationTypes.sql
 
 EXEC dbo.adm_COA__Parents_Update;
 
-INSERT [dbo].[States] ([Id], [Name]) VALUES 
-	(N'Event', N'Event'), 
-	(N'Order', N'Order'),
-	(N'Plan', N'Plan'),
-	(N'Request', N'Request'),
-	(N'Template', N'Template');
-
-INSERT [dbo].[TransactionTypes] ([Id], [IsInstant]) VALUES
-	(N'CashIssueToSupplier',  1),
-	(N'CashReceiptFromCustomer',  1),
-	(N'EmployeeIncomeTax',  0),
-	(N'InventoryTransfer',0),
-	(N'Labor', 1),
-	(N'LaborReceiptFromEmployee',  0),
-	(N'LeaseIssueToCustomer', 0),
-	(N'LeaseReceiptFromSupplier',  0),
-	(N'ManualJournalVoucher',  1),
-	(N'ManualJournalVoucherExtended',  0),
-	(N'Purchase',  1),
-	(N'PurchaseWitholdingTax',  1),
-	(N'Sale',  1),
-	(N'SaleWitholdingTax',  1),
-	(N'StockIssueToCustomer',  1),
-	(N'StockReceiptFromSupplier', 1);
-
-:R .\PopulateTransactionSpecifications.sql
-
-INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
-	(N'CashIssueToSupplier', N'Event', N'Suppliers Payments'),
-	(N'CashReceiptFromCustomer', N'Event', N'Customers Payments'),
+-- We may be able to get rid of it, and construct the name key on the fly...
+/*
+INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
+	(N'PaymentIssueToSupplier', N'Event', N'PaymentIssueToSupplierEvent'),
+	(N'PaymentReceiptFromCustomer', N'Event', N'PaymentReceiptFromCustomerEvent'),
 	(N'EmployeeIncomeTax', N'Event', N'Employee Income Tax'),
 	(N'InventoryTransfer', N'Event', N'Inventory Transfer'),
 	(N'InventoryTransfer', N'Order', N'Inventory transfer Order'),
@@ -72,7 +34,11 @@ INSERT [dbo].[EventTypes] ([TransactionType], [State], [Name]) VALUES
 	(N'SaleWitholdingTax', N'Event', N'Withholding Tax'),
 	(N'StockIssueToCustomer', N'Event', N'Issues'),
 	(N'StockReceiptFromSupplier', N'Event', N'Receipts')
+*/
+--  We may be able to auto concatenate the table name to the string, or simply dismiss it, or use Module as a qualifier
+-- instead of table
 
+IF NOT Exists(SELECT * FROM [dbo].[AccountSpecifications])
 INSERT [dbo].[AccountSpecifications] ([Id]) VALUES 
 	(N'Agent'),
 	(N'Basic'),
@@ -81,46 +47,14 @@ INSERT [dbo].[AccountSpecifications] ([Id]) VALUES
 	(N'Inventory'),
 	(N'PPE');
 
-INSERT [dbo].[AccountTypes] ([Id], [Name]) VALUES
-	(N'Correction', N'Correction'),
-	(N'Custom', N'Custom'),
-	(N'Extension', N'Extension'),
-	(N'Regulatory', N'Regulatory');
+IF NOT Exists(SELECT * FROM [dbo].[Modes])
+INSERT [dbo].[Modes] ([Id]) VALUES
+	(N'Draft'),
+	(N'Posted'),
+	(N'Verified'),
+	(N'Void');
 
-INSERT [dbo].[AgentTypes] ([Id], [Name]) VALUES 
-	(N'Individual', N'Individual'),
-	(N'Organization', N'Organization'),
-	(N'OrganizationUnit', N'Organization Unit');
-
-INSERT [dbo].[LocationTypes] ([Id], [Name]) VALUES
-	(N'Address', N'Address'),
-	(N'BankAccount', N'Bank Account'),
-	(N'Farm', N'Farm'),
-	(N'ProductionPoint', N'Production Point'),
-	(N'Warehouse', N'Warehouse');
-
-INSERT [dbo].[CustodyTypes] ([Id], [Name]) VALUES
-	(N'Address', N'Address'),
-	(N'Agent', N'Agent'),
-	(N'BankAccount', N'Bank Account'),
-	(N'Individual', N'Individual'),
-	(N'Organization', N'Organization'),
-	(N'OrganizationUnit', N'Organization Unit'),
-	(N'ProductionPoint', N'Production Point'),
-	(N'Warehouse', N'Warehouse');
-	   
-INSERT [dbo].[Modes] ([Id], [Name]) VALUES
-	(N'Draft', N'Draft'),
-	(N'Posted', N'Posted'),
-	(N'Verified', N'Verified'),
-	(N'Void', N'Void');
-
-INSERT [dbo].[OperationTypes] ([Id], [Name]) VALUES
-	(N'BusinessEntity', N'Global'),
-	(N'Investment', N'Investment'),
-	(N'OperatingSegment', N'Operating Segment'),
-	(N'Project', N'Project');
-
+IF NOT Exists(SELECT * FROM [dbo].[UnitsOfMeasure])
 INSERT [dbo].[UnitsOfMeasure] ([Id], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive], [AsOfDateTime]) VALUES
 	(N'AED', N'Money', N'AE Dirhams', 3.67, 1, 0, CAST(N'01.01.2000' AS DateTimeOffset)),
 	(N'd', N'Time', N'Day', 1, 86400, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
@@ -147,3 +81,21 @@ INSERT [dbo].[UnitsOfMeasure] ([Id], [UnitType], [Name], [UnitAmount], [BaseAmou
 	(N'wwk', N'Time', N'work week', 1, 48, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
 	(N'wyr', N'Time', N'work year', 1, 14976, 1, CAST(N'01.01.2000' AS DateTimeOffset)),
 	(N'yr', N'Time', N'Year', 1, 31104000, 0, CAST(N'01.01.2000' AS DateTimeOffset));
+	
+MERGE dbo.Translations AS t
+USING @Translations AS s
+ON s.[Key] = t.[Key] AND s.[Language] = t.[Language] AND s.[Country] = t.[Country] --AND s.tenantId = t.tenantId
+WHEN MATCHED AND
+(
+    t.[Singular]	<>	s.[Singular]			OR
+    t.[Plural]		<>	s.[Plural]
+) THEN
+UPDATE SET
+    t.[Singular]	=	s.[Singular],
+    t.[Plural]		=	s.[Plural]
+WHEN NOT MATCHED BY SOURCE THEN
+        DELETE
+WHEN NOT MATCHED BY TARGET THEN
+        INSERT ([Key], [Language], [Country], [Singular], [Plural])
+        VALUES (s.[Key], s.[Language], s.[Country], s.[Singular], s.[Plural]);
+--OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

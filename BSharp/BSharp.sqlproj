@@ -75,11 +75,9 @@
     <Build Include="dbo\Tables\dbo.Locations.sql" />
     <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
     <Build Include="dbo\Tables\dbo.Modes.sql" />
-    <Build Include="dbo\Tables\dbo.States.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
     <Build Include="dbo\Tables\dbo.TransactionSpecifications.sql" />
-    <Build Include="dbo\Tables\dbo.AccountTypes.sql" />
     <Build Include="dbo\Tables\dbo.CustodyTypes.sql" />
     <Build Include="dbo\Tables\dbo.AgentTypes.sql" />
     <Build Include="dbo\Tables\dbo.Users.sql" />
@@ -131,11 +129,7 @@
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Post.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Individual__Insert.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Organization__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Update.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Warehouse__Insert.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_OrganizationUnit__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Forward.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Resource__Insert.sql" />
@@ -158,6 +152,9 @@
     <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IdMappingList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Locations__Save.sql" />
+    <Build Include="dbo\Tables\dbo.Translations.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -172,6 +169,9 @@
     <None Include="PopulateTransactionSpecifications.sql" />
     <None Include="TestingAgents.sql" />
     <None Include="TestingToBeCleaned2.sql" />
+    <None Include="PopulateTransactionTypes.sql" />
+    <None Include="PopulateCustodyTypes.sql" />
+    <None Include="PopulateOperationTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

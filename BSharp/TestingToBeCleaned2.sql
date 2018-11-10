@@ -3,7 +3,7 @@
 	DELETE FROM dbo.Lines;
 	DELETE FROM dbo.Documents;
 	DELETE FROM dbo.Custodies;
-	DELETE FROM dbo.Users;
+
 	DELETE FROM dbo.Operations;
 	DELETE FROM dbo.Resources;	
 
@@ -28,27 +28,7 @@ BEGIN -- Settings
 END
 	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int, @ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int;
 	/*
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Mohamad Akra', @BirthDateTime = '1966.02.19', @UserId = N'mohamad.akra@banan-it.com', @Title = N'Dr.',  @Gender = 'M', @Individual = @MohamadAkra OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Ahmad Akra', @BirthDateTime = '1992.09.21', @UserId = N'ahmad.akra@banan-it.com', @Title = N'Mr.', @Gender = 'M', @Individual = @AhmadAkra OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Badege Kebede', @UserId = N'badegek@gmail.com', @Title = N'ATO', @Gender = 'M', @Individual = @BadegeKebede OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Tizita Nigussie', @UserId = N'mintewelde00@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @TizitaNigussie OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Ashenafi Fantahun', @UserId = N'ashenafi935@gmail.com', @Title = N'Mr.', @Gender = 'M', @Individual = @Ashenafi OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Yisak Tegene', @UserId = N'yisak.tegene@gmail.com', @Title = N'Mr.', @Gender = 'M', @Individual = @YisakTegene OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Zewdinesh Hora', @UserId = N'zewdnesh.hora@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @ZewdineshHora OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Tigist Negash', @UserId = N'tigistnegash74@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @TigistNegash OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Roman Zenebe', @UserId = N'roman.zen12@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @RomanZenebe OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Mestawet G/Egziyabhare', @UserId = N'mestawetezige@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @Mestawet OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Ayelech Hora', @UserId = N'ayelech.hora@gmail.com', @Title = N'Ms.', @Gender = 'F', @Individual = @AyelechHora OUTPUT
-	EXEC  [dbo].[sbs_Individual__Insert] @Name = N'Yigezu Legesse', @UserId = NULL, @Title = N'ATO', @Gender = 'M', @Individual = @YigezuLegesse OUTPUT
-	*/
-	DECLARE @BananIT int, @WaliaSteel int, @Lifan int, @Sesay int, @ERCA int, @Paint int, @Plastic int;
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Banan Information technologies, plc', @BirthDateTime = '2017.08.09', @TaxIdentificationNumber = N'0054901530', @UserId = N'info@banan-it.com', @Organization = @BananIT OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Walia Steel Industry, plc', @TaxIdentificationNumber = N'0001656462',  @Organization = @WaliaSteel OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Yangfan Motors, PLC', @TaxIdentificationNumber = N'0005306731', @RegisteredAddress = N'AA, Bole, 06, New',   @Organization = @Lifan OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Sisay Tesfaye, PLC', @TaxIdentificationNumber = N'', @Organization = @Sesay OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Ethiopian Revenues and Customs Authority', @Organization = @ERCA OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Best Paint Industry', @TaxIdentificationNumber = N'',  @Organization = @Paint OUTPUT
-	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Best Plastic Industry', @TaxIdentificationNumber = N'',  @Organization = @Plastic OUTPUT
+		*/
 	
 	DECLARE @CBE int, @AWB int
 	EXEC  [dbo].[sbs_Organization__Insert] @Name = N'Commercial Bank of Ethiopia', @TaxIdentificationNumber = N'',  @Organization = @CBE OUTPUT

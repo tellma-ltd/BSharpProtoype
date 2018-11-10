@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[Modes] (
     [Id]   NVARCHAR (10) NOT NULL,
-    [Name] NVARCHAR (50) NOT NULL,
     CONSTRAINT [PK_Modes] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

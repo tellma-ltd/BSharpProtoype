@@ -11,7 +11,7 @@
     [Title]						NVARCHAR (50)      NULL,
     [Gender]					NCHAR (1)          NULL,
     [BirthDateTime]				DATETIMEOFFSET (7) NULL,
-	[Status]					NVARCHAR(10) NOT NULL, -- Unchanged, Inserted, Updated, Deleted.
+	[Status]					NVARCHAR(10) NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]				INT	NULL,
 	PRIMARY KEY CLUSTERED ([Id] ASC)
 );
