@@ -129,10 +129,8 @@
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Post.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Forward.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Resource__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.adm_COA__Parents_Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_IFRS.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Account__IsActive.sql" />
@@ -140,7 +138,6 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_WithholdingTaxOnPayment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_VAT__Declaration.sql" />
     <Build Include="dbo\Stored Procedures\dbo.adm_Accounts_H__FIX.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_Operation__Insert.sql" />
     <Build Include="dbo\User Defined Types\dbo.EntryList.sql" />
     <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
     <Build Include="dbo\User Defined Types\dbo.WideLineList.sql" />
@@ -155,6 +152,10 @@
     <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Save.sql" />
     <Build Include="dbo\Tables\dbo.Translations.sql" />
+    <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -167,11 +168,15 @@
     <None Include="TestingToBeCleaned.sql" />
     <None Include="PopulateNotes.sql" />
     <None Include="PopulateTransactionSpecifications.sql" />
-    <None Include="TestingAgents.sql" />
+    <None Include="TestingCustodies.sql" />
     <None Include="TestingToBeCleaned2.sql" />
     <None Include="PopulateTransactionTypes.sql" />
     <None Include="PopulateCustodyTypes.sql" />
     <None Include="PopulateOperationTypes.sql" />
+    <None Include="Testing.sql" />
+    <None Include="TestingSettings.sql" />
+    <None Include="TestingResources.sql" />
+    <None Include="TestingOperations.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />
