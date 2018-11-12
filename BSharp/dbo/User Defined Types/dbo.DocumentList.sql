@@ -16,5 +16,6 @@
 	[LinesReference2]			NVARCHAR(50)	 NULL,
 	[LinesReference3]			NVARCHAR(50)	 NULL,
     [ForwardedToUserId]        NVARCHAR (255)     NULL,
-	[Status]					NVARCHAR(50)	NULL,
+	[Status]					NVARCHAR(10) NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[TemporaryId]				INT	NULL,
 	PRIMARY KEY CLUSTERED ([Id] ASC));

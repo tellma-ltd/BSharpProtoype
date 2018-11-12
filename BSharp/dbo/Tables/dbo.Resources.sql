@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[Resources] (
+	[TenantId]				 INT				NOT NULL,
     [Id]                     INT            IDENTITY (1, 1) NOT NULL,
     [ResourceType]           NVARCHAR (50)  NOT NULL,
     [Name]                   NVARCHAR (50)  NOT NULL,
@@ -11,7 +12,7 @@
     [Lookup4]                NVARCHAR (50)  NULL,
     [GoodForServiceParentId] INT            NULL,
     [FungibleParentId]       INT            NULL,
-    CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
     CONSTRAINT [FK_Resources_UnitsOfMeasure] FOREIGN KEY ([UnitOfMeasure]) REFERENCES [dbo].[UnitsOfMeasure] ([Id]) ON UPDATE CASCADE
 );
 

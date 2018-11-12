@@ -1,8 +1,17 @@
-﻿BEGIN
+﻿BEGIN -- Cleanup & Declarations
+	SET NOCOUNT ON;
 	DELETE FROM dbo.Entries;
 	DELETE FROM dbo.Lines;
 	DELETE FROM dbo.Documents;
+
+--	DBCC CHECKIDENT ('dbo.Documents', RESEED, 0) WITH NO_INFOMSGS;
 	-- Pension social contribution authority,
+
+	Declare @Documents DocumentList, @Lines LineList, @WideLines WideLineList, @Entries EntryList;
+	DECLARE @DocumentId int = -100, @SerialNumber int, @State nvarchar(10), @TransactionType nvarchar(50), @Mode nvarchar(10);
+	DECLARE @LineNumber int, @ResponsibleAgent int, @Memo nvarchar(255), @StartDateTime datetimeoffset(7), @EndDateTime datetimeoffset(7);
+	DECLARE @EntryNumber int, @Operation int, @Account nvarchar(255), @Custody int, @Resource int, @Direction smallint, @Amount money, @Value money, @Note nvarchar(255);
+	DECLARE @ValidationMessage nvarchar(1024);
 END
 
 -- get acceptable document types; and user permissions and general settings;

@@ -1,8 +1,4 @@
 ﻿BEGIN -- Cleanup & Declarations
-	SET NOCOUNT ON;
-	DELETE FROM dbo.Resources;
-	DBCC CHECKIDENT ('dbo.Resources', RESEED, 0) WITH NO_INFOMSGS;
-
 	DECLARE @Resources ResourceList, @ResourcesResult ResourceList;
 	DECLARE @ETB int, @USD int;
 	DECLARE @CommonStock int;

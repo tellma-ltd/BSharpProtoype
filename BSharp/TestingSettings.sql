@@ -1,12 +1,8 @@
 ﻿BEGIN -- Cleanup & Declarations
-	SET NOCOUNT ON;
-	DECLARE @Settings TABLE(
-		[Field] NVARCHAR (255)  NOT NULL,
-		[Value] NVARCHAR (1024) NOT NULL,
-		PRIMARY KEY CLUSTERED ([Field] ASC)
-);
+	DECLARE @Settings SettingList, @SettingsResult SettingList;
 END
-INSERT INTO @Settings Values
+INSERT INTO @Settings
+([Field],[Value]) Values
 -- IFRS values
 (N'NameOfReportingEntityOrOtherMeansOfIdentification', N'Banan IT, plc'),
 (N'DomicileOfEntity', N'ET'),
@@ -21,16 +17,7 @@ INSERT INTO @Settings Values
 (N'TaxIdentificationNumber', N'123456789'),
 (N'FunctionalCurrencyUnit', N'ETB');
 
-MERGE dbo.Settings AS t
-USING @Settings AS s
-ON s.[Field] = t.[Field] --AND s.tenantId = t.tenantId
-WHEN MATCHED AND s.[Value] <> t.[Value] THEN
-UPDATE
-	SET t.[Value] = s.[Value]
-WHEN NOT MATCHED BY SOURCE THEN
-		DELETE
-WHEN NOT MATCHED BY TARGET THEN
-		INSERT ([Field], [Value])
-		VALUES (s.[Field], s.[Value]);
+DELETE FROM @SettingsResult; INSERT INTO @SettingsResult([Field], [Value], [Status])
+EXEC  [dbo].[api_Settings__Save]  @Settings = @Settings; DELETE FROM @Settings WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Settings SELECT * FROM @SettingsResult;
 
 SELECT * FROM @Settings

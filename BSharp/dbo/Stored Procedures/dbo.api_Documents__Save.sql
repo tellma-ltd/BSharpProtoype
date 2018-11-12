@@ -2,8 +2,7 @@
 	@Documents DocumentList READONLY, 
 	@WideLines WideLineList READONLY, 
 	@Lines LineList READONLY, 
-	@Entries EntryList READONLY,
-	@DocumentOffset int OUTPUT
+	@Entries EntryList READONLY
 AS
 DECLARE
 	@DocumentId int = 0,
@@ -212,9 +211,8 @@ BEGIN TRY
 	-- Bulk validation
 
 	-- Persist in Db
-	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal, @DocumentOffset = @DocumentOffset OUTPUT
+	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal;
 END TRY
-
 BEGIN CATCH
 	SELECT   /*
     ERROR_NUMBER() AS ErrorNumber  

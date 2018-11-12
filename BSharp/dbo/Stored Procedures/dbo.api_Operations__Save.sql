@@ -2,11 +2,11 @@
 	@Operations [OperationList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList;
+	DECLARE @IdMappings IdMappingList, @TenantId int;
 	BEGIN TRANSACTION
 		BEGIN TRY
-
-			DELETE FROM dbo.Operations WHERE Id IN (SELECT Id FROM @Operations WHERE Status = N'Deleted');
+			SELECT @TenantId = dbo.fn_TenantId();
+			DELETE FROM dbo.Operations WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Operations WHERE Status = N'Deleted');
 
 			INSERT INTO @IdMappings([NewId], [OldId])
 			SELECT x.[NewId], x.[OldId]
@@ -14,18 +14,18 @@ BEGIN
 			(
 				MERGE INTO dbo.Operations AS t
 				USING (
-					SELECT [Id], [OperationType], [Name], [Parent]
+					SELECT @TenantId As [TenantId], [Id], [OperationType], [Name], [Parent]
 					FROM @Operations 
 					WHERE [Status] IN (N'Inserted', N'Updated')
-				) AS s ON t.Id = s.Id
+				) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 				WHEN MATCHED THEN
 					UPDATE SET 
 						t.[OperationType] = s.[OperationType],
 						t.[Name] = s.[Name],
 						t.[Parent] = s.[Parent]
 				WHEN NOT MATCHED THEN
-					INSERT ([OperationType], [Name])
-					VALUES (s.[OperationType], s.[Name])
+					INSERT ([TenantId], [OperationType], [Name])
+					VALUES (@TenantId, s.[OperationType], s.[Name])
 				--WHEN NOT MATCHED BY SOURCE THEN 
 				--	DELETE
 				OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
@@ -60,7 +60,8 @@ BEGIN
 	SELECT O.[Id], O.[OperationType], O.[Name], O.[Parent], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
 	FROM dbo.Operations O
 	LEFT JOIN @IdMappings M ON O.[Id] = M.[NewId]
-	WHERE O.[Id] IN (
+	WHERE O.[TenantId] = @TenantId
+	AND O.[Id] IN (
 		SELECT M.[NewId] FROM @Operations A JOIN @IdMappings M ON A.Id = M.OldId WHERE [Status] = N'Inserted'
 		UNION ALL
 		SELECT Id FROM @Operations WHERE [Status] = N'Updated'

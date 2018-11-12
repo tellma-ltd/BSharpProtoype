@@ -15,5 +15,6 @@
     [RelatedAgentId]    INT            NULL,
     [RelatedResourceId] INT            NULL,
     [RelatedAmount]     MONEY          NULL,
-    [Status]			NVARCHAR(50)	NULL,
+	[Status]					NVARCHAR(10) NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[TemporaryId]				INT	NULL,
     PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC, [EntryNumber] ASC));

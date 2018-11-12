@@ -156,6 +156,10 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
+    <None Include="TestingManualJV.sql" />
+    <Build Include="dbo\Functions\dbo.fn_TenantId.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -169,7 +173,6 @@
     <None Include="PopulateNotes.sql" />
     <None Include="PopulateTransactionSpecifications.sql" />
     <None Include="TestingCustodies.sql" />
-    <None Include="TestingToBeCleaned2.sql" />
     <None Include="PopulateTransactionTypes.sql" />
     <None Include="PopulateCustodyTypes.sql" />
     <None Include="PopulateOperationTypes.sql" />

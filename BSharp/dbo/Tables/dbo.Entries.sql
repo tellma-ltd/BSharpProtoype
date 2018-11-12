@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[Entries] (
+	[TenantId]			INT            NOT NULL,
     [DocumentId]        INT            NOT NULL,
     [LineNumber]        INT            NOT NULL,
     [EntryNumber]       INT            NOT NULL,
@@ -15,13 +16,13 @@
     [RelatedAgentId]    INT            NULL,
     [RelatedResourceId] INT            NULL,
     [RelatedAmount]     MONEY          NULL,
-    CONSTRAINT [PK_LineItems] PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC, [EntryNumber] ASC),
+    CONSTRAINT [PK_LineItems] PRIMARY KEY CLUSTERED ([TenantId] ASC, [DocumentId] ASC, [LineNumber] ASC, [EntryNumber] ASC),
     CONSTRAINT [CK_Entries_Direction] CHECK ([Direction]=(1) OR [Direction]=(-1)),
     CONSTRAINT [FK_Entries_Accounts] FOREIGN KEY ([AccountId]) REFERENCES [dbo].[Accounts] ([Id]) ON UPDATE CASCADE,
-    CONSTRAINT [FK_Entries_Custodies] FOREIGN KEY ([CustodyId]) REFERENCES [dbo].[Custodies] ([Id]),
+    CONSTRAINT [FK_Entries_Custodies] FOREIGN KEY ([TenantId], [CustodyId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id]),
     CONSTRAINT [FK_Entries_Lines] FOREIGN KEY ([DocumentId], [LineNumber]) REFERENCES [dbo].[Lines] ([DocumentId], [LineNumber]) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT [FK_Entries_Notes] FOREIGN KEY ([NoteId]) REFERENCES [dbo].[Notes] ([Id]) ON UPDATE CASCADE,
-    CONSTRAINT [FK_Entries_Operations] FOREIGN KEY ([OperationId]) REFERENCES [dbo].[Operations] ([Id]),
-    CONSTRAINT [FK_Entries_Resources] FOREIGN KEY ([ResourceId]) REFERENCES [dbo].[Resources] ([Id])
+    CONSTRAINT [FK_Entries_Operations] FOREIGN KEY ([TenantId], [OperationId]) REFERENCES [dbo].[Operations] ([TenantId], [Id]),
+    CONSTRAINT [FK_Entries_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id])
 );
 

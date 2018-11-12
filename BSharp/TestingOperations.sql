@@ -1,8 +1,4 @@
 ﻿BEGIN -- Cleanup & Declarations
-	SET NOCOUNT ON;
-	DELETE FROM dbo.Operations;
-	DBCC CHECKIDENT ('dbo.Operations', RESEED, 0) WITH NO_INFOMSGS;
-
 	DECLARE @Operations OperationList, @OperationsResult OperationList;
 	DECLARE @BusinessEntity int, @Existing int, @Expansion int;
 END
@@ -22,7 +18,7 @@ BEGIN -- Updating
 	SET 
 		[Name] = N'Existing',
 		Status = N'Updated'
-	WHERE [Name] = N'Existin';
+	WHERE TemporaryId = -99;
 
 	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
@@ -32,11 +28,15 @@ BEGIN -- Deleting
 	UPDATE @Operations 
 	SET 
 		Status = N'Deleted'
-	WHERE [Name] = N'Fake';
+	WHERE TemporaryId = -98;
 
 	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END	
 
 SELECT * FROM @Operations;
+SELECT 
+		@BusinessEntity = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -100), 
+		@Existing = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -99),
+		@Expansion = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -78);
 	
