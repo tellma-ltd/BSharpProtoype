@@ -7,8 +7,8 @@ AS BEGIN
 
 	SELECT @Result = N'{' +
 					ISNULL(N'[Documents][' + CAST(DocumentId AS nvarchar(10)) + ']', '') + 
-					ISNULL(N'.[Lines][' + CAST(LineNumber AS nvarchar(10)) + ']', '') + 
-					ISNULL(N'.[Entries][' + CAST(EntryNumber AS nvarchar(10)) + ']', '') +
+					ISNULL(N'.[Lines][' + CAST([LineId] AS nvarchar(10)) + ']', '') + 
+					ISNULL(N'.[Entries][' + CAST([EntryId] AS nvarchar(10)) + ']', '') +
 					ISNULL(N'.' + PropertyName, '') +
 					N':[{Message_Lang1:' + Message1 + N', Message_Lang2:' + Message2 + N'}]' +
 					N'}'					   

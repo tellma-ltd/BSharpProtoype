@@ -57,18 +57,18 @@ DECLARE
 	@EntriesLocal EntryList,
 	@EntriesTransit EntryList;
 BEGIN TRY
-	-- in memory validation, use LineTemplates Validation logic
+	-- in memory validation, use TransactionType specification Validation logic
 	
 	-- if no bulk db operation is needed, skip he next step
 	-- in memory processing
 	SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE Id > @DocumentId);
 	WHILE @DocumentId IS NOT NULL
 	BEGIN
-		DECLARE	@LineNumber int = 0;
-		SET @LineNumber = (SELECT min(LineNumber) FROM @WideLines WHERE DocumentId = @DocumentId AND LineNumber > @LineNumber)
-		WHILE @LineNumber IS NOT NULL
+		DECLARE	@LineId int = 0;
+		SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE DocumentId = @DocumentId AND [LineId] > @LineId)
+		WHILE @LineId IS NOT NULL
 		BEGIN
-			--Print 'Document ' + cast(@DocumentId as nvarchar(50)) + ', Line ' + Cast(@LineNumber as nvarchar(50));
+			--Print 'Document ' + cast(@DocumentId as nvarchar(50)) + ', Line ' + Cast(@LineId as nvarchar(50));
 			SELECT
 				@DocumentId = DocumentId,
 				@TransactionType = TransactionType,
@@ -119,13 +119,12 @@ BEGIN TRY
 				@RelatedResource3 = RelatedResource3,
 				@RelatedAmount3 = RelatedAmount3
 			FROM @WideLines
-			WHERE DocumentId = @DocumentId AND LineNumber = @LineNumber
+			WHERE DocumentId = @DocumentId AND [LineId] = @LineId
 
 			INSERT INTO @EntriesTransit 
 			EXEC [dbo].[sub_Line__Entries] 
-				@DocumentId = @DocumentId,
+				@LineId = @LineId,
 				@TransactionType = @TransactionType,
-				@LineNumber = @LineNumber,
 
 				@Operation1 = @Operation1,
 				@Reference1 = @Reference1,
@@ -168,7 +167,7 @@ BEGIN TRY
 				@RelatedAgent3 = @RelatedAgent3,
 				@RelatedResource3 = @RelatedResource3,
 				@RelatedAmount3 = @RelatedAmount3
-			SET @LineNumber = (SELECT min(LineNumber) FROM @WideLines WHERE DocumentId = @DocumentId AND LineNumber > @LineNumber)
+			SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE DocumentId = @DocumentId AND [LineId] > @LineId)
 		END
 		SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE Id > @DocumentId);
 	END
@@ -178,8 +177,8 @@ BEGIN TRY
 		EXEC [dbo].[bdb_Document_Values__Update] 
 				@WideLines = @WideLines, @Entries = @EntriesTransit
 	
-	INSERT INTO @LinesLocal(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
-	SELECT DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
+	INSERT INTO @LinesLocal(DocumentId, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
+	SELECT DocumentId, ResponsibleAgentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
 
 	INSERT INTO @LinesLocal SELECT * FROM @Lines;
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries;
@@ -194,18 +193,18 @@ BEGIN TRY
 	SET E.Value = -SN2.Net
 	FROM @EntriesLocal E
 	JOIN (
-		SELECT DocumentId, LineNumber
+		SELECT LineId
 		FROM @EntriesLocal
 		WHERE Value IS NULL
-		GROUP BY DocumentId, LineNumber
+		GROUP BY LineId
 		HAVING COUNT(*) = 1
-	) SN1 ON E.DocumentId = SN1.DocumentId AND E.LineNumber = SN1.LineNumber -- Single Null
+	) SN1 ON E.LineId = SN1.LineId -- Single Null
 	JOIN (
-		SELECT DocumentId, LineNumber, SUM(Direction * Value) As Net
+		SELECT LineId, SUM(Direction * Value) As Net
 		FROM @EntriesLocal
 		WHERE Value IS NOT NULL
-		GROUP BY DocumentId, LineNumber
-	) SN2 ON SN1.DocumentId = SN2.DocumentId AND SN1.LineNumber = SN2.LineNumber
+		GROUP BY LineId
+	) SN2 ON SN1.LineId = SN2.LineId
 	WHERE E.Value IS NULL
 
 	-- Bulk validation
@@ -214,11 +213,6 @@ BEGIN TRY
 	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal;
 END TRY
 BEGIN CATCH
-	SELECT   /*
-    ERROR_NUMBER() AS ErrorNumber  
-    ,ERROR_SEVERITY() AS ErrorSeverity  
-    ,ERROR_STATE() AS ErrorState  
-    , */ERROR_PROCEDURE() AS ErrorProcedure  
-    ,ERROR_LINE() AS ErrorLine  
-    ,ERROR_MESSAGE() AS ErrorMessage; 
+	EXEC dbo.Error__Log;
+	THROW;
 END CATCH

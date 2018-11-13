@@ -2,10 +2,13 @@
 	@Locations [LocationList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList, @TenantId int;
-	BEGIN TRANSACTION
-		BEGIN TRY
-			SELECT @TenantId = dbo.fn_TenantId();
+	BEGIN TRY
+		DECLARE @IdMappings IdMappingList, @TenantId int;
+		SELECT @TenantId = dbo.fn_TenantId();
+		IF @TenantId IS NULL
+			THROW 50001, N'Tenant Id is NULL', 1;
+
+		BEGIN TRANSACTION
 			DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
 
 			INSERT INTO @IdMappings([NewId], [OldId])
@@ -46,26 +49,14 @@ BEGIN
 				INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[Parent],	[CustodianId])
 				VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[Parent], s.[CustodianId]);
 
-				--WHEN NOT MATCHED BY SOURCE THEN 
-				--	DELETE
-		END TRY
+		COMMIT TRANSACTION;
+	END TRY
 
-		BEGIN CATCH
-			SELECT   /*
-			ERROR_NUMBER() AS ErrorNumber  
-			,ERROR_SEVERITY() AS ErrorSeverity  
-			,ERROR_STATE() AS ErrorState  
-			, */ERROR_PROCEDURE() AS ErrorProcedure  
-			,ERROR_LINE() AS ErrorLine  
-			,ERROR_MESSAGE() AS ErrorMessage; 
+	BEGIN CATCH
+		EXEC dbo.Error__Log;
+		THROW;
+	END CATCH
 
-			IF @@TRANCOUNT > 0 
-			ROLLBACK TRANSACTION;
-		END CATCH
-
-	IF @@TRANCOUNT > 0  
-    COMMIT TRANSACTION;
-	
 	SELECT C.[Id], L.[LocationType], C.[Name], C.[IsActive], L.[Address], L.[Parent], L.[CustodianId], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
 	FROM dbo.Custodies C
 	JOIN dbo.Locations L ON C.[TenantId] = L.[TenantId] AND C.Id = L.Id  

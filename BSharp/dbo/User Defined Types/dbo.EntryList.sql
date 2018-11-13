@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[EntryList] AS TABLE (
-    [DocumentId]        INT            NOT NULL,
-    [LineNumber]        INT            NOT NULL,
+	[Id]			INT            NOT NULL,
+    [LineId]			INT            NOT NULL,
     [EntryNumber]       INT            NOT NULL,
     [OperationId]       INT            NULL,
     [Reference]         NVARCHAR (50)  NULL,
@@ -17,4 +17,5 @@
     [RelatedAmount]     MONEY          NULL,
 	[Status]					NVARCHAR(10) NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]				INT	NULL,
-    PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC, [EntryNumber] ASC));
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);

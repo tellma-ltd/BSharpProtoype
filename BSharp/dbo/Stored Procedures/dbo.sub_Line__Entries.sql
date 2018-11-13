@@ -1,14 +1,8 @@
 ﻿
-CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries]1,1,N'ManualJV'
-	@DocumentId int,
+CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'ManualJV'
+	@LineId int,
 	@TransactionType nvarchar(50),
-	@LineNumber int,
-
---	@ResponsibleAgentId int = NULL,
---	@StartDateTime datetimeoffset(7) = NULL,
---	@EndDateTime datetimeoffset(7) = NULL,
--- @Memo nvarchar(255) = NULL
-
+	
 	@Operation1 int = NULL,
 	@Reference1 nvarchar(50) = NULL,
 	@Account1 nvarchar(255) = NULL,
@@ -62,11 +56,11 @@ BEGIN
 	BEGIN TRY
 
 		INSERT INTO @Entries
-			(DocumentId, LineNumber, EntryNumber, OperationId, Reference, AccountId, CustodyId, ResourceId, Direction, Amount, Value, NoteId, RelatedReference, RelatedAgentId, RelatedResourceId, RelatedAmount)
+			(LineId, EntryNumber, OperationId, Reference, AccountId, CustodyId, ResourceId, Direction, Amount, Value, NoteId, RelatedReference, RelatedAgentId, RelatedResourceId, RelatedAmount)
 		VALUES
-			(@DocumentId, @LineNumber, 1, @Operation1, @Reference1, @Account1, @Custody1, @Resource1 , @Direction1 , @Amount1, @Value1, @Note1, @RelatedReference1 , @RelatedAgent1, @RelatedResource1, @RelatedAmount1),
-			(@DocumentId, @LineNumber, 2, @Operation2, @Reference2, @Account2, @Custody2, @Resource2 , @Direction2 , @Amount2, @Value2, @Note2, @RelatedReference2 , @RelatedAgent2, @RelatedResource2, @RelatedAmount2),
-			(@DocumentId, @LineNumber, 3, @Operation3, @Reference3, @Account3, @Custody3, @Resource3 , @Direction3 , @Amount3, @Value3, @Note3, @RelatedReference3 , @RelatedAgent3, @RelatedResource3, @RelatedAmount3);
+			(@LineId, 1, @Operation1, @Reference1, @Account1, @Custody1, @Resource1 , @Direction1 , @Amount1, @Value1, @Note1, @RelatedReference1 , @RelatedAgent1, @RelatedResource1, @RelatedAmount1),
+			(@LineId, 2, @Operation2, @Reference2, @Account2, @Custody2, @Resource2 , @Direction2 , @Amount2, @Value2, @Note2, @RelatedReference2 , @RelatedAgent2, @RelatedResource2, @RelatedAmount2),
+			(@LineId, 3, @Operation3, @Reference3, @Account3, @Custody3, @Resource3 , @Direction3 , @Amount3, @Value3, @Note3, @RelatedReference3 , @RelatedAgent3, @RelatedResource3, @RelatedAmount3);
 
 		SELECT @EntriesCount = max(EntryNumber) FROM dbo.[TransactionSpecifications] WHERE [TransactionType] = @TransactionType
 		DELETE FROM @Entries WHERE EntryNumber > @EntriesCount;

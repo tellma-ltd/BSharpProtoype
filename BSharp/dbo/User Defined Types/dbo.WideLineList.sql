@@ -1,7 +1,7 @@
 ﻿CREATE TYPE [dbo].[WideLineList] AS TABLE (
+    [LineId]			INT                NOT NULL,
     [DocumentId]         INT                NOT NULL,
 	[TransactionType]    NVARCHAR (50)      NOT NULL,
-    [LineNumber]         INT                NOT NULL,
     [ResponsibleAgentId] INT                NULL,
     [StartDateTime]      DATETIMEOFFSET (7) NULL,
     [EndDateTime]        DATETIMEOFFSET (7) NULL,
@@ -46,5 +46,5 @@
     [RelatedResource3]   INT                NULL,
     [RelatedAmount3]     MONEY              NULL,
 	[Status]			 NVARCHAR(50)	NULL,
-    PRIMARY KEY CLUSTERED ([DocumentId] ASC, [LineNumber] ASC));
+    PRIMARY KEY CLUSTERED ([LineId] ASC));
 

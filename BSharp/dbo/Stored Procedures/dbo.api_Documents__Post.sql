@@ -15,20 +15,20 @@ BEGIN
 		IF EXISTS(
 			SELECT *
 			FROM dbo.Entries E
-			JOIN dbo.Lines L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
+			JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
 			JOIN dbo.Accounts A
 			ON E.AccountId = A.Id 
-			WHERE L.DocumentId IN (SELECT Id FROM @Documents) 
+			WHERE E.TenantId = dbo.fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents) 
 			AND A.IsExtensible = 0 -- non leaf is found
 		)
 		BEGIN
-			INSERT INTO @ValidationErrors(DocumentId, LineNumber, EntryNumber, PropertyName, Message1, Message2)
-			SELECT L.DocumentId, L.LineNumber, E.EntryNumber, N'AccountId', A.Name + N'is not a leaf account', N'هذا حساب إجمالي لا ينفع للقيود'
+			INSERT INTO @ValidationErrors(DocumentId, LineId, EntryId, PropertyName, Message1, Message2)
+			SELECT L.DocumentId, L.Id, E.EntryNumber, N'AccountId', A.Name + N'is not a leaf account', N'هذا حساب إجمالي لا ينفع للقيود'
 			FROM dbo.Entries E
-			JOIN dbo.Lines L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
+			JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
 			JOIN dbo.Accounts A
 			ON E.AccountId = A.Id 
-			WHERE L.DocumentId IN (SELECT Id FROM @Documents) 
+			WHERE E.TenantId = dbo.fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents) 
 			AND A.IsExtensible = 0;
 		END
 		/*
@@ -53,20 +53,20 @@ BEGIN
 		IF EXISTS(
 			SELECT *
 			FROM dbo.Entries E
-			JOIN dbo.Lines L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
-			WHERE L.DocumentId IN (SELECT Id FROM @Documents)
-			GROUP BY L.DocumentId, L.LineNumber
+			JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+			WHERE E.TenantId = dbo.fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents)
+			GROUP BY L.Id
 			HAVING SUM(E.Value * E.Direction) <> 0
 		)
 		BEGIN
-			INSERT INTO @ValidationErrors(DocumentId, LineNumber, EntryNumber, PropertyName, Message1, Message2)
-			SELECT						L.DocumentId, L.LineNumber, NULL,		NULL,
-				 N'Line ' + CAST(L.LineNumber AS Nvarchar(50)) + N' Total Credit and Total Debit are off by ' + 
+			INSERT INTO @ValidationErrors(DocumentId, LineId, EntryId, PropertyName, Message1, Message2)
+			SELECT						L.DocumentId, L.Id, NULL,		NULL,
+				 N'Line ' + CAST(L.Id AS Nvarchar(50)) + N' Total Credit and Total Debit are off by ' + 
 					CAST(SUM(E.Value * E.Direction) AS varchar(50)), N'هناك فارق بين جملة المدين وجملة الدائن'
 			FROM dbo.Entries E
-			JOIN dbo.Lines L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
-			WHERE L.DocumentId IN (SELECT Id FROM @Documents)
-			GROUP BY L.DocumentId, L.LineNumber
+			JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+			WHERE E.TenantId = dbo.fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents)
+			GROUP BY L.DocumentId, L.Id
 			HAVING SUM(E.Value * E.Direction) <> 0
 		END
 		IF EXISTS(SELECT * FROM @ValidationErrors)

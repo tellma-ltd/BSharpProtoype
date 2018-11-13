@@ -12,6 +12,6 @@ BEGIN
 	WHERE [Field] = @Field
 	AND [TenantId] = dbo.fn_TenantId();
 
-	RETURN @Result
+	RETURN @Result;
 
 END

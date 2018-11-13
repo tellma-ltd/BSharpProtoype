@@ -6,5 +6,5 @@ BEGIN
 
 	SELECT @Result =  CONVERT(int, SESSION_CONTEXT(N'Tenantid')); 
 	
-	RETURN @Result
+	RETURN @Result;
 END

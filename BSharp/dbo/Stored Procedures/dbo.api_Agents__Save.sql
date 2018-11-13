@@ -2,10 +2,13 @@
 	@Agents [AgentList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList, @TenantId int;
-	BEGIN TRANSACTION
-		BEGIN TRY
-			SELECT @TenantId = dbo.fn_TenantId();
+	BEGIN TRY
+		DECLARE @IdMappings IdMappingList, @TenantId int;
+		SELECT @TenantId = dbo.fn_TenantId();
+		IF @TenantId IS NULL
+			THROW 50001, N'Tenant Id is NULL', 1;
+
+		BEGIN TRANSACTION
 			DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Agents WHERE Status = N'Deleted');
 
 			INSERT INTO @IdMappings([NewId], [OldId])
@@ -49,26 +52,13 @@ BEGIN
 			WHEN NOT MATCHED THEN
 				INSERT ([TenantId], [Id], [AgentType]	,	[IsRelated] ,	[UserId],	[TaxIdentificationNumber],	[RegisteredAddress], [Title], [Gender], [BirthDateTime])
 				VALUES (@TenantId, s.[Id], s.[AgentType], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[RegisteredAddress], s.[Title], s.[Gender], s.[BirthDateTime]);
+		COMMIT TRANSACTION;
+	END TRY
 
-				--WHEN NOT MATCHED BY SOURCE THEN 
-				--	DELETE
-		END TRY
-
-		BEGIN CATCH
-			SELECT   /*
-			ERROR_NUMBER() AS ErrorNumber  
-			,ERROR_SEVERITY() AS ErrorSeverity  
-			,ERROR_STATE() AS ErrorState  
-			, */ERROR_PROCEDURE() AS ErrorProcedure  
-			,ERROR_LINE() AS ErrorLine  
-			,ERROR_MESSAGE() AS ErrorMessage; 
-
-			IF @@TRANCOUNT > 0 
-			ROLLBACK TRANSACTION;
-		END CATCH
-
-	IF @@TRANCOUNT > 0  
-    COMMIT TRANSACTION; 
+	BEGIN CATCH
+		EXEC dbo.Error__Log;
+		THROW;
+	END CATCH
 	
 	SELECT C.[Id], A.[AgentType], C.[Name], C.[IsActive], A.[IsRelated], A.[UserId], A.[TaxIdentificationNumber], A.[RegisteredAddress], A.[Title], A.[Gender], A.[BirthDateTime], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
 	FROM dbo.Custodies C 

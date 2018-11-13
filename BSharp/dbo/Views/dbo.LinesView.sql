@@ -2,7 +2,7 @@
 CREATE VIEW [dbo].[LinesView]   
 AS
  SELECT
- 	D.Id, D.TransactionType, L.LineNumber,  L.ResponsibleAgentId, L.StartDateTime, L.EndDateTime,
+ 	D.Id As DocumentId, D.TransactionType, L.Id As LineId, L.ResponsibleAgentId, L.StartDateTime, L.EndDateTime,
 	MAX(CASE WHEN E.EntryNumber = 1 THEN E.[OperationId] ELSE NULL END) AS Operation1,
 	MAX(CASE WHEN E.EntryNumber = 1 THEN E.[AccountId] ELSE NULL END) AS Account1,
 	MAX(CASE WHEN E.EntryNumber = 1 THEN E.[CustodyId] ELSE NULL END) AS Custody1,
@@ -42,7 +42,7 @@ AS
 	MAX(CASE WHEN E.EntryNumber = 3 THEN E.[RelatedResourceId] ELSE NULL END) AS RelatedResource3,
 	MAX(CASE WHEN E.EntryNumber = 3 THEN E.[RelatedAmount] ELSE NULL END) AS RelatedAmount3
 
-FROM dbo.Entries E JOIN dbo.Lines L ON L.DocumentId = E.DocumentId AND L.LineNumber = E.LineNumber
+FROM dbo.Entries E JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
 JOIN dbo.Documents D ON D.Id = L.DocumentId
-GROUP BY D.Id, D.TransactionType, L.LineNumber, L.ResponsibleAgentId, L.StartDateTime, L.EndDateTime
+GROUP BY D.Id, D.TransactionType, L.Id, L.ResponsibleAgentId, L.StartDateTime, L.EndDateTime
  

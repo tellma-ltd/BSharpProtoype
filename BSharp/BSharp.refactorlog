@@ -217,4 +217,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[CustodianId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b200f612-15f2-4c6e-a34e-bdcbbf797a55" ChangeDateTime="11/12/2018 22:09:07">
+    <Property Name="ElementName" Value="[dbo].[Entries].[EntryId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Entries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Id]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5956379d-ab6f-4121-b4c7-80885d3956d6" ChangeDateTime="11/13/2018 15:20:10">
+    <Property Name="ElementName" Value="[dbo].[Error_Log].[CREATEUSERNAME]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Error_Log]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreateUserName]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b7b691a7-8157-437f-a1d9-7cfbfd562567" ChangeDateTime="11/13/2018 15:20:24">
+    <Property Name="ElementName" Value="[dbo].[Error_Log].[CREATEMACHINENAME]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Error_Log]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreateMachineName]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f8a5be12-c89e-4a88-838d-5ed36c772d98" ChangeDateTime="11/13/2018 15:20:36">
+    <Property Name="ElementName" Value="[dbo].[Error_Log].[CREATEDATE]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Error_Log]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreateDate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="218bbe95-6fc4-48ec-9898-d11522e5216b" ChangeDateTime="11/13/2018 15:20:48">
+    <Property Name="ElementName" Value="[dbo].[Error_Log].[CREATESOURCE]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Error_Log]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreateSource]" />
+  </Operation>
 </Operations>

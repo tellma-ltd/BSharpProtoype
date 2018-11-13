@@ -3,7 +3,7 @@
     [State]						NVARCHAR (10)      NULL,
     [TransactionType]			NVARCHAR (50)      NOT NULL,
     [SerialNumber]				INT                NULL,
-    [Mode]						NVARCHAR (10)      NOT NULL,
+    [Mode]						NVARCHAR (10)      NOT NULL DEFAULT(N'Draft'),
 	[FolderId]					INT                NULL,
 	[LinesMemo]					NVARCHAR (255)     NULL,
     [LinesResponsibleAgentId]	INT                NULL,

@@ -9,13 +9,14 @@ RETURN
 		D.Id,
 		D.[TransactionType],
 		D.SerialNumber,
-		L.LineNumber,
+		L.Id As LineId,
 		L.ResponsibleAgentId,
 		CONVERT(nvarchar(50), 
 		(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END), 104) As StartDateTime,
 		CONVERT(nvarchar(50), 			
 		(CASE WHEN @toDate < L.EndDateTime THEN @toDate ELSE L.EndDateTime END), 104) As EndDateTime,
 		L.Memo,
+		E.Id As EntryId,
 		E.EntryNumber,
 		E.OperationId,
 		E.Reference,
@@ -34,8 +35,8 @@ RETURN
 		E.RelatedResourceId,
 		E.RelatedAmount
 	FROM dbo.Entries E
-	INNER JOIN dbo.Lines L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
-	INNER JOIN dbo.Documents D ON L.DocumentId = D.Id
+	INNER JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+	INNER JOIN dbo.Documents D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
 	WHERE D.Mode = N'Posted' AND D.State = N'Event'
 	AND L.StartDateTime < @toDate AND L.EndDateTime >= @fromDate
 )
