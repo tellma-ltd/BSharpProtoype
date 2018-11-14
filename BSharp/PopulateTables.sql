@@ -3,8 +3,8 @@
 	[Key]			nvarchar(255) NOT NULL,
     [Language]		nchar (2) NOT NULL,
     [Country]       nchar(2)  NOT NULL DEFAULT N'',
-	[Singular]		nvarchar(1024) NOT NULL,
-	[Plural]		nvarchar(1024) NULL,
+	[Singular]		nvarchar(2048) NOT NULL,
+	[Plural]		nvarchar(2048) NULL,
     PRIMARY KEY NONCLUSTERED ([Key] ASC, [Language] ASC, [Country] ASC)
 );
 
@@ -14,6 +14,7 @@
 :r .\PopulateTransactionSpecifications.sql
 :r .\PopulateCustodyTypes.sql
 :r .\PopulateOperationTypes.sql
+:r .\PopulateErrorMessages.sql
 
 EXEC dbo.adm_COA__Parents_Update;
 

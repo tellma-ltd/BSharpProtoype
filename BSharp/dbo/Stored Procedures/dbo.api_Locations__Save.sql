@@ -2,60 +2,52 @@
 	@Locations [LocationList] READONLY
 AS
 BEGIN
-	BEGIN TRY
-		DECLARE @IdMappings IdMappingList, @TenantId int;
-		SELECT @TenantId = dbo.fn_TenantId();
-		IF @TenantId IS NULL
-			THROW 50001, N'Tenant Id is NULL', 1;
+	DECLARE @IdMappings IdMappingList, @TenantId int, @msg nvarchar(2048);
+	SELECT @TenantId = dbo.fn_TenantId();
+	IF @TenantId IS NULL
+	BEGIN
+		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
+		THROW 50001, @msg, 1;
+	END
+	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
 
-		BEGIN TRANSACTION
-			DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
+	INSERT INTO @IdMappings([NewId], [OldId])
+	SELECT x.[NewId], x.[OldId]
+	FROM
+	(
+		MERGE INTO dbo.Custodies AS t
+		USING (
+			SELECT @TenantId As [TenantId], [Id], [LocationType], [Name], [IsActive] 
+			FROM @Locations 
+			WHERE [Status] IN (N'Inserted', N'Updated')
+		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
+		WHEN MATCHED THEN
+			UPDATE SET 
+				t.[Name] = s.[Name],
+				t.[IsActive] = s.[IsActive]
+		WHEN NOT MATCHED THEN
+			INSERT ([TenantId], [CustodyType], [Name], [IsActive])
+			VALUES (@TenantId, s.[LocationType], s.[Name], s.[IsActive])
+		--WHEN NOT MATCHED BY SOURCE THEN 
+		--	DELETE
+		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
+	) AS x;
 
-			INSERT INTO @IdMappings([NewId], [OldId])
-			SELECT x.[NewId], x.[OldId]
-			FROM
-			(
-				MERGE INTO dbo.Custodies AS t
-				USING (
-					SELECT @TenantId As [TenantId], [Id], [LocationType], [Name], [IsActive] 
-					FROM @Locations 
-					WHERE [Status] IN (N'Inserted', N'Updated')
-				) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
-				WHEN MATCHED THEN
-					UPDATE SET 
-						t.[Name] = s.[Name],
-						t.[IsActive] = s.[IsActive]
-				WHEN NOT MATCHED THEN
-					INSERT ([TenantId], [CustodyType], [Name], [IsActive])
-					VALUES (@TenantId, s.[LocationType], s.[Name], s.[IsActive])
-				--WHEN NOT MATCHED BY SOURCE THEN 
-				--	DELETE
-				OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
-			) AS x;
-
-			MERGE INTO dbo.Locations t
-			USING (
-				SELECT @TenantId As [TenantId], M.[NewId] As [Id], [LocationType], [Address], [Parent], [CustodianId]
-				FROM @Locations I 
-				JOIN @IdMappings M ON I.Id = M.OldId
-			) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
-			WHEN MATCHED THEN
-				UPDATE SET
-					t.[Id]						= s.[Id],
-					t.[Address]					= s.[Address],
-					t.[Parent]					= s.[Parent],      
-					t.[CustodianId]				= s.[CustodianId]
-			WHEN NOT MATCHED THEN
-				INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[Parent],	[CustodianId])
-				VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[Parent], s.[CustodianId]);
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
-		EXEC dbo.Error__Log;
-		THROW;
-	END CATCH
+	MERGE INTO dbo.Locations t
+	USING (
+		SELECT @TenantId As [TenantId], M.[NewId] As [Id], [LocationType], [Address], [Parent], [CustodianId]
+		FROM @Locations I 
+		JOIN @IdMappings M ON I.Id = M.OldId
+	) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
+	WHEN MATCHED THEN
+		UPDATE SET
+			t.[Id]						= s.[Id],
+			t.[Address]					= s.[Address],
+			t.[Parent]					= s.[Parent],      
+			t.[CustodianId]				= s.[CustodianId]
+	WHEN NOT MATCHED THEN
+		INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[Parent],	[CustodianId])
+		VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[Parent], s.[CustodianId]);
 
 	SELECT C.[Id], L.[LocationType], C.[Name], C.[IsActive], L.[Address], L.[Parent], L.[CustodianId], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
 	FROM dbo.Custodies C

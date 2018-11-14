@@ -115,7 +115,6 @@
     <Build Include="dbo\Functions\dbo.RelatedResource.sql" />
     <Build Include="dbo\Functions\dbo.Resource.sql" />
     <Build Include="dbo\Functions\dbo.Value.sql" />
-    <Build Include="dbo\Functions\dbo.ft_ValidationErrors.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
     <Build Include="dbo\Functions\dbo.fn_Resource__UnitOfMeasure.sql" />
     <Build Include="dbo\Functions\dbo.ft_Account__Statement.sql" />
@@ -160,9 +159,9 @@
     <Build Include="dbo\Functions\dbo.fn_TenantId.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
-    <Build Include="dbo\Tables\dbo.Errors.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.Error__Log.sql" />
-    <None Include="PopulateErrorMessges.sql" />
+    <None Include="PopulateErrorMessages.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Language.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Translate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

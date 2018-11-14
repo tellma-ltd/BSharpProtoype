@@ -4,6 +4,7 @@
 	@Lines LineList READONLY, 
 	@Entries EntryList READONLY
 AS
+BEGIN
 DECLARE
 	@DocumentId int = 0,
 	@TransactionType nvarchar(50),
@@ -56,7 +57,6 @@ DECLARE
 	@LinesLocal LineList,
 	@EntriesLocal EntryList,
 	@EntriesTransit EntryList;
-BEGIN TRY
 	-- in memory validation, use TransactionType specification Validation logic
 	
 	-- if no bulk db operation is needed, skip he next step
@@ -211,8 +211,4 @@ BEGIN TRY
 
 	-- Persist in Db
 	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal;
-END TRY
-BEGIN CATCH
-	EXEC dbo.Error__Log;
-	THROW;
-END CATCH
+END;

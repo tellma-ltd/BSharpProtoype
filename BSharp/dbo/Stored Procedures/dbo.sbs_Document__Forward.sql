@@ -13,9 +13,7 @@ CREATE PROCEDURE [dbo].[sbs_Document__Forward]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	BEGIN TRANSACTION
-	
-	BEGIN TRY
+
 		IF (SELECT Mode FROM dbo.Documents WHERE Id = @FromDocument) <> N'Committed'
 			RAISERROR (N'Please commit the Document before moving to next stage', 16,1) 
 /*
@@ -53,22 +51,5 @@ BEGIN
 		VALUES(@ToState, @TransactionType, @OperatingSegment, @SerialNumber, @ToDocumentDateTime, @Actor, @Reason, @Reference, @Agent, @Location, @Resource, @ReminderDateTime )
 		
 		SET @ToDocument = SCOPE_IDENTITY() */
-	END TRY
-
-	BEGIN CATCH
-	    SELECT   /*
-        ERROR_NUMBER() AS ErrorNumber  
-        ,ERROR_SEVERITY() AS ErrorSeverity  
-        ,ERROR_STATE() AS ErrorState  
-        , */ERROR_PROCEDURE() AS ErrorProcedure  
-        ,ERROR_LINE() AS ErrorLine  
-        ,ERROR_MESSAGE() AS ErrorMessage; 
-
-		IF @@TRANCOUNT > 0 
-        ROLLBACK TRANSACTION;
-	END CATCH
-
-	IF @@TRANCOUNT > 0  
-    COMMIT TRANSACTION; 
-END
+END;
 

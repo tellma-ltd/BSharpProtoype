@@ -1,5 +1,4 @@
-﻿
--- TODO: Refactor shared code between both ui
+﻿-- TODO: Refactor shared code between both ui
 CREATE PROCEDURE [dbo].[ui_Documents_WideLines__Validate]
 @Documents DocumentList READONLY,
 @WideLines WideLineList READONLY,

@@ -66,18 +66,18 @@ BEGIN -- Agents
 		SET 
 			[TaxIdentificationNumber] = N'0059603732',
 			[Status] = N'Updated'
-		WHERE [Id] = 1;
+		WHERE [Name] = N'Mohamad Akra';
 
 		DELETE FROM @AgentsResult; INSERT INTO @AgentsResult([Id], [AgentType], [Name], [IsActive], [IsRelated], [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Agents__Save]  @Agents = @Agents; DELETE FROM @Agents WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Agents SELECT * FROM @AgentsResult;
 	END	
 	BEGIN -- Deleting MA Record
-		UPDATE @Agents SET [Status] = N'Deleted' WHERE [Id] = 1;
+		UPDATE @Agents SET [Status] = N'Deleted' WHERE Name = N'Yigezu Legesse';
 
 		DELETE FROM @AgentsResult; INSERT INTO @AgentsResult([Id], [AgentType], [Name], [IsActive], [IsRelated], [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime], [Status], [TemporaryId])
-	EXEC  [dbo].[api_Agents__Save]  @Agents = @Agents; DELETE FROM @Agents WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Agents SELECT * FROM @AgentsResult;
+		EXEC  [dbo].[api_Agents__Save]  @Agents = @Agents; DELETE FROM @Agents WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Agents SELECT * FROM @AgentsResult;
 	END
-	SELECT * FROM @Agents;
+--	SELECT * FROM @Agents;
 	SELECT 
 		@MohamadAkra = (SELECT [Id] FROM @Agents WHERE [Name] = N'Mohamad Akra'), 
 		@AhmadAkra = (SELECT [Id] FROM @Agents WHERE [Name] = N'Ahmad Akra'), 
@@ -108,6 +108,8 @@ BEGIN -- Agents
 		@Finance = (SELECT [Id] FROM @Agents WHERE [Name] = N'Finance'),
 		@HR = (SELECT [Id] FROM @Agents WHERE [Name] = N'Human Resources'),
 		@Purchasing = (SELECT [Id] FROM @Agents WHERE [Name] = N'Materials & Purchasing');
+
+--		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;
 END
 BEGIN -- Locations
 	BEGIN -- Insert 
@@ -139,7 +141,7 @@ BEGIN -- Locations
 		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [Parent],[CustodianId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Locations__Save]  @Locations = @Locations; DELETE FROM @Locations WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Locations SELECT * FROM @LocationsResult;
 	END	
-	SELECT * FROM @Locations;
+--	SELECT * FROM @Locations;
 	SELECT
 		@RawMaterialsWarehouse = (SELECT [Id] FROM @Locations WHERE [Name] = N'Raw Materials Warehouse'), 
 		@FinishedGoodsWarehouse = (SELECT [Id] FROM @Locations WHERE [Name] = N'Finished Goods Warehouse');

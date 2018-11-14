@@ -25,7 +25,9 @@ RETURN
 		E.ResourceId,
 		E.Direction,
 		-- covering ratio: (min(End, @to) - max(Start, @from))/(end - start)
-		 DATEDIFF(s, (CASE WHEN @toDate < L.EndDateTime THEN @toDate ELSE L.EndDateTime END), (CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END))
+		 DATEDIFF(s, 
+					(CASE WHEN @toDate < L.EndDateTime THEN @toDate ELSE L.EndDateTime END),
+					(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END))
 		/ CAST(DATEDIFF(s, L.EndDateTime, L.StartDateTime) AS float) As CoveringRatio,
 		E.Amount,
 		E.[Value],

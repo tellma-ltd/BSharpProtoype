@@ -37,7 +37,7 @@ BEGIN -- Resources
 		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [GoodForServiceParentId], [FungibleParentId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END 
-	SELECT * FROM @Resources;
+--	SELECT * FROM @Resources;
 	SELECT 
 		@ETB = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -100), 
 		@USD = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -99),
@@ -46,6 +46,7 @@ BEGIN -- Resources
 		@CommonStock = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -96),
 		@HolidayOvertime = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -95),
 		@Labor = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -94);
+
 	/*INSERT INTO dbo.Settings VALUES
 	(N'HolidayOvertime', @HolidayOvertime),
 	(N'Labor', @Labor); */

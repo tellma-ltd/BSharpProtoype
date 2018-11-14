@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[adm_COA__Parents_Update]
 AS
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
 	UPDATE dbo.Accounts Set ParentId = NULL WHERE ParentId IS NOT NULL -- And Tenant = 0;
 	
 	DECLARE @i INT = 1
@@ -101,5 +101,4 @@ BEGIN
 	UPDATE dbo.Accounts
 	SET [AccountSpecification] = N'Basic' -- location
 	WHERE [AccountSpecification] IS NULL
-
 END

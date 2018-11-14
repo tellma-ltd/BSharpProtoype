@@ -18,7 +18,7 @@ BEGIN -- Updating
 	SET 
 		[Name] = N'Existing',
 		Status = N'Updated'
-	WHERE TemporaryId = -99;
+	WHERE [Name] = N'Existin';
 
 	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
@@ -34,9 +34,9 @@ BEGIN -- Deleting
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END	
 
-SELECT * FROM @Operations;
+--SELECT * FROM @Operations;
 SELECT 
-		@BusinessEntity = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -100), 
-		@Existing = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -99),
-		@Expansion = (SELECT [Id] FROM @Operations WHERE [TemporaryId] = -78);
+		@BusinessEntity = (SELECT [Id] FROM @Operations WHERE [Name] = N'Walia Steel Industry'), 
+		@Existing = (SELECT [Id] FROM @Operations WHERE [Name] = N'Existing'),
+		@Expansion = (SELECT [Id] FROM @Operations WHERE [Name] = N'Expansion');
 	

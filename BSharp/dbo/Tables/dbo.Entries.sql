@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Entries] (
 	[TenantId]			INT            NOT NULL,
-	[Id]			INT            NOT NULL,
+    [Id]				 INT IDENTITY (1, 1) NOT NULL,
     [LineId]			INT            NOT NULL,
     [EntryNumber]       INT            NOT NULL,
     [OperationId]       INT            NOT NULL,
