@@ -177,8 +177,8 @@ DECLARE
 		EXEC [dbo].[bdb_Document_Values__Update] 
 				@WideLines = @WideLines, @Entries = @EntriesTransit
 	
-	INSERT INTO @LinesLocal(DocumentId, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
-	SELECT DocumentId, ResponsibleAgentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
+	INSERT INTO @LinesLocal(DocumentId, StartDateTime, EndDateTime, Memo)
+	SELECT DocumentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
 
 	INSERT INTO @LinesLocal SELECT * FROM @Lines;
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries;

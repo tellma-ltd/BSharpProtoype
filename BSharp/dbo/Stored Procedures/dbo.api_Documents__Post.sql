@@ -2,7 +2,6 @@
 	@Documents DocumentList READONLY
 AS
 BEGIN
-	SET NOCOUNT ON;
 	DECLARE @ValidationErrors ValidationErrorList;
 
 	-- if all documents are already posted, return

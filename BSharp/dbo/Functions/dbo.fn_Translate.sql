@@ -5,17 +5,17 @@
 RETURNS nvarchar(2048)
 AS
 BEGIN
-	DECLARE @Result nvarchar(2048), @Language nchar(2);
-	SELECT @Language = dbo.fn_Language();
-	SELECT @Result = Singular 
+	DECLARE @Result nvarchar(2048), @Culture nvarchar(50);
+	SELECT @Culture = dbo.fn_Culture();
+	SELECT @Result = [Value] 
 	FROM dbo.Translations 
-	WHERE [Key] = @Key
-	AND [Language] = @Language;
+	WHERE [Name] = @Key
+	AND [Culture] = @Culture;
 	IF @Result IS NULL
-		IF @Language <> N'EN'
-			SELECT @Result = Singular FROM dbo.Translations 
-			WHERE [Key] = @Key
-			AND [Language] = N'EN';
+		IF @Culture <> N'EN'
+			SELECT @Result = [Value] FROM dbo.Translations 
+			WHERE [Name] = @Key
+			AND [Culture] = N'EN';
 	-- if not translated, return the key itself.
 	RETURN ISNULL(@Result, @Key);
 END;

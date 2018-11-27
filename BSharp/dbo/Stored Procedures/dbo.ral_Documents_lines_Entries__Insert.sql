@@ -15,12 +15,14 @@ BEGIN
 		THROW 50001, @msg, 1;
 	END
 
-	INSERT INTO @DocumentsLocal([Id], [State], [TransactionType], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
-								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToUserId], [Status], [TemporaryId])
-	SELECT [Id], [State], [TransactionType], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
-								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToUserId], [Status], [Id]
+	INSERT INTO @DocumentsLocal([Id], [State], [TransactionType], [FolderId], [LinesMemo], [ResponsibleAgentId],
+								[LinesStartDateTime], [LinesEndDateTime], 
+								[LinesCustody1], [LinesCustody2], [LinesCustody3], 
+								[LinesReference1], [LinesReference2], [LinesReference3], [Status], [TemporaryId])
+	SELECT [Id], [State], [TransactionType], [FolderId], [LinesMemo], [ResponsibleAgentId],
+								[LinesStartDateTime], [LinesEndDateTime], 
+								[LinesCustody1], [LinesCustody2], [LinesCustody3], 
+								[LinesReference1], [LinesReference2], [LinesReference3], [Status], [Id]
 	FROM @Documents;
 
 	DELETE FROM dbo.Documents
@@ -33,9 +35,9 @@ BEGIN
 	(
 		MERGE INTO dbo.Documents AS t
 		USING (
-			SELECT @TenantId As [TenantId], [Id], [State], [TransactionType], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+			SELECT @TenantId As [TenantId], [Id], [State], [TransactionType], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToUserId]
+								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToAgentId]
 			FROM @DocumentsLocal 
 			WHERE [Status] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
@@ -43,7 +45,7 @@ BEGIN
 			UPDATE SET 
 				t.FolderId = s.FolderId,
 				t.LinesMemo = s.LinesMemo,
-				t.LinesResponsibleAgentId = s.LinesResponsibleAgentId,
+				t.[ResponsibleAgentId] = s.ResponsibleAgentId,
 				t.LinesStartDateTime = s.LinesStartDateTime,
 				t.LinesEndDateTime = s.LinesEndDateTime,
 				t.LinesCustody1 = s.LinesCustody1,
@@ -52,14 +54,14 @@ BEGIN
 				t.LinesReference1 = s.LinesReference1,
 				t.LinesReference2 = s.LinesReference2,
 				t.LinesReference3 = s.LinesReference3,
-				t.ForwardedToUserId = s.ForwardedToUserId
+				t.[ForwardedToAgentId] = s.ForwardedToAgentId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [State], [TransactionType], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+			INSERT ([TenantId], [State], [TransactionType], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToUserId])
-			VALUES (@TenantId, s.[State], s.[TransactionType], s.[FolderId], s.[LinesMemo], s.[LinesResponsibleAgentId],
+								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToAgentId])
+			VALUES (@TenantId, s.[State], s.[TransactionType], s.[FolderId], s.[LinesMemo], s.[ResponsibleAgentId],
 								s.[LinesStartDateTime], s.[LinesEndDateTime], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3], 
-								s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], s.[ForwardedToUserId])
+								s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], s.[ForwardedToAgentId])
 		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
 	) AS x;
 
@@ -68,11 +70,13 @@ BEGIN
 	FROM @DocumentsLocal D
 	JOIN @DocumentIdMappings M ON D.TemporaryId = M.OldId;
 
-	-- Assign Serial Numbers, I wish we could do it asynchronously...
+	-- Assign Serial Numbers, here are some solutions..
+	-- https://social.technet.microsoft.com/Forums/en-US/631cf0e1-c6db-4985-9147-718af0080d03/pdw-simulate-identity-column?forum=sqldatawarehousing
+	-- https://www.sqlservercentral.com/Forums/Topic123246-8-1.aspx
 	-- For each state/transaction type, get the last serial number, and add one
 
-	INSERT INTO @LinesLocal([Id], [DocumentId], [ResponsibleAgentId], [StartDateTime], [EndDateTime], [Memo], [Status], [TemporaryId])
-	SELECT [Id], [DocumentId], [ResponsibleAgentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Id]
+	INSERT INTO @LinesLocal([Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [TemporaryId])
+	SELECT [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Id]
 	FROM @Lines
 	
 	UPDATE L 
@@ -90,19 +94,18 @@ BEGIN
 	(
 		MERGE INTO dbo.Lines AS t
 		USING (
-			SELECT @TenantId As [TenantId], [Id], [DocumentId], [ResponsibleAgentId], [StartDateTime], [EndDateTime], [Memo]
+			SELECT @TenantId As [TenantId], [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo]
 			FROM @LinesLocal 
 			WHERE [Status] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
-				t.[ResponsibleAgentId] = s.[ResponsibleAgentId],
 				t.[StartDateTime] = s.[StartDateTime],
 				t.[EndDateTime] = s.[EndDateTime],
 				t.[Memo] = s.[Memo]
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [DocumentId], [ResponsibleAgentId], [StartDateTime], [EndDateTime], [Memo])
-			VALUES (@TenantId, s.[DocumentId], s.[ResponsibleAgentId], s.[StartDateTime], s.[EndDateTime], s.[Memo])
+			INSERT ([TenantId], [DocumentId], [StartDateTime], [EndDateTime], [Memo])
+			VALUES (@TenantId, s.[DocumentId], s.[StartDateTime], s.[EndDateTime], s.[Memo])
 		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
 	) AS y;
 
@@ -176,8 +179,8 @@ BEGIN
 	UPDATE @EntriesLocal SET [Status] = N'Unchanged';
 
 	SELECT [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], 
-			[LinesMemo], [LinesResponsibleAgentId],	[LinesStartDateTime], [LinesEndDateTime], 
+			[LinesMemo], [ResponsibleAgentId],	[LinesStartDateTime], [LinesEndDateTime], 
 			[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
-			[ForwardedToUserId], [Status], [TemporaryId]
+			[ForwardedToAgentId], [Status], [TemporaryId]
 	FROM @DocumentsLocal;
 END;

@@ -37,9 +37,9 @@ END
 IF (1=1)-- Journal Vouchers
 BEGIN
 -- Document 1: Manual JV
-	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Event', @TransactionType = N'ManualJournalVoucher', @Mode = N'Draft';
+	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Voucher', @TransactionType = N'ManualJournalVoucher', @Mode = N'Draft';
 
-	INSERT INTO @Documents( [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	INSERT INTO @Documents( [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -67,8 +67,8 @@ BEGIN
 	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction,@Amount, @Value, @Note)
 
 -- Document 2: Manual JV Extended
-	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Event', @TransactionType = N'ManualJournalVoucherExtended', @Mode = N'Draft';
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	SELECT  @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Voucher', @TransactionType = N'ManualJournalVoucherExtended', @Mode = N'Draft';
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -98,7 +98,7 @@ IF (1=0)-- Purchase Order
 BEGIN 
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Purchase', @Mode = N'Draft';
 
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -120,8 +120,8 @@ BEGIN
 END
 IF (1=0)-- Purchase Event
 BEGIN
-	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'CashIssueToSupplier', @Mode = N'Draft';
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'CashIssueToSupplier', @Mode = N'Draft';
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -132,8 +132,8 @@ BEGIN
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount1, Custody2, Reference2)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 
-	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'PurchaseWitholdingTax', @Mode = N'Draft';
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'PurchaseWitholdingTax', @Mode = N'Draft';
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -160,9 +160,9 @@ BEGIN
 	VALUES(@DocumentId, @LineNumber, @LineType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Warehouse, @item, @Quantity, @Supplier);
 	*/
 
-	SELECT @DocumentId = @DocumentId + 1, @State = N'Event', @TransactionType = N'Purchase', @Mode = N'Draft';
+	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'Purchase', @Mode = N'Draft';
 		
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -179,7 +179,7 @@ IF (1=0)-- Employment Contract
 BEGIN
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Labor', @Mode = N'Draft';
 
-	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [LinesResponsibleAgentId],
+	INSERT INTO @Documents(  [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
     [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -198,7 +198,7 @@ END
 IF (1=0)-- Attendance Event
 BEGIN
 	DELETE FROM @WideLines;
-	SELECT  @State = N'Event', @TransactionType = N'Payroll';
+	SELECT  @State = N'Voucher', @TransactionType = N'Payroll';
 
 	SELECT @TransactionType = N'LaborReceiptFromEmployee';
 -- Labor receipt

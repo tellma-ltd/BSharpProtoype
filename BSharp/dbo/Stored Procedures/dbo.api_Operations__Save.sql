@@ -17,7 +17,7 @@ BEGIN
 	(
 		MERGE INTO dbo.Operations AS t
 		USING (
-			SELECT @TenantId As [TenantId], [Id], [OperationType], [Name], [Parent]
+			SELECT @TenantId As [TenantId], [Id], [OperationType], [Name], [ParentId]
 			FROM @Operations 
 			WHERE [Status] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
@@ -25,7 +25,7 @@ BEGIN
 			UPDATE SET 
 				t.[OperationType] = s.[OperationType],
 				t.[Name] = s.[Name],
-				t.[Parent] = s.[Parent]
+				t.[ParentId] = s.[ParentId]
 		WHEN NOT MATCHED THEN
 			INSERT ([TenantId], [OperationType], [Name])
 			VALUES (@TenantId, s.[OperationType], s.[Name])
@@ -36,14 +36,14 @@ BEGIN
 	PRINT N'Parent Id in table Operations is lost. Additional code is needed to fix it. Will be fixed once we agree it is necessary'
 	/*
 	UPDATE O
-	SET O.[Parent] = 
+	SET O.[ParentId] = 
 	FROM dbo.Operations O 
 	JOIN @Operations OL ON O.Id = OL.Parent
 	JOIN @IdMappings M ON OL.Id = M.OldId
 	JOIN dbo.Operations O2 ON M.NewId = O2.Id
 	*/
 	
-	SELECT O.[Id], O.[OperationType], O.[Name], O.[Parent], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
+	SELECT O.[Id], O.[OperationType], O.[Name], O.[ParentId], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
 	FROM dbo.Operations O
 	LEFT JOIN @IdMappings M ON O.[Id] = M.[NewId]
 	WHERE O.[TenantId] = @TenantId

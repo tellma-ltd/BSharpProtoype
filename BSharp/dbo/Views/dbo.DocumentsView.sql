@@ -6,6 +6,6 @@ AS
 	D.Mode,
 	U.FriendlyName As [Forwarded To]
 	FROM dbo.Documents D
-	LEFT JOIN dbo.Users U ON D.ForwardedToUserId = U.Id
+	LEFT JOIN dbo.Users U ON D.[ForwardedToAgentId] = U.Id
 
 

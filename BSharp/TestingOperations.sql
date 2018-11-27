@@ -4,13 +4,13 @@
 END
 BEGIN -- Inserting
 	INSERT INTO @Operations
-		([Id], [OperationType], [Name], [Parent]) Values
-		(-100, N'BusinessEntity', N'Walia Steel Industry', NULL),
-		(-99, N'Investment', N'Existin', -100),
-		(-98, N'OperatingSegment', N'Fake', -100),
-		(-78, N'Investment', N'Expansion', -100);
+		([Id], [TemporaryId], [OperationType], [Name], [ParentId]) Values
+		(-100, -100,		 N'BusinessEntity', N'Walia Steel Industry', NULL),
+		(-99, -99,			N'Investment', N'Existin', -100),
+		(-98, -98,			N'OperatingSegment', N'Fake', -100),
+		(-78, -78,			N'Investment', N'Expansion', -100);
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END
 BEGIN -- Updating
@@ -20,7 +20,7 @@ BEGIN -- Updating
 		Status = N'Updated'
 	WHERE [Name] = N'Existin';
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END
 
@@ -30,7 +30,7 @@ BEGIN -- Deleting
 		Status = N'Deleted'
 	WHERE TemporaryId = -98;
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [Parent], [Status], [TemporaryId])
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
 	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END	
 

@@ -3,7 +3,7 @@
     [Name]            NVARCHAR (1024) NOT NULL,
     [Code]            NVARCHAR (10)   NOT NULL,
     [IsActive]        BIT             NOT NULL,
-    [ParentId]        NVARCHAR (255)  NULL,
+    [ParentId]        NVARCHAR (255),
     [NoteType]		NVARCHAR (10)   DEFAULT (N'Custom') NOT NULL,
     [IsExtensible]    BIT            DEFAULT ((1)) NOT NULL,
     PRIMARY KEY NONCLUSTERED ([Id] ASC)
@@ -226,7 +226,7 @@ INSERT INTO @Notes(NoteType, IsActive, Code, Id, [Name]) VALUES
 ,(N'Regulatory', 1, N'47', N'OtherExpenseByNature', N'Other expenses, by nature');
 MERGE dbo.Notes AS t
 USING @Notes AS s
-ON s.Code = t.Code --AND s.tenantId = t.tenantId
+ON s.Code = t.Code AND t.tenantId = dbo.fn_TenantId()
 WHEN MATCHED AND
 (
     t.[Name]			<>	s.[Name]			OR
@@ -244,6 +244,6 @@ UPDATE SET
 WHEN NOT MATCHED BY SOURCE THEN
         DELETE
 WHEN NOT MATCHED BY TARGET THEN
-        INSERT ([Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
-        VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
+        INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
+        VALUES (dbo.fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

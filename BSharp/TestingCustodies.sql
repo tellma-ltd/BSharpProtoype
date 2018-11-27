@@ -26,37 +26,37 @@ END
 BEGIN -- Agents
 	BEGIN -- Insert individuals and organizations
 		INSERT INTO @Agents
-		([Id], [AgentType],		[Name],			[IsRelated], [UserId],						[TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime]) VALUES
-		(-100,	N'Individual',	N'Mohamad Akra',	0,		 N'mohamad.akra@banan-it.com',	NULL,						NULL,				N'Dr.',		'M',	'1966.02.19'),
-		(-99,	N'Individual',	N'Ahmad Akra',		0,		 N'ahmad.akra@banan-it.com',	NULL,						NULL,				N'Mr.',		'M',	'1992.09.21'),
-		(-98, N'Individual',	N'Badege Kebede',	1,		 N'badegek@gmail.com',			NULL,						NULL,				N'ATO',		'M',	NULL),
-		(-97, N'Individual',	N'Tizita Nigussie',	0,		N'mintewelde00@gmail.com',		NULL,						NULL,				N'Ms.', 	'F',	NULL),
-		(-96, N'Individual',	N'Ashenafi Fantahun',0,		N'ashenafi935@gmail.com',		NULL,						NULL,				N'Mr.',		'M',	NULL),
-		(-95, N'Individual',	N'Yisak Tegene',	0,		N'yisak.tegene@gmail.com',		NULL,						NULL,				N'Mr.',		'M',	NULL),
-		(-94, N'Individual',	N'Zewdinesh Hora',	0,		N'zewdnesh.hora@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
-		(-93, N'Individual',	N'Tigist Negash',	0,		N'tigistnegash74@gmail.com',	NULL,						NULL,				N'Ms.',		'F',	NULL),
-		(-92, N'Individual',	N'Roman Zenebe',	0,		N'roman.zen12@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
-		(-91, N'Individual',	N'Mestawet G/Egziyabhare',	0,N'mestawetezige@gmail.com',	NULL,						NULL,				N'Ms.',		'F',	NULL),
-		(-90, N'Individual',	N'Ayelech Hora',	0,		N'ayelech.hora@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
-		(-89, N'Individual',	N'Yigezu Legesse',	0,		NULL,							NULL,						NULL,				N'ATO',		'F',	NULL),
+		([Id], [Temporaryid], [AgentType],		[Name],			[IsRelated], [UserId],						[TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime]) VALUES
+		(-100, -100,			N'Individual',	N'Mohamad Akra',	0,		 N'mohamad.akra@banan-it.com',	NULL,						NULL,				N'Dr.',		'M',	'1966.02.19'),
+		(-99, -99,				N'Individual',	N'Ahmad Akra',		0,		 N'ahmad.akra@banan-it.com',	NULL,						NULL,				N'Mr.',		'M',	'1992.09.21'),
+		(-98, -98,				N'Individual',	N'Badege Kebede',	1,		 N'badegek@gmail.com',			NULL,						NULL,				N'ATO',		'M',	NULL),
+		(-97, -97,				N'Individual',	N'Tizita Nigussie',	0,		N'mintewelde00@gmail.com',		NULL,						NULL,				N'Ms.', 	'F',	NULL),
+		(-96, -96,				N'Individual',	N'Ashenafi Fantahun',0,		N'ashenafi935@gmail.com',		NULL,						NULL,				N'Mr.',		'M',	NULL),
+		(-95, -95,				N'Individual',	N'Yisak Tegene',	0,		N'yisak.tegene@gmail.com',		NULL,						NULL,				N'Mr.',		'M',	NULL),
+		(-94, -94,				N'Individual',	N'Zewdinesh Hora',	0,		N'zewdnesh.hora@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
+		(-93, -93,				N'Individual',	N'Tigist Negash',	0,		N'tigistnegash74@gmail.com',	NULL,						NULL,				N'Ms.',		'F',	NULL),
+		(-92, -92,				N'Individual',	N'Roman Zenebe',	0,		N'roman.zen12@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
+		(-91, -91,				N'Individual',	N'Mestawet G/Egziyabhare',	0,N'mestawetezige@gmail.com',	NULL,						NULL,				N'Ms.',		'F',	NULL),
+		(-90, -90,				N'Individual',	N'Ayelech Hora',	0,		N'ayelech.hora@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
+		(-89, -89,				N'Individual',	N'Yigezu Legesse',	0,		NULL,							NULL,						NULL,				N'ATO',		'F',	NULL),
 
-		(-88, N'Organization', N'Banan Information technologies, plc', 1, N'info@banan-it.com',N'0054901530',	N'AA, Bole, 316/3/203 A',	NULL,		NULL, '2017.08.09'),
-		(-87, N'Organization', N'Walia Steel Industry, plc', 1, NULL,						N'0001656462',				NULL,				NULL,		NULL,	NULL),
-		(-86, N'Organization', N'Yangfan Motors, PLC', 0,	NULL,							N'0005306731',		N'AA, Bole, 06, New',		NULL,		NULL,	NULL),
-		(-85, N'Organization', N'Sisay Tesfaye, PLC', 0,	NULL,							N'',						NULL,				NULL,		NULL,	NULL),
-		(-84, N'Organization', N'Ethiopian Revenues and Customs Authority', 0, NULL,		NULL,						NULL,				NULL,		NULL,	NULL),
-		(-83, N'Organization', N'Best Paint Industry', 0,  NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-82, N'Organization', N'Best Plastic Industry', 0, NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-81, N'Organization', N'Commercial Bank of Ethiopia', 0, NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-		(-80, N'Organization', N'Awash Bank', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-79, N'Organization', N'NIB', 0,					NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-88, -88,				N'Organization', N'Banan Information technologies, plc', 1, N'info@banan-it.com',N'0054901530',	N'AA, Bole, 316/3/203 A',	NULL,		NULL, '2017.08.09'),
+		(-87, -87,				N'Organization', N'Walia Steel Industry, plc', 1, NULL,						N'0001656462',				NULL,				NULL,		NULL,	NULL),
+		(-86, -86,				N'Organization', N'Yangfan Motors, PLC', 0,	NULL,							N'0005306731',		N'AA, Bole, 06, New',		NULL,		NULL,	NULL),
+		(-85, -85,				N'Organization', N'Sisay Tesfaye, PLC', 0,	NULL,							N'',						NULL,				NULL,		NULL,	NULL),
+		(-84, -84,				N'Organization', N'Ethiopian Revenues and Customs Authority', 0, NULL,		NULL,						NULL,				NULL,		NULL,	NULL),
+		(-83, -83,				N'Organization', N'Best Paint Industry', 0,		NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+		(-82, -82,				N'Organization', N'Best Plastic Industry', 0, NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-81, -81,				N'Organization', N'Commercial Bank of Ethiopia', 0, NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+		(-80, -80,				N'Organization', N'Awash Bank', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-79, -79,				N'Organization', N'NIB', 0,					NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
 		
-		(-60, N'OrganizationUnit', N'Executive Office', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-59, N'OrganizationUnit', N'Production', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-58, N'OrganizationUnit', N'Sales & Marketing', 0, NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-57, N'OrganizationUnit', N'Finance', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-56, N'OrganizationUnit', N'Human Resources', 0,	NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-		(-55, N'OrganizationUnit', N'Materials & Purchasing', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
+		(-60, -60,				N'OrganizationUnit', N'Executive Office', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-59, -59,				N'OrganizationUnit', N'Production', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-58, -58,				N'OrganizationUnit', N'Sales & Marketing', 0, NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-57, -57,				N'OrganizationUnit', N'Finance', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-56, -56,				N'OrganizationUnit', N'Human Resources', 0,	NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+		(-55, -55,				N'OrganizationUnit', N'Materials & Purchasing', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
 
 		DELETE FROM @AgentsResult; INSERT INTO @AgentsResult([Id], [AgentType], [Name], [IsActive], [IsRelated], [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Agents__Save]  @Agents = @Agents; DELETE FROM @Agents WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Agents SELECT * FROM @AgentsResult;
@@ -114,12 +114,12 @@ END
 BEGIN -- Locations
 	BEGIN -- Insert 
 		INSERT INTO @Locations
-		([Id], [LocationType], [Name],						[Address], [Parent],[CustodianId]) VALUES
-		(-100, N'Warehouse',	N'Raw Materials Warehouse', NULL,		NULL,	NULL),
-		(-99, N'Warehouse',	N'Fake Warehouse', NULL,		NULL,	NULL),
-		(-98, N'Warehouse',		N'Finished Goods Warehouse', NULL,		NULL,	NULL);
+		([Id], [LocationType], [Name],						[Address], [ParentId],[CustodianId], [TemporaryId]) VALUES
+		(-100, N'Warehouse',	N'Raw Materials Warehouse', NULL,		NULL,	NULL, -100),
+		(-99, N'Warehouse',		N'Fake Warehouse',			NULL,		NULL,	NULL, -99),
+		(-98, N'Warehouse',		N'Finished Goods Warehouse', NULL,		NULL,	NULL, -98);
 
-		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [Parent],[CustodianId], [Status], [TemporaryId])
+		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [ParentId],[CustodianId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Locations__Save]  @Locations = @Locations; DELETE FROM @Locations WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Locations SELECT * FROM @LocationsResult;
 	END
 	BEGIN -- Updating RM Warehouse address
@@ -129,7 +129,7 @@ BEGIN -- Locations
 			[Status] = N'Updated'
 		WHERE [Name] = N'Raw Materials Warehouse';
 
-		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [Parent],[CustodianId], [Status], [TemporaryId])
+		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [ParentId],[CustodianId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Locations__Save]  @Locations = @Locations; DELETE FROM @Locations WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Locations SELECT * FROM @LocationsResult;
 	END
 	BEGIN -- Updating RM Warehouse address
@@ -138,7 +138,7 @@ BEGIN -- Locations
 			[Status] = N'Deleted'
 		WHERE [Name] = N'Fake Warehouse';
 
-		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [Parent],[CustodianId], [Status], [TemporaryId])
+		DELETE FROM @LocationsResult; INSERT INTO @LocationsResult([Id], [LocationType], [Name], [IsActive], [Address], [ParentId],[CustodianId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Locations__Save]  @Locations = @Locations; DELETE FROM @Locations WHERE [Status] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Locations SELECT * FROM @LocationsResult;
 	END	
 --	SELECT * FROM @Locations;

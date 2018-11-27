@@ -9,7 +9,8 @@ BEGIN
 		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
 		THROW 50001, @msg, 1;
 	END
-	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
+	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId
+	AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
 
 	INSERT INTO @IdMappings([NewId], [OldId])
 	SELECT x.[NewId], x.[OldId]
@@ -35,7 +36,7 @@ BEGIN
 
 	MERGE INTO dbo.Locations t
 	USING (
-		SELECT @TenantId As [TenantId], M.[NewId] As [Id], [LocationType], [Address], [Parent], [CustodianId]
+		SELECT @TenantId As [TenantId], M.[NewId] As [Id], [LocationType], [Address], [ParentId], [CustodianId]
 		FROM @Locations I 
 		JOIN @IdMappings M ON I.Id = M.OldId
 	) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
@@ -43,13 +44,13 @@ BEGIN
 		UPDATE SET
 			t.[Id]						= s.[Id],
 			t.[Address]					= s.[Address],
-			t.[Parent]					= s.[Parent],      
+			t.[ParentId]					= s.[ParentId],      
 			t.[CustodianId]				= s.[CustodianId]
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[Parent],	[CustodianId])
-		VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[Parent], s.[CustodianId]);
+		INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[ParentId],	[CustodianId])
+		VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[ParentId], s.[CustodianId]);
 
-	SELECT C.[Id], L.[LocationType], C.[Name], C.[IsActive], L.[Address], L.[Parent], L.[CustodianId], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
+	SELECT C.[Id], L.[LocationType], C.[Name], C.[IsActive], L.[Address], L.[ParentId], L.[CustodianId], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
 	FROM dbo.Custodies C
 	JOIN dbo.Locations L ON C.[TenantId] = L.[TenantId] AND C.Id = L.Id  
 	LEFT JOIN @IdMappings M ON C.[Id] = M.[NewId]

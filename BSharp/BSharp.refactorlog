@@ -252,4 +252,67 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[CreateSource]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="1e6d91e1-b7c6-4eb4-8248-b60af90ce348" ChangeDateTime="11/19/2018 04:34:31">
+    <Property Name="ElementName" Value="[dbo].[Documents].[ForwardedToUserId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ForwardedToAgentd]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fd848a06-3944-4d02-850e-8580928790f3" ChangeDateTime="11/20/2018 16:14:53">
+    <Property Name="ElementName" Value="[dbo].[Translations].[Singular]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Translations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Value]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d38b0545-9d79-4993-8d47-a852a4780a84" ChangeDateTime="11/20/2018 16:15:20">
+    <Property Name="ElementName" Value="[dbo].[Translations].[Key]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Translations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Name]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b92c30b5-d944-4b9e-bfa0-33b74c08ebb9" ChangeDateTime="11/20/2018 16:16:04">
+    <Property Name="ElementName" Value="[dbo].[Translations].[Language]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Translations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Culture]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="65dca6dc-bbf3-4934-913e-d1377bcc739e" ChangeDateTime="11/22/2018 10:21:58">
+    <Property Name="ElementName" Value="[dbo].[fn_Language]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fn_Culture]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d3e22da-a0d9-4d12-bed2-0ec94132e288" ChangeDateTime="11/22/2018 17:49:37">
+    <Property Name="ElementName" Value="[dbo].[Documents].[ResponsibleAgentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ResponsibleAgentId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce316cc8-bc79-40e4-8eb7-557c50159096" ChangeDateTime="11/25/2018 04:35:04">
+    <Property Name="ElementName" Value="[dbo].[Documents].[ForwardedToAgentd]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ForwardedToAgentId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="140481c7-542a-4e6c-988a-970255bec5dc" ChangeDateTime="11/26/2018 15:11:22">
+    <Property Name="ElementName" Value="[dbo].[Resources].[PartOf]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Resources]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PartOfPPE" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7b1d5ba6-304b-4fbc-909a-b32156e9a4df" ChangeDateTime="11/27/2018 10:07:15">
+    <Property Name="ElementName" Value="[dbo].[Locations].[ParentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Locations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ParentId]" />
+  </Operation>
 </Operations>

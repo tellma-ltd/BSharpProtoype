@@ -8,17 +8,17 @@ END
 BEGIN -- Resources
 	BEGIN -- Inserting
 		INSERT INTO @Resources
-		([Id], [ResourceType],		[Name],				[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [GoodForServiceParentId], [FungibleParentId]) VALUES
-		(-100,	N'Money',			N'ETB',				N'ETB',	N'ETB',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-99,	N'Money',			N'USD',				N'USD',	N'USD',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-98,	N'Vehicles',		N'Toyota Camry 2018',NULL,	N'pcs',			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,						NULL),
-		(-97,	N'GeneralGoods',	N'Teddy bear',		NULL,	N'pcs',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-96,	N'Shares',			N'Common Stock',	NULL,	N'share',		NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-92,	N'Shares',			N'Premium Stock',	NULL,	N'share',		NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-95,	N'WagesAndSalaries',N'Labor',			NULL,	N'wmo',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
-		(-94,	N'WagesAndSalaries',N'Holiday Overtime',NULL,	N'hr',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL);
+		([Id], [TemporaryId], [ResourceType],		[Name],				[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId]) VALUES
+		(-100, -100,			N'Money',			N'ETB',				N'ETB',	N'ETB',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-99,	-99,			N'Money',			N'USD',				N'USD',	N'USD',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-98,	-98,			N'Vehicles',		N'Toyota Camry 2018',NULL,	N'pcs',			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,						NULL),
+		(-97,	-97,			N'GeneralGoods',	N'Teddy bear',		NULL,	N'pcs',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-96,	-96,			N'Shares',			N'Common Stock',	NULL,	N'share',		NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-92,	-92,			N'Shares',			N'Premium Stock',	NULL,	N'share',		NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-95,	-95,			N'WagesAndSalaries',N'Labor',			NULL,	N'wmo',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
+		(-94,	-94,			N'WagesAndSalaries',N'Holiday Overtime',NULL,	N'hr',			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL);
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [GoodForServiceParentId], [FungibleParentId], [Status], [TemporaryId])
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END
 	BEGIN -- Updating
@@ -28,13 +28,13 @@ BEGIN -- Resources
 			Status = N'Updated'
 		WHERE [TemporaryId] = -98;
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [GoodForServiceParentId], [FungibleParentId], [Status], [TemporaryId])
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END	
 	BEGIN -- Deleting
 		UPDATE @Resources SET [Status] = N'Deleted' WHERE [TemporaryId] = -92;
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [GoodForServiceParentId], [FungibleParentId], [Status], [TemporaryId])
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [UnitOfMeasure],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
 		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END 
 --	SELECT * FROM @Resources;

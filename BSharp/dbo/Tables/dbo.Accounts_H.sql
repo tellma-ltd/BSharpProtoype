@@ -1,5 +1,7 @@
 ﻿CREATE TABLE [dbo].[Accounts_H] (
-    [C] NVARCHAR (255) NOT NULL,
-    [P] NVARCHAR (255) NOT NULL
+	[TenantId]	INT,
+    [C]			NVARCHAR (255),
+    [P]			NVARCHAR (255),
+    CONSTRAINT [PK_Accounts_H] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [C] ASC, [P] ASC)
 );
 

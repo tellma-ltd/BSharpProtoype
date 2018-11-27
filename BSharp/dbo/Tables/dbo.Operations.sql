@@ -1,10 +1,11 @@
 ﻿CREATE TABLE [dbo].[Operations] (
-	[TenantId]				 INT				NOT NULL,
-    [Id]            INT           IDENTITY (1, 1) NOT NULL,
+	[TenantId]		INT,
+    [Id]            INT           IDENTITY (1, 1),
     [OperationType] NVARCHAR (50) NOT NULL,
     [Name]          NVARCHAR (50) NOT NULL,
-    [Parent]        INT           NULL,
+    [ParentId]        INT,
     CONSTRAINT [PK_Operations] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-    CONSTRAINT [FK_Operations_Operations] FOREIGN KEY ([TenantId], [Parent]) REFERENCES [dbo].[Operations] ([TenantId], [Id]),
-    CONSTRAINT [FK_Operations_OperationTypes] FOREIGN KEY ([OperationType]) REFERENCES [dbo].[OperationTypes] ([Id]) ON UPDATE CASCADE
+    CONSTRAINT [FK_Operations_Operations] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Operations] ([TenantId], [Id]),
+	CONSTRAINT [CK_Operations_OperationType] CHECK ([OperationType] IN (N'BusinessEntity', N'Investment', N'OperatingSegment'))
+
 );

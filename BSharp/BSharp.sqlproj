@@ -73,13 +73,9 @@
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Agents.sql" />
     <Build Include="dbo\Tables\dbo.Locations.sql" />
-    <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
-    <Build Include="dbo\Tables\dbo.Modes.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
     <Build Include="dbo\Tables\dbo.TransactionSpecifications.sql" />
-    <Build Include="dbo\Tables\dbo.CustodyTypes.sql" />
-    <Build Include="dbo\Tables\dbo.AgentTypes.sql" />
     <Build Include="dbo\Tables\dbo.Users.sql" />
     <Build Include="dbo\Tables\dbo.DocumentForwardings.sql" />
     <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
@@ -95,8 +91,6 @@
     <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.Operations.sql" />
-    <Build Include="dbo\Tables\dbo.OperationTypes.sql" />
-    <Build Include="dbo\Tables\dbo.LocationTypes.sql" />
     <Build Include="dbo\Views\dbo.DocumentsView.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
     <Build Include="dbo\Views\dbo.IndividualsView.sql" />
@@ -159,9 +153,10 @@
     <Build Include="dbo\Functions\dbo.fn_TenantId.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
-    <None Include="PopulateErrorMessages.sql" />
-    <Build Include="dbo\Functions\dbo.fn_Language.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Culture.sql" />
     <Build Include="dbo\Functions\dbo.fn_Translate.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
+    <Build Include="dbo\User Defined Types\dbo.UnitOfMeasureList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -176,12 +171,12 @@
     <None Include="PopulateTransactionSpecifications.sql" />
     <None Include="TestingCustodies.sql" />
     <None Include="PopulateTransactionTypes.sql" />
-    <None Include="PopulateCustodyTypes.sql" />
-    <None Include="PopulateOperationTypes.sql" />
+    <None Include="PopulateTranslations.sql" />
     <None Include="Testing.sql" />
     <None Include="TestingSettings.sql" />
     <None Include="TestingResources.sql" />
     <None Include="TestingOperations.sql" />
+    <None Include="PopulateUnitsOfMeasure.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />
