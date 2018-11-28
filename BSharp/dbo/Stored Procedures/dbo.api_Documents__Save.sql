@@ -7,14 +7,14 @@ AS
 BEGIN
 DECLARE
 	@DocumentId int = 0,
-	@TransactionType nvarchar(50),
+	@TransactionType NVARCHAR(255),
 	@ResponsibleAgentId int,
 	@StartDateTime datetimeoffset(7),
 	@EndDateTime datetimeoffset(7),	
 	@Memo  nvarchar(255),
 
 	@Operation1 int,
-	@Reference1 nvarchar(50),
+	@Reference1 NVARCHAR(255),
 	@Account1 nvarchar(255),
 	@Custody1 int, 
 	@Resource1 int,
@@ -22,13 +22,13 @@ DECLARE
 	@Amount1 money,
 	@Value1 money,
 	@Note1 nvarchar(255),
-	@RelatedReference1 nvarchar(50),
+	@RelatedReference1 NVARCHAR(255),
 	@RelatedAgent1 int,
 	@RelatedResource1 int,
 	@RelatedAmount1 money,
 
 	@Operation2 int,
-	@Reference2 nvarchar(50),
+	@Reference2 NVARCHAR(255),
 	@Account2 nvarchar(255),
 	@Custody2 int, 
 	@Resource2 int,
@@ -36,13 +36,13 @@ DECLARE
 	@Amount2 money,
 	@Value2 money,
 	@Note2 nvarchar(255),
-	@RelatedReference2 nvarchar(50),
+	@RelatedReference2 NVARCHAR(255),
 	@RelatedAgent2 int,
 	@RelatedResource2 int,
 	@RelatedAmount2 money,
 
 	@Operation3 int,
-	@Reference3 nvarchar(50),
+	@Reference3 NVARCHAR(255),
 	@Account3 nvarchar(255),
 	@Custody3 int, 
 	@Resource3 int,
@@ -50,7 +50,7 @@ DECLARE
 	@Amount3 money,
 	@Value3 money,
 	@Note3 nvarchar(255),
-	@RelatedReference3 nvarchar(50),
+	@RelatedReference3 NVARCHAR(255),
 	@RelatedAgent3 int,
 	@RelatedResource3 int,
 	@RelatedAmount3 money,
@@ -68,7 +68,7 @@ DECLARE
 		SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE DocumentId = @DocumentId AND [LineId] > @LineId)
 		WHILE @LineId IS NOT NULL
 		BEGIN
-			--Print 'Document ' + cast(@DocumentId as nvarchar(50)) + ', Line ' + Cast(@LineId as nvarchar(50));
+			--Print 'Document ' + cast(@DocumentId as NVARCHAR(255)) + ', Line ' + Cast(@LineId as NVARCHAR(255));
 			SELECT
 				@DocumentId = DocumentId,
 				@TransactionType = TransactionType,

@@ -87,7 +87,7 @@
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
     <Build Include="dbo\Tables\dbo.TransactionTypes.sql" />
-    <Build Include="dbo\Tables\dbo.UnitsOfMeasure.sql" />
+    <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
     <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.Operations.sql" />
@@ -156,7 +156,8 @@
     <Build Include="dbo\Functions\dbo.fn_Culture.sql" />
     <Build Include="dbo\Functions\dbo.fn_Translate.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
-    <Build Include="dbo\User Defined Types\dbo.UnitOfMeasureList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
+    <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

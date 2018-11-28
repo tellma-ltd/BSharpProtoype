@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Locations] (
 	[TenantId]		INT,
     [Id]			INT	,
-    [LocationType]	NVARCHAR (50) NOT NULL,
+    [LocationType]	NVARCHAR (255) NOT NULL,
     [Address]		NVARCHAR (255),
     [ParentId]		INT,
     [CustodianId]	INT,

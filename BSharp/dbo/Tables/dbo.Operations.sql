@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Operations] (
 	[TenantId]		INT,
     [Id]            INT           IDENTITY (1, 1),
-    [OperationType] NVARCHAR (50) NOT NULL,
-    [Name]          NVARCHAR (50) NOT NULL,
+    [OperationType] NVARCHAR (255) NOT NULL,
+    [Name]          NVARCHAR (255) NOT NULL,
     [ParentId]        INT,
     CONSTRAINT [PK_Operations] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
     CONSTRAINT [FK_Operations_Operations] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Operations] ([TenantId], [Id]),

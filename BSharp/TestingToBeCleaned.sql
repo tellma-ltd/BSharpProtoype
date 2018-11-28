@@ -14,24 +14,24 @@
 
 	Truncate Table dbo.Settings;
 
-	DECLARE @DocumentId int = 0, @State nvarchar(50), @TransactionType nvarchar(50), @SerialNumber int, @Mode nvarchar(10), @ResponsibleAgent int;
+	DECLARE @DocumentId int = 0, @State NVARCHAR(255), @TransactionType NVARCHAR(255), @SerialNumber int, @Mode NVARCHAR(255), @ResponsibleAgent int;
 	DECLARE @LineNumber int = 0, @DocumentOffset int = 0;
-	DECLARE @EntryNumber int = 0, @Operation int, @Memo nvarchar(255), @Reference nvarchar(50), @Account nvarchar(255), @Custody int,  @Resource int, @Direction smallint, @Amount money, @Value money, @Note nvarchar(255);
+	DECLARE @EntryNumber int = 0, @Operation int, @Memo nvarchar(255), @Reference NVARCHAR(255), @Account nvarchar(255), @Custody int,  @Resource int, @Direction smallint, @Amount money, @Value money, @Note nvarchar(255);
 	DECLARE @Documents DocumentList, @Lines LineList, @Entries EntryList, @WideLines WideLineList, @ValidationMessage nvarchar(1024);
 	
 	-- List of Concepts
 	DECLARE @EventDateTime datetimeoffset(7), @Supplier int, @Customer int, @Employee int, @Shareholder int, @Investment int, @Debtor int, @Creditor int;
 	DECLARE @ReceivingWarehouse int, @IssuingWarehouse int, @ReceivingCashier int, @IssuingCashier int;
 
-	DECLARE @item int, @Quantity money, @PriceVATExclusive money, @VAT money, @LineTotal money, @CashReceiptNumber nvarchar(50);
-	DECLARE @Payment money, @AmountWithheld money, @WithholdingNumber nvarchar(50), @TaxableAmount money, @Warehouse int, @InvoiceDate datetimeoffset(7), @TypeOfTransaction nvarchar(50);
+	DECLARE @item int, @Quantity money, @PriceVATExclusive money, @VAT money, @LineTotal money, @CashReceiptNumber NVARCHAR(255);
+	DECLARE @Payment money, @AmountWithheld money, @WithholdingNumber NVARCHAR(255), @TaxableAmount money, @Warehouse int, @InvoiceDate datetimeoffset(7), @TypeOfTransaction NVARCHAR(255);
 	DECLARE @SalaryAmount money, @Attendance money, @Department int, @EmployeeTaxableIncome money, @EmployeeIncomeTax money;
 
 	DECLARE @MonthStarts datetimeoffset(7), @MonthEnds datetimeoffset(7), @StartDatetime datetimeoffset(7), @EndDatetime datetimeoffset(7);
 	
 	DECLARE @Organization int, @Currency int, @Date datetimeoffset(7), @BasicSalary money, @TransportationAllowance money, @NumberOfDays money;
 
-	DECLARE @Cashier int, @ExpenseType nvarchar(50), @InvoiceNumber  nvarchar(50), @MachineNumber  nvarchar(50);
+	DECLARE @Cashier int, @ExpenseType NVARCHAR(255), @InvoiceNumber  NVARCHAR(255), @MachineNumber  NVARCHAR(255);
 END
 -- get acceptable document types; and user permissions and general settings;
 IF (1=1)-- Journal Vouchers

@@ -2,14 +2,15 @@
 (
 	@Resource int
 )
-RETURNS nvarchar(5)
+RETURNS NVARCHAR(255)
 AS
 BEGIN
-	DECLARE @Result nvarchar(5)
+	DECLARE @Result NVARCHAR(255)
 
-	SELECT @Result = UnitOfMeasure
-	FROM dbo.Resources
-	WHERE Id = @Resource
+	SELECT @Result = U.Code
+	FROM dbo.Resources R JOIN dbo.[MeasurementUnits] U ON R.UnitOfMeasure = U.Id
+	AND R.TenantId = U.TenantId
+	WHERE R.Id = @Resource
 
 	RETURN @Result
 

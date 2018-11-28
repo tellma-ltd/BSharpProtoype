@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[DocumentForwardings] (
-	[TenantId]			 INT				NOT NULL,
-    [Id]				 INT IDENTITY (1, 1) NOT NULL,
+	[TenantId]			 INT,
+    [Id]				 INT IDENTITY (1, 1),
     [DocumentId]        INT                NOT NULL,
     [ForwardedToUserId] NVARCHAR (450)     NOT NULL,
     [Comment]           NVARCHAR (1024)  ,

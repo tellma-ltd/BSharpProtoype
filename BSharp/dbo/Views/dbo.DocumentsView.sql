@@ -2,7 +2,7 @@
 AS
 	SELECT D.Id, 
 	D.[State], D.[TransactionType], 
-	RIGHT(N'00000' + CAST(D.SerialNumber AS nvarchar(50)), 3) As [Serial Number], 
+	RIGHT(N'00000' + CAST(D.SerialNumber AS NVARCHAR(255)), 3) As [Serial Number], 
 	D.Mode,
 	U.FriendlyName As [Forwarded To]
 	FROM dbo.Documents D

@@ -1,4 +1,4 @@
-﻿DECLARE @TransactionTypes TABLE([id] NVARCHAR(50) PRIMARY KEY, [IsInstant] bit)
+﻿DECLARE @TransactionTypes TABLE([id] NVARCHAR(255) PRIMARY KEY, [IsInstant] bit)
 INSERT @TransactionTypes ([Id], [IsInstant]) VALUES
 	(N'PaymentIssueToSupplier',  1),
 	(N'PaymentReceiptFromCustomer',  1),

@@ -2,12 +2,12 @@
 CREATE PROCEDURE [dbo].[sbs_Document__Forward] 
 	@FromDocument int,
 	@ToDocument int = 0 OUTPUT,
-	@ToState	nvarchar(10),
+	@ToState	NVARCHAR(255),
 	@ToDocumentDateTime	datetimeoffset(7),
 	@Actor	int,
-	@Reason nvarchar(50) = NULL,
-	@Reference nvarchar(50) = NULL,
-	@String1 nvarchar(50) = NULL,
+	@Reason NVARCHAR(255) = NULL,
+	@Reference NVARCHAR(255) = NULL,
+	@String1 NVARCHAR(255) = NULL,
 	@ReminderDateTime datetimeoffset(7) = NULL,
 	@SerialNumber int = 0 OUTPUT
 AS
@@ -32,7 +32,7 @@ BEGIN
 		)
 			RAISERROR (N'Some events have less amount than you are trying to forward', 16,1)
 
-		DECLARE @TransactionType nvarchar(50), @OperatingSegment int, @FromDocumentDateTime datetimeoffset(7), @Agent int, @Location int, @Resource int
+		DECLARE @TransactionType NVARCHAR(255), @OperatingSegment int, @FromDocumentDateTime datetimeoffset(7), @Agent int, @Location int, @Resource int
 
 		SELECT @TransactionType = TransactionType, @OperatingSegment = OperatingSegmentId, @FromDocumentDateTime = DocumentDateTime, 
 			@Agent = AgentId, @Location = LocationId, @Resource = ResourceId

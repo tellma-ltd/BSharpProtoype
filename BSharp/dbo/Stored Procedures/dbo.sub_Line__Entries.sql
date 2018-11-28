@@ -1,10 +1,10 @@
 ﻿
 CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'ManualJV'
 	@LineId int,
-	@TransactionType nvarchar(50),
+	@TransactionType NVARCHAR(255),
 	
 	@Operation1 int = NULL,
-	@Reference1 nvarchar(50) = NULL,
+	@Reference1 NVARCHAR(255) = NULL,
 	@Account1 nvarchar(255) = NULL,
 	@Custody1 int = NULL, 
 	@Resource1 int = NULL,
@@ -12,13 +12,13 @@ CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'Manu
 	@Amount1 money = NULL,
 	@Value1 money = NULL,
 	@Note1 nvarchar(255) = NULL,
-	@RelatedReference1 nvarchar(50) = NULL,
+	@RelatedReference1 NVARCHAR(255) = NULL,
 	@RelatedAgent1 int = NULL,
 	@RelatedResource1 int = NULL,
 	@RelatedAmount1 money = NULL,
 
 	@Operation2 int = NULL,
-	@Reference2 nvarchar(50) = NULL,
+	@Reference2 NVARCHAR(255) = NULL,
 	@Account2 nvarchar(255) = NULL,
 	@Custody2 int = NULL, 
 	@Resource2 int = NULL,
@@ -26,13 +26,13 @@ CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'Manu
 	@Amount2 money = NULL,
 	@Value2 money = NULL,
 	@Note2 nvarchar(255) = NULL,
-	@RelatedReference2 nvarchar(50) = NULL,
+	@RelatedReference2 NVARCHAR(255) = NULL,
 	@RelatedAgent2 int = NULL,
 	@RelatedResource2 int = NULL,
 	@RelatedAmount2 money = NULL,
 
 	@Operation3 int = NULL,
-	@Reference3 nvarchar(50) = NULL,
+	@Reference3 NVARCHAR(255) = NULL,
 	@Account3 nvarchar(255) = NULL,
 	@Custody3 int = NULL, 
 	@Resource3 int = NULL,
@@ -40,7 +40,7 @@ CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'Manu
 	@Amount3 money = NULL,
 	@Value3 money = NULL,
 	@Note3 nvarchar(255) = NULL,
-	@RelatedReference3 nvarchar(50) = NULL,
+	@RelatedReference3 NVARCHAR(255) = NULL,
 	@RelatedAgent3 int = NULL,
 	@RelatedResource3 int = NULL,
 	@RelatedAmount3 money = NULL
@@ -51,7 +51,7 @@ BEGIN
 	DECLARE @AccountCalculation nvarchar(255), @CustodyCalculation nvarchar(255), @ResourceCalculation nvarchar(255), @DirectionCalculation nvarchar(255), @AmountCalculation nvarchar(255), @ValueCalculation nvarchar(255), @NoteCalculation nvarchar(255),
 			@StartDateTimeCalculation nvarchar(255), @EndDateTimeCalculation nvarchar(255), @RelatedReferenceCalculation nvarchar(255), @RelatedAgentCalculation nvarchar(255), @RelatedResourceCalculation nvarchar(255), @RelatedAmountCalculation  nvarchar(255);
 	DECLARE @EntriesCount tinyint, @EntryNumber tinyint, @AccountId nvarchar(255), @CustodyId int, @ResourceId int, @Direction smallint, @Amount money, @Value money, @NoteId nvarchar(255),
-			@RelatedReference nvarchar(50), @RelatedAgentId int, @RelatedResourceId int, @RelatedAmount decimal;
+			@RelatedReference NVARCHAR(255), @RelatedAgentId int, @RelatedResourceId int, @RelatedAmount decimal;
 
 	INSERT INTO @Entries
 		(LineId, EntryNumber, OperationId, Reference, AccountId, CustodyId, ResourceId, Direction, Amount, Value, NoteId, RelatedReference, RelatedAgentId, RelatedResourceId, RelatedAmount)
@@ -84,7 +84,7 @@ BEGIN
 			EXEC sp_executesql @ValueCalculation,  N'@Entries EntryList READONLY, @Value money OUTPUT', @Entries = @Entries, @Value = @Value OUTPUT 
 		END
 		SET @NoteCalculation = N'SELECT @Note = ' + @NoteCalculation; EXEC sp_executesql @NoteCalculation, N'@Note nvarchar(255) OUTPUT', @Note = @NoteId OUTPUT			
-		SET @RelatedReferenceCalculation = N'SELECT @RelatedReference = ' + @RelatedReferenceCalculation; EXEC sp_executesql @RelatedReferenceCalculation,  N'@Entries EntryList READONLY, @RelatedReference nvarchar(50) OUTPUT', @Entries = @Entries, @RelatedReference = @RelatedReference OUTPUT			
+		SET @RelatedReferenceCalculation = N'SELECT @RelatedReference = ' + @RelatedReferenceCalculation; EXEC sp_executesql @RelatedReferenceCalculation,  N'@Entries EntryList READONLY, @RelatedReference NVARCHAR(255) OUTPUT', @Entries = @Entries, @RelatedReference = @RelatedReference OUTPUT			
 		SET @RelatedAgentCalculation = N'SELECT @RelatedAgent = ' + @RelatedAgentCalculation; EXEC sp_executesql @RelatedAgentCalculation, N'@Entries EntryList READONLY, @RelatedAgent int OUTPUT', @Entries = @Entries, @RelatedAgent = @RelatedAgentId OUTPUT
 		SET @RelatedResourceCalculation = N'SELECT @RelatedResource = ' + @RelatedResourceCalculation; EXEC sp_executesql @RelatedResourceCalculation,  N'@Entries EntryList READONLY, @RelatedResource int OUTPUT', @Entries = @Entries, @RelatedResource = @RelatedResourceId OUTPUT
 		SET @RelatedAmountCalculation = N'SELECT @RelatedAmount = ' + @RelatedAmountCalculation; EXEC sp_executesql @RelatedAmountCalculation,  N'@Entries EntryList READONLY, @RelatedAmount money OUTPUT', @Entries = @Entries, @RelatedAmount = @RelatedAmount OUTPUT

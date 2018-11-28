@@ -23,9 +23,9 @@ BEGIN
 		N'ExplanationOfChangeInNameOfReportingEntityOrOtherMeansOfIdentificationFromEndOfPrecedingReportingPeriod',
 		N'DescriptionOfNatureOfFinancialStatements');
 
-	DECLARE @strRoundingLevel nvarchar(50) = CAST(@RoundingLevel AS nvarchar(50)), 
-			@strPeriod nvarchar(50) = cast(@fromDate as nvarchar(50)) + N' - ' + cast(@toDate as nvarchar(50)),
-			@strToDate nvarchar(50) = cast(@toDate as nvarchar(50));
+	DECLARE @strRoundingLevel NVARCHAR(255) = CAST(@RoundingLevel AS NVARCHAR(255)), 
+			@strPeriod NVARCHAR(255) = cast(@fromDate as NVARCHAR(255)) + N' - ' + cast(@toDate as NVARCHAR(255)),
+			@strToDate NVARCHAR(255) = cast(@toDate as NVARCHAR(255));
 	INSERT INTO #IFRS([Field], [Value]) VALUES
 	(N'DescriptionOfPresentationCurrency', @PresentationCurrency),
 	(N'PeriodCoveredByFinancialStatements', @strPeriod),

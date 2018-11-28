@@ -3,7 +3,7 @@ CREATE Procedure [dbo].[bdb_Document_Values__Update]
 @WideLines WideLineList READONLY,
 @Entries EntryList READONLY
 AS
-DECLARE @EntryNumber tinyint, @EntriesCount tinyint, @ValueCalculation nvarchar(255), @TransactionType nvarchar(50), @AccountId nvarchar(255), @Direction smallint,
+DECLARE @EntryNumber tinyint, @EntriesCount tinyint, @ValueCalculation nvarchar(255), @TransactionType NVARCHAR(255), @AccountId nvarchar(255), @Direction smallint,
 	@LineOffset int, @EntriesCopy EntryList;
 SET NOCOUNT ON
 

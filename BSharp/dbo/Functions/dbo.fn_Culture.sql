@@ -1,10 +1,10 @@
 ﻿CREATE FUNCTION [dbo].[fn_Culture]()
-RETURNS nvarchar(50)
+RETURNS NVARCHAR(255)
 AS
 BEGIN
-	DECLARE @Result nvarchar(50);
+	DECLARE @Result NVARCHAR(255);
 
-	SELECT @Result =  CONVERT(nvarchar(50), SESSION_CONTEXT(N'Language')); 
+	SELECT @Result =  CONVERT(NVARCHAR(255), SESSION_CONTEXT(N'Language')); 
 	
 	RETURN @Result;
 END

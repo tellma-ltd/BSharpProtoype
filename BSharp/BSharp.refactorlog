@@ -315,4 +315,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ParentId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="8bd2d5dc-0e4b-4f9c-8568-7eac7b08f559" ChangeDateTime="11/28/2018 10:47:23">
+    <Property Name="ElementName" Value="[dbo].[UnitsOfMeasure].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UnitsOfMeasure]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Code]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2c890845-2a33-4fc3-93e6-1a66e14aec3b" ChangeDateTime="11/28/2018 17:08:46">
+    <Property Name="ElementName" Value="[dbo].[ExchangeRatesHistory].[CRate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ExchangeRatesHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExchangeRate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="156290dc-980d-420f-8203-78b85cc87d38" ChangeDateTime="11/28/2018 17:24:05">
+    <Property Name="ElementName" Value="[dbo].[UnitsOfMeasure]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[MeasurementUnits]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b4ea9dfd-9666-41a0-9fbf-b2bc2c1a8caa" ChangeDateTime="11/28/2018 17:24:42">
+    <Property Name="ElementName" Value="[dbo].[UnitOfMeasureList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[MeasurementUnitList]" />
+  </Operation>
 </Operations>

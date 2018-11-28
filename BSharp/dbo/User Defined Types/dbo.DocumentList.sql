@@ -1,8 +1,8 @@
 ﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
     [Id]						INT,
-    [State]						NVARCHAR (50)		NOT NULL,
-    [TransactionType]			NVARCHAR (50)		NOT NULL,
-	[Mode]						NVARCHAR (10)		NOT NULL DEFAULT(N'Draft'),
+    [State]						NVARCHAR (255)		NOT NULL,
+    [TransactionType]			NVARCHAR (255)		NOT NULL,
+	[Mode]						NVARCHAR (255)		NOT NULL DEFAULT(N'Draft'),
     [SerialNumber]				INT,
     [ResponsibleAgentId]		INT,
     [ForwardedToAgentId]		INT,
@@ -13,10 +13,10 @@
 	[LinesCustody1]				INT,
 	[LinesCustody2]				INT,
 	[LinesCustody3]				INT,
-	[LinesReference1]			NVARCHAR(50),
-	[LinesReference2]			NVARCHAR(50),
-	[LinesReference3]			NVARCHAR(50),
-	[Status]					NVARCHAR(10)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[LinesReference1]			NVARCHAR(255),
+	[LinesReference2]			NVARCHAR(255),
+	[LinesReference3]			NVARCHAR(255),
+	[Status]					NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]				INT					NOT NULL,
 	PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([State]	IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),

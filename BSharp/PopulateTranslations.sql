@@ -1,7 +1,7 @@
 ﻿DECLARE @Translations TABLE
 (
 	[Name]			nvarchar(255),
-    [Culture]		nvarchar(50),
+    [Culture]		NVARCHAR(255),
 	[Value]			nvarchar(2048) NOT NULL,
     PRIMARY KEY NONCLUSTERED ([Name] ASC, [Culture] ASC)
 );

@@ -1,18 +1,20 @@
 ﻿CREATE FUNCTION [dbo].[fn_CurrencyExchange]
 (
-	@Amount money,
-	@FromCurrency char(3),
-	@ToCurrency char(3)
+	@Date DATE = NULL,
+	@BaseCurrency char(3),
+	@TargetCurrency char(3) = NULL,
+	@Amount money
 )
 RETURNS money
 AS
 BEGIN
-	DECLARE @Result money
+	DECLARE @Result money;
 
-	SELECT @Result = @Amount * -- ordered as such to reduce rounding
-		 (SELECT UnitAmount FROM UnitsOfMeasure WHERE Id = @ToCurrency) * (SELECT BaseAmount FROM UnitsOfMeasure WHERE Id = @FromCurrency) /
-		 ((SELECT UnitAmount FROM UnitsOfMeasure WHERE Id = @FromCurrency) * (SELECT BaseAmount FROM UnitsOfMeasure WHERE Id = @ToCurrency))
-	RETURN @Result
+	SELECT @Date = ISNULL(@Date, GETDATE()), @TargetCurrency = ISNULL(@TargetCurrency, dbo.fn_FunctionalCurrency())
 
+	SELECT @Result = @Amount * ExchangeRate FROM dbo.ExchangeRatesHistory 
+	WHERE [Date] = @Date AND BaseCurrency = @BaseCurrency AND TargetCurrency = @TargetCurrency
+
+	RETURN @Result;
 END
 

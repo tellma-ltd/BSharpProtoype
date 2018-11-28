@@ -3,7 +3,7 @@
     [LineId]			INT				NOT NULL,
     [EntryNumber]       INT				NOT NULL,
     [OperationId]       INT,
-    [Reference]         NVARCHAR (50),
+    [Reference]         NVARCHAR (255),
     [AccountId]         NVARCHAR (255),
     [CustodyId]         INT,
     [ResourceId]        INT,
@@ -11,11 +11,11 @@
     [Amount]            MONEY,
     [Value]             MONEY,
     [NoteId]            NVARCHAR (255),
-    [RelatedReference]  NVARCHAR (50),
+    [RelatedReference]  NVARCHAR (255),
     [RelatedAgentId]    INT,
     [RelatedResourceId] INT,
     [RelatedAmount]     MONEY,
-	[Status]			NVARCHAR(10)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[Status]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]		INT				NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([Status] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))

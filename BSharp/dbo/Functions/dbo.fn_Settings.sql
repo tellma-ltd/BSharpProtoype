@@ -1,11 +1,11 @@
 ﻿CREATE FUNCTION [dbo].[fn_Settings]
 (
-	@Field nvarchar(50)
+	@Field NVARCHAR(255)
 )
-RETURNS nvarchar(50)
+RETURNS NVARCHAR(255)
 AS
 BEGIN
-	DECLARE @Result nvarchar(50)
+	DECLARE @Result NVARCHAR(255)
 
 	SELECT @Result = Value
 	FROM dbo.Settings

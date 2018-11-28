@@ -5,7 +5,7 @@
 RETURNS nvarchar(2048)
 AS
 BEGIN
-	DECLARE @Result nvarchar(2048), @Culture nvarchar(50);
+	DECLARE @Result nvarchar(2048), @Culture NVARCHAR(255);
 	SELECT @Culture = dbo.fn_Culture();
 	SELECT @Result = [Value] 
 	FROM dbo.Translations 
