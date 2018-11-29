@@ -1,7 +1,7 @@
 ﻿SET NOCOUNT ON;
 BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
-	IF NOT EXISTS(SELECT * FROM dbo.[MeasurementUnits])	DBCC CHECKIDENT ('dbo.UnitsOfMeasure', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM dbo.[MeasurementUnits])	DBCC CHECKIDENT ('dbo.MeasurementsUnit', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM dbo.Operations)		DBCC CHECKIDENT ('dbo.Operations', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM dbo.Custodies)		DBCC CHECKIDENT ('dbo.Custodies', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM dbo.Resources)		DBCC CHECKIDENT ('dbo.Resources', RESEED, 0) WITH NO_INFOMSGS;

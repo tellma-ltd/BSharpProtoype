@@ -343,4 +343,25 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[MeasurementUnitList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fbbc20a9-4178-40d0-ac47-fdf6bcbf0dec" ChangeDateTime="11/29/2018 09:32:31">
+    <Property Name="ElementName" Value="[dbo].[Resources].[UnitOfMeasure]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Resources]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MeasurementUnit" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="70297e34-e39d-4f15-a7ea-dd3db8a47c22" ChangeDateTime="11/29/2018 09:32:56">
+    <Property Name="ElementName" Value="[dbo].[Resources].[MeasurementUnit]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Resources]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[MeasurementUnitId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="80e28a4c-6c45-48ee-83fe-43482c2abc8d" ChangeDateTime="11/29/2018 09:39:22">
+    <Property Name="ElementName" Value="[dbo].[FK_Resources_UnitsOfMeasure]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Resources]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Resources_MeasurementUnit]" />
+  </Operation>
 </Operations>

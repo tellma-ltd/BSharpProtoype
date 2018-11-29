@@ -1,9 +1,12 @@
 ﻿CREATE TYPE [dbo].[ResourceList] AS TABLE
 (
     [Id]				INT,
+    [MeasurementUnitId]	INT				NOT NULL, 
     [ResourceType]		NVARCHAR (255)	NOT NULL,
     [Name]				NVARCHAR (255)	NOT NULL,
-    [UnitOfMeasure]		INT				NOT NULL, 
+	[IsActive]			BIT				NOT NULL DEFAULT (1),
+	[Source]			NVARCHAR (255), -- Lease In/Acquisition/Production
+	[Purpose]			NVARCHAR (255), -- Lease out/Sale/Production/SG&A
 	[Code]				NVARCHAR (255),
     [Memo]				NVARCHAR (2048),
     [Lookup1]			NVARCHAR (255),

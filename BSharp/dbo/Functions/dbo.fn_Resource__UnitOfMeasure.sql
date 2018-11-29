@@ -8,7 +8,7 @@ BEGIN
 	DECLARE @Result NVARCHAR(255)
 
 	SELECT @Result = U.Code
-	FROM dbo.Resources R JOIN dbo.[MeasurementUnits] U ON R.UnitOfMeasure = U.Id
+	FROM dbo.Resources R JOIN dbo.[MeasurementUnits] U ON R.[MeasurementUnitId] = U.Id
 	AND R.TenantId = U.TenantId
 	WHERE R.Id = @Resource
 
