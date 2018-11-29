@@ -17,5 +17,7 @@
     [FungibleParentId]	INT,
 	[Status]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]		INT				NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+	CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
+	CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative'))
 );

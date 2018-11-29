@@ -364,4 +364,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_Resources_MeasurementUnit]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="ae4439d3-a4d7-4918-aeba-62fe7066b73d" ChangeDateTime="11/29/2018 10:52:38">
+    <Property Name="ElementName" Value="[dbo].[LinesHeader]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[WideLinesView]" />
+  </Operation>
 </Operations>

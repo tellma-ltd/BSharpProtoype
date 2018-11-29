@@ -17,7 +17,7 @@
     [RelatedResourceId] INT,
     [RelatedAmount]     MONEY,
     CONSTRAINT [PK_Entries] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-    CONSTRAINT [CK_Entries_Direction] CHECK ([Direction]=(1) OR [Direction]=(-1)),
+    CONSTRAINT [CK_Entries_Direction] CHECK ([Direction] IN (-1, 1)),
     CONSTRAINT [FK_Entries_Accounts] FOREIGN KEY ([TenantId], [AccountId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]) ON UPDATE CASCADE,
     CONSTRAINT [FK_Entries_Custodies] FOREIGN KEY ([TenantId], [CustodyId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id]),
     CONSTRAINT [FK_Entries_Lines] FOREIGN KEY ([TenantId], [LineId]) REFERENCES [dbo].[Lines] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE,

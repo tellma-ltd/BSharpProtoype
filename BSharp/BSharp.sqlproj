@@ -98,7 +98,7 @@
     <Build Include="dbo\Views\dbo.LineTemplatesCalculationView.sql" />
     <Build Include="dbo\Views\dbo.LineTemplatesLabelView.sql" />
     <Build Include="dbo\Views\dbo.LineTemplatesValidationView.sql" />
-    <Build Include="dbo\Views\dbo.LinesHeader.sql" />
+    <Build Include="dbo\Views\dbo.WideLinesView.sql" />
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.Amount.sql" />

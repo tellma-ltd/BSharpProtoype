@@ -16,6 +16,8 @@
     [PartOf]			INT, -- for compound assets
     [FungibleParentId]	INT,
     CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
+	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
     CONSTRAINT [FK_Resources_MeasurementUnit] FOREIGN KEY ([TenantId], [MeasurementUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
 	CONSTRAINT [FK_Resources_Resources_FungibleParent] FOREIGN KEY ([TenantId], [FungibleParentId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 	CONSTRAINT [FK_Resources_Resources_PartOf] FOREIGN KEY ([TenantId], [PartOf]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION
