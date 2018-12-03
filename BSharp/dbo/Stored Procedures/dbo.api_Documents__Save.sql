@@ -174,7 +174,7 @@ DECLARE
 
 	IF EXISTS(SELECT * FROM @EntriesTransit)
 		INSERT INTO @EntriesLocal
-		EXEC [dbo].[bdb_Document_Values__Update] 
+		EXEC [dbo].[bll_Document_Values__Update] 
 				@WideLines = @WideLines, @Entries = @EntriesTransit
 	
 	INSERT INTO @LinesLocal(DocumentId, StartDateTime, EndDateTime, Memo)

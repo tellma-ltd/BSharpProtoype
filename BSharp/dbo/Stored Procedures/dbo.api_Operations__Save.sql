@@ -11,7 +11,7 @@ BEGIN
 	END
 	DELETE FROM dbo.Operations WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Operations WHERE Status = N'Deleted');
 
-	INSERT INTO @IdMappings([NewId], [OldId])
+	INSERT INTO @IdMappings([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
@@ -42,14 +42,4 @@ BEGIN
 	JOIN @IdMappings M ON OL.Id = M.OldId
 	JOIN dbo.Operations O2 ON M.NewId = O2.Id
 	*/
-	
-	SELECT O.[Id], O.[OperationType], O.[Name], O.[ParentId], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
-	FROM dbo.Operations O
-	LEFT JOIN @IdMappings M ON O.[Id] = M.[NewId]
-	WHERE O.[TenantId] = @TenantId
-	AND O.[Id] IN (
-		SELECT M.[NewId] FROM @Operations A JOIN @IdMappings M ON A.Id = M.OldId WHERE [Status] = N'Inserted'
-		UNION ALL
-		SELECT Id FROM @Operations WHERE [Status] = N'Updated'
-		);
 END;

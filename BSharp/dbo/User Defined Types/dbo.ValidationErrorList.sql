@@ -1,4 +1,10 @@
 ﻿CREATE TYPE [dbo].[ValidationErrorList] AS TABLE (
 	[Path]			NVARCHAR (255),
-    [ErrorMessage]	NVARCHAR (2048) NULL
+    [ErrorName]		NVARCHAR (255),
+	[Argument1]		NVARCHAR (255),
+	[Argument2]		NVARCHAR (255),
+	[Argument3]		NVARCHAR (255),
+	[Argument4]		NVARCHAR (255),
+	[Argument5]		NVARCHAR (255),
+	PRIMARY KEY CLUSTERED ([Path] ASC, [ErrorName] ASC)
 );

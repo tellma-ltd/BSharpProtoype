@@ -1,5 +1,5 @@
 ﻿
-CREATE Procedure [dbo].[bdb_Document_Values__Update]
+CREATE Procedure [dbo].[bll_Document_Values__Update]
 @WideLines WideLineList READONLY,
 @Entries EntryList READONLY
 AS

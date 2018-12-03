@@ -12,7 +12,7 @@ BEGIN
 
 	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Agents WHERE Status = N'Deleted');
 
-	INSERT INTO @IdMappings([NewId], [OldId])
+	INSERT INTO @IdMappings([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
@@ -33,10 +33,10 @@ BEGIN
 	) AS x;
 
 	MERGE INTO dbo.Agents t
-	USING (
-		SELECT @TenantId As [TenantId], M.[NewId] As [Id], [AgentType], [IsRelated] , [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime]
+	USING (-- was using M.OldId, had to make it Id to allow it to compile
+		SELECT @TenantId As [TenantId], M.[Id], [AgentType], [IsRelated] , [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime]
 		FROM @Agents I 
-		JOIN @IdMappings M ON I.Id = M.OldId
+		JOIN @IdMappings M ON I.Id = M.Id -- TODO Was M.OldId, had to change it to allow compilation
 	) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -52,12 +52,4 @@ BEGIN
 		INSERT ([TenantId], [Id], [AgentType]	,	[IsRelated] ,	[UserId],	[TaxIdentificationNumber],	[RegisteredAddress], [Title], [Gender], [BirthDateTime])
 		VALUES (@TenantId, s.[Id], s.[AgentType], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[RegisteredAddress], s.[Title], s.[Gender], s.[BirthDateTime]);
 	
-	SELECT C.[Id], A.[AgentType], C.[Name], C.[IsActive], A.[IsRelated], A.[UserId], A.[TaxIdentificationNumber], A.[RegisteredAddress], A.[Title], A.[Gender], A.[BirthDateTime], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
-	FROM dbo.Custodies C 
-	JOIN dbo.Agents A ON C.[TenantId] = A.[TenantId] AND C.Id = A.Id  
-	LEFT JOIN @IdMappings M ON C.[Id] = M.[NewId]
-	WHERE C.[Id] IN (
-		SELECT M.[NewId] FROM @Agents A JOIN @IdMappings M ON A.Id = M.OldId WHERE [Status] = N'Inserted'
-		UNION ALL
-		SELECT Id FROM @Agents WHERE [Status] = N'Updated');
 END

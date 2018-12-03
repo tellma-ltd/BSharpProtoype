@@ -21,7 +21,7 @@ BEGIN
 		)
 	)
 	BEGIN
-		INSERT INTO @ValidationErrors([Path], ErrorMessage)
+		INSERT INTO @ValidationErrors([Path], ErrorName)
 		SELECT 	N'Documents['+ CONVERT(NVARCHAR(255), Id) + ']',
 			FORMATMESSAGE(dbo.fn_Translate(N'DocumentHasNoEntries'))
 		FROM @Documents 
@@ -43,7 +43,7 @@ BEGIN
 		AND A.IsExtensible = 0 -- non leaf is found
 	)
 	BEGIN
-		INSERT INTO @ValidationErrors([Path], ErrorMessage)
+		INSERT INTO @ValidationErrors([Path], ErrorName)
 		SELECT 
 			N'Documents[' + CONVERT(NVARCHAR(255), L.DocumentId) + '].Lines[' + CONVERT(NVARCHAR(255), L.Id) + '].Entries[' + CONVERT(NVARCHAR(255), E.Id) + '].Account',
 			FORMATMESSAGE(dbo.fn_Translate(N'AccountIsNotLeaf'))
@@ -82,7 +82,7 @@ BEGIN
 		HAVING SUM(E.Value * E.Direction) <> 0
 	)
 	BEGIN
-		INSERT INTO @ValidationErrors([Path], ErrorMessage)
+		INSERT INTO @ValidationErrors([Path], ErrorName)
 		SELECT
 				N'Documents[' + CONVERT(NVARCHAR(255), L.DocumentId) + '].Lines[' + CONVERT(NVARCHAR(255), L.Id) + ']',
 				FORMATMESSAGE(dbo.fn_Translate('LineIsNotBalanced'), CONVERT(NVARCHAR(255), SUM(E.[Value] * E.[Direction])))
@@ -96,7 +96,7 @@ BEGIN
 	IF EXISTS(SELECT * FROM @ValidationErrors)
 	BEGIN
 		DECLARE @errorMessage nvarchar(2048);
-		SELECT @errorMessage = STRING_AGG([Path] + N', ' + ErrorMessage, ';') From @ValidationErrors;
+		SELECT @errorMessage = STRING_AGG([Path] + N', ' + ErrorName, ';') From @ValidationErrors;
 		THROW 99999, @errorMessage, 1
 	END
 	ELSE

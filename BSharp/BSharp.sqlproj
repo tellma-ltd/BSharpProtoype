@@ -115,7 +115,7 @@
     <Build Include="dbo\Functions\dbo.ft_Journal.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sub_Line__Entries.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_DocumentRecipient__Update.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bdb_Document_Values__Update.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Document_Values__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.ral_Documents_Lines_Entries__Insert.sql" />
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_WideLines__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_ERCA__VAT_Purchases.sql" />
@@ -158,6 +158,8 @@
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
     <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
     <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits__Validate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -177,7 +179,8 @@
     <None Include="TestingSettings.sql" />
     <None Include="TestingResources.sql" />
     <None Include="TestingOperations.sql" />
-    <None Include="PopulateUnitsOfMeasure.sql" />
+    <None Include="PopulateMeasurementUnits.sql" />
+    <None Include="TestingMeasurementUnits.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

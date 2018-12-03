@@ -12,7 +12,7 @@ BEGIN
 	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId
 	AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
 
-	INSERT INTO @IdMappings([NewId], [OldId])
+	INSERT INTO @IdMappings([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
@@ -36,9 +36,9 @@ BEGIN
 
 	MERGE INTO dbo.Locations t
 	USING (
-		SELECT @TenantId As [TenantId], M.[NewId] As [Id], [LocationType], [Address], [ParentId], [CustodianId]
+		SELECT @TenantId As [TenantId], M.[Id], [LocationType], [Address], [ParentId], [CustodianId]
 		FROM @Locations I 
-		JOIN @IdMappings M ON I.Id = M.OldId
+		JOIN @IdMappings M ON I.Id = M.Id -- TODO Was M.OldId, had to change it to allow compilation
 	) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -49,13 +49,4 @@ BEGIN
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [Id], [LocationType],	[Address] ,	[ParentId],	[CustodianId])
 		VALUES (@TenantId, s.[Id], s.[LocationType], s.[Address], s.[ParentId], s.[CustodianId]);
-
-	SELECT C.[Id], L.[LocationType], C.[Name], C.[IsActive], L.[Address], L.[ParentId], L.[CustodianId], N'Unchanged' As Status, M.[OldId] As [TemporaryId]
-	FROM dbo.Custodies C
-	JOIN dbo.Locations L ON C.[TenantId] = L.[TenantId] AND C.Id = L.Id  
-	LEFT JOIN @IdMappings M ON C.[Id] = M.[NewId]
-	WHERE C.[Id] IN (
-		SELECT M.[NewId] FROM @Locations L JOIN @IdMappings M ON L.Id = M.OldId WHERE [Status] = N'Inserted'
-		UNION ALL
-		SELECT Id FROM @Locations WHERE [Status] = N'Updated');
 END

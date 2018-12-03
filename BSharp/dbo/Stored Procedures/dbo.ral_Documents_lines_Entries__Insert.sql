@@ -7,7 +7,7 @@ BEGIN
 	DECLARE @TenantId int, @msg nvarchar(2048);
 	DECLARE @DocumentIdMappings IdMappingList, @LineIdMappings IdMappingList, @EntryIdMappings IdMappingList;
 	DECLARE @DocumentsLocal DocumentList, @LinesLocal LineList, @EntriesLocal EntryList;
-	
+	/*
 	SELECT @TenantId = dbo.fn_TenantId();
 	IF @TenantId IS NULL
 	BEGIN
@@ -37,7 +37,7 @@ BEGIN
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [State], [TransactionType], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToAgentId]
+								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToAgentId], [Index]
 			FROM @DocumentsLocal 
 			WHERE [Status] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
@@ -62,7 +62,7 @@ BEGIN
 			VALUES (@TenantId, s.[State], s.[TransactionType], s.[FolderId], s.[LinesMemo], s.[ResponsibleAgentId],
 								s.[LinesStartDateTime], s.[LinesEndDateTime], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3], 
 								s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], s.[ForwardedToAgentId])
-		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
+		OUTPUT inserted.[Id], s.[Index]
 	) AS x;
 
 	UPDATE D 
@@ -75,7 +75,7 @@ BEGIN
 	-- https://www.sqlservercentral.com/Forums/Topic123246-8-1.aspx
 	-- For each state/transaction type, get the last serial number, and add one
 
-	INSERT INTO @LinesLocal([Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [TemporaryId])
+	INSERT INTO @LinesLocal([Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Index])
 	SELECT [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Id]
 	FROM @Lines
 	
@@ -177,10 +177,11 @@ BEGIN
 	UPDATE @DocumentsLocal SET [Status] = N'Unchanged';
 	UPDATE @LinesLocal SET [Status] = N'Unchanged';
 	UPDATE @EntriesLocal SET [Status] = N'Unchanged';
-
+		*/
 	SELECT [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], 
 			[LinesMemo], [ResponsibleAgentId],	[LinesStartDateTime], [LinesEndDateTime], 
 			[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
 			[ForwardedToAgentId], [Status], [TemporaryId]
 	FROM @DocumentsLocal;
+
 END;

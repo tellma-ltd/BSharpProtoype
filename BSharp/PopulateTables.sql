@@ -1,5 +1,5 @@
 ﻿EXEC sp_set_session_context 'Tenantid', 106;
-:r .\PopulateUnitsOfMeasure.sql
+--:r .\PopulateMeasurementUnits.sql
 :r .\PopulateTranslations.sql
 :r .\PopulateAccounts.sql
 :r .\PopulateNotes.sql

@@ -11,7 +11,7 @@ BEGIN
 	END
 	DELETE FROM dbo.Resources WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Resources WHERE Status = N'Deleted');
 
-	INSERT INTO @IdMappings([NewId], [OldId])
+	INSERT INTO @IdMappings([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
@@ -50,14 +50,4 @@ BEGIN
 	JOIN @IdMappings M ON OL.Id = M.OldId
 	JOIN dbo.Resources O2 ON M.NewId = O2.Id
 	*/
-	
-	SELECT R.[Id], R.[ResourceType], R.[Name], R.[Code], R.[MeasurementUnitId], R.[Memo], R.[Lookup1], R.[Lookup2], R.[Lookup3], R.[Lookup4], R.[PartOf], R.[FungibleParentId], N'Unchanged' As [Status], M.[OldId] As [TemporaryId]
-	FROM dbo.Resources R
-	LEFT JOIN @IdMappings M ON R.[Id] = M.[NewId]
-	WHERE R.[TenantId] = @TenantId
-	AND R.[Id] IN (
-		SELECT M.[NewId] FROM @Resources R JOIN @IdMappings M ON R.Id = M.OldId WHERE [Status] = N'Inserted'
-		UNION ALL
-		SELECT Id FROM @Resources WHERE [Status] = N'Updated'
-		);
 END

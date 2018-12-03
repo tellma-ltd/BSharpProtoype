@@ -371,4 +371,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[WideLinesView]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c39bdb3f-afdd-43d0-a7d5-0a33244b683d" ChangeDateTime="12/03/2018 08:14:33">
+    <Property Name="ElementName" Value="[dbo].[bdb_Document_Values__Update]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Document_Values__Update]" />
+  </Operation>
 </Operations>
