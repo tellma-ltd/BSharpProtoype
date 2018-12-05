@@ -224,9 +224,9 @@ INSERT INTO @Notes(NoteType, IsActive, Code, Id, [Name]) VALUES
 ,(N'Regulatory', 1, N'45242', N'ReversalOfImpairmentLossRecognisedInProfitOrLossLoansAndAdvances', N'Reversal of impairment loss recognised in profit or loss, loans and advances')
 ,(N'Regulatory', 1, N'46', N'TaxExpenseOtherThanIncomeTaxExpense', N'Tax expense other than income tax expense')
 ,(N'Regulatory', 1, N'47', N'OtherExpenseByNature', N'Other expenses, by nature');
-MERGE dbo.Notes AS t
+MERGE [dbo].Notes AS t
 USING @Notes AS s
-ON s.Code = t.Code AND t.tenantId = dbo.fn_TenantId()
+ON s.Code = t.Code AND t.tenantId = [dbo].fn_TenantId()
 WHEN MATCHED AND
 (
     t.[Name]			<>	s.[Name]			OR
@@ -245,5 +245,5 @@ WHEN NOT MATCHED BY SOURCE THEN
         DELETE
 WHEN NOT MATCHED BY TARGET THEN
         INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
-        VALUES (dbo.fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
+        VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

@@ -23,7 +23,7 @@ ON [dbo].[Accounts]
 FOR DELETE 
 AS
 SET NOCOUNT ON
-	DECLARE @TenantId int = dbo.fn_TenantId();
+	DECLARE @TenantId int = [dbo].fn_TenantId();
 -- When deleting A, ParentID
 -- Delete all C, P where C = A or below, and P = ParentID or above
 	DELETE Accounts_H WHERE TenantId = @TenantId
@@ -48,7 +48,7 @@ ON [dbo].[Accounts]
 FOR INSERT -- when inserting a child to a parent, add it to table Accounts_H, add also the grandparents
 AS
 SET NOCOUNT ON
-	DECLARE @TenantId int = dbo.fn_TenantId();
+	DECLARE @TenantId int = [dbo].fn_TenantId();
 	/*
 	INSERT INTO Accounts_H([TenantId], [C], [P]) -- insert x y where x = A or below and y = parentid and above
 	SELECT @TenantId, T1.C, T2.P 
@@ -79,7 +79,7 @@ AS
 SET NOCOUNT ON
 IF Update(Id) Or Update(ParentId)
 BEGIN
-	DECLARE @TenantId int = dbo.fn_TenantId();
+	DECLARE @TenantId int = [dbo].fn_TenantId();
 	Delete Accounts_H WHERE TenantId = @TenantId
 	AND (
 		C IN (SELECT Id FROM Deleted WHERE TenantId = @TenantId) OR

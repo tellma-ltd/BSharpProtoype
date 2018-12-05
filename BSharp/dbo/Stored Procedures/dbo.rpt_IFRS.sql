@@ -8,15 +8,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	IF @PresentationCurrency IS NULL
-		SET @PresentationCurrency = dbo.fn_Settings(N'FunctionalCurrency');
+		SET @PresentationCurrency = [dbo].fn_Settings(N'FunctionalCurrency');
 
-	CREATE TABLE dbo.#IFRS(
+	CREATE TABLE [dbo].#IFRS(
 		[Field] [nvarchar](255) PRIMARY KEY,
 		[Value] [nvarchar](255) NULL
 	);
 
 	INSERT INTO #IFRS
-	SELECT * FROM dbo.Settings
+	SELECT * FROM [dbo].Settings
 	WHERE Field IN (
 		N'DisclosureOfGeneralInformationAboutFinancialStatementsExplanatory',
 		N'NameOfReportingEntityOrOtherMeansOfIdentification', -- Ok

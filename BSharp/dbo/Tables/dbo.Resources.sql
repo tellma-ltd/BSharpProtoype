@@ -22,4 +22,6 @@
 	CONSTRAINT [FK_Resources_Resources_FungibleParent] FOREIGN KEY ([TenantId], [FungibleParentId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 	CONSTRAINT [FK_Resources_Resources_PartOf] FOREIGN KEY ([TenantId], [PartOf]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION
 );
-
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Code]
+    ON [dbo].[Resources]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;

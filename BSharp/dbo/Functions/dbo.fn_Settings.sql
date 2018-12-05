@@ -8,9 +8,9 @@ BEGIN
 	DECLARE @Result NVARCHAR(255)
 
 	SELECT @Result = Value
-	FROM dbo.Settings
+	FROM [dbo].Settings
 	WHERE [Field] = @Field
-	AND [TenantId] = dbo.fn_TenantId();
+	AND [TenantId] = [dbo].fn_TenantId();
 
 	RETURN @Result;
 

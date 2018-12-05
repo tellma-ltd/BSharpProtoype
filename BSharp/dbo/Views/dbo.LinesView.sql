@@ -42,7 +42,7 @@ AS
 	MAX(CASE WHEN E.EntryNumber = 3 THEN E.[RelatedResourceId] ELSE NULL END) AS RelatedResource3,
 	MAX(CASE WHEN E.EntryNumber = 3 THEN E.[RelatedAmount] ELSE NULL END) AS RelatedAmount3
 
-FROM dbo.Entries E JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-JOIN dbo.Documents D ON D.Id = L.DocumentId
+FROM [dbo].Entries E JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+JOIN [dbo].Documents D ON D.Id = L.DocumentId
 GROUP BY D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id,  L.StartDateTime, L.EndDateTime
  

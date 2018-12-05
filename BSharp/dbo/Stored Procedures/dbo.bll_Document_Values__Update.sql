@@ -13,11 +13,11 @@ SELECT * FROM @Entries;
 SELECT @TransactionType = MIN(TransactionType) FROM @WideLines
 WHILE @TransactionType IS NOT NULL
 BEGIN
-	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM  dbo.LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType;
+	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM  [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType;
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
 		-- Determine value of resource issue or receipt from an available invoice (event) or contract (order)
-		SELECT	@ValueCalculation = [Value] FROM dbo.LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber
+		SELECT	@ValueCalculation = [Value] FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber
 		IF LEFT(@ValueCalculation, 6) = N'@BULK:'
 		BEGIN
 			SET @ValueCalculation = REPLACE(@ValueCalculation, N'@Bulk:', N'SELECT ');
@@ -32,9 +32,9 @@ BEGIN
 			FROM @EntriesCopy E1
 			JOIN (
 				SELECT E.ResourceId, E.CustodyId, CAST(SUM(E.Value) AS float)/SUM(E.Amount) AS Rate
-				FROM dbo.Entries E 
-				JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-				JOIN dbo.Documents D ON D.Id = L.DocumentId
+				FROM [dbo].Entries E 
+				JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+				JOIN [dbo].Documents D ON D.Id = L.DocumentId
 				WHERE E.AccountId = @AccountId AND E.Direction = @Direction
 				AND D.Mode = N'Posted'
 				GROUP BY E.ResourceId, E.CustodyId

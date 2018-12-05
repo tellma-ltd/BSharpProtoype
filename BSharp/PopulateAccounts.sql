@@ -384,9 +384,9 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, Id, [Name]) VALUES
 ,(N'Regulatory', 1, N'5272', N'ReclassificationAdjustmentsOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeNetOfTax', N'Reclassification adjustments on financial assets measured at fair value through other comprehensive income, net of tax')
 ,(N'Regulatory', 1, N'5273', N'AmountsRemovedFromEquityAndAdjustedAgainstFairValueOfFinancialAssetsOnReclassificationOutOfFairValueThroughOtherComprehensiveIncomeMeasurementCategoryNetOfTax', N'Amounts removed from equity and adjusted against fair value of financial assets on reclassification out of fair value through other comprehensive income measurement category, net of tax')
 ,(N'Regulatory', 1, N'528', N'ShareOfOtherComprehensiveIncomeOfAssociatesAndJointVenturesAccountedForUsingEquityMethodThatWillBeReclassifiedToProfitOrLossNetOfTax', N'Share of other comprehensive income of associates and joint ventures accounted for using equity method that will be reclassified to profit or loss, net of tax');
-MERGE dbo.Accounts AS t
+MERGE [dbo].Accounts AS t
 USING @Accounts AS s
-ON s.Code = t.Code AND dbo.fn_TenantId() = t.tenantId
+ON s.Code = t.Code AND [dbo].fn_TenantId() = t.tenantId
 WHEN MATCHED AND
 (
     t.[Name]					<>	s.[Name]			OR
@@ -408,6 +408,6 @@ WHEN NOT MATCHED BY SOURCE THEN
 WHEN NOT MATCHED BY TARGET THEN
         INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [AccountType],-- [AccountSpecification],
 			[IsExtensible])
-        VALUES (dbo.fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
+        VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

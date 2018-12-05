@@ -10,9 +10,9 @@ AS
 BEGIN
 	DECLARE @Result money;
 
-	SELECT @Date = ISNULL(@Date, GETDATE()), @TargetCurrency = ISNULL(@TargetCurrency, dbo.fn_FunctionalCurrency())
+	SELECT @Date = ISNULL(@Date, GETDATE()), @TargetCurrency = ISNULL(@TargetCurrency, [dbo].fn_FunctionalCurrency())
 
-	SELECT @Result = @Amount * ExchangeRate FROM dbo.ExchangeRatesHistory 
+	SELECT @Result = @Amount * ExchangeRate FROM [dbo].ExchangeRatesHistory 
 	WHERE [Date] = @Date AND BaseCurrency = @BaseCurrency AND TargetCurrency = @TargetCurrency
 
 	RETURN @Result;

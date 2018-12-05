@@ -6,9 +6,9 @@
 :r .\PopulateTransactionTypes.sql
 :r .\PopulateTransactionSpecifications.sql
 
-EXEC dbo.adm_COA__Parents_Update;
+EXEC [dbo].adm_COA__Parents_Update;
 
--- We may be able to get rid of it, and construct the name key on the fly...
+-- We may be able to get rid of it, and construct the [Name] key on the fly...
 /*
 INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
 	(N'PaymentIssueToSupplier', N'Voucher', N'PaymentIssueToSupplierEvent'),
@@ -26,5 +26,5 @@ INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
 	(N'StockIssueToCustomer', N'Voucher', N'Issues'),
 	(N'StockReceiptFromSupplier', N'Voucher', N'Receipts')
 */
---  We may be able to auto concatenate the table name to the string, or simply dismiss it, or use Module as a qualifier
+--  We may be able to auto concatenate the table [Name] to the string, or simply dismiss it, or use Module as a qualifier
 -- instead of table

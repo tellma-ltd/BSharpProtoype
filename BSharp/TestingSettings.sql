@@ -18,9 +18,9 @@ INSERT INTO @Settings
 (N'FunctionalCurrencyUnit', N'ETB');
 
 DELETE FROM @SettingsResult; 
-INSERT INTO @SettingsResult([Field], [Value], [Status]) EXEC  [dbo].[api_Settings__Save]  @Settings = @Settings;
+INSERT INTO @SettingsResult([Field], [Value], [EntityState]) EXEC  [dbo].[api_Settings__Save]  @Settings = @Settings;
 
-DELETE FROM @Settings WHERE Status IN (N'Inserted', N'Updated', 'Deleted');
+DELETE FROM @Settings WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted');
 INSERT INTO @Settings SELECT * FROM @SettingsResult;
 
 --SELECT * FROM @Settings;

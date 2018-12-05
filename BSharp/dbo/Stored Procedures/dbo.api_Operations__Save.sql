@@ -2,24 +2,24 @@
 	@Operations [OperationList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList, @TenantId int, @msg nvarchar(2048);
-	SELECT @TenantId = dbo.fn_TenantId();
+	DECLARE @IndexedIds [IndexedIdList], @TenantId int, @msg nvarchar(2048);
+	SELECT @TenantId = [dbo].fn_TenantId();
 	IF @TenantId IS NULL
 	BEGIN
-		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
+		SELECT @msg = FORMATMESSAGE([dbo].fn_Translate('NullTenantId')); 
 		THROW 50001, @msg, 1;
 	END
-	DELETE FROM dbo.Operations WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Operations WHERE Status = N'Deleted');
+	DELETE FROM [dbo].[Operations] WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Operations WHERE [EntityState] = N'Deleted');
 
-	INSERT INTO @IdMappings([Index], [Id])
+	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Operations AS t
+		MERGE INTO [dbo].[Operations] AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [OperationType], [Name], [ParentId]
 			FROM @Operations 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -37,9 +37,9 @@ BEGIN
 	/*
 	UPDATE O
 	SET O.[ParentId] = 
-	FROM dbo.Operations O 
+	FROM [dbo].[Operations] O 
 	JOIN @Operations OL ON O.Id = OL.Parent
-	JOIN @IdMappings M ON OL.Id = M.OldId
-	JOIN dbo.Operations O2 ON M.NewId = O2.Id
+	JOIN @IndexedIds M ON OL.Id = M.OldId
+	JOIN [dbo].[Operations] O2 ON M.NewId = O2.Id
 	*/
 END;

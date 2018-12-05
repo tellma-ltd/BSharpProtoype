@@ -1,18 +1,18 @@
 ﻿BEGIN -- Cleanup
 	SET NOCOUNT ON;
-	DELETE FROM dbo.Entries;
-	DELETE FROM dbo.Lines;
-	DELETE FROM dbo.Documents;
-	DELETE FROM dbo.Custodies;
-	DELETE FROM dbo.Users;
-	DELETE FROM dbo.Operations;
-	DELETE FROM dbo.Resources;	
+	DELETE FROM [dbo].Entries;
+	DELETE FROM [dbo].Lines;
+	DELETE FROM [dbo].Documents;
+	DELETE FROM [dbo].Custodies;
+	DELETE FROM [dbo].Users;
+	DELETE FROM [dbo].[Operations];
+	DELETE FROM [dbo].Resources;	
 
-	DBCC CHECKIDENT ('dbo.Operations', RESEED, 0) WITH NO_INFOMSGS;
-	DBCC CHECKIDENT ('dbo.Custodies', RESEED, 0) WITH NO_INFOMSGS;
-	DBCC CHECKIDENT ('dbo.Resources', RESEED, 0) WITH NO_INFOMSGS;;
+	DBCC CHECKIDENT ('[dbo].[Operations]', RESEED, 0) WITH NO_INFOMSGS;
+	DBCC CHECKIDENT ('[dbo].Custodies', RESEED, 0) WITH NO_INFOMSGS;
+	DBCC CHECKIDENT ('[dbo].Resources', RESEED, 0) WITH NO_INFOMSGS;;
 
-	Truncate Table dbo.Settings;
+	Truncate Table [dbo].Settings;
 
 	DECLARE @DocumentId int = 0, @State NVARCHAR(255), @TransactionType NVARCHAR(255), @SerialNumber int, @Mode NVARCHAR(255), @ResponsibleAgent int;
 	DECLARE @LineNumber int = 0, @DocumentOffset int = 0;
@@ -257,6 +257,6 @@ SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');
 
 EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0
 
-SELECT * FROM dbo.Documents;
-SELECT * FROM dbo.Lines;
-SELECT * FROM dbo.Entries;
+SELECT * FROM [dbo].Documents;
+SELECT * FROM [dbo].Lines;
+SELECT * FROM [dbo].Entries;

@@ -5,41 +5,41 @@
 AS
 BEGIN
 	DECLARE @TenantId int, @msg nvarchar(2048);
-	DECLARE @DocumentIdMappings IdMappingList, @LineIdMappings IdMappingList, @EntryIdMappings IdMappingList;
+	DECLARE @DocumentIdMappings [IndexedIdList], @LineIdMappings [IndexedIdList], @EntryIdMappings [IndexedIdList];
 	DECLARE @DocumentsLocal DocumentList, @LinesLocal LineList, @EntriesLocal EntryList;
 	/*
-	SELECT @TenantId = dbo.fn_TenantId();
+	SELECT @TenantId = [dbo].fn_TenantId();
 	IF @TenantId IS NULL
 	BEGIN
-		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
+		SELECT @msg = FORMATMESSAGE([dbo].fn_Translate('NullTenantId')); 
 		THROW 50001, @msg, 1;
 	END
 
 	INSERT INTO @DocumentsLocal([Id], [State], [TransactionType], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], 
 								[LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [Status], [TemporaryId])
+								[LinesReference1], [LinesReference2], [LinesReference3], [EntityState], [TemporaryId])
 	SELECT [Id], [State], [TransactionType], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], 
 								[LinesCustody1], [LinesCustody2], [LinesCustody3], 
-								[LinesReference1], [LinesReference2], [LinesReference3], [Status], [Id]
+								[LinesReference1], [LinesReference2], [LinesReference3], [EntityState], [Id]
 	FROM @Documents;
 
-	DELETE FROM dbo.Documents
-	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Documents WHERE Status = N'Deleted');
-	DELETE FROM @DocumentsLocal WHERE Status = N'Deleted';
+	DELETE FROM [dbo].Documents
+	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Documents WHERE [EntityState] = N'Deleted');
+	DELETE FROM @DocumentsLocal WHERE [EntityState] = N'Deleted';
 
 	INSERT INTO @DocumentIdMappings([NewId], [OldId])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Documents AS t
+		MERGE INTO [dbo].Documents AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [State], [TransactionType], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
 								[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], 
 								[LinesReference1], [LinesReference2], [LinesReference3], [ForwardedToAgentId], [Index]
 			FROM @DocumentsLocal 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -75,8 +75,8 @@ BEGIN
 	-- https://www.sqlservercentral.com/Forums/Topic123246-8-1.aspx
 	-- For each state/transaction type, get the last serial number, and add one
 
-	INSERT INTO @LinesLocal([Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Index])
-	SELECT [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [Status], [Id]
+	INSERT INTO @LinesLocal([Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [EntityState], [Index])
+	SELECT [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo], [EntityState], [Id]
 	FROM @Lines
 	
 	UPDATE L 
@@ -84,19 +84,19 @@ BEGIN
 	FROM @LinesLocal L
 	JOIN @DocumentIdMappings M ON L.DocumentId = M.OldId
 
-	DELETE FROM dbo.Lines
-	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @LinesLocal WHERE Status = N'Deleted');
-	DELETE FROM @LinesLocal WHERE Status = N'Deleted';
+	DELETE FROM [dbo].Lines
+	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @LinesLocal WHERE [EntityState] = N'Deleted');
+	DELETE FROM @LinesLocal WHERE [EntityState] = N'Deleted';
 
 	INSERT INTO @LineIdMappings([NewId], [OldId])
 	SELECT y.[NewId], y.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Lines AS t
+		MERGE INTO [dbo].Lines AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [DocumentId], [StartDateTime], [EndDateTime], [Memo]
 			FROM @LinesLocal 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -116,15 +116,15 @@ BEGIN
 	
 	INSERT INTO @EntriesLocal([Id], [LineId], [EntryNumber], [OperationId], [Reference],
 					[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
-					[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [Status], [TemporaryId])
+					[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState], [TemporaryId])
 	SELECT [Id], [LineId], [EntryNumber], [OperationId], [Reference],
 					[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
-					[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [Status], [Id]
+					[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState], [Id]
 	FROM @Entries;
 
-	DELETE FROM dbo.Entries
-	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @EntriesLocal WHERE [Status] = N'Deleted');
-	DELETE FROM @EntriesLocal WHERE [Status] = N'Deleted';
+	DELETE FROM [dbo].Entries
+	WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @EntriesLocal WHERE [EntityState] = N'Deleted');
+	DELETE FROM @EntriesLocal WHERE [EntityState] = N'Deleted';
 
 	UPDATE E
 	SET E.[LineId] = M.[NewId]
@@ -135,13 +135,13 @@ BEGIN
 	SELECT z.[NewId], z.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Entries AS t
+		MERGE INTO [dbo].Entries AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [LineId], [EntryNumber], [OperationId], [Reference],
 					[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
 					[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount]
 			FROM @EntriesLocal 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -174,14 +174,14 @@ BEGIN
 	FROM @EntriesLocal E
 	JOIN @EntryIdMappings M ON E.TemporaryId = M.OldId;
 
-	UPDATE @DocumentsLocal SET [Status] = N'Unchanged';
-	UPDATE @LinesLocal SET [Status] = N'Unchanged';
-	UPDATE @EntriesLocal SET [Status] = N'Unchanged';
+	UPDATE @DocumentsLocal SET [EntityState] = N'Unchanged';
+	UPDATE @LinesLocal SET [EntityState] = N'Unchanged';
+	UPDATE @EntriesLocal SET [EntityState] = N'Unchanged';
 		*/
 	SELECT [Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], 
 			[LinesMemo], [ResponsibleAgentId],	[LinesStartDateTime], [LinesEndDateTime], 
 			[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
-			[ForwardedToAgentId], [Status], [TemporaryId]
+			[ForwardedToAgentId], [EntityState], [TemporaryId]
 	FROM @DocumentsLocal;
 
 END;

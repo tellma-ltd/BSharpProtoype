@@ -18,24 +18,24 @@ BEGIN -- Resources
 		(-95,	-95,			N'WagesAndSalaries',N'Labor',			NULL,	[dbo].[fn_UOM_Code__Id](N'wmo'),		NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL),
 		(-94,	-94,			N'WagesAndSalaries',N'Holiday Overtime',NULL,	[dbo].[fn_UOM_Code__Id](N'hr'),			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,						NULL);
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
-		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [EntityState], [TemporaryId])
+		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END
 	BEGIN -- Updating
 		UPDATE @Resources 
 		SET 
 			[Lookup3] = N'2018',
-			Status = N'Updated'
+			[EntityState] = N'Updated'
 		WHERE [TemporaryId] = -98;
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
-		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [EntityState], [TemporaryId])
+		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END	
 	BEGIN -- Deleting
-		UPDATE @Resources SET [Status] = N'Deleted' WHERE [TemporaryId] = -92;
+		UPDATE @Resources SET [EntityState] = N'Deleted' WHERE [TemporaryId] = -92;
 
-		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [Status], [TemporaryId])
-		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
+		DELETE FROM @ResourcesResult; INSERT INTO @ResourcesResult([Id], [ResourceType],	[Name],			[Code], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId], [EntityState], [TemporaryId])
+		EXEC  [dbo].[api_Resources__Save]  @Resources = @Resources; DELETE FROM @Resources WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Resources SELECT * FROM @ResourcesResult;
 	END 
 --	SELECT * FROM @Resources;
 	SELECT 
@@ -47,7 +47,7 @@ BEGIN -- Resources
 		@HolidayOvertime = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -95),
 		@Labor = (SELECT [Id] FROM @Resources WHERE [TemporaryId] = -94);
 
-	/*INSERT INTO dbo.Settings VALUES
+	/*INSERT INTO [dbo].Settings VALUES
 	(N'HolidayOvertime', @HolidayOvertime),
 	(N'Labor', @Labor); */
 END

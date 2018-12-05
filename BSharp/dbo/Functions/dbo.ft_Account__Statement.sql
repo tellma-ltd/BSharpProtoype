@@ -28,6 +28,6 @@ RETURN
 		RelatedAgentId,
 		RelatedResourceId,
 		RelatedAmount
-	FROM dbo.ft_Journal(@fromDate, @toDate)
+	FROM [dbo].ft_Journal(@fromDate, @toDate)
 	WHERE AccountId = @Account
 )

@@ -185,7 +185,7 @@ DECLARE
 
 	-- Bulk Update all null operations to business entity
 	UPDATE @EntriesLocal
-	SET OperationId = (SELECT min(Id) FROM dbo.Operations WHERE OperationType = N'BusinessEntity')
+	SET OperationId = (SELECT min(Id) FROM [dbo].[Operations] WHERE OperationType = N'BusinessEntity')
 	WHERE OperationId IS NULL
 
 	--Bulk Balance all lines having only one null value, by setting the value to the total of the other entries

@@ -47,7 +47,7 @@
     [RelatedAgent3]			INT,
     [RelatedResource3]		INT,
     [RelatedAmount3]		MONEY,
-	[Status]				NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]				NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]			INT					NOT NULL,
     PRIMARY KEY CLUSTERED ([LineId] ASC));
 

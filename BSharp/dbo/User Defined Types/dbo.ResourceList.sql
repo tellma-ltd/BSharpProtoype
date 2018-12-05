@@ -15,7 +15,7 @@
     [Lookup4]			NVARCHAR (255),
 	[PartOf]			INT, -- for compound assets
     [FungibleParentId]	INT,
-	[Status]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]		INT				NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),

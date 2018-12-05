@@ -341,7 +341,7 @@
     <Property Name="ElementType" Value="SqlTableType" />
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
-    <Property Name="NewName" Value="[MeasurementUnitList]" />
+    <Property Name="NewName" Value="[MeasurementUnitForSaveList]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="fbbc20a9-4178-40d0-ac47-fdf6bcbf0dec" ChangeDateTime="11/29/2018 09:32:31">
     <Property Name="ElementName" Value="[dbo].[Resources].[UnitOfMeasure]" />
@@ -377,5 +377,47 @@
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_Document_Values__Update]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="79bf3921-1b8c-49ad-a3d1-0dc03d54ceef" ChangeDateTime="12/03/2018 19:06:27">
+    <Property Name="ElementName" Value="[dbo].[IndexedIdList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IdIndexedList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="eff32768-9fb1-4f57-a768-ef0b67a8a0db" ChangeDateTime="12/03/2018 19:07:06">
+    <Property Name="ElementName" Value="[dbo].[IdIndexedList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IndexedIdList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="82ac7726-cb92-4a6c-8005-1fa3c639383a" ChangeDateTime="12/03/2018 19:12:00">
+    <Property Name="ElementName" Value="[dbo].[MeasurementUnitForSaveList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[MeasurementUnitForUpdateList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f91b90ae-6811-44e4-a2a8-80c796c1b22d" ChangeDateTime="12/03/2018 19:43:05">
+    <Property Name="ElementName" Value="[dbo].[MeasurementUnitForUpdateList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[MeasurementUnitForWriteList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4d76322e-f682-41cb-8b59-f5e95d79138b" ChangeDateTime="12/03/2018 19:43:59">
+    <Property Name="ElementName" Value="[dbo].[MeasurementUnitForWriteList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[MeasurementUnitForSaveList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c9456189-48b8-4df7-a532-14299da66c99" ChangeDateTime="12/04/2018 20:49:06">
+    <Property Name="ElementName" Value="[dbo].[AgentList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[AgentForSaveList]" />
   </Operation>
 </Operations>

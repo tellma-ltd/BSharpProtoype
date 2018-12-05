@@ -47,11 +47,11 @@ BEGIN
 	SET @Query = @Query + N'		
 			HAVING SUM(Direction * [Value]) <> 0
 		) T 
-		JOIN dbo.Accounts A ON T.AccountId = A.Id'
+		JOIN [dbo].Accounts A ON T.AccountId = A.Id'
 	IF (@ByCustody = 1) SET @Query = @Query + N'
-		JOIN dbo.Custodies C ON T.CustodyId = C.Id'
+		JOIN [dbo].Custodies C ON T.CustodyId = C.Id'
 	IF (@ByResource = 1)  SET @Query = @Query + N'
-		JOIN dbo.Resources R ON T.ResourceId = R.Id'
+		JOIN [dbo].Resources R ON T.ResourceId = R.Id'
 	SET @Query = @Query + N'
 		ORDER BY A.Code'
 

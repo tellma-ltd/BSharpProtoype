@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[sbs_DocumentRecipient__Update]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	UPDATE dbo.Documents
+	UPDATE [dbo].Documents
 	SET [ForwardedToAgentId] = @ForwardedTo
 	WHERE Id = @Id
 END

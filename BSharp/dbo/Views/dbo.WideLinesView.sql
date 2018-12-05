@@ -40,7 +40,7 @@ SELECT [TransactionType],
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedAgent] ELSE NULL END) AS RelatedAgent3,
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedResource] ELSE NULL END) AS RelatedResource3,
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedAmount] ELSE NULL END) AS RelatedAmount3
-FROM dbo.[TransactionSpecifications] 
+FROM [dbo].[TransactionSpecifications] 
 WHERE Definition = N'Label'
 GROUP BY [TransactionType]
 

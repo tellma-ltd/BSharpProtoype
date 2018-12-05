@@ -6,9 +6,9 @@ BEGIN
 	DECLARE @Result int
 
 	SELECT @Result = Id
-	FROM dbo.Resources
+	FROM [dbo].Resources
 	WHERE ResourceType = N'Money'
-	AND [MeasurementUnitId] = dbo.fn_Settings(N'FunctionalCurrencyUnit');
+	AND [MeasurementUnitId] = [dbo].fn_Settings(N'FunctionalCurrencyUnit');
 
 	RETURN @Result
 

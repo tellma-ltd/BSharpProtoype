@@ -1,80 +1,104 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @MeasurementUnits MeasurementUnitList, @IdMappings IdMappingList;
+	DECLARE @MU1 [dbo].MeasurementUnitForSaveList, @MU2 [dbo].MeasurementUnitForSaveList;
 	DECLARE @AED int, @Dozen int, @Kg int;
-	DECLARE @MeasurementUnitValidationErrors ValidationErrorList;
 END
 BEGIN -- Inserting
-	INSERT INTO @MeasurementUnits ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive]) VALUES
-		('AED', N'Money', N'AE Dirhams', 3.67, 1, 0),
-		(N'd', N'Time', N'Day', 1, 86400, 1),
-		(N'dozen', N'Count', N'Dozen', 1, 12, 1),
-		(N'ea', N'Pure', N'Each', 1, 1, 1),
-		(N'ETB', N'Money', N'ET Birr', 27.8, 1, 1),
-		(N'g', N'Mass', N'Gram', 1, 1, 0),
-		(N'hr', N'Time', N'Hour', 1, 3600, 1),
-		(N'in', N'Distance', N'inch', 1, 2.541, 0),
-		(N'kg', N'Mass', N'Kilogram', 1, 1000, 1),
-		(N'ltr', N'Volume', N'Liter', 1, 1, 1),
-		(N'm', N'Distance', N'meter', 1, 1, 1),
-		(N'min', N'Time', N'minute', 1, 60, 0),
-		(N'mo', N'Time', N'Month', 1, 2592000, 1),
-		(N'mt', N'Mass', N'Metric ton', 1, 1000000, 1),
-		(N'pcs', N'Count', N'Pieces', 1, 1, 1),
-		(N's', N'Time', N'second', 1, 1, 0),
-		(N'share', N'Pure', N'Shares', 1, 1, 1),
-		(N'USD', N'Money', N'US Dollars', 1, 1, 1),
-		(N'usg', N'Volume', N'US Gallon', 1, 3.785411784, 0),
-		(N'wd', N'Time', N'work day', 1, 8, 1),
-		(N'wk', N'Time', N'week', 1, 604800, 0),
-		(N'wmo', N'Time', N'work month', 1, 1248, 1),
-		(N'wwk', N'Time', N'work week', 1, 48, 1),
-		(N'wyr', N'Time', N'work year', 1, 14976, 1),
-		(N'yr', N'Time', N'Year', 1, 31104000, 0);
+	INSERT INTO @MU1 ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount]) VALUES
+		('AED', N'Money', N'AE Dirhams', 3.67, 1),
+		(N'd', N'Time', N'Day', 1, 86400),
+		(N'dozen', N'Count', N'Dozen', 1, 12),
+		(N'ea', N'Pure', N'Each', 1, 1),
+		(N'ETB', N'Money', N'ET Birr', 27.8, 1),
+		(N'g', N'Mass', N'Gram', 1, 1),
+		(N'hr', N'Time', N'Hour', 1, 3600),
+		(N'in', N'Distance', N'inch', 1, 2.541),
+		(N'kg', N'Mass', N'Kilogram', 1, 1000),
+		(N'ltr', N'Volume', N'Liter', 1, 1),
+		(N'm', N'Distance', N'meter', 1, 1),
+		(N'min', N'Time', N'minute', 1, 60),
+		(N'mo', N'Time', N'Month', 1, 2592000),
+		(N'mt', N'Mass', N'Metric ton', 1, 1000000),
+		(N'pcs', N'Count', N'Pieces', 1, 1),
+		(N's', N'Time', N'second', 1, 1),
+		(N'share', N'Pure', N'Shares', 1, 1),
+		(N'USD', N'Money', N'US Dollars', 1, 1),
+		(N'usg', N'Volume', N'US Gallon', 1, 3.785411784),
+		(N'wd', N'Time', N'work day', 1, 8),
+		(N'wk', N'Time', N'week', 1, 604800),
+		(N'wmo', N'Time', N'work month', 1, 1248),
+		(N'wwk', N'Time', N'work week', 1, 48),
+		(N'wyr', N'Time', N'work year', 1, 14976),
+		(N'yr', N'Time', N'Year', 1, 31104000);
 
-	DELETE FROM @MeasurementUnitValidationErrors;
-	INSERT INTO @MeasurementUnitValidationErrors
-	EXEC [dbo].[bll_MeasurementUnits__Validate] @MeasurementUnits = @MeasurementUnits;
-	IF EXISTS(SELECT * FROM @MeasurementUnitValidationErrors) GOTO Err_Label;
+	EXEC  [dbo].[api_MeasurementUnits__Save]
+		@MeasurementUnits = @MU1,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT
 
-	DELETE FROM @IdMappings;
-	INSERT INTO @IdMappings	EXEC  [dbo].[api_MeasurementUnits__Save]  @MeasurementUnits = @MeasurementUnits; 
-	DELETE FROM @MeasurementUnits WHERE Status IN ('Deleted');
+	IF @ValidationErrorsJson IS NOT NULL 
+	BEGIN
+		Print 'MeasurementUnits: Location 1'
+		GOTO Err_Label;
+	END
 
-	UPDATE MU 
-	SET MU.[Id] = IM.[Id], [Status] = N'Unchanged'
-	FROM @MeasurementUnits MU 
-	JOIN @IdMappings IM ON MU.[Index] = IM.[Index];
+	DELETE FROM @IndexedIds;
+	INSERT INTO @IndexedIds
+	SELECT * FROM OpenJson(@IndexedIdsJson)
+	WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+
+	DELETE FROM @MU1 WHERE [EntityState] IN ('Deleted');
+
+	UPDATE T 
+	SET T.[Id] = II.[Id], T.[EntityState] = N'Unchanged'
+	FROM @MU1 T 
+	JOIN @IndexedIds II ON T.[Index] = II.[Index];
 END
+
+-- Display units whose code starts with m
+INSERT INTO @MU2 ([Id], [Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [EntityState])
+SELECT [Id], [Code], [UnitType], [Name], [UnitAmount], [BaseAmount], N'Unchanged'
+FROM dbo.MeasurementUnits
+WHERE [Code] Like 'm%';
+
 -- Inserting
-	INSERT INTO @MeasurementUnits
-		([Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive]) Values
-		(N'AED', N'Money', N'AE Dirhams', 3.67, 1, 0),
-		(N'c', N'Time', N'Century', 1, 3110400000, 1),
-		(N'dozen', N'Count', N'Dazzina', 1, 12, 1);
+	INSERT INTO @MU2
+		([Code], [UnitType], [Name], [UnitAmount], [BaseAmount]) Values
+		(N'AED', N'Money', N'AE Dirhams', 3.67, 1),
+		(N'c', N'Time', N'Century', 1, 3110400000),
+		(N'dozen', N'Count', N'Dazzina', 1, 12);
 -- Updating
-	UPDATE @MeasurementUnits 
+	UPDATE @MU2 
 	SET 
+		[Code] = N'pcs',
 		[Name] = N'Metric Ton',
-		Status = N'Updated'
-	WHERE [Index] = 13;
+		[EntityState] = N'Updated'
+	WHERE [Code] = N'mt';
 
 -- Deleting
-	UPDATE @MeasurementUnits 
+	UPDATE @MU2 
 	SET 
-		Status = N'Deleted'
-	WHERE [Index] = 0;-- Deleting the dirham
+		[EntityState] = N'Deleted'
+	WHERE [Code] = N'min';-- Deleting the minute
 
 -- Calling Save API
-	DELETE FROM @MeasurementUnitValidationErrors;
-	INSERT INTO @MeasurementUnitValidationErrors
-	EXEC [dbo].[bll_MeasurementUnits__Validate] @MeasurementUnits = @MeasurementUnits;
-	IF EXISTS(SELECT * FROM @MeasurementUnitValidationErrors) GOTO Err_Label;
+	EXEC  [dbo].[api_MeasurementUnits__Save]
+		@MeasurementUnits = @MU2,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT
 
-	DELETE FROM @IdMappings;
-	INSERT INTO @IdMappings	EXEC  [dbo].[api_MeasurementUnits__Save]  @MeasurementUnits = @MeasurementUnits; 
-	DELETE FROM @MeasurementUnits WHERE Status IN ('Deleted');
-	UPDATE MU SET MU.[Id] = IM.[Id] FROM @MeasurementUnits MU JOIN @IdMappings IM ON MU.[Index] = IM.[Index];
-	UPDATE @MeasurementUnits SET [Status] = N'Unchanged';
-
-ERR_LABEL:
-	SELECT * FROM @MeasurementUnitValidationErrors;
+	IF @ValidationErrorsJson IS NOT NULL
+	BEGIN
+		Print 'MeasurementUnits: Location 2'
+		GOTO Err_Label;
+	END
+		
+	DELETE FROM @IndexedIds;
+	INSERT INTO @IndexedIds
+	SELECT * FROM OpenJson(@IndexedIdsJson)
+	WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+		
+	DELETE FROM @MU2 WHERE [EntityState] IN ('Deleted');
+	UPDATE MU 
+	SET MU.[Id] = IM.[Id], [EntityState] = N'Unchanged'
+	FROM @MU2 MU 
+	JOIN @IndexedIds IM ON MU.[Index] = IM.[Index];

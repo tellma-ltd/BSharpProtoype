@@ -13,7 +13,7 @@ SELECT
 	S.Amount As [Tax Withheld], 
 	S.Reference As [Receipt Number], 
 	S.StartDateTime As [Receipt Date]
-FROM dbo.ft_Account__Statement(N'CurrentWithholdingTaxPayable', @fromDate, @toDate) S
-LEFT JOIN dbo.Custodies C ON S.RelatedAgentId = C.Id
-LEFT JOIN dbo.Agents A ON C.Id = A.Id
+FROM [dbo].ft_Account__Statement(N'CurrentWithholdingTaxPayable', @fromDate, @toDate) S
+LEFT JOIN [dbo].Custodies C ON S.RelatedAgentId = C.Id
+LEFT JOIN [dbo].Agents A ON C.Id = A.Id
 WHERE S.Direction = -1

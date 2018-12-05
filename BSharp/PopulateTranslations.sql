@@ -65,7 +65,7 @@ INSERT INTO @Translations([Name], [Culture], [Value]) VALUES
 (N'PaymentReceiptFromCustomerEvent', N'EN', N'Payment from Customer'),
 (N'PaymentReceiptFromCustomerEvent', N'AR', N'دفعبة من زبون');
 
-MERGE dbo.Translations AS t
+MERGE [dbo].Translations AS t
 USING @Translations AS s
 ON s.[Name] = t.[Name] AND s.[Culture] = t.[Culture]
 WHEN MATCHED AND

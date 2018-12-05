@@ -7,8 +7,9 @@
     [Address]		NVARCHAR (255),
     [ParentId]		INT,
     [CustodianId]	INT,
-	[Status]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]	INT				NOT NULL,
+	[Code]			NVARCHAR (255),
 	PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([LocationType] IN (N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Address'))
 

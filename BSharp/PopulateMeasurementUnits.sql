@@ -1,6 +1,6 @@
-﻿IF NOT Exists(SELECT * FROM [dbo].[MeasurementUnits] WHERE TenantId = dbo.fn_TenantId())
+﻿IF NOT Exists(SELECT * FROM [dbo].[MeasurementUnits] WHERE TenantId = [dbo].fn_TenantId())
 BEGIN
-	DECLARE @MeasurementUnits MeasurementUnitList;
+	DECLARE @MeasurementUnits MeasurementUnitForSaveList;
 	INSERT INTO @MeasurementUnits ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive]) VALUES
 		('AED', N'Money', N'AE Dirhams', 3.67, 1, 0),
 		(N'd', N'Time', N'Day', 1, 86400, 1),

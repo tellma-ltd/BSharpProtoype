@@ -15,9 +15,9 @@
     [RelatedAgentId]    INT,
     [RelatedResourceId] INT,
     [RelatedAmount]     MONEY,
-	[Status]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]		INT				NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([Direction] IN (-1, 1)),
-	CHECK ([Status] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

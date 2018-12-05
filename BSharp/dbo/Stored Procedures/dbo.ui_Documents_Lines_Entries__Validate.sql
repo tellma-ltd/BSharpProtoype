@@ -6,9 +6,9 @@ AS
 DECLARE @ValidationErrors ValidationErrorList;
 
 IF NOT EXISTS(SELECT * FROM @Documents)
-INSERT INTO @ValidationErrors([Path], ErrorName)
+INSERT INTO @ValidationErrors([Key], ErrorName)
 SELECT N'', 'DocumentCollectionIsEmpty';
 
-SELECT [Path], ErrorName
+SELECT [Key], ErrorName
 FROM @ValidationErrors;
 	

@@ -40,11 +40,11 @@ RETURN
 		E.RelatedResourceId,
 		E.RelatedAmount
 	FROM 
-		dbo.Entries E
-		INNER JOIN dbo.Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-		INNER JOIN dbo.Documents D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
+		[dbo].Entries E
+		INNER JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+		INNER JOIN [dbo].Documents D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
 	WHERE
-		D.TenantId = dbo.fn_TenantId() AND
+		D.TenantId = [dbo].fn_TenantId() AND
 		D.Mode = N'Posted' AND 
 		D.State = N'Voucher' AND
 		L.StartDateTime <= @toDate AND L.EndDateTime >= @fromDate

@@ -2,6 +2,6 @@
 (
     [Field]		NVARCHAR (255)  NOT NULL,
     [Value]		NVARCHAR (1024) NOT NULL,
-	[Status]	NVARCHAR(255) NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]	NVARCHAR(255) NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY CLUSTERED ([Field] ASC)
 );

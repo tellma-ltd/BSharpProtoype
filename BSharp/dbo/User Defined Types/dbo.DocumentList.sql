@@ -16,10 +16,10 @@
 	[LinesReference1]			NVARCHAR(255),
 	[LinesReference2]			NVARCHAR(255),
 	[LinesReference3]			NVARCHAR(255),
-	[Status]					NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]					NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
 	[TemporaryId]				INT					NOT NULL,
 	PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([State]	IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
 	CHECK ([Mode]	IN (N'Void', N'Draft', N'Submitted', N'Posted')),
-	CHECK ([Status] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 	);

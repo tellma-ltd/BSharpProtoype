@@ -10,7 +10,7 @@ BEGIN
 	WHERE EntryNumber = @EntryNumber
 
 /*
-	SELECT @Result = dbo.fn_CurrencyExchange(Amount, ResourceId, dbo.fn_FunctionalCurrency())
+	SELECT @Result = [dbo].fn_CurrencyExchange(Amount, ResourceId, [dbo].fn_FunctionalCurrency())
 	FROM @Entries 
 	WHERE EntryNumber = @EntryNumber
 */

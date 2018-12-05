@@ -2,24 +2,24 @@
 	@Resources [ResourceList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList, @TenantId int, @msg nvarchar(2048);
-	SELECT @TenantId = dbo.fn_TenantId();
+	DECLARE @IndexedIds [IndexedIdList], @TenantId int, @msg nvarchar(2048);
+	SELECT @TenantId = [dbo].fn_TenantId();
 	IF @TenantId IS NULL
 	BEGIN
-		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
+		SELECT @msg = FORMATMESSAGE([dbo].fn_Translate('NullTenantId')); 
 		THROW 50001, @msg, 1;
 	END
-	DELETE FROM dbo.Resources WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Resources WHERE Status = N'Deleted');
+	DELETE FROM [dbo].Resources WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Resources WHERE [EntityState] = N'Deleted');
 
-	INSERT INTO @IdMappings([Index], [Id])
+	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Resources AS t
+		MERGE INTO [dbo].Resources AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [ResourceType], [Name], [Code], [MeasurementUnitId], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId]
 			FROM @Resources 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -45,9 +45,9 @@ BEGIN
 	/*
 	UPDATE O
 	SET O.[ParentId] = 
-	FROM dbo.Resources O 
+	FROM [dbo].Resources O 
 	JOIN @Resources OL ON O.Id = OL.Parent
-	JOIN @IdMappings M ON OL.Id = M.OldId
-	JOIN dbo.Resources O2 ON M.NewId = O2.Id
+	JOIN @IndexedIds M ON OL.Id = M.OldId
+	JOIN [dbo].Resources O2 ON M.NewId = O2.Id
 	*/
 END

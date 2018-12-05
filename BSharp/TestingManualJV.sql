@@ -39,9 +39,9 @@ DELETE FROM @DocumentsResult;
 INSERT INTO @DocumentsResult([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], 
 	[LinesMemo], [ResponsibleAgentId],	[LinesStartDateTime], [LinesEndDateTime], 
 	[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
-	[ForwardedToAgentId], [Status], [TemporaryId])
+	[ForwardedToAgentId], [EntityState], [TemporaryId])
 EXEC [dbo].[api_Documents__Save] @Documents = @Documents, @WideLines = @WideLines, @Lines = @Lines, @Entries = @Entries;
-DELETE FROM @Documents WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Documents SELECT * FROM @DocumentsResult;
+DELETE FROM @Documents WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Documents SELECT * FROM @DocumentsResult;
 
 --SELECT * FROM @Documents;
 EXEC [dbo].[api_Documents__Post] @Documents = @Documents;

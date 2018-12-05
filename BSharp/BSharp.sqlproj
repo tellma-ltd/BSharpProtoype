@@ -139,9 +139,9 @@
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
     <None Include="PopulateAccounts.sql" />
-    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.AgentForSaveList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.IdMappingList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
     <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Save.sql" />
     <Build Include="dbo\Tables\dbo.Translations.sql" />
@@ -156,10 +156,15 @@
     <Build Include="dbo\Functions\dbo.fn_Culture.sql" />
     <Build Include="dbo\Functions\dbo.fn_Translate.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
-    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitForSaveList.sql" />
     <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Save.sql" />
+    <None Include="TestingAgents.sql" />
+    <None Include="TestingLocations.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Agents__Validate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -172,7 +177,6 @@
     <None Include="TestingToBeCleaned.sql" />
     <None Include="PopulateNotes.sql" />
     <None Include="PopulateTransactionSpecifications.sql" />
-    <None Include="TestingCustodies.sql" />
     <None Include="PopulateTransactionTypes.sql" />
     <None Include="PopulateTranslations.sql" />
     <None Include="Testing.sql" />

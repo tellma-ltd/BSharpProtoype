@@ -10,28 +10,28 @@ BEGIN -- Inserting
 		(-98, -98,			N'OperatingSegment', N'Fake', -100),
 		(-78, -78,			N'Investment', N'Expansion', -100);
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
+	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END
 BEGIN -- Updating
 	UPDATE @Operations 
 	SET 
 		[Name] = N'Existing',
-		Status = N'Updated'
+		[EntityState] = N'Updated'
 	WHERE [Name] = N'Existin';
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
+	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END
 
 BEGIN -- Deleting
 	UPDATE @Operations 
 	SET 
-		Status = N'Deleted'
+		[EntityState] = N'Deleted'
 	WHERE TemporaryId = -98;
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [Status], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE Status IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
+	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
+	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
 END	
 
 --SELECT * FROM @Operations;

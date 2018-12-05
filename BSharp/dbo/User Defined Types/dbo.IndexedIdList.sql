@@ -1,4 +1,4 @@
-﻿CREATE TYPE [dbo].[IdMappingList] AS TABLE
+﻿CREATE TYPE [dbo].[IndexedIdList] AS TABLE
 (
 	[Index] INT,
 	[Id] INT

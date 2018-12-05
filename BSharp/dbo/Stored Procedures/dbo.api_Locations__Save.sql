@@ -2,25 +2,25 @@
 	@Locations [LocationList] READONLY
 AS
 BEGIN
-	DECLARE @IdMappings IdMappingList, @TenantId int, @msg nvarchar(2048);
-	SELECT @TenantId = dbo.fn_TenantId();
+	DECLARE @IndexedIds [IndexedIdList], @TenantId int, @msg nvarchar(2048);
+	SELECT @TenantId = [dbo].fn_TenantId();
 	IF @TenantId IS NULL
 	BEGIN
-		SELECT @msg = FORMATMESSAGE(dbo.fn_Translate('NullTenantId')); 
+		SELECT @msg = FORMATMESSAGE([dbo].fn_Translate('NullTenantId')); 
 		THROW 50001, @msg, 1;
 	END
-	DELETE FROM dbo.Custodies WHERE TenantId = @TenantId
-	AND Id IN (SELECT Id FROM @Locations WHERE Status = N'Deleted');
+	DELETE FROM [dbo].Custodies WHERE TenantId = @TenantId
+	AND Id IN (SELECT Id FROM @Locations WHERE [EntityState] = N'Deleted');
 
-	INSERT INTO @IdMappings([Index], [Id])
+	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[NewId], x.[OldId]
 	FROM
 	(
-		MERGE INTO dbo.Custodies AS t
+		MERGE INTO [dbo].Custodies AS t
 		USING (
 			SELECT @TenantId As [TenantId], [Id], [LocationType], [Name], [IsActive] 
 			FROM @Locations 
-			WHERE [Status] IN (N'Inserted', N'Updated')
+			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
@@ -34,11 +34,11 @@ BEGIN
 		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
 	) AS x;
 
-	MERGE INTO dbo.Locations t
+	MERGE INTO [dbo].Locations t
 	USING (
 		SELECT @TenantId As [TenantId], M.[Id], [LocationType], [Address], [ParentId], [CustodianId]
 		FROM @Locations I 
-		JOIN @IdMappings M ON I.Id = M.Id -- TODO Was M.OldId, had to change it to allow compilation
+		JOIN @IndexedIds M ON I.Id = M.Id -- TODO Was M.OldId, had to change it to allow compilation
 	) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET

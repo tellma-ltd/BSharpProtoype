@@ -14,7 +14,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-		IF (SELECT Mode FROM dbo.Documents WHERE Id = @FromDocument) <> N'Committed'
+		IF (SELECT Mode FROM [dbo].Documents WHERE Id = @FromDocument) <> N'Committed'
 			RAISERROR (N'Please commit the Document before moving to next stage', 16,1) 
 /*
 		IF EXISTS (
@@ -22,8 +22,8 @@ BEGIN
 			FROM @Entries EL
 			JOIN (
 				SELECT E.AccountId, SUM(Amount) As Amount 
-				FROM dbo.Entries E 
-				JOIN dbo.Lines L ON E.LineId = L.Id
+				FROM [dbo].Entries E 
+				JOIN [dbo].Lines L ON E.LineId = L.Id
 				WHERE L.DocumentId = @FromDocument
 				Group By E.AccountId
 				HAVING SUM(Amount) <> 0
@@ -36,7 +36,7 @@ BEGIN
 
 		SELECT @TransactionType = TransactionType, @OperatingSegment = OperatingSegmentId, @FromDocumentDateTime = DocumentDateTime, 
 			@Agent = AgentId, @Location = LocationId, @Resource = ResourceId
-		FROM dbo.Documents 
+		FROM [dbo].Documents 
 		WHERE Id = @FromDocument
 
 		IF @ToDocumentDateTime < @FromDocumentDateTime
@@ -44,10 +44,10 @@ BEGIN
 
 		SELECT @SerialNumber = 
 			isNull(MAX(SerialNumber) ,0) + 1
-			FROM dbo.Documents
+			FROM [dbo].Documents
 			WHERE TransactionType = @TransactionType AND State = @ToState
 
-		INSERT INTO dbo.Documents(State, TransactionType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, LocationId, ResourceId,  ReminderDateTime)
+		INSERT INTO [dbo].Documents(State, TransactionType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, LocationId, ResourceId,  ReminderDateTime)
 		VALUES(@ToState, @TransactionType, @OperatingSegment, @SerialNumber, @ToDocumentDateTime, @Actor, @Reason, @Reference, @Agent, @Location, @Resource, @ReminderDateTime )
 		
 		SET @ToDocument = SCOPE_IDENTITY() */

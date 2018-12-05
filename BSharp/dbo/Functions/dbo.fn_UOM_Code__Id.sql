@@ -7,8 +7,8 @@ AS
 BEGIN
 	DECLARE @Result int;
 	
-	SELECT @Result = Id FROM dbo.[MeasurementUnits]
-	WHERE TenantId = dbo.fn_TenantId()
+	SELECT @Result = Id FROM [dbo].[MeasurementUnits]
+	WHERE TenantId = [dbo].fn_TenantId()
 	AND Code = @Code;
 
 	RETURN @Result;
