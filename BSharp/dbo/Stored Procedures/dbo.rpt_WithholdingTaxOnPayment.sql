@@ -7,7 +7,7 @@ SET NOCOUNT ON
 SELECT
 	A.TaxIdentificationNumber As [Withholdee TIN],
 	C.Name As [Organization/Person Name],
-	A.RegisteredAddress As [Withholdee Address], 
+	C.[Address] As [Withholdee Address], 
 	S.Memo As [Withholding Type],
 	S.RelatedAmount As [Taxable Amount], 
 	S.Amount As [Tax Withheld], 

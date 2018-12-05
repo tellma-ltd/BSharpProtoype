@@ -24,7 +24,7 @@ BEGIN -- Users
 END
 BEGIN -- Insert individuals and organizations
 	INSERT INTO @A1
-	([AgentType],		[Name],			[IsRelated], [UserId],					[TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime]) VALUES
+	([AgentType],		[Name],			[IsRelated], [UserId],					[TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime]) VALUES
 	(N'Individual',	N'Mohamad Akra',	0,		 N'mohamad.akra@banan-it.com',	NULL,						NULL,				N'Dr.',		'M',	'1966.02.19'),
 	(N'Individual',	N'Ahmad Akra',		0,		 N'ahmad.akra@banan-it.com',	NULL,						NULL,				N'Mr.',		'M',	'1992.09.21'),
 	(N'Individual',	N'Badege Kebede',	1,		 N'badegek@gmail.com',			NULL,						NULL,				N'ATO',		'M',	NULL),
@@ -78,13 +78,15 @@ BEGIN -- Insert individuals and organizations
 	SET T.[Id] = II.[Id], T.[EntityState] = N'Unchanged'
 	FROM @A1 T 
 	JOIN @IndexedIds II ON T.[Index] = II.[Index];
+
+	UPDATE @A1 SET [EntityState] = N'Unchanged'	WHERE  [EntityState] = N'Updated';
 END
 
 -- Inserting
 INSERT INTO @A2 (
-	  [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime], [EntityState])
+	  [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
-	A.[Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [RegisteredAddress], [Title], [Gender], [BirthDateTime], N'Unchanged'
+	A.[Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
 FROM dbo.Agents A
 JOIN dbo.Custodies C ON A.Id = C.Id
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
@@ -96,11 +98,11 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Mohamad Akra';
 
-	UPDATE @A2 
-	SET 
-		[Code] = N'MA',
-		[EntityState] = N'Updated'
-	WHERE [Name] Like N'%Akra';
+	--UPDATE @A2 
+	--SET 
+	--	[Code] = N'MA',
+	--	[EntityState] = N'Updated'
+	--WHERE [Name] Like N'%Akra';
 
 -- Deleting Legesse record
 	UPDATE @A2
@@ -129,6 +131,8 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 	SET T.[Id] = II.[Id], T.[EntityState] = N'Unchanged'
 	FROM @A2 T 
 	JOIN @IndexedIds II ON T.[Index] = II.[Index];
+
+	UPDATE @A2 SET [EntityState] = N'Unchanged'	WHERE  [EntityState] = N'Updated';
 SELECT 
 	@MohamadAkra = (SELECT [Id] FROM @A1 WHERE [Name] = N'Mohamad Akra'), 
 	@AhmadAkra = (SELECT [Id] FROM @A1 WHERE [Name] = N'Ahmad Akra'), 

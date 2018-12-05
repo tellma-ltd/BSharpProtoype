@@ -5,7 +5,6 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-
 -- Validate
 	EXEC [dbo].[bll_Agents__Validate]
 		@Agents = @Agents,
@@ -14,9 +13,7 @@ SET NOCOUNT ON;
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-
 	EXEC [dbo].[dal_Agents__Save]
 		@Agents = @Agents,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT
-	
 END;

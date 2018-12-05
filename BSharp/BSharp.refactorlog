@@ -420,4 +420,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[AgentForSaveList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="43823d3c-dd4c-4da8-a574-514114cc2fe6" ChangeDateTime="12/05/2018 08:55:06">
+    <Property Name="ElementName" Value="[dbo].[LocationList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[LocationForSaveList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0907d7fb-cc33-4b0d-88b6-459279f3fa94" ChangeDateTime="12/05/2018 14:45:25">
+    <Property Name="ElementName" Value="[dbo].[Custodies].[Address]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Custodies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Address]" />
+  </Operation>
 </Operations>

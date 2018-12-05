@@ -3,8 +3,10 @@
 	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	DECLARE @IndexedIds [dbo].[IndexedIdList], @TenantId int;
-	SELECT @TenantId = [dbo].fn_TenantId();
+	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
+	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
+	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
 	DELETE FROM [dbo].MeasurementUnits
@@ -26,11 +28,13 @@ SET NOCOUNT ON;
 	)	
 	THEN
 		UPDATE SET 
-			t.[UnitType] = s.[UnitType],
-			t.[Name] = s.[Name],
-			t.[UnitAmount] = s.[UnitAmount],
-			t.[BaseAmount] = s.[BaseAmount],
-			t.[Code] = s.[Code];
+			t.[UnitType]	= s.[UnitType],
+			t.[Name]		= s.[Name],
+			t.[UnitAmount]	= s.[UnitAmount],
+			t.[BaseAmount]	= s.[BaseAmount],
+			t.[Code]		= s.[Code],
+			t.[ModifiedAt]	= @Now,
+			t.[ModifiedBy]	= @UserId;
 
 -- Inserts
 	INSERT INTO @IndexedIds([Index], [Id])
@@ -44,9 +48,9 @@ SET NOCOUNT ON;
 			WHERE [EntityState] = N'Inserted'
 		) AS s ON (t.Id = s.Id)
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [UnitType], [Name], [UnitAmount], [BaseAmount], [Code])
-			VALUES (@TenantId, s.[UnitType], s.[Name], s.[UnitAmount], s.[BaseAmount], s.[Code])
-		OUTPUT s.[Index] AS [Index], inserted.[Id] 
+			INSERT ([TenantId], [UnitType], [Name], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[UnitType], s.[Name], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
+		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
 
 	SELECT @IndexedIdsJson =

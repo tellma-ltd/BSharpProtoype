@@ -7,11 +7,11 @@ SET NOCOUNT ON;
 
 	-- Code must be unique
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Code' As [Key], N'CodeIsAlreadyInUse' As [ErrorName],
-		FE.Code AS Argument1, NULL AS Argument2,NULL AS Argument3,NULL AS Argument4, NULL AS Argument5
+	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Code' As [Key], N'TheCode{{0}}IsUsed' As [ErrorName],
+		FE.Code AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @MeasurementUnits FE 
 	JOIN [dbo].MeasurementUnits BE ON FE.Code = BE.Code
-	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id)
+	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id);
 	-- Add further logic
 
 	SELECT @ValidationErrorsJson = 

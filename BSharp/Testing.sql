@@ -19,12 +19,13 @@ BEGIN TRY
 		:r .\TestingSettings.sql
 	--	:r .\TestingMeasurementUnits.sql
 		:r .\TestingAgents.sql
-	--	:r .\TestingLocations.sql
+		:r .\TestingLocations.sql
 	--	:r .\TestingOperations.sql
 	--	:r .\TestingResources.sql
 	--	:r .\TestingManualJV.sql
 	--SELECT * FROM dbo.MeasurementUnits;
 	SELECT * FROM @A1; SELECT * FROM @A2;
+	SELECT * FROM @L1; SELECT * FROM @L2;
 	SELECT * FROM [dbo].Custodies;
 	--SELECT * FROM [dbo].[Operations];
 	--SELECT * FROM [dbo].Resources;
