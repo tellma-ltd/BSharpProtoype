@@ -56,5 +56,5 @@ SET NOCOUNT ON;
 	SELECT @IndexedIdsJson =
 	(
 		SELECT [Index], [Id] FROM @IndexedIds
-		FOR JSON AUTO
+		FOR JSON PATH
 	);

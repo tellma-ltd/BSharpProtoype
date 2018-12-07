@@ -167,6 +167,10 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Agents__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Locations__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Select.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

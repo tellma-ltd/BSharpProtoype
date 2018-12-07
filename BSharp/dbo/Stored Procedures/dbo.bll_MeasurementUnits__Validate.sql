@@ -18,5 +18,5 @@ SET NOCOUNT ON;
 	(
 		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
 		FROM @ValidationErrors
-		FOR JSON AUTO
+		FOR JSON PATH
 	);

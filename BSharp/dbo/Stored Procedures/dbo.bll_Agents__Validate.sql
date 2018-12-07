@@ -20,10 +20,10 @@ SET NOCOUNT ON;
 	FROM @Agents FE 
 	JOIN [dbo].Agents BE ON FE.UserId = BE.UserId
 	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id)
-	
+
 	SELECT @ValidationErrorsJson = 
 	(
 		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
 		FROM @ValidationErrors
-		FOR JSON AUTO
+		FOR JSON PATH
 	);

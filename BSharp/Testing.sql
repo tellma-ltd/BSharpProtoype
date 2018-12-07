@@ -11,6 +11,8 @@ BEGIN -- reset Identities
 
 	DECLARE @ValidationErrorsJson nvarchar(max), @IndexedIdsJson NVARCHAR(MAX);
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @A1Result AgentList, @A2Result AgentList;
+	DECLARE @L1Result LocationList, @L2Result LocationList;
 END
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -24,9 +26,9 @@ BEGIN TRY
 	--	:r .\TestingResources.sql
 	--	:r .\TestingManualJV.sql
 	--SELECT * FROM dbo.MeasurementUnits;
-	SELECT * FROM @A1; SELECT * FROM @A2;
-	SELECT * FROM @L1; SELECT * FROM @L2;
-	SELECT * FROM [dbo].Custodies;
+	SELECT * FROM @A1Result; SELECT * FROM @A2Result;
+	SELECT * FROM @L1Result; SELECT * FROM @L2Result;
+	--SELECT * FROM [dbo].Custodies;
 	--SELECT * FROM [dbo].[Operations];
 	--SELECT * FROM [dbo].Resources;
 	--SELECT * FROM [dbo].Documents;
