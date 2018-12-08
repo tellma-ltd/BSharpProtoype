@@ -15,6 +15,10 @@
     [Lookup4]			NVARCHAR (255),
     [PartOf]			INT, -- for compound assets
     [FungibleParentId]	INT,
+    [CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
+    [CreatedBy]		NVARCHAR(450)		NOT NULL,
+    [ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
+    [ModifiedBy]	NVARCHAR(450)		NOT NULL,
     CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),

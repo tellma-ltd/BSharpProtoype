@@ -10,10 +10,10 @@ BEGIN -- Insert
 	INSERT INTO @L1Save
 	([LocationType], [Name],					[Address], [BirthDateTime], [CustodianId]) VALUES
 	(N'Warehouse',	N'Raw Materials Warehouse', NULL,		NULL, NULL),
-	(N'Warehouse',	N'Fake Warehouse',			N'Far away',NULL, NULL),
+	(N'Warehouse',	N'Fake Warehouse',			N'Far away', NULL, NULL),
 	(N'Warehouse',	N'Finished Goods Warehouse', NULL,		NULL, NULL);
 
-EXEC  [dbo].[api_Locations__Save]
+	EXEC  [dbo].[api_Locations__Save]
 		@Locations = @L1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@LocationsResultJson = @L1ResultJson OUTPUT
@@ -50,14 +50,14 @@ EXEC  [dbo].[api_Locations__Save]
 	);
 END
 BEGIN -- Updating RM Warehouse address
-INSERT INTO @L2Save (
-	  [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
-)
-SELECT
-	L.[Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
-FROM dbo.Locations L
-JOIN dbo.Custodies C ON L.Id = C.Id
-WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
+	INSERT INTO @L2Save (
+		  [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
+	)
+	SELECT
+		L.[Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
+	FROM dbo.Locations L
+	JOIN dbo.Custodies C ON L.Id = C.Id
+	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
 
 	UPDATE @L2Save
 	SET 
@@ -138,7 +138,9 @@ INSERT INTO @L3Result(
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 
-END	
+END
+	SELECT * FROM @L1Result; SELECT * FROM @L2Result; SELECT * FROM @L3Result;
+	SELECT * FROM [dbo].Custodies;
 
 SELECT
 	@RawMaterialsWarehouse = (SELECT [Id] FROM @L1Result WHERE [Name] = N'Raw Materials Warehouse'), 

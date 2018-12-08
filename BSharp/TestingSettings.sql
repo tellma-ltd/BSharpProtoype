@@ -1,7 +1,8 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @Settings SettingList, @SettingsResult SettingList;
+	DECLARE @S1Save SettingForSaveList, @S2Save SettingForSaveList;
+	DECLARE @S1ResultJson NVARCHAR(MAX), @S2ResultJson NVARCHAR(MAX);
 END
-INSERT INTO @Settings
+INSERT INTO @S1Save
 ([Field],[Value]) Values
 -- IFRS values
 (N'NameOfReportingEntityOrOtherMeansOfIdentification', N'Banan IT, plc'),
@@ -17,10 +18,31 @@ INSERT INTO @Settings
 (N'TaxIdentificationNumber', N'123456789'),
 (N'FunctionalCurrencyUnit', N'ETB');
 
-DELETE FROM @SettingsResult; 
-INSERT INTO @SettingsResult([Field], [Value], [EntityState]) EXEC  [dbo].[api_Settings__Save]  @Settings = @Settings;
+	EXEC  [dbo].[api_Settings__Save]
+		@Settings = @S1Save,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@SettingsResultJson = @S1ResultJson OUTPUT
 
-DELETE FROM @Settings WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted');
-INSERT INTO @Settings SELECT * FROM @SettingsResult;
+	IF @ValidationErrorsJson IS NOT NULL 
+	BEGIN
+		Print 'Location: Settings 1'
+		GOTO Err_Label;
+	END
 
---SELECT * FROM @Settings;
+	INSERT INTO @S1Result(
+		[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@S1ResultJson)
+	WITH (
+		[Field] NVARCHAR (255) '$.Field',
+		[Value] NVARCHAR (255) '$.Value',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
+
+SELECT * FROM dbo.Settings;

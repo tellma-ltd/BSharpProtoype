@@ -9,11 +9,11 @@
     [Address]			NVARCHAR (255),
     [BirthDateTime]		DATETIMEOFFSET (7),
     [CustodianId]		INT,
-    [CreatedAt]			DATETIMEOFFSET(7), 
-    [CreatedBy]			NVARCHAR(450), 
-    [ModifiedAt]		DATETIMEOFFSET(7), 
-    [ModifiedBy]		NVARCHAR(450), 
-	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+    [CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
+    [CreatedBy]			NVARCHAR(450)		NOT NULL,
+    [ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
+    [ModifiedBy]		NVARCHAR(450)		NOT NULL,
+	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([LocationType] IN (N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)

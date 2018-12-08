@@ -18,6 +18,10 @@
 	[LinesReference1]			NVARCHAR(255),
 	[LinesReference2]			NVARCHAR(255),
 	[LinesReference3]			NVARCHAR(255),
+    [CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
+    [CreatedBy]					NVARCHAR(450)		NOT NULL,
+    [ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
+    [ModifiedBy]				NVARCHAR(450)		NOT NULL,
     CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC), -- Data/Demand/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
     CONSTRAINT [CK_Documents_State] CHECK ([State] IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
 	CONSTRAINT [FK_Documents_TransactionTypes] FOREIGN KEY ([TransactionType]) REFERENCES [dbo].[TransactionTypes] ([Id]) ON UPDATE CASCADE, 

@@ -179,6 +179,15 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Activate.sql" />
+    <Build Include="dbo\User Defined Types\dbo.OperationForSaveList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Operations__Validate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.SettingForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Settings__Validate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

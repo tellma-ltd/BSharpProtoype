@@ -1,42 +1,109 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @Operations OperationList, @OperationsResult OperationList;
+	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
+	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
+	DECLARE @OperationActivationList dbo.ActivationList;
 	DECLARE @BusinessEntity int, @Existing int, @Expansion int;
 END
 BEGIN -- Inserting
-	INSERT INTO @Operations
-		([Id], [TemporaryId], [OperationType], [Name], [ParentId]) Values
-		(-100, -100,		 N'BusinessEntity', N'Walia Steel Industry', NULL),
-		(-99, -99,			N'Investment', N'Existin', -100),
-		(-98, -98,			N'OperatingSegment', N'Fake', -100),
-		(-78, -78,			N'Investment', N'Expansion', -100);
+	INSERT INTO @O1Save
+		([OperationType], [Name], [ParentIndex]) Values
+		(N'BusinessEntity', N'Walia Steel Industry', NULL),
+		(N'Investment', N'Existin', 0),
+		(N'OperatingSegment', N'Fake', 0),
+		(N'Investment', N'Expansion', 0);
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
+	EXEC  [dbo].[api_Operations__Save]
+		@Operations = @O1Save,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@OperationsResultJson = @O1ResultJson OUTPUT
+
+	IF @ValidationErrorsJson IS NOT NULL 
+	BEGIN
+		Print 'Location: Operations 1'
+		GOTO Err_Label;
+	END
+
+	INSERT INTO @O1Result(
+		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@O1ResultJson)
+	WITH (
+		[Index] INT '$.Index',
+		[Id] INT '$.Id',
+		[OperationType] NVARCHAR (255) '$.OperationType',
+		[Name] NVARCHAR (255) '$.Name',
+		[IsActive] BIT '$.IsActive',
+		[Code] NVARCHAR (255) '$.Code',
+		[ParentId] INT '$.ParentId',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
 END
-BEGIN -- Updating
-	UPDATE @Operations 
+BEGIN
+	INSERT INTO @O2Save (
+		[Id], [OperationType], [Name], [Code], [ParentId], [EntityState]
+	)
+	SELECT
+		[Id], [OperationType], [Name], [Code], [ParentId], N'Unchanged'
+	FROM dbo.Operations
+	WHERE [Name] IN (N'Existin', N'Fake')
+
+	UPDATE @O2Save 
 	SET 
 		[Name] = N'Existing',
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Existin';
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
-END
-
-BEGIN -- Deleting
-	UPDATE @Operations 
+	UPDATE @O2Save 
 	SET 
 		[EntityState] = N'Deleted'
-	WHERE TemporaryId = -98;
+	WHERE [Name] = N'Fake';
 
-	DELETE FROM @OperationsResult; INSERT INTO @OperationsResult([Id], [OperationType], [Name], [ParentId], [EntityState], [TemporaryId])
-	EXEC  [dbo].[api_Operations__Save]  @Operations = @Operations; DELETE FROM @Operations WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Operations SELECT * FROM @OperationsResult;
-END	
+	EXEC  [dbo].[api_Operations__Save]
+		@Operations = @O2Save,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@OperationsResultJson = @O2ResultJson OUTPUT
 
---SELECT * FROM @Operations;
+	IF @ValidationErrorsJson IS NOT NULL 
+	BEGIN
+		Print 'Location: Operations 2'
+		GOTO Err_Label;
+	END
+
+	INSERT INTO @O2Result(
+		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@O2ResultJson)
+	WITH (
+		[Index] INT '$.Index',
+		[Id] INT '$.Id',
+		[OperationType] NVARCHAR (255) '$.OperationType',
+		[Name] NVARCHAR (255) '$.Name',
+		[IsActive] BIT '$.IsActive',
+		[Code] NVARCHAR (255) '$.Code',
+		[ParentId] INT '$.ParentId',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
+END
+
+SELECT * FROM [dbo].[Operations];
 SELECT 
-		@BusinessEntity = (SELECT [Id] FROM @Operations WHERE [Name] = N'Walia Steel Industry'), 
-		@Existing = (SELECT [Id] FROM @Operations WHERE [Name] = N'Existing'),
-		@Expansion = (SELECT [Id] FROM @Operations WHERE [Name] = N'Expansion');
+		@BusinessEntity = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Walia Steel Industry'), 
+		@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),
+		@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion');
 	

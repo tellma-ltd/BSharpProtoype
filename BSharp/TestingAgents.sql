@@ -165,6 +165,9 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 
+	SELECT * FROM @A1Result; SELECT * FROM @A2Result;
+	SELECT * FROM [dbo].Custodies;
+
 SELECT 
 	@MohamadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mohamad Akra'), 
 	@AhmadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ahmad Akra'), 

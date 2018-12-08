@@ -13,6 +13,10 @@
 	[BaseLineId]	INT, -- this is like FunctionId, good for linear functions.
 	[ScalingFactor]	FLOAT, -- Qty sold for Price list, Qty produced for BOM, throughput rate for oil well.
     [Memo]			NVARCHAR(255), 
+    [CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
+    [CreatedBy]		NVARCHAR(450)		NOT NULL,
+    [ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
+    [ModifiedBy]	NVARCHAR(450)		NOT NULL,
     CONSTRAINT [PK_Lines] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
     CONSTRAINT [FK_Lines_Documents] FOREIGN KEY ([TenantId], [DocumentId]) REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_Lines_Lines] FOREIGN KEY ([TenantId], [BaseLineId]) REFERENCES [dbo].[Lines] ([TenantId], [Id])

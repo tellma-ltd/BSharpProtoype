@@ -128,3 +128,5 @@ WHERE [Code] Like 'm%';
 		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
+
+SELECT * FROM dbo.MeasurementUnits;
