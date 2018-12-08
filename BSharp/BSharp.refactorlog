@@ -441,4 +441,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_Custodies__Activate]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0c5e4ebb-0b38-4e1f-bcbd-72a47719d1fe" ChangeDateTime="12/08/2018 05:33:23">
+    <Property Name="ElementName" Value="[dbo].[bll_Custodies__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Custodies__Activate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7706b47d-17bd-4485-8468-21a8716edac5" ChangeDateTime="12/08/2018 05:34:00">
+    <Property Name="ElementName" Value="[dbo].[bll_MeasurementUnits__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_MeasurementUnits__Activate]" />
+  </Operation>
 </Operations>

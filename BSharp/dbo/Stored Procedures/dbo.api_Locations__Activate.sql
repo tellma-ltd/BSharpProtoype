@@ -7,7 +7,7 @@ AS
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX);
 
-	EXEC [dbo].[bll_Custodies__Activate]
+	EXEC [dbo].[dal_Custodies__Activate]
 		@ActivationList = @ActivationList,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT
 

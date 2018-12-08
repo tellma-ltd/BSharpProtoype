@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[bll_Custodies__Activate]
+﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Activate]
 	@ActivationList [ActivationList] READONLY,
 	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
-	MERGE INTO [dbo].Custodies AS t
+	MERGE INTO [dbo].MeasurementUnits AS t
 		USING (
 			SELECT [Index], [Id], [IsActive]
 			FROM @ActivationList 
