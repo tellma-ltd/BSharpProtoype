@@ -1,6 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @L1Save LocationForSaveList, @L2Save LocationForSaveList;
-	DECLARE @L1ResultJson NVARCHAR(MAX), @L2ResultJson NVARCHAR(MAX);
+	DECLARE @L1ResultJson NVARCHAR(MAX), @L2ResultJson NVARCHAR(MAX), @L3ResultJson NVARCHAR(MAX);
+	DECLARE @LocationActivationList dbo.ActivationList;
 
 	DECLARE @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int; 
 END
@@ -104,6 +105,39 @@ WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
 		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
+
+	INSERT INTO @LocationActivationList(Id, IsActive)
+	VALUES(29, 0), (31, 0)
+
+	EXEC  [dbo].[api_Locations__Activate]
+	@ActivationList = @LocationActivationList,
+	@LocationsResultJson = @L3ResultJson OUTPUT
+
+INSERT INTO @L3Result(
+		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@L3ResultJson)
+	WITH (
+		[Index] INT '$.Index',
+		[Id] INT '$.Id',
+		[LocationType] NVARCHAR (255) '$.LocationType',
+		[Name] NVARCHAR (255) '$.Name',
+		[IsActive] BIT '$.IsActive',
+		[Code] NVARCHAR (255) '$.Code',
+		[Address] NVARCHAR (255) '$.Address',
+		[BirthDateTime] DATETIMEOFFSET (7) '$.BirthDateTime',
+		[CustodianId] INT '$.CustodianId',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
+
 END	
 
 SELECT

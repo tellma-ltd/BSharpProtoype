@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[api_Agents__Save]
 	@Agents [AgentForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnResults bit = 1,
+	@ReturnEntities bit = 1,
 	@AgentsResultJson  NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -20,7 +20,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX);
 		@Agents = @Agents,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT
 	
-	IF (@ReturnResults = 1)
+	IF (@ReturnEntities = 1)
 		EXEC [dbo].[dal_Agents__Select] 
 			@IndexedIdsJson = @IndexedIdsJson, @AgentsResultJson = @AgentsResultJson OUTPUT
 END

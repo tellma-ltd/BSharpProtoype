@@ -11,15 +11,17 @@ BEGIN -- reset Identities
 
 	DECLARE @ValidationErrorsJson nvarchar(max), @IndexedIdsJson NVARCHAR(MAX);
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @MU1Result MeasurementUnitList, @MU2Result MeasurementUnitList;
 	DECLARE @A1Result AgentList, @A2Result AgentList;
-	DECLARE @L1Result LocationList, @L2Result LocationList;
+	DECLARE @L1Result LocationList, @L2Result LocationList, @L3Result LocationList;
+
 END
 BEGIN TRY
 	BEGIN TRANSACTION
 		EXEC sp_set_session_context 'Tenantid', 106;
 		EXEC sp_set_session_context 'Language', N'AR';
 		:r .\TestingSettings.sql
-	--	:r .\TestingMeasurementUnits.sql
+		--:r .\TestingMeasurementUnits.sql
 		:r .\TestingAgents.sql
 		:r .\TestingLocations.sql
 	--	:r .\TestingOperations.sql
@@ -27,8 +29,8 @@ BEGIN TRY
 	--	:r .\TestingManualJV.sql
 	--SELECT * FROM dbo.MeasurementUnits;
 	SELECT * FROM @A1Result; SELECT * FROM @A2Result;
-	SELECT * FROM @L1Result; SELECT * FROM @L2Result;
-	--SELECT * FROM [dbo].Custodies;
+	SELECT * FROM @L1Result; SELECT * FROM @L2Result; SELECT * FROM @L3Result;
+	SELECT * FROM [dbo].Custodies;
 	--SELECT * FROM [dbo].[Operations];
 	--SELECT * FROM [dbo].Resources;
 	--SELECT * FROM [dbo].Documents;
@@ -45,7 +47,7 @@ END CATCH
 RETURN;
 
 ERR_LABEL:
-	--SELECT * FROM dbo.MeasurementUnits;
+	SELECT * FROM dbo.MeasurementUnits;
 	SELECT * FROM [dbo].Custodies;
 	--SELECT * FROM [dbo].[Operations];
 	--SELECT * FROM [dbo].Resources;

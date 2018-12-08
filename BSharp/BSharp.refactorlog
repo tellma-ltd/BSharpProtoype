@@ -434,4 +434,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[Address]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5345c609-abe2-43bd-9121-b23d7622a9f8" ChangeDateTime="12/08/2018 05:18:24">
+    <Property Name="ElementName" Value="[dbo].[bll_Agents__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Custodies__Activate]" />
+  </Operation>
 </Operations>

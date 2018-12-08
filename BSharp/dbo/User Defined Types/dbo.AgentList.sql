@@ -4,7 +4,7 @@
 	[Id]						INT,
 	[AgentType]					NVARCHAR (255)		NOT NULL,
     [Name]						NVARCHAR (255)		NOT NULL,
-    [IsActive]					BIT,		
+    [IsActive]					BIT					NOT NULL,		
 	[Code]						NVARCHAR (255),
     [Address]					NVARCHAR (255),
     [BirthDateTime]				DATETIMEOFFSET (7),

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[api_Locations__Save]
 	@Locations [LocationForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnResults bit = 1,
+	@ReturnEntities bit = 1,
 	@LocationsResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -19,7 +19,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX);
 		@Locations = @Locations,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT
 
-	IF (@ReturnResults = 1)
+	IF (@ReturnEntities = 1)
 		EXEC [dbo].[dal_Locations__Select] 
 			@IndexedIdsJson = @IndexedIdsJson, @LocationsResultJson = @LocationsResultJson OUTPUT
 END;

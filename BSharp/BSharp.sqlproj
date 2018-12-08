@@ -171,6 +171,14 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Select.sql" />
+    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Agents__Activate.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ActivationList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Custodies__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Locations__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits__Activate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

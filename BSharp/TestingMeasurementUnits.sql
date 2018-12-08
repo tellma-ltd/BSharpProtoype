@@ -1,9 +1,10 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @MU1 [dbo].MeasurementUnitForSaveList, @MU2 [dbo].MeasurementUnitForSaveList;
+	DECLARE @MU1Save [dbo].MeasurementUnitForSaveList, @MU2Save [dbo].MeasurementUnitForSaveList;
+	DECLARE @MU1ResultJson NVARCHAR(MAX), @MU2ResultJson NVARCHAR(MAX);
 	DECLARE @AED int, @Dozen int, @Kg int;
 END
 BEGIN -- Inserting
-	INSERT INTO @MU1 ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount]) VALUES
+	INSERT INTO @MU1Save ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount]) VALUES
 		('AED', N'Money', N'AE Dirhams', 3.67, 1),
 		(N'd', N'Time', N'Day', 1, 86400),
 		(N'dozen', N'Count', N'Dozen', 1, 12),
@@ -31,9 +32,9 @@ BEGIN -- Inserting
 		(N'yr', N'Time', N'Year', 1, 31104000);
 
 	EXEC  [dbo].[api_MeasurementUnits__Save]
-		@MeasurementUnits = @MU1,
+		@MeasurementUnits = @MU1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+		@MeasurementUnitsResultJson = @MU1ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -41,33 +42,45 @@ BEGIN -- Inserting
 		GOTO Err_Label;
 	END
 
-	DELETE FROM @IndexedIds;
-	INSERT INTO @IndexedIds
-	SELECT * FROM OpenJson(@IndexedIdsJson)
-	WITH ([Index] INT '$.Index', [Id] INT '$.Id');
-
-	DELETE FROM @MU1 WHERE [EntityState] IN ('Deleted');
-
-	UPDATE T 
-	SET T.[Id] = II.[Id], T.[EntityState] = N'Unchanged'
-	FROM @MU1 T 
-	JOIN @IndexedIds II ON T.[Index] = II.[Index];
+	INSERT INTO @MU1Result(
+		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@MU1ResultJson)
+	WITH (
+		[Index] INT '$.Index',
+		[Id] INT '$.Id',
+		[UnitType] NVARCHAR (255) '$.UnitType',
+		[UnitAmount] FLOAT (53) '$.UnitAmount',
+		[BaseAmount] FLOAT (53) '$.BaseAmount',
+		[Name] NVARCHAR (255) '$.Name',
+		[IsActive] BIT '$.IsActive',
+		[Code] NVARCHAR (255) '$.Code',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
 END
 
 -- Display units whose code starts with m
-INSERT INTO @MU2 ([Id], [Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [EntityState])
+INSERT INTO @MU2Save ([Id], [Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [EntityState])
 SELECT [Id], [Code], [UnitType], [Name], [UnitAmount], [BaseAmount], N'Unchanged'
 FROM dbo.MeasurementUnits
 WHERE [Code] Like 'm%';
 
 -- Inserting
-	INSERT INTO @MU2
+	INSERT INTO @MU2Save
 		([Code], [UnitType], [Name], [UnitAmount], [BaseAmount]) Values
 		(N'AED', N'Money', N'AE Dirhams', 3.67, 1),
 		(N'c', N'Time', N'Century', 1, 3110400000),
 		(N'dozen', N'Count', N'Dazzina', 1, 12);
 -- Updating
-	UPDATE @MU2 
+	UPDATE @MU2Save 
 	SET 
 		[Code] = N'pcs',
 		[Name] = N'Metric Ton',
@@ -75,30 +88,43 @@ WHERE [Code] Like 'm%';
 	WHERE [Code] = N'mt';
 
 -- Deleting
-	UPDATE @MU2 
+	UPDATE @MU2Save 
 	SET 
 		[EntityState] = N'Deleted'
 	WHERE [Code] = N'min';-- Deleting the minute
 
 -- Calling Save API
 	EXEC  [dbo].[api_MeasurementUnits__Save]
-		@MeasurementUnits = @MU2,
+		@MeasurementUnits = @MU2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+		@MeasurementUnitsResultJson = @MU2ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL
 	BEGIN
 		Print 'MeasurementUnits: Location 2'
 		GOTO Err_Label;
 	END
-		
-	DELETE FROM @IndexedIds;
-	INSERT INTO @IndexedIds
-	SELECT * FROM OpenJson(@IndexedIdsJson)
-	WITH ([Index] INT '$.Index', [Id] INT '$.Id');
-		
-	DELETE FROM @MU2 WHERE [EntityState] IN ('Deleted');
-	UPDATE MU 
-	SET MU.[Id] = IM.[Id], [EntityState] = N'Unchanged'
-	FROM @MU2 MU 
-	JOIN @IndexedIds IM ON MU.[Index] = IM.[Index];
+
+	INSERT INTO @MU2Result(
+		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	)
+	SELECT 
+		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+	FROM OpenJson(@MU2ResultJson)
+	WITH (
+		[Index] INT '$.Index',
+		[Id] INT '$.Id',
+		[UnitType] NVARCHAR (255) '$.UnitType',
+		[UnitAmount] FLOAT (53) '$.UnitAmount',
+		[BaseAmount] FLOAT (53) '$.BaseAmount',
+		[Name] NVARCHAR (255) '$.Name',
+		[IsActive] BIT '$.IsActive',
+		[Code] NVARCHAR (255) '$.Code',
+		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+		[EntityState] NVARCHAR(255) '$.EntityState'
+	);
