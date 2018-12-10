@@ -94,11 +94,11 @@
     <Build Include="dbo\Views\dbo.DocumentsView.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
     <Build Include="dbo\Views\dbo.IndividualsView.sql" />
-    <Build Include="dbo\Views\dbo.LinesView.sql" />
+    <Build Include="dbo\Views\dbo.WideLinesView.sql" />
     <Build Include="dbo\Views\dbo.LineTemplatesCalculationView.sql" />
     <Build Include="dbo\Views\dbo.LineTemplatesLabelView.sql" />
     <Build Include="dbo\Views\dbo.LineTemplatesValidationView.sql" />
-    <Build Include="dbo\Views\dbo.WideLinesView.sql" />
+    <Build Include="dbo\Views\dbo.WideLinesLabelView.sql" />
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.Amount.sql" />
@@ -113,14 +113,12 @@
     <Build Include="dbo\Functions\dbo.fn_Resource__UnitOfMeasure.sql" />
     <Build Include="dbo\Functions\dbo.ft_Account__Statement.sql" />
     <Build Include="dbo\Functions\dbo.ft_Journal.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sub_Line__Entries.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_WideLine__Entries.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_DocumentRecipient__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Document_Values__Update.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.ral_Documents_Lines_Entries__Insert.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.ui_Documents_WideLines__Validate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_ERCA__VAT_Purchases.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Validate.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Save__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Forward.sql" />
@@ -188,6 +186,24 @@
     <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Settings__Validate.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ResourceForSaveList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Resources__Validate.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LineForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.EntryForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.WideLineForSaveList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Lines__Select.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_WideLines__Fill.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Documents_Lines__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Documents_WideLines__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_WideLines__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Lines__Fill.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentForSaveNoIdentityList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LineForSaveNoIdentityList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.EntryForSaveNoIdentityList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

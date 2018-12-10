@@ -1,5 +1,6 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @A1Save AgentForSaveList, @A2Save AgentForSaveList;
+	DECLARE @A1Save dbo.AgentForSaveList, @A2Save dbo.AgentForSaveList;
+	DECLARE @A1Result dbo.AgentList, @A2Result dbo.AgentList;
 	DECLARE @A1ResultJson NVARCHAR(MAX), @A2ResultJson NVARCHAR(MAX);
 
 	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int, @ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int;
@@ -164,10 +165,11 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 		[Gender] NCHAR (1) '$.Gender',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
-
-	SELECT * FROM @A1Result; SELECT * FROM @A2Result;
-	SELECT * FROM [dbo].Custodies;
-
+	IF @LookupsSelect = 1
+	BEGIN
+		SELECT * FROM @A1Result; SELECT * FROM @A2Result;
+		SELECT * FROM [dbo].Custodies;
+	END
 SELECT 
 	@MohamadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mohamad Akra'), 
 	@AhmadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ahmad Akra'), 
@@ -200,7 +202,12 @@ SELECT
 	@Purchasing = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Materials & Purchasing');
 
 --		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;
+DECLARE @AgentSettingSave dbo.SettingForSaveList, @AgentSettingResultJson nvarchar(max)
 
-INSERT INTO @Settings([Field],[Value]) Values(N'TaxAuthority', @ERCA);
-DELETE FROM @SettingsResult; INSERT INTO @SettingsResult([Field], [Value], [EntityState])
-EXEC  [dbo].[api_Settings__Save]  @Settings = @Settings; DELETE FROM @Settings WHERE [EntityState] IN (N'Inserted', N'Updated', 'Deleted'); INSERT INTO @Settings SELECT * FROM @SettingsResult;
+INSERT INTO @AgentSettingSave
+([Field],[Value]) Values(N'TaxAuthority', @ERCA);
+
+EXEC  [dbo].[api_Settings__Save]
+		@Settings = @AgentSettingSave,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+		@SettingsResultJson = @AgentSettingResultJson OUTPUT

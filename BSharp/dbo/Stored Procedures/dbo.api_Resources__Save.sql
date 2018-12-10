@@ -1,53 +1,25 @@
 ﻿CREATE PROCEDURE [dbo].[api_Resources__Save]
-	@Resources [ResourceList] READONLY
+	@Resources [ResourceForSaveList] READONLY,
+	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
+	@ReturnEntities bit = 1,
+	@ResourcesResultJson  NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @IndexedIds [IndexedIdList], @TenantId int, @msg nvarchar(2048);
-	SELECT @TenantId = [dbo].fn_TenantId();
-	IF @TenantId IS NULL
-	BEGIN
-		SELECT @msg = FORMATMESSAGE([dbo].fn_Translate('NullTenantId')); 
-		THROW 50001, @msg, 1;
-	END
-	DELETE FROM [dbo].Resources WHERE TenantId = @TenantId AND Id IN (SELECT Id FROM @Resources WHERE [EntityState] = N'Deleted');
+SET NOCOUNT ON;
+DECLARE @IndexedIdsJson NVARCHAR(MAX);
+-- Validate
+	EXEC [dbo].[bll_Resources__Validate]
+		@Resources = @Resources,
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
-	INSERT INTO @IndexedIds([Index], [Id])
-	SELECT x.[NewId], x.[OldId]
-	FROM
-	(
-		MERGE INTO [dbo].Resources AS t
-		USING (
-			SELECT @TenantId As [TenantId], [Id], [ResourceType], [Name], [Code], [MeasurementUnitId], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId]
-			FROM @Resources 
-			WHERE [EntityState] IN (N'Inserted', N'Updated')
-		) AS s ON t.[TenantId] = s.[TenantId] AND t.Id = s.Id
-		WHEN MATCHED THEN
-			UPDATE SET 
-				t.[ResourceType]			= s.[ResourceType],         
-				t.[Name]					= s.[Name],                   
-				t.[Code]					= s.[Code],
-				t.[MeasurementUnitId]			= s.[MeasurementUnitId],
-				t.[Memo]					= s.[Memo],             
-				t.[Lookup1]					= s.[Lookup1],
-				t.[Lookup2]					= s.[Lookup2],
-				t.[Lookup3]					= s.[Lookup3],
-				t.[Lookup4]					= s.[Lookup4],
-				t.[PartOf]					= s.[PartOf],
-				t.[FungibleParentId]		= s.[FungibleParentId]
-		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [ResourceType],		[Name],	[Code], [MeasurementUnitId],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],		[Lookup4], [PartOf], [FungibleParentId])
-			VALUES (@TenantId, s.[ResourceType], s.[Name], s.[Code], s.[MeasurementUnitId], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOf], s.[FungibleParentId])
-		--WHEN NOT MATCHED BY SOURCE THEN 
-		--	DELETE
-		OUTPUT inserted.[Id] As [NewId], s.[Id] As [OldId]
-	) AS x;
-	PRINT N'Parent Id in table Resources is lost. Additional code is needed to fix it. Will be fixed once we agree it is necessary'
-	/*
-	UPDATE O
-	SET O.[ParentId] = 
-	FROM [dbo].Resources O 
-	JOIN @Resources OL ON O.Id = OL.Parent
-	JOIN @IndexedIds M ON OL.Id = M.OldId
-	JOIN [dbo].Resources O2 ON M.NewId = O2.Id
-	*/
+	IF @ValidationErrorsJson IS NOT NULL
+		RETURN;
+
+	EXEC [dbo].[dal_Resources__Save]
+		@Resources = @Resources,
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+
+	IF (@ReturnEntities = 1)
+		EXEC [dbo].[dal_Resources__Select] 
+			@IndexedIdsJson = @IndexedIdsJson, @ResourcesResultJson = @ResourcesResultJson OUTPUT
 END

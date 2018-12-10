@@ -1,6 +1,7 @@
-﻿CREATE TYPE [dbo].[WideLineList] AS TABLE (
+﻿CREATE TYPE [dbo].[WideLineForSaveList] AS TABLE (
 	[LineIndex]				INT,
     [LineId]				INT,
+    [DocumentIndex]			INT					NOT NULL,
     [DocumentId]			INT					NOT NULL,
 	[TransactionType]		NVARCHAR (255)      NOT NULL,
     [ResponsibleAgentId]	INT,
@@ -53,4 +54,3 @@
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [LineId] IS NULL)	
 );
-

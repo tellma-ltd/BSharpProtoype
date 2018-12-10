@@ -6,6 +6,6 @@
     [CreatedBy]		NVARCHAR(450)		NOT NULL,
     [ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
     [ModifiedBy]	NVARCHAR(450)		NOT NULL,
-	[EntityState]	NVARCHAR(255) NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]	NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY CLUSTERED ([Field] ASC)
 );

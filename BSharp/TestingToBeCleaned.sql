@@ -91,7 +91,7 @@ BEGIN
 	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
 	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
 
-	EXEC ui_Documents_Lines_Entries__Validate @Documents = @Documents, @Lines = @Lines, @Entries = @Entries, @ValidationMessage = @ValidationMessage OUTPUT
+	EXEC [bll_Documents_Save__Validate] @Documents = @Documents, @Lines = @Lines, @Entries = @Entries, @ValidationMessage = @ValidationMessage OUTPUT
 	IF @ValidationMessage IS NOT NULL GOTO UI_Error;
 END
 IF (1=0)-- Purchase Order
@@ -240,7 +240,7 @@ BEGIN
 END
 --	IF (1=0)-- Inventory transfer event
 
-EXEC [dbo].[api_Documents__Save] @Documents = @Documents, @WideLines = @WideLines, @Lines = @Lines, @Entries = @Entries, @DocumentOffset = @DocumentOffset Output
+EXEC [dbo].[api_Documents_WideLines__Save] @Documents = @Documents, @WideLines = @WideLines, @Lines = @Lines, @Entries = @Entries, @DocumentOffset = @DocumentOffset Output
 EXEC [dbo].[api_Documents__Post] @Documents = @Documents;
 RETURN
 UI_Error:

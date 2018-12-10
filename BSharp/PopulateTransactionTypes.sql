@@ -16,9 +16,10 @@ INSERT @TransactionTypes ([Id], [IsInstant]) VALUES
 	(N'SaleWitholdingTax',  1),
 	(N'StockIssueToCustomer',  1),
 	(N'StockReceiptFromSupplier', 1);
+
 MERGE [dbo].TransactionTypes AS t
 USING @TransactionTypes AS s
-ON s.Id = t.Id --AND s.tenantId = t.tenantId
+ON s.Id = t.Id
 WHEN MATCHED AND s.IsInstant <> t.IsInstant THEN
 UPDATE
 	SET t.IsInstant = s.IsInstant

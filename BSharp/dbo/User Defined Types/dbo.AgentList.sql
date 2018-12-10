@@ -20,6 +20,7 @@
 	[EntityState]				NVARCHAR(255),
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([AgentType] IN (N'Individual', N'Organization', N'OrganizationUnit')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
 

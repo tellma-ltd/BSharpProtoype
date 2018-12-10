@@ -12,9 +12,10 @@
     [TaxIdentificationNumber]	NVARCHAR (255),
     [Title]						NVARCHAR (255),
     [Gender]					NCHAR (1),
-	[EntityState]				NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]				NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([AgentType] IN (N'Individual', N'Organization', N'OrganizationUnit')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
 

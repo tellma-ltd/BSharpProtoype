@@ -6,8 +6,7 @@ BEGIN
 
 	-- if all documents are already posted, return
 	IF NOT EXISTS(SELECT * FROM [dbo].Documents 
-		WHERE TenantId = [dbo].fn_TenantId() 
-		AND Id IN (SELECT Id FROM @Documents) AND Mode <> N'Posted')
+		WHERE Id IN (SELECT Id FROM @Documents) AND Mode <> N'Posted')
 		RETURN;
 
 	-- if some documents do not have entries, error
@@ -16,8 +15,7 @@ BEGIN
 		WHERE [Id] NOT IN (
 			SELECT L.DocumentId 
 			FROM [dbo].Lines L
-			JOIN [dbo].Entries E ON L.TenantId = E.TenantId AND L.Id = E.LineId
-			WHERE L.TenantId = [dbo].fn_TenantId()
+			JOIN [dbo].Entries E ON L.Id = E.LineId
 		)
 	)
 	BEGIN
@@ -28,18 +26,18 @@ BEGIN
 		WHERE [Id] NOT IN (
 			SELECT L.DocumentId 
 			FROM [dbo].Lines L
-			JOIN [dbo].Entries E ON L.TenantId = E.TenantId AND L.Id = E.LineId
-			WHERE L.TenantId = [dbo].fn_TenantId())
+			JOIN [dbo].Entries E ON L.Id = E.LineId
+		)
 	END;
 
 	-- Only leaf accounts are allowed
 	IF EXISTS(
 		SELECT *
 		FROM [dbo].Entries E
-		JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+		JOIN [dbo].Lines L ON E.LineId = L.Id
 		JOIN [dbo].Accounts A
 		ON E.AccountId = A.Id 
-		WHERE E.TenantId = [dbo].fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents) 
+		WHERE L.DocumentId IN (SELECT Id FROM @Documents) 
 		AND A.IsExtensible = 0 -- non leaf is found
 	)
 	BEGIN
@@ -48,10 +46,10 @@ BEGIN
 			N'Documents[' + CONVERT(NVARCHAR(255), L.DocumentId) + '].Lines[' + CONVERT(NVARCHAR(255), L.Id) + '].Entries[' + CONVERT(NVARCHAR(255), E.Id) + '].Account',
 			FORMATMESSAGE([dbo].fn_Translate(N'AccountIsNotLeaf'))
 		FROM [dbo].Entries E
-		JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+		JOIN [dbo].Lines L ON E.LineId = L.Id
 		JOIN [dbo].Accounts A
 		ON E.AccountId = A.Id 
-		WHERE E.TenantId = [dbo].fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents) 
+		WHERE L.DocumentId IN (SELECT Id FROM @Documents) 
 		AND A.IsExtensible = 0;
 	END
 	/*
@@ -76,8 +74,8 @@ BEGIN
 	IF EXISTS(
 		SELECT *
 		FROM [dbo].Entries E
-		JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-		WHERE E.TenantId = [dbo].fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents)
+		JOIN [dbo].Lines L ON E.LineId = L.Id
+		WHERE L.DocumentId IN (SELECT Id FROM @Documents)
 		GROUP BY L.Id
 		HAVING SUM(E.Value * E.Direction) <> 0
 	)
@@ -88,8 +86,8 @@ BEGIN
 				FORMATMESSAGE([dbo].fn_Translate('LineIsNotBalanced'), CONVERT(NVARCHAR(255), SUM(E.[Value] * E.[Direction])))
 				--CAST(SUM(E.Value * E.Direction) AS varchar(50)), N'هناك فارق بين جملة المدين وجملة الدائن'
 		FROM [dbo].Entries E
-		JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-		WHERE E.TenantId = [dbo].fn_TenantId() AND L.DocumentId IN (SELECT Id FROM @Documents)
+		JOIN [dbo].Lines L ON E.LineId = L.Id
+		WHERE L.DocumentId IN (SELECT Id FROM @Documents)
 		GROUP BY L.DocumentId, L.Id
 		HAVING SUM(E.[Value] * E.[Direction]) <> 0;
 	END;

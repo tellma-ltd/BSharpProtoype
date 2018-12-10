@@ -1,8 +1,9 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
+	DECLARE @O1Result dbo.OperationList, @O2Result dbo.OperationList;
 	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
 	DECLARE @OperationActivationList dbo.ActivationList;
-	DECLARE @BusinessEntity int, @Existing int, @Expansion int;
+
 END
 BEGIN -- Inserting
 	INSERT INTO @O1Save
@@ -100,8 +101,9 @@ BEGIN
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 END
+IF @LookupsSelect = 1
+	SELECT * FROM [dbo].[Operations];
 
-SELECT * FROM [dbo].[Operations];
 SELECT 
 		@BusinessEntity = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Walia Steel Industry'), 
 		@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),

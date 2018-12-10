@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'ManualJV'
+﻿CREATE PROCEDURE [dbo].[bll_WideLine__Entries] -- [dbo].[sub_Line__Entries] 1,N'ManualJV'
 	@LineId int,
 	@TransactionType NVARCHAR(255),
 	
@@ -47,7 +46,7 @@ CREATE PROCEDURE [dbo].[sub_Line__Entries] -- [dbo].[sub_Line__Entries] 1,N'Manu
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @Entries As EntryList;
+	DECLARE @Entries As dbo.EntryForSaveList;
 	DECLARE @AccountCalculation nvarchar(255), @CustodyCalculation nvarchar(255), @ResourceCalculation nvarchar(255), @DirectionCalculation nvarchar(255), @AmountCalculation nvarchar(255), @ValueCalculation nvarchar(255), @NoteCalculation nvarchar(255),
 			@StartDateTimeCalculation nvarchar(255), @EndDateTimeCalculation nvarchar(255), @RelatedReferenceCalculation nvarchar(255), @RelatedAgentCalculation nvarchar(255), @RelatedResourceCalculation nvarchar(255), @RelatedAmountCalculation  nvarchar(255);
 	DECLARE @EntriesCount tinyint, @EntryNumber tinyint, @AccountId nvarchar(255), @CustodyId int, @ResourceId int, @Direction smallint, @Amount money, @Value money, @NoteId nvarchar(255),
@@ -68,9 +67,13 @@ BEGIN
 	SET @EntryNumber = 1
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
-		SELECT @AccountCalculation = Account, @CustodyCalculation = Custody, @ResourceCalculation = Resource, @DirectionCalculation = Direction, @AmountCalculation = Amount, @ValueCalculation = Value, @NoteCalculation = Note,
+		SELECT
+			@AccountCalculation = Account, @CustodyCalculation = Custody, @ResourceCalculation = [Resource], 
+			@DirectionCalculation = Direction, @AmountCalculation = Amount, @ValueCalculation = [Value], @NoteCalculation = Note,
 			@RelatedReferenceCalculation = RelatedReference, @RelatedAgentCalculation = RelatedAgent, @RelatedResourceCalculation = RelatedResource, @RelatedAmountCalculation = RelatedAmount
-		FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber;
+		FROM [dbo].LineTemplatesCalculationView
+		WHERE [TransactionType] = @TransactionType
+		AND EntryNumber = @EntryNumber;
 
 		-- Account calculation may need to be done in bulk, as when receiving thousands of items in stocks, then each item type may end up with different inventory classification.
 		SET @AccountCalculation = N'SELECT @Account = ' + @AccountCalculation; EXEC sp_executesql @AccountCalculation, N'@Account nvarchar(255) OUTPUT', @Account = @AccountId OUTPUT
@@ -112,8 +115,10 @@ BEGIN
 	SET @EntryNumber = 1
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
-		SELECT @ValueCalculation = Value
-		FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber;
+		SELECT @ValueCalculation = [Value]
+		FROM [dbo].LineTemplatesCalculationView 
+		WHERE [TransactionType] = @TransactionType
+		AND EntryNumber = @EntryNumber;
 			
 		IF LEFT(@ValueCalculation, 6) <> N'@BULK:' 
 		BEGIN
@@ -123,7 +128,7 @@ BEGIN
 			
 		UPDATE @Entries
 		SET 
-			Value = ISNULL(Value, @Value)
+			[Value] = ISNULL([Value], @Value)
 		WHERE EntryNumber = @EntryNumber
 
 		SELECT @Value = NULL, @EntryNumber = @EntryNumber + 1

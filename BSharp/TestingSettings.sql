@@ -1,4 +1,5 @@
 ﻿BEGIN -- Cleanup & Declarations
+	DECLARE @S1Result dbo.SettingList, @S2Result dbo.SettingList;
 	DECLARE @S1Save SettingForSaveList, @S2Save SettingForSaveList;
 	DECLARE @S1ResultJson NVARCHAR(MAX), @S2ResultJson NVARCHAR(MAX);
 END
@@ -44,5 +45,5 @@ INSERT INTO @S1Save
 		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
-
-SELECT * FROM dbo.Settings;
+IF @LookupsSelect = 1
+	SELECT * FROM dbo.Settings;

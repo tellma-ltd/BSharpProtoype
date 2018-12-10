@@ -16,5 +16,6 @@
 	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([LocationType] IN (N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );

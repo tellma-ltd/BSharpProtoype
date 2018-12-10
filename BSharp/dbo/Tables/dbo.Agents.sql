@@ -1,8 +1,8 @@
-﻿CREATE TABLE [dbo].[Agents] (
+﻿CREATE TABLE [dbo].[Agents] (-- العاقل
 	[TenantId]					INT,
     [Id]						INT,
-    [AgentType]					NVARCHAR (255)      NOT NULL,
-    [IsRelated]					BIT                NOT NULL CONSTRAINT [DF_Agents_IsRelated] DEFAULT (0),
+    [AgentType]					NVARCHAR (255)		NOT NULL,
+    [IsRelated]					BIT					NOT NULL CONSTRAINT [DF_Agents_IsRelated] DEFAULT (0),
     [UserId]					NVARCHAR (450),
     [TaxIdentificationNumber]	NVARCHAR (255),
     [Title]						NVARCHAR (255),

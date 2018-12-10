@@ -9,13 +9,9 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].Lines)				DBCC CHECKIDENT ('[dbo].Lines', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].Documents)			DBCC CHECKIDENT ('[dbo].Documents', RESEED, 0) WITH NO_INFOMSGS;
 
-	DECLARE @ValidationErrorsJson nvarchar(max), @IndexedIdsJson NVARCHAR(MAX);
-	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @S1Result dbo.SettingList, @S2Result dbo.SettingList;
-	DECLARE @MU1Result dbo.MeasurementUnitList, @MU2Result dbo.MeasurementUnitList;
-	DECLARE @A1Result dbo.AgentList, @A2Result dbo.AgentList;
-	DECLARE @L1Result dbo.LocationList, @L2Result dbo.LocationList, @L3Result dbo.LocationList;
-	DECLARE @O1Result dbo.OperationList, @O2Result dbo.OperationList;
+	DECLARE @ValidationErrorsJson nvarchar(max); 
+	DECLARE @LookupsSelect bit = 0;
+	DECLARE @BusinessEntity int, @Existing int, @Expansion int;
 END
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -23,15 +19,13 @@ BEGIN TRY
 		EXEC sp_set_session_context 'UserId', N'mohamad.akra@banan-it.com';
 		EXEC sp_set_session_context 'Language', N'AR';
 		:r .\TestingSettings.sql
-		--:r .\TestingMeasurementUnits.sql
-		--:r .\TestingAgents.sql
-		--:r .\TestingLocations.sql
-		--:r .\TestingOperations.sql
-	--	:r .\TestingResources.sql
-	--	:r .\TestingManualJV.sql
-	--SELECT * FROM [dbo].Documents;
-	--SELECT * FROM [dbo].Lines;
-	--SELECT * FROM [dbo].Entries;
+		:r .\TestingMeasurementUnits.sql
+		:r .\TestingAgents.sql
+		:r .\TestingLocations.sql
+		:r .\TestingOperations.sql
+		:r .\TestingResources.sql
+		:r .\TestingManualJV.sql
+
 	--SELECT * from ft_Journal('2018.01.01', '2018.01.01') ORDER BY Id, LineId, EntryId;
 	--EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;
 	ROLLBACK;
@@ -43,13 +37,6 @@ END CATCH
 RETURN;
 
 ERR_LABEL:
-	--SELECT * FROM dbo.MeasurementUnits;
-	--SELECT * FROM [dbo].Custodies;
-	--SELECT * FROM [dbo].[Operations];
-	--SELECT * FROM [dbo].Resources;
-	--SELECT * FROM [dbo].Documents;
-	--SELECT * FROM [dbo].Lines;
-	--SELECT * FROM [dbo].Entries;
 	SELECT * FROM OpenJson(@ValidationErrorsJson)
 	WITH (
 		[Key] NVARCHAR(255) '$.Key',

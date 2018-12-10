@@ -7,9 +7,10 @@
 	[Code]				NVARCHAR (255),
 	[ParentIndex]		INT,
     [ParentId]			INT,   
-	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
+	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([OperationType] IN (N'BusinessEntity', N'Investment', N'OperatingSegment')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
 

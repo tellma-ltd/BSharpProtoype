@@ -1,22 +1,23 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @L1Save LocationForSaveList, @L2Save LocationForSaveList;
-	DECLARE @L1ResultJson NVARCHAR(MAX), @L2ResultJson NVARCHAR(MAX), @L3ResultJson NVARCHAR(MAX);
+	DECLARE @Loc1Save LocationForSaveList, @Loc2Save LocationForSaveList;
+	DECLARE @Loc1Result dbo.LocationList, @Loc2Result dbo.LocationList, @Loc3Result dbo.LocationList;
+	DECLARE @Loc1ResultJson NVARCHAR(MAX), @Loc2ResultJson NVARCHAR(MAX), @Loc3ResultJson NVARCHAR(MAX);
 	DECLARE @LocationActivationList dbo.ActivationList;
 
 	DECLARE @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int; 
 END
 
 BEGIN -- Insert 
-	INSERT INTO @L1Save
+	INSERT INTO @Loc1Save
 	([LocationType], [Name],					[Address], [BirthDateTime], [CustodianId]) VALUES
 	(N'Warehouse',	N'Raw Materials Warehouse', NULL,		NULL, NULL),
 	(N'Warehouse',	N'Fake Warehouse',			N'Far away', NULL, NULL),
 	(N'Warehouse',	N'Finished Goods Warehouse', NULL,		NULL, NULL);
 
 	EXEC  [dbo].[api_Locations__Save]
-		@Locations = @L1Save,
+		@Locations = @Loc1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@LocationsResultJson = @L1ResultJson OUTPUT
+		@LocationsResultJson = @Loc1ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -24,14 +25,14 @@ BEGIN -- Insert
 		GOTO Err_Label;
 	END
 
-	INSERT INTO @L1Result(
+	INSERT INTO @Loc1Result(
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@L1ResultJson)
+	FROM OpenJson(@Loc1ResultJson)
 	WITH (
 		[Index] INT '$.Index',
 		[Id] INT '$.Id',
@@ -50,7 +51,7 @@ BEGIN -- Insert
 	);
 END
 BEGIN -- Updating RM Warehouse address
-	INSERT INTO @L2Save (
+	INSERT INTO @Loc2Save (
 		  [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
 	)
 	SELECT
@@ -59,21 +60,21 @@ BEGIN -- Updating RM Warehouse address
 	JOIN dbo.Custodies C ON L.Id = C.Id
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
 
-	UPDATE @L2Save
+	UPDATE @Loc2Save
 	SET 
 		[Address] = N'Alemgena, Oromia',
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Raw Materials Warehouse';
 
-	UPDATE @L2Save
+	UPDATE @Loc2Save
 	SET 
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake Warehouse';
 
 	EXEC  [dbo].[api_Locations__Save]
-		@Locations = @L2Save,
+		@Locations = @Loc2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@LocationsResultJson = @L2ResultJson OUTPUT
+		@LocationsResultJson = @Loc2ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -81,14 +82,14 @@ BEGIN -- Updating RM Warehouse address
 		GOTO Err_Label;
 	END;
 
-	INSERT INTO @L2Result(
+	INSERT INTO @Loc2Result(
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@L2ResultJson)
+	FROM OpenJson(@Loc2ResultJson)
 	WITH (
 		[Index] INT '$.Index',
 		[Id] INT '$.Id',
@@ -111,16 +112,16 @@ BEGIN -- Updating RM Warehouse address
 
 	EXEC  [dbo].[api_Locations__Activate]
 	@ActivationList = @LocationActivationList,
-	@LocationsResultJson = @L3ResultJson OUTPUT
+	@LocationsResultJson = @Loc3ResultJson OUTPUT
 
-INSERT INTO @L3Result(
+INSERT INTO @Loc3Result(
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
 		[Index], [Id], [LocationType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CustodianId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@L3ResultJson)
+	FROM OpenJson(@Loc3ResultJson)
 	WITH (
 		[Index] INT '$.Index',
 		[Id] INT '$.Id',
@@ -139,9 +140,13 @@ INSERT INTO @L3Result(
 	);
 
 END
-	SELECT * FROM @L1Result; SELECT * FROM @L2Result; SELECT * FROM @L3Result;
+
+IF @LookupsSelect = 1
+BEGIN
+	SELECT * FROM @Loc1Result; SELECT * FROM @Loc2Result; SELECT * FROM @Loc3Result;
 	SELECT * FROM [dbo].Custodies;
+END
 
 SELECT
-	@RawMaterialsWarehouse = (SELECT [Id] FROM @L1Result WHERE [Name] = N'Raw Materials Warehouse'), 
-	@FinishedGoodsWarehouse = (SELECT [Id] FROM @L1Result WHERE [Name] = N'Finished Goods Warehouse');
+	@RawMaterialsWarehouse = (SELECT [Id] FROM @Loc1Result WHERE [Name] = N'Raw Materials Warehouse'), 
+	@FinishedGoodsWarehouse = (SELECT [Id] FROM @Loc1Result WHERE [Name] = N'Finished Goods Warehouse');

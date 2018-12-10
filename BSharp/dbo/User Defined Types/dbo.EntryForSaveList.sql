@@ -1,7 +1,8 @@
-﻿CREATE TYPE [dbo].[EntryList] AS TABLE (
-	[Index]				INT,
+﻿CREATE TYPE [dbo].[EntryForSaveList] AS TABLE (
+	[Index]				INT					IDENTITY(0, 1),
 	[Id]				INT,
-    [LineId]			INT					NOT NULL,
+	[LineIndex]			INT					NOT NULL,
+    [LineId]			INT,
     [EntryNumber]       INT					NOT NULL,
     [OperationId]       INT,
     [Reference]         NVARCHAR (255),
@@ -16,12 +17,9 @@
     [RelatedAgentId]    INT,
     [RelatedResourceId] INT,
     [RelatedAmount]     MONEY,
-    [CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
-    [CreatedBy]			NVARCHAR(450)		NOT NULL,
-    [ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
-    [ModifiedBy]		NVARCHAR(450)		NOT NULL,
 	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
-    PRIMARY KEY CLUSTERED ([Id] ASC),
+    PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([Direction] IN (-1, 1)),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
+	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );

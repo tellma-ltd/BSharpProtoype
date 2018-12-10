@@ -455,4 +455,88 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[dal_MeasurementUnits__Activate]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="dfe9666a-1bc4-457f-86c0-d7220b866817" ChangeDateTime="12/09/2018 08:04:27">
+    <Property Name="ElementName" Value="[dbo].[ui_Documents_Lines_Entries__Validate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_Lines_Entries__Validate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="951f3104-d1d2-4799-8bad-9ca37f2e6fd7" ChangeDateTime="12/09/2018 11:57:13">
+    <Property Name="ElementName" Value="[dbo].[bll_Documents_Lines_Entries__Validate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents__Validate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="639b5d04-e3f3-48b9-a083-1ce0b47e711a" ChangeDateTime="12/09/2018 12:02:59">
+    <Property Name="ElementName" Value="[dbo].[ral_Documents_Lines_Entries__Insert]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ral_Documents__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="89ca1084-d22f-40d5-9df6-fa156441ba18" ChangeDateTime="12/09/2018 12:03:22">
+    <Property Name="ElementName" Value="[dbo].[ral_Documents__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Documents__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d191016-5647-4035-9f90-0068cfa6917d" ChangeDateTime="12/09/2018 15:05:28">
+    <Property Name="ElementName" Value="[dbo].[WideLinesView]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[WideLinesLabelView]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3ee855b3-ac1c-4f09-8afe-07ea4aed47d3" ChangeDateTime="12/09/2018 15:05:49">
+    <Property Name="ElementName" Value="[dbo].[LinesView]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[WideLinesView]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7fd85b48-0b10-4c0a-883b-6f69db31879c" ChangeDateTime="12/09/2018 16:04:50">
+    <Property Name="ElementName" Value="[dbo].[bll_Documents__Validate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_Save__Validate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3bd09836-62e5-45e0-9a02-6e840d59e63e" ChangeDateTime="12/09/2018 16:09:53">
+    <Property Name="ElementName" Value="[dbo].[sub_Line__Entries]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[sub_WideLine__Entries]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce3a71bd-365e-4b70-a22f-63f74c476155" ChangeDateTime="12/09/2018 16:10:24">
+    <Property Name="ElementName" Value="[dbo].[sub_WideLine__Entries]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_WideLine__Entries]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d26779f3-4f1b-4623-a9ea-1b0b37f7e4e9" ChangeDateTime="12/09/2018 18:20:14">
+    <Property Name="ElementName" Value="[dbo].[api_Documents__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_Documents_WideLines__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d8fd99b5-7b15-4d90-8fcc-171f8be46637" ChangeDateTime="12/09/2018 20:27:20">
+    <Property Name="ElementName" Value="[dbo].[dal_Documents__Select]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Documents_Lines__Select]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2f8cd058-07aa-420a-8ded-79d9c0fb0830" ChangeDateTime="12/10/2018 04:17:57">
+    <Property Name="ElementName" Value="[dbo].[bll_Documents__Fill]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_WideLines__Fill]" />
+  </Operation>
 </Operations>

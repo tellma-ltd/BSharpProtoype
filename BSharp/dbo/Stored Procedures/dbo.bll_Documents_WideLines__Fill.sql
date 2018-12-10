@@ -1,10 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents__Save] 
-	@Documents DocumentList READONLY, 
-	@WideLines WideLineList READONLY, 
-	@Lines LineList READONLY, 
-	@Entries EntryList READONLY
+﻿CREATE PROCEDURE [dbo].[bll_Documents_WideLines__Fill]
+		@Documents dbo.DocumentForSaveList READONLY, 
+		@WideLines  dbo.WideLineForSaveList READONLY, 
+		@LinesResultJson NVARCHAR(MAX) OUTPUT,
+		@EntriesResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
-BEGIN
 DECLARE
 	@DocumentId int = 0,
 	@TransactionType NVARCHAR(255),
@@ -54,12 +53,10 @@ DECLARE
 	@RelatedAgent3 int,
 	@RelatedResource3 int,
 	@RelatedAmount3 money,
-	@LinesLocal LineList,
-	@EntriesLocal EntryList,
+
+	@LinesLocal dbo.LineForSaveList,
+	@EntriesLocal dbo.EntryForSaveList,
 	@EntriesTransit EntryList;
-	-- in memory validation, use TransactionType specification Validation logic
-	
-	-- if no bulk db operation is needed, skip he next step
 	-- in memory processing
 	SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE Id > @DocumentId);
 	WHILE @DocumentId IS NOT NULL
@@ -122,7 +119,7 @@ DECLARE
 			WHERE DocumentId = @DocumentId AND [LineId] = @LineId
 
 			INSERT INTO @EntriesTransit 
-			EXEC [dbo].[sub_Line__Entries] 
+			EXEC [dbo].[bll_WideLine__Entries] 
 				@LineId = @LineId,
 				@TransactionType = @TransactionType,
 
@@ -179,10 +176,10 @@ DECLARE
 	
 	INSERT INTO @LinesLocal(DocumentId, StartDateTime, EndDateTime, Memo)
 	SELECT DocumentId, StartDateTime, EndDateTime, Memo FROM @WideLines;
-
+/* commented out temporarily
 	INSERT INTO @LinesLocal SELECT * FROM @Lines;
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries;
-
+*/
 	-- Bulk Update all null operations to business entity
 	UPDATE @EntriesLocal
 	SET OperationId = (SELECT min(Id) FROM [dbo].[Operations] WHERE OperationType = N'BusinessEntity')
@@ -206,9 +203,3 @@ DECLARE
 		GROUP BY LineId
 	) SN2 ON SN1.LineId = SN2.LineId
 	WHERE E.Value IS NULL
-
-	-- Bulk validation
-
-	-- Persist in Db
-	EXEC ral_Documents_Lines_Entries__Insert @Documents = @Documents, @Lines = @LinesLocal, @Entries = @EntriesLocal;
-END;

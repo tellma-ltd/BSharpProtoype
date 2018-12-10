@@ -1,10 +1,10 @@
 ﻿CREATE TABLE [dbo].[Resources] (
 	[TenantId]			INT,
-    [Id]				INT		IDENTITY (1, 1),
-    [MeasurementUnitId]	INT				NOT NULL,
-    [ResourceType]		NVARCHAR (255)  NOT NULL,
-    [Name]				NVARCHAR (255)  NOT NULL,
-	[IsActive]			BIT				NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
+    [Id]				INT					IDENTITY (1, 1),
+    [MeasurementUnitId]	INT					NOT NULL,
+    [ResourceType]		NVARCHAR (255)		NOT NULL,
+    [Name]				NVARCHAR (255)		NOT NULL,
+	[IsActive]			BIT					NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
 	[Source]			NVARCHAR (255), -- Lease In/Acquisition/Production
 	[Purpose]			NVARCHAR (255), -- Lease out/Sale/Production/SG&A
     [Code]				NVARCHAR (255),
@@ -14,11 +14,11 @@
     [Lookup3]			NVARCHAR (255),
     [Lookup4]			NVARCHAR (255),
     [PartOf]			INT, -- for compound assets
-    [FungibleParentId]	INT,
-    [CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
-    [CreatedBy]		NVARCHAR(450)		NOT NULL,
-    [ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
-    [ModifiedBy]	NVARCHAR(450)		NOT NULL,
+    [FungibleParentId]	INT, -- to allow contracts at higher level.
+    [CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
+    [CreatedBy]			NVARCHAR(450)		NOT NULL,
+    [ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
+    [ModifiedBy]		NVARCHAR(450)		NOT NULL,
     CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),

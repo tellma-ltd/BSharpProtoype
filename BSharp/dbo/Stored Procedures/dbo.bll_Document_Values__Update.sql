@@ -1,5 +1,5 @@
 ﻿
-CREATE Procedure [dbo].[bll_Document_Values__Update]
+CREATE Procedure [dbo].[bll_Document_Values__Update] -- OBSOLETE?!?!
 @WideLines WideLineList READONLY,
 @Entries EntryList READONLY
 AS
@@ -33,7 +33,7 @@ BEGIN
 			JOIN (
 				SELECT E.ResourceId, E.CustodyId, CAST(SUM(E.Value) AS float)/SUM(E.Amount) AS Rate
 				FROM [dbo].Entries E 
-				JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+				JOIN [dbo].Lines L ON E.LineId = L.Id
 				JOIN [dbo].Documents D ON D.Id = L.DocumentId
 				WHERE E.AccountId = @AccountId AND E.Direction = @Direction
 				AND D.Mode = N'Posted'

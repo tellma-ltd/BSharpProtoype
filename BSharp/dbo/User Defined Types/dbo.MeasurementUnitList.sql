@@ -4,6 +4,7 @@
 	[Id]			INT,
     [UnitType]		NVARCHAR (255)		NOT NULL,
     [Name]			NVARCHAR (255)		NOT NULL,
+	[Description]	NVARCHAR (255)		NOT NULL,
     [UnitAmount]	FLOAT (53)			NOT NULL,
     [BaseAmount]	FLOAT (53)			NOT NULL,
     [IsActive]		BIT					NOT NULL,
@@ -15,5 +16,6 @@
 	[EntityState]	NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted')
     PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 )

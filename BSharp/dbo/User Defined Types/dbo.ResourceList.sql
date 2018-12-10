@@ -20,8 +20,10 @@
     [CreatedBy]			NVARCHAR(450)		NOT NULL,
     [ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
     [ModifiedBy]		NVARCHAR(450)		NOT NULL,
-	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'), -- Unchanged, Inserted, Updated, Deleted.
-    PRIMARY KEY CLUSTERED ([Id] ASC),
+	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
+    PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
-	CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative'))
+	CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
+	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
