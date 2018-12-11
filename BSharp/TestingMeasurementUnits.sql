@@ -1,5 +1,5 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @MU1Result dbo.MeasurementUnitList, @MU2Result dbo.MeasurementUnitList;
+	DECLARE @MU1Result [dbo].MeasurementUnitList, @MU2Result [dbo].MeasurementUnitList;
 	DECLARE @MU1Save [dbo].MeasurementUnitForSaveList, @MU2Save [dbo].MeasurementUnitForSaveList;
 	DECLARE @MU1ResultJson NVARCHAR(MAX), @MU2ResultJson NVARCHAR(MAX);
 END
@@ -71,7 +71,7 @@ END
 -- Display units whose code starts with m
 INSERT INTO @MU2Save ([Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [EntityState])
 SELECT [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], N'Unchanged'
-FROM dbo.MeasurementUnits
+FROM [dbo].MeasurementUnits
 WHERE [Code] Like 'm%';
 
 -- Inserting
@@ -133,4 +133,4 @@ WHERE [Code] Like 'm%';
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 IF @LookupsSelect = 1
-	SELECT * FROM dbo.MeasurementUnits;
+	SELECT * FROM [dbo].MeasurementUnits;

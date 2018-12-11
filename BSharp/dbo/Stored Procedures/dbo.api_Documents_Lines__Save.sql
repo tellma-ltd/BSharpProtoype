@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents_Lines__Save]
-	@Documents dbo.DocumentForSaveList READONLY, 
-	@Lines dbo.LineForSaveList READONLY, 
-	@Entries dbo.EntryForSaveList READONLY,
+	@Documents [dbo].DocumentForSaveList READONLY, 
+	@Lines [dbo].LineForSaveList READONLY, 
+	@Entries [dbo].EntryForSaveList READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson  NVARCHAR(MAX) OUTPUT,
@@ -9,7 +9,7 @@
 	@EntriesResultJson  NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-DECLARE @IndexedIdsJson NVARCHAR(MAX);
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds [dbo].[IndexedIdList];
 
 -- Validate
 EXEC [dbo].[bll_Documents_Save__Validate]
@@ -21,29 +21,19 @@ EXEC [dbo].[bll_Documents_Save__Validate]
 IF @ValidationErrorsJson IS NOT NULL
 	RETURN;
 
-EXEC dbo.[bll_Documents_Lines__Fill]
+EXEC [dbo].[bll_Documents_Lines__Fill]
 	@Documents = @Documents, @Lines = @Lines, @Entries = @Entries,
 	@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 	@LinesResultJson = @LinesResultJson OUTPUT,
 	@EntriesResultJson = @EntriesResultJson OUTPUT
 
 DECLARE 	
-	@FilledDocuments dbo.DocumentForSaveNoIdentityList , 
-	@FilledLines dbo.LineForSaveNoIdentityList, 
-	@FilledEntries dbo.EntryForSaveNoIdentityList;
+	@FilledDocuments [dbo].DocumentForSaveNoIdentityList , 
+	@FilledLines [dbo].LineForSaveNoIdentityList, 
+	@FilledEntries [dbo].EntryForSaveNoIdentityList;
 
 	INSERT INTO @FilledDocuments
-	--(
-	--	[Index], [Id], [State], [TransactionType], [FolderId], [ResponsibleAgentId],	
-	--	[LinesMemo], [LinesStartDateTime], [LinesEndDateTime], 
-	--	[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
-	--	[EntityState]
-	--)
 	SELECT *
-		--[Index], [Id], [State], [TransactionType], [FolderId], [ResponsibleAgentId],
-		--[LinesMemo], [LinesStartDateTime], [LinesEndDateTime], 
-		--[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3], 
-		--[EntityState]
 	FROM OpenJson(@DocumentsResultJson)
 	WITH (
 		[Index]					INT '$.Index',
@@ -121,9 +111,14 @@ EXEC [dbo].[dal_Documents__Save]
 	@Entries = @FilledEntries,
 	@IndexedIdsJson = @IndexedIdsJson OUTPUT
 
+	INSERT INTO @IndexedIds( [Index], [Id])
+	SELECT [Index], [Id] 
+	FROM OpenJson(@IndexedIdsJson)
+	WITH ([Index] INT '$.Index', [Id] INT '$.Id')
+
 IF (@ReturnEntities = 1)
 	EXEC [dbo].[dal_Documents_Lines__Select] 
-		@IndexedIdsJson = @IndexedIdsJson, 
+		@IndexedIds = @IndexedIds, 
 		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 		@LinesResultJson  = @LinesResultJson OUTPUT,
 		@EntriesResultJson  = @EntriesResultJson OUTPUT

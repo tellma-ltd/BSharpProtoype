@@ -1,6 +1,6 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @A1Save dbo.AgentForSaveList, @A2Save dbo.AgentForSaveList;
-	DECLARE @A1Result dbo.AgentList, @A2Result dbo.AgentList;
+	DECLARE @A1Save [dbo].AgentForSaveList, @A2Save [dbo].AgentForSaveList;
+	DECLARE @A1Result [dbo].AgentList, @A2Result [dbo].AgentList;
 	DECLARE @A1ResultJson NVARCHAR(MAX), @A2ResultJson NVARCHAR(MAX);
 
 	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int, @ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int;
@@ -9,7 +9,7 @@
 END
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)
-	INSERT INTO [dbo].Users(Id, FriendlyName) VALUES
+	INSERT INTO [dbo].Users([Id], FriendlyName) VALUES
 	(N'system@banan-it.com', N'B#'),
 	(N'mohamad.akra@banan-it.com', N'Mohamad Akra'),
 	(N'ahmad.akra@banan-it.com', N'Ahmad Akra'),
@@ -104,8 +104,8 @@ INSERT INTO @A2Save (
 	  [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
 	A.[Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
-FROM dbo.Agents A
-JOIN dbo.Custodies C ON A.Id = C.Id
+FROM [dbo].Agents A
+JOIN [dbo].Custodies C ON A.Id = C.Id
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 
 -- Updating MA TIN
@@ -202,7 +202,7 @@ SELECT
 	@Purchasing = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Materials & Purchasing');
 
 --		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;
-DECLARE @AgentSettingSave dbo.SettingForSaveList, @AgentSettingResultJson nvarchar(max)
+DECLARE @AgentSettingSave [dbo].SettingForSaveList, @AgentSettingResultJson nvarchar(max)
 
 INSERT INTO @AgentSettingSave
 ([Field],[Value]) Values(N'TaxAuthority', @ERCA);

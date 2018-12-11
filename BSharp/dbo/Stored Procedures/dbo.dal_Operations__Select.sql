@@ -6,7 +6,7 @@ SELECT @OperationsResultJson =	(
 		SELECT
 			T.[Index], O.[Id], O.[OperationType], O.[Name], O.[ParentId], O.[IsActive], O.[Code], 
 			O.[CreatedAt], O.[CreatedBy], O.[ModifiedAt], O.[ModifiedBy], N'Unchanged' As [EntityState]
-		FROM dbo.Operations O JOIN (
+		FROM [dbo].Operations O JOIN (
 			SELECT [Index], [Id] 
 			FROM OpenJson(@IndexedIdsJson)
 			WITH ([Index] INT '$.Index', [Id] INT '$.Id')

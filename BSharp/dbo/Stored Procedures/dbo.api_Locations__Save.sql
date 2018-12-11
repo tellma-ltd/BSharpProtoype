@@ -6,20 +6,27 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX);
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
 -- Validate
 	EXEC [dbo].[bll_Locations__Validate]
 		@Locations = @Locations,
-		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
 	EXEC [dbo].[dal_Locations__Save]
 		@Locations = @Locations,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
 	IF (@ReturnEntities = 1)
+	BEGIN
+		INSERT INTO @IndexedIds([Index], [Id])
+		SELECT [Index], [Id] 
+		FROM OpenJson(@IndexedIdsJson)
+		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+
 		EXEC [dbo].[dal_Locations__Select] 
-			@IndexedIdsJson = @IndexedIdsJson, @LocationsResultJson = @LocationsResultJson OUTPUT
+			@IndexedIds = @IndexedIds, @LocationsResultJson = @LocationsResultJson OUTPUT;
+	END
 END;

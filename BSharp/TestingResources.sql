@@ -1,20 +1,20 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @R1Save dbo.ResourceForSaveList, @R2Save dbo.ResourceForSaveList;
-	DECLARE @R1Result dbo.ResourceList, @R2Result dbo.ResourceList;
+	DECLARE @R1Save [dbo].ResourceForSaveList, @R2Save [dbo].ResourceForSaveList;
+	DECLARE @R1Result [dbo].ResourceList, @R2Result [dbo].ResourceList;
 	DECLARE @R1ResultJson NVARCHAR(MAX), @R2ResultJson NVARCHAR(MAX), @R3ResultJson NVARCHAR(MAX);
-	DECLARE @ResourceActivationList dbo.ActivationList;
+	DECLARE @ResourceActivationList [dbo].ActivationList;
 
 	DECLARE @ETB int, @USD int;
 	DECLARE @CommonStock int;
 	DECLARE @Camry2018 int, @TeddyBear int;
 	DECLARE @HolidayOvertime int, @Labor int;
 	DECLARE @ETBUnit int, @USDUnit int, @pcsUnit int, @shareUnit int, @wmoUnit int, @hrUnit int;
-	SELECT @ETBUnit = [Id] FROM dbo.MeasurementUnits	WHERE [Name] = N'ETB'; IF @ETBUnit IS NULL Print N'@ETBUnit is NULL!!!!'
-	SELECT @USDUnit = [Id] FROM dbo.MeasurementUnits	WHERE [Name] = N'USD'; IF @USDUnit IS NULL Print N'@USDUnit is NULL!!!!'
-	SELECT @pcsUnit = [Id] FROM dbo.MeasurementUnits	WHERE [Name] = N'pcs'; IF @pcsUnit IS NULL Print N'@pcsUnit is NULL!!!!'
-	SELECT @shareUnit = [Id] FROM dbo.MeasurementUnits	WHERE [Name] = N'share'; IF @shareUnit IS NULL Print N'@shareUnit is NULL!!!!'
-	SELECT @wmoUnit = [Id] FROM dbo.MeasurementUnits	WHERE [Name] = N'wmo'; IF @wmoUnit IS NULL Print N'@wmoUnit is NULL!!!!'
-	SELECT @hrUnit = [Id] FROM dbo.MeasurementUnits		WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!'
+	SELECT @ETBUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'ETB'; IF @ETBUnit IS NULL Print N'@ETBUnit is NULL!!!!'
+	SELECT @USDUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'USD'; IF @USDUnit IS NULL Print N'@USDUnit is NULL!!!!'
+	SELECT @pcsUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'pcs'; IF @pcsUnit IS NULL Print N'@pcsUnit is NULL!!!!'
+	SELECT @shareUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'share'; IF @shareUnit IS NULL Print N'@shareUnit is NULL!!!!'
+	SELECT @wmoUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'wmo'; IF @wmoUnit IS NULL Print N'@wmoUnit is NULL!!!!'
+	SELECT @hrUnit = [Id] FROM [dbo].MeasurementUnits		WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!'
 END
 BEGIN -- Inserting
 	INSERT INTO @R1Save
@@ -69,7 +69,7 @@ BEGIN -- Updating
 	)
 	SELECT
 		[Id], [MeasurementUnitId], [ResourceType], [Name], [Code], [FungibleParentId], N'Unchanged'
-	FROM dbo.Resources
+	FROM [dbo].Resources
 	WHERE [Name] IN (N'Toyota Camry 2018', N'Fake')
 
 	UPDATE @R2Save 

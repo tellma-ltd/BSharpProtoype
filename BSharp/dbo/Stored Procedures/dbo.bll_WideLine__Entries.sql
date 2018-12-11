@@ -46,7 +46,7 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @Entries As dbo.EntryForSaveList;
+	DECLARE @Entries As [dbo].EntryForSaveList;
 	DECLARE @AccountCalculation nvarchar(255), @CustodyCalculation nvarchar(255), @ResourceCalculation nvarchar(255), @DirectionCalculation nvarchar(255), @AmountCalculation nvarchar(255), @ValueCalculation nvarchar(255), @NoteCalculation nvarchar(255),
 			@StartDateTimeCalculation nvarchar(255), @EndDateTimeCalculation nvarchar(255), @RelatedReferenceCalculation nvarchar(255), @RelatedAgentCalculation nvarchar(255), @RelatedResourceCalculation nvarchar(255), @RelatedAmountCalculation  nvarchar(255);
 	DECLARE @EntriesCount tinyint, @EntryNumber tinyint, @AccountId nvarchar(255), @CustodyId int, @ResourceId int, @Direction smallint, @Amount money, @Value money, @NoteId nvarchar(255),

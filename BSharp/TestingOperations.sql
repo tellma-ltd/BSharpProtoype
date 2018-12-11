@@ -1,8 +1,8 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
-	DECLARE @O1Result dbo.OperationList, @O2Result dbo.OperationList;
+	DECLARE @O1Result [dbo].OperationList, @O2Result [dbo].OperationList;
 	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
-	DECLARE @OperationActivationList dbo.ActivationList;
+	DECLARE @OperationActivationList [dbo].ActivationList;
 
 END
 BEGIN -- Inserting
@@ -53,7 +53,7 @@ BEGIN
 	)
 	SELECT
 		[Id], [OperationType], [Name], [Code], [ParentId], N'Unchanged'
-	FROM dbo.Operations
+	FROM [dbo].Operations
 	WHERE [Name] IN (N'Existin', N'Fake')
 
 	UPDATE @O2Save 

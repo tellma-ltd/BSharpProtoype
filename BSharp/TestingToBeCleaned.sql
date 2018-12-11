@@ -1,8 +1,8 @@
 ﻿BEGIN -- Cleanup
 	SET NOCOUNT ON;
-	DELETE FROM [dbo].Entries;
-	DELETE FROM [dbo].Lines;
-	DELETE FROM [dbo].Documents;
+	DELETE FROM [dbo].[Entries];
+	DELETE FROM [dbo].[Lines];
+	DELETE FROM [dbo].[Documents];
 	DELETE FROM [dbo].Custodies;
 	DELETE FROM [dbo].Users;
 	DELETE FROM [dbo].[Operations];
@@ -247,7 +247,7 @@ UI_Error:
 	Print @ValidationMessage;
 RETURN
 
-SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY Id, LineNumber, EntryNumber;
+SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY [Id], LineNumber, EntryNumber;
 EXEC rpt_TrialBalance;
 EXEC rpt_WithholdingTaxOnPayment;
 EXEC rpt_ERCA__VAT_Purchases; 
@@ -257,6 +257,6 @@ SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');
 
 EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0
 
-SELECT * FROM [dbo].Documents;
-SELECT * FROM [dbo].Lines;
-SELECT * FROM [dbo].Entries;
+SELECT * FROM [dbo].[Documents];
+SELECT * FROM [dbo].[Lines];
+SELECT * FROM [dbo].[Entries];

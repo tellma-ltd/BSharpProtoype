@@ -7,7 +7,7 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].Resources)			DBCC CHECKIDENT ('[dbo].Resources', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].Entries)				DBCC CHECKIDENT ('[dbo].Entries', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].Lines)				DBCC CHECKIDENT ('[dbo].Lines', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].Documents)			DBCC CHECKIDENT ('[dbo].Documents', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 
 	DECLARE @ValidationErrorsJson nvarchar(max); 
 	DECLARE @LookupsSelect bit = 0;
@@ -26,8 +26,8 @@ BEGIN TRY
 		:r .\TestingResources.sql
 		:r .\TestingManualJV.sql
 
-	--SELECT * from ft_Journal('2018.01.01', '2018.01.01') ORDER BY Id, LineId, EntryId;
-	--EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;
+	SELECT * from ft_Journal('2018.01.01', '2018.01.31') ORDER BY [Id], [LineId], [EntryId];
+	EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;
 	ROLLBACK;
 END TRY
 BEGIN CATCH
@@ -50,7 +50,7 @@ ERR_LABEL:
 	ROLLBACK;
 RETURN;
 
-SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY Id, LineId, EntryId
+SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY [Id], [LineId], EntryId
 EXEC rpt_TrialBalance;
 EXEC rpt_WithholdingTaxOnPayment;
 EXEC rpt_ERCA__VAT_Purchases; 

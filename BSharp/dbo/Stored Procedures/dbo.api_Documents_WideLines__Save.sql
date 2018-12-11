@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents_WideLines__Save]
-	@Documents dbo.DocumentForSaveList READONLY, 
-	@WideLines dbo.WideLineForSaveList READONLY, 
+	@Documents [dbo].DocumentForSaveList READONLY, 
+	@WideLines [dbo].WideLineForSaveList READONLY, 
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
@@ -8,7 +8,7 @@
 AS
 BEGIN
 DECLARE @IndexedIdsJson NVARCHAR(MAX);
-DECLARE @Lines dbo.LineForSaveList, @Entries dbo.EntryForSaveList;
+DECLARE @Lines [dbo].LineForSaveList, @Entries [dbo].EntryForSaveList;
 DECLARE @LinesResultJson NVARCHAR(MAX), @EntriesResultJson NVARCHAR(MAX);
 
 -- Validate
@@ -22,7 +22,7 @@ EXEC [dbo].[bll_Documents_Save__Validate]
 IF @ValidationErrorsJson IS NOT NULL
 	RETURN;
 
-EXEC dbo.[bll_Documents_WideLines__Fill]
+EXEC [dbo].[bll_Documents_WideLines__Fill]
 	@Documents = @Documents,
 	@WideLines = @WideLines,
 	@LinesResultJson = @LinesResultJson OUTPUT,

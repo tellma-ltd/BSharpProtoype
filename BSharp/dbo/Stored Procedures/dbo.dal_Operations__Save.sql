@@ -10,7 +10,7 @@ SET NOCOUNT ON;
 
 -- Deletions
 	DELETE FROM [dbo].Operations
-	WHERE Id IN (SELECT Id FROM @Operations WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Operations WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -39,7 +39,7 @@ SET NOCOUNT ON;
 
 	UPDATE BE
 	SET BE.[ParentId]= T.[ParentId]
-	FROM dbo.Operations BE
+	FROM [dbo].Operations BE
 	JOIN (
 		SELECT II.[Id], IIParent.[Id] As ParentId
 		FROM @Operations O

@@ -18,7 +18,7 @@ INSERT INTO @Translations([Name], [Culture], [Value]) VALUES
 
 -- Error Messages
 INSERT INTO @Translations([Name], [Culture], [Value]) VALUES
-(N'NullTenantID',		N'EN', N'Tenant Id is NULL!'),
+(N'NullTenantID',		N'EN', N'Tenant [Id]is NULL!'),
 (N'NullTenantID',		N'AR', N'لم يتم تحديد رقم الاشتراك'),
 (N'AccountIsNotLeaf',	N'EN', N'This is a summary account, and cannot be used in entries'),
 (N'AccountIsNotLeaf',	N'AR', N'حساب إجمالي يمنع إجراء القيود عليه'),

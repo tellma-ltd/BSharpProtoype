@@ -9,7 +9,7 @@ RETURN
 		D.[TransactionType],
 		D.SerialNumber,
 		D.ResponsibleAgentId,
-		L.Id As LineId,
+		L.Id As [LineId],
 		CONVERT(NVARCHAR(255), 
 		(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END), 104) As StartDateTime,
 		CONVERT(NVARCHAR(255), 			
@@ -41,8 +41,8 @@ RETURN
 		E.RelatedAmount
 	FROM 
 		[dbo].Entries E
-		INNER JOIN [dbo].Lines L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-		INNER JOIN [dbo].Documents D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
+		INNER JOIN [dbo].[Lines] L ON E.TenantId = L.TenantId AND E.LineId = L.Id
+		INNER JOIN [dbo].[Documents] D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
 	WHERE
 		D.TenantId = [dbo].fn_TenantId() AND
 		D.Mode = N'Posted' AND 

@@ -33,8 +33,8 @@ BEGIN
 			JOIN (
 				SELECT E.ResourceId, E.CustodyId, CAST(SUM(E.Value) AS float)/SUM(E.Amount) AS Rate
 				FROM [dbo].Entries E 
-				JOIN [dbo].Lines L ON E.LineId = L.Id
-				JOIN [dbo].Documents D ON D.Id = L.DocumentId
+				JOIN [dbo].[Lines] L ON E.LineId = L.Id
+				JOIN [dbo].[Documents] D ON D.Id = L.DocumentId
 				WHERE E.AccountId = @AccountId AND E.Direction = @Direction
 				AND D.Mode = N'Posted'
 				GROUP BY E.ResourceId, E.CustodyId

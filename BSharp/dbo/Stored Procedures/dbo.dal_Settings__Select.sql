@@ -5,7 +5,7 @@ AS
 SELECT @SettingsResultJson =	(
 		SELECT
 			[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
-		FROM dbo.Settings 
+		FROM [dbo].Settings 
 		WHERE [Field] IN (
 			SELECT [Field]
 			FROM OpenJson(@FieldListJson)

@@ -1,8 +1,8 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @Loc1Save LocationForSaveList, @Loc2Save LocationForSaveList;
-	DECLARE @Loc1Result dbo.LocationList, @Loc2Result dbo.LocationList, @Loc3Result dbo.LocationList;
+	DECLARE @Loc1Result [dbo].LocationList, @Loc2Result [dbo].LocationList, @Loc3Result [dbo].LocationList;
 	DECLARE @Loc1ResultJson NVARCHAR(MAX), @Loc2ResultJson NVARCHAR(MAX), @Loc3ResultJson NVARCHAR(MAX);
-	DECLARE @LocationActivationList dbo.ActivationList;
+	DECLARE @LocationActivationList [dbo].ActivationList;
 
 	DECLARE @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int; 
 END
@@ -56,8 +56,8 @@ BEGIN -- Updating RM Warehouse address
 	)
 	SELECT
 		L.[Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
-	FROM dbo.Locations L
-	JOIN dbo.Custodies C ON L.Id = C.Id
+	FROM [dbo].Locations L
+	JOIN [dbo].Custodies C ON L.Id = C.Id
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
 
 	UPDATE @Loc2Save
@@ -107,7 +107,7 @@ BEGIN -- Updating RM Warehouse address
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 
-	INSERT INTO @LocationActivationList(Id, IsActive)
+	INSERT INTO @LocationActivationList([Id], IsActive)
 	VALUES(29, 0), (31, 0)
 
 	EXEC  [dbo].[api_Locations__Activate]

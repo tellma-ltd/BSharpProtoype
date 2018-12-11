@@ -10,7 +10,7 @@ SET NOCOUNT ON;
 
 -- Deletions
 	DELETE FROM [dbo].MeasurementUnits
-	WHERE Id IN (SELECT Id FROM @MeasurementUnits WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @MeasurementUnits WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]

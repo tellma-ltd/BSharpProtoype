@@ -10,7 +10,7 @@ SET NOCOUNT ON;
 
 -- Deletions
 	DELETE FROM [dbo].Resources
-	WHERE Id IN (SELECT Id FROM @Resources WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Resources WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -46,7 +46,7 @@ SET NOCOUNT ON;
 
 	UPDATE BE
 	SET BE.[FungibleParentId]= T.[FungibleParentId]
-	FROM dbo.Resources BE
+	FROM [dbo].Resources BE
 	JOIN (
 		SELECT II.[Id], IIParent.[Id] As [FungibleParentId]
 		FROM @Resources R

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_WideLines__Fill]
-		@Documents dbo.DocumentForSaveList READONLY, 
-		@WideLines  dbo.WideLineForSaveList READONLY, 
+		@Documents [dbo].DocumentForSaveList READONLY, 
+		@WideLines  [dbo].WideLineForSaveList READONLY, 
 		@LinesResultJson NVARCHAR(MAX) OUTPUT,
 		@EntriesResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
@@ -54,15 +54,15 @@ DECLARE
 	@RelatedResource3 int,
 	@RelatedAmount3 money,
 
-	@LinesLocal dbo.LineForSaveList,
-	@EntriesLocal dbo.EntryForSaveList,
+	@LinesLocal [dbo].LineForSaveList,
+	@EntriesLocal [dbo].EntryForSaveList,
 	@EntriesTransit EntryList;
 	-- in memory processing
-	SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE Id > @DocumentId);
+	SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE [Id]> @DocumentId);
 	WHILE @DocumentId IS NOT NULL
 	BEGIN
 		DECLARE	@LineId int = 0;
-		SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE DocumentId = @DocumentId AND [LineId] > @LineId)
+		SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE [DocumentId] = @DocumentId AND [LineId] > @LineId)
 		WHILE @LineId IS NOT NULL
 		BEGIN
 			--Print 'Document ' + cast(@DocumentId as NVARCHAR(255)) + ', Line ' + Cast(@LineId as NVARCHAR(255));
@@ -116,7 +116,7 @@ DECLARE
 				@RelatedResource3 = RelatedResource3,
 				@RelatedAmount3 = RelatedAmount3
 			FROM @WideLines
-			WHERE DocumentId = @DocumentId AND [LineId] = @LineId
+			WHERE [DocumentId] = @DocumentId AND [LineId] = @LineId
 
 			INSERT INTO @EntriesTransit 
 			EXEC [dbo].[bll_WideLine__Entries] 
@@ -164,9 +164,9 @@ DECLARE
 				@RelatedAgent3 = @RelatedAgent3,
 				@RelatedResource3 = @RelatedResource3,
 				@RelatedAmount3 = @RelatedAmount3
-			SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE DocumentId = @DocumentId AND [LineId] > @LineId)
+			SET @LineId = (SELECT min([LineId]) FROM @WideLines WHERE [DocumentId] = @DocumentId AND [LineId] > @LineId)
 		END
-		SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE Id > @DocumentId);
+		SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE [Id]> @DocumentId);
 	END
 
 	IF EXISTS(SELECT * FROM @EntriesTransit)
@@ -197,7 +197,7 @@ DECLARE
 		HAVING COUNT(*) = 1
 	) SN1 ON E.LineId = SN1.LineId -- Single Null
 	JOIN (
-		SELECT LineId, SUM(Direction * Value) As Net
+		SELECT [LineId], SUM(Direction * Value) As Net
 		FROM @EntriesLocal
 		WHERE Value IS NOT NULL
 		GROUP BY LineId

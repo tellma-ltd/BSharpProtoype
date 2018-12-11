@@ -8,7 +8,7 @@
     [IsExtensible]    BIT            DEFAULT ((1)) NOT NULL,
     PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
-INSERT INTO @Notes(NoteType, IsActive, Code, Id, [Name]) VALUES
+INSERT INTO @Notes(NoteType, IsActive, Code, [Id], [Name]) VALUES
 (N'Extension', 1, N'11', N'PropertyPlantAndEquipment', N'Property, plant and equipment')
 ,(N'Regulatory', 1, N'1101', N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment', N'Additions other than through business combinations, property, plant and equipment')
 ,(N'Regulatory', 1, N'1102', N'AcquisitionsThroughBusinessCombinationsPropertyPlantAndEquipment', N'Acquisitions through business combinations, property, plant and equipment')

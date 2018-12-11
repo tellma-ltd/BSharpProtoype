@@ -1,16 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Lines__Fill]
-	@Documents dbo.DocumentForSaveList READONLY, 
-	@Lines dbo.LineForSaveList READONLY, 
-	@Entries dbo.EntryForSaveList READONLY,
+	@Documents [dbo].DocumentForSaveList READONLY, 
+	@Lines [dbo].LineForSaveList READONLY, 
+	@Entries [dbo].EntryForSaveList READONLY,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 SET NOCOUNT ON;
 DECLARE 	
-	@FilledDocuments dbo.DocumentForSaveNoIdentityList , 
-	@FilledLines dbo.LineForSaveNoIdentityList, 
-	@FilledEntries dbo.EntryForSaveNoIdentityList;
+	@FilledDocuments [dbo].DocumentForSaveNoIdentityList , 
+	@FilledLines [dbo].LineForSaveNoIdentityList, 
+	@FilledEntries [dbo].EntryForSaveNoIdentityList;
 
 	INSERT INTO @FilledDocuments SELECT * FROM @Documents;
 	INSERT INTO @FilledLines SELECT * FROM @Lines;
@@ -38,7 +38,7 @@ DECLARE
 	SET EndDateTime = StartDateTime
 	FROM @FilledLines L
 	JOIN @FilledDocuments D ON L.DocumentIndex = D.[Index]
-	JOIN dbo.TransactionTypes T ON D.TransactionType = T.Id
+	JOIN [dbo].TransactionTypes T ON D.TransactionType = T.Id
 	WHERE T.IsInstant = 1
 	AND EndDateTime IS NULL;
 

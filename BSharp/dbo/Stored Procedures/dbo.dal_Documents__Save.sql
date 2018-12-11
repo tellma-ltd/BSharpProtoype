@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents dbo.DocumentForSaveNoIdentityList READONLY, 
-	@Lines dbo.LineForSaveNoIdentityList READONLY, 
-	@Entries dbo.EntryForSaveNoIdentityList READONLY,
+	@Documents [dbo].DocumentForSaveNoIdentityList READONLY, 
+	@Lines [dbo].LineForSaveNoIdentityList READONLY, 
+	@Entries [dbo].EntryForSaveNoIdentityList READONLY,
 	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -10,20 +10,20 @@ BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
-	DELETE FROM [dbo].Documents
-	WHERE Id IN (SELECT Id FROM @Documents WHERE [EntityState] = N'Deleted');
+	DELETE FROM [dbo].[Documents]
+	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
 
 	DELETE FROM [dbo].Lines
-	WHERE Id IN (SELECT Id FROM @Lines WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
 
 	DELETE FROM [dbo].Entries
-	WHERE Id IN (SELECT Id FROM @Entries WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Entries WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @DocumentsIndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].Documents AS t
+		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
 				[Index], [Id], [State], [TransactionType], [ResponsibleAgentId], [FolderId], [LinesMemo],
@@ -67,12 +67,12 @@ BEGIN
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].Lines AS t
+		MERGE INTO [dbo].[Lines] AS t
 		USING (
 			SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo]
 			FROM @Lines L
 			JOIN @DocumentsIndexedIds II ON L.DocumentIndex = II.[Index]
-			WHERE [EntityState] IN (N'Inserted', N'Updated')
+			WHERE L.[EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
