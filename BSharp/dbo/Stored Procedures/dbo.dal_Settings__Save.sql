@@ -25,6 +25,6 @@ SET NOCOUNT ON;
 			t.[ModifiedAt]	= @Now,
 			t.[ModifiedBy]	= @UserId
 	WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[Field], s.[Value], @Now, @UserId, @Now, @UserId);
+		INSERT ([TenantId], [Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+		VALUES (@TenantId, s.[Field], s.[Value], @Now, @UserId, @Now, @UserId);
 

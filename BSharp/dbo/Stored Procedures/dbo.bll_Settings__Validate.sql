@@ -3,7 +3,7 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	DECLARE @ValidationErrors ValidationErrorList;
+	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 
 	-- Code must be unique
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -11,11 +11,6 @@ SET NOCOUNT ON;
 		FE.[Field] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Settings FE 
 	JOIN [dbo].Settings BE ON FE.[Field] = BE.[Field]
-	WHERE (FE.EntityState = N'Inserted')
+	WHERE (FE.EntityState = N'Inserted');
 
-	SELECT @ValidationErrorsJson = 
-	(
-		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
-		FROM @ValidationErrors
-		FOR JSON PATH
-	);
+	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

@@ -1,5 +1,5 @@
 ﻿
-CREATE VIEW [dbo].[WideLinesLabelView]   
+CREATE VIEW [dbo].[WideLinesLabelView]  
 AS
 SELECT [TransactionType], 
 	MAX(CASE WHEN EntryNumber = 1 THEN [Operation] ELSE NULL END) AS Operation1,

@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[sbs_Document__Forward] 
+﻿CREATE PROCEDURE [dbo].[sbs_Document__Forward] 
 	@FromDocument int,
 	@ToDocument int = 0 OUTPUT,
 	@ToState	NVARCHAR(255),
@@ -47,7 +46,7 @@ BEGIN
 			FROM [dbo].[Documents]
 			WHERE TransactionType = @TransactionType AND State = @ToState
 
-		INSERT INTO [dbo].[Documents](State, TransactionType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, LocationId, ResourceId,  ReminderDateTime)
+		INSERT INTO [dbo].[Documents](State, TransactionType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, LocationId, ResourceId, ReminderDateTime)
 		VALUES(@ToState, @TransactionType, @OperatingSegment, @SerialNumber, @ToDocumentDateTime, @Actor, @Reason, @Reference, @Agent, @Location, @Resource, @ReminderDateTime )
 		
 		SET @ToDocument = SCOPE_IDENTITY() */

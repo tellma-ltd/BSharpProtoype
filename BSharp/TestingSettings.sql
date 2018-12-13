@@ -19,7 +19,7 @@ INSERT INTO @S1Save
 (N'TaxIdentificationNumber', N'123456789'),
 (N'FunctionalCurrencyUnit', N'ETB');
 
-	EXEC  [dbo].[api_Settings__Save]
+	EXEC [dbo].[api_Settings__Save]
 		@Settings = @S1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@SettingsResultJson = @S1ResultJson OUTPUT

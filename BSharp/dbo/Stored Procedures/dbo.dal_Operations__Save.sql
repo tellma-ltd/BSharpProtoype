@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Operations__Save]
 	@Operations [OperationForSaveList] READONLY,
-	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
+	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -8,7 +8,7 @@ SET NOCOUNT ON;
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
--- Deletions
+-- Deletions, if already user, we should deactivate instead
 	DELETE FROM [dbo].Operations
 	WHERE [Id] IN (SELECT [Id] FROM @Operations WHERE [EntityState] = N'Deleted');
 
@@ -32,8 +32,8 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
-				INSERT ([TenantId], [OperationType], [Name], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-				VALUES (@TenantId, s.[OperationType], s.[Name], s.[Code], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [OperationType], [Name], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[OperationType], s.[Name], s.[Code], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
 
@@ -47,8 +47,4 @@ SET NOCOUNT ON;
 		JOIN @IndexedIds II ON II.[Index] = O.[Index]
 	) T ON BE.Id = T.[Id]
 
-	SELECT @IndexedIdsJson =
-	(
-		SELECT [Index], [Id] FROM @IndexedIds
-		FOR JSON PATH
-	);
+	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

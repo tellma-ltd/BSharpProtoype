@@ -5,7 +5,7 @@ AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
-	MERGE INTO [dbo].Custodies AS t
+	MERGE INTO [dbo].[Custodies] AS t
 		USING (
 			SELECT [Index], [Id]
 			FROM @IndexedIds 

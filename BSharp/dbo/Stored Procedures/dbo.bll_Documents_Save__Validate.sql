@@ -6,7 +6,7 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	DECLARE @ValidationErrors ValidationErrorList;
+	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
 	-- Cannot save with a future date
@@ -52,9 +52,4 @@ SET NOCOUNT ON;
 
 	-- If Resource = functional currency, the value must match the quantity
 
-	SELECT @ValidationErrorsJson = 
-	(
-		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
-		FROM @ValidationErrors
-		FOR JSON PATH
-	);
+	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

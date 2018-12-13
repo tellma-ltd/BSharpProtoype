@@ -1,3 +1,3 @@
 ﻿CREATE SCHEMA [api]
-    AUTHORIZATION [dbo];
+  AUTHORIZATION [dbo];
 

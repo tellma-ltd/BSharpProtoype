@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[sbs_DocumentRecipient__Update] 
+﻿CREATE PROCEDURE [dbo].[sbs_DocumentRecipient__Update] 
 	@Id int,
 	@ForwardedTo int,
 	@Comment nvarchar(255)

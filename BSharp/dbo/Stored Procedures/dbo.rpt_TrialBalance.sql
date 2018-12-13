@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[rpt_TrialBalance] 
+﻿CREATE PROCEDURE [dbo].[rpt_TrialBalance] 
 /* 
 EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByCustody = 1, @ByResource = 1, @ByNote = 1, @PrintQuery = 1
 */	
@@ -34,7 +33,7 @@ BEGIN
 		(
 			SELECT AccountId, '
 	IF (@ByCustody = 1) SET @Query = @Query + N'CustodyId, '
-	IF (@ByResource = 1)  SET @Query = @Query + N'ResourceId, '
+	IF (@ByResource = 1) SET @Query = @Query + N'ResourceId, '
 	IF (@ByNote = 1) SET @Query = @Query + N'NoteId, '
 	SET @Query = @Query + N'
 			CAST(SUM(Direction * CoveringRatio * Amount) AS money) AS Amount,	
@@ -42,16 +41,16 @@ BEGIN
 			FROM [dbo].[ft_Journal](@fromDate, @toDate) E
 			GROUP BY AccountId'
 	IF (@ByCustody = 1) SET @Query = @Query + N', CustodyId'
-	IF (@ByResource = 1)  SET @Query = @Query + N', ResourceId'
+	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'
 	IF (@ByNote = 1) SET @Query = @Query + N', NoteId'
 	SET @Query = @Query + N'		
 			HAVING SUM(Direction * [Value]) <> 0
 		) T 
 		JOIN [dbo].Accounts A ON T.AccountId = A.Id'
 	IF (@ByCustody = 1) SET @Query = @Query + N'
-		JOIN [dbo].Custodies C ON T.CustodyId = C.Id'
-	IF (@ByResource = 1)  SET @Query = @Query + N'
-		JOIN [dbo].Resources R ON T.ResourceId = R.Id'
+		JOIN [dbo].[Custodies] C ON T.CustodyId = C.Id'
+	IF (@ByResource = 1) SET @Query = @Query + N'
+		JOIN [dbo].[Resources] R ON T.ResourceId = R.Id'
 	SET @Query = @Query + N'
 		ORDER BY A.Code'
 

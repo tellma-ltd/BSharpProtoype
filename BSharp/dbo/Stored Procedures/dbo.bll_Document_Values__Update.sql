@@ -1,5 +1,4 @@
-﻿
-CREATE Procedure [dbo].[bll_Document_Values__Update] -- OBSOLETE?!?!
+﻿CREATE Procedure [dbo].[bll_Document_Values__Update] -- OBSOLETE?!?!
 @WideLines WideLineList READONLY,
 @Entries EntryList READONLY
 AS
@@ -13,7 +12,7 @@ SELECT * FROM @Entries;
 SELECT @TransactionType = MIN(TransactionType) FROM @WideLines
 WHILE @TransactionType IS NOT NULL
 BEGIN
-	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM  [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType;
+	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType;
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
 		-- Determine value of resource issue or receipt from an available invoice (event) or contract (order)
@@ -23,10 +22,10 @@ BEGIN
 			SET @ValueCalculation = REPLACE(@ValueCalculation, N'@Bulk:', N'SELECT ');
 			EXEC [dbo].sp_executesql @statement = @ValueCalculation, @params = N'@AccountId nvarchar(255) OUTPUT, @Direction smallint OUTPUT', @AccountId = @AccountId OUTPUT, @Direction = @Direction OUTPUT
 		--	@AccountId = N'GoodsAndServicesReceivedFromSupplierButNotBilled', @Direction = 1;
-		--	@AccountId  = N'ShorttermEmployeeBenefitsAccruals', @Direction = 1; 
-		--	@AccountId  = N'RentAccruedIncome', @Direction = 1; 
-		--	@AccountId  = N'GoodsAndServicesDeliveredToCustomerButNotBilled', @Direction = -1;
-		--	@AccountId  = N'RentAccrualClassifiedAsCurrent', @Direction = -1; 
+		--	@AccountId = N'ShorttermEmployeeBenefitsAccruals', @Direction = 1; 
+		--	@AccountId = N'RentAccruedIncome', @Direction = 1; 
+		--	@AccountId = N'GoodsAndServicesDeliveredToCustomerButNotBilled', @Direction = -1;
+		--	@AccountId = N'RentAccrualClassifiedAsCurrent', @Direction = -1; 
 			UPDATE E1
 			SET E1.Value = E1.Amount * E2.Rate
 			FROM @EntriesCopy E1

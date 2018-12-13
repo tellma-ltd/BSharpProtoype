@@ -39,7 +39,7 @@ BEGIN
 			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE TenantId = @TenantId AND Code = @Code;
 		ELSE -- Regulatory and/or fix
 
-		IF EXISTS(SELECT * FROM [dbo].Accounts WHERE TenantId = @TenantId AND Code Like @Code + '%' AND Code <> @Code AND AccountType NOT IN  (N'Custom', N'Extension'))
+		IF EXISTS(SELECT * FROM [dbo].Accounts WHERE TenantId = @TenantId AND Code Like @Code + '%' AND Code <> @Code AND AccountType NOT IN (N'Custom', N'Extension'))
 			UPDATE [dbo].Accounts SET IsExtensible = 0 WHERE TenantId = @TenantId AND Code = @Code
 		ELSE
 			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE TenantId = @TenantId AND Code = @Code
@@ -55,7 +55,7 @@ BEGIN
 			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE TenantId = @TenantId AND Code = @Code;
 		ELSE -- Regulatory and/or fix
 
-		IF EXISTS(SELECT * FROM [dbo].Notes WHERE TenantId = @TenantId AND Code Like @Code + '%' AND Code <> @Code AND NoteType NOT IN  (N'Custom', N'Extension'))
+		IF EXISTS(SELECT * FROM [dbo].Notes WHERE TenantId = @TenantId AND Code Like @Code + '%' AND Code <> @Code AND NoteType NOT IN (N'Custom', N'Extension'))
 			UPDATE [dbo].Notes SET IsExtensible = 0 WHERE TenantId = @TenantId AND Code = @Code;
 		ELSE
 			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE TenantId = @TenantId AND Code = @Code;

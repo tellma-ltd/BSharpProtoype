@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[bll_MeasurementUnits__Validate]
+﻿CREATE PROCEDURE [dbo].[bll_MeasurementUnits_Save__Validate]
 	@MeasurementUnits [MeasurementUnitForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	DECLARE @ValidationErrors ValidationErrorList;
+	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 
 	-- Code must be unique
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -23,7 +23,7 @@ SET NOCOUNT ON;
 
 	SELECT @ValidationErrorsJson = 
 	(
-		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
+		SELECT *
 		FROM @ValidationErrors
 		FOR JSON PATH
 	);

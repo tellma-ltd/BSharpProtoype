@@ -48,7 +48,7 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @Entries As [dbo].EntryForSaveList;
 	DECLARE @AccountCalculation nvarchar(255), @CustodyCalculation nvarchar(255), @ResourceCalculation nvarchar(255), @DirectionCalculation nvarchar(255), @AmountCalculation nvarchar(255), @ValueCalculation nvarchar(255), @NoteCalculation nvarchar(255),
-			@StartDateTimeCalculation nvarchar(255), @EndDateTimeCalculation nvarchar(255), @RelatedReferenceCalculation nvarchar(255), @RelatedAgentCalculation nvarchar(255), @RelatedResourceCalculation nvarchar(255), @RelatedAmountCalculation  nvarchar(255);
+			@StartDateTimeCalculation nvarchar(255), @EndDateTimeCalculation nvarchar(255), @RelatedReferenceCalculation nvarchar(255), @RelatedAgentCalculation nvarchar(255), @RelatedResourceCalculation nvarchar(255), @RelatedAmountCalculation nvarchar(255);
 	DECLARE @EntriesCount tinyint, @EntryNumber tinyint, @AccountId nvarchar(255), @CustodyId int, @ResourceId int, @Direction smallint, @Amount money, @Value money, @NoteId nvarchar(255),
 			@RelatedReference NVARCHAR(255), @RelatedAgentId int, @RelatedResourceId int, @RelatedAmount decimal;
 
@@ -78,19 +78,19 @@ BEGIN
 		-- Account calculation may need to be done in bulk, as when receiving thousands of items in stocks, then each item type may end up with different inventory classification.
 		SET @AccountCalculation = N'SELECT @Account = ' + @AccountCalculation; EXEC sp_executesql @AccountCalculation, N'@Account nvarchar(255) OUTPUT', @Account = @AccountId OUTPUT
 		SET @CustodyCalculation = N'SELECT @Custody = ' + @CustodyCalculation; EXEC sp_executesql @CustodyCalculation, N'@Entries EntryList READONLY, @Custody int OUTPUT', @Entries = @Entries, @Custody = @CustodyId OUTPUT
-		SET @ResourceCalculation = N'SELECT @Resource = ' + @ResourceCalculation; EXEC sp_executesql @ResourceCalculation,  N'@Entries EntryList READONLY, @Resource int OUTPUT', @Entries = @Entries, @Resource = @ResourceId OUTPUT
+		SET @ResourceCalculation = N'SELECT @Resource = ' + @ResourceCalculation; EXEC sp_executesql @ResourceCalculation, N'@Entries EntryList READONLY, @Resource int OUTPUT', @Entries = @Entries, @Resource = @ResourceId OUTPUT
 		SET @DirectionCalculation = N'SELECT @Direction = ' + @DirectionCalculation; EXEC sp_executesql @DirectionCalculation, N'@Direction smallint OUTPUT', @Direction = @Direction OUTPUT
-		SET @AmountCalculation = N'SELECT @Amount = ' + @AmountCalculation; EXEC sp_executesql @AmountCalculation,  N'@Entries EntryList READONLY, @Amount money OUTPUT', @Entries = @Entries, @Amount = @Amount OUTPUT
+		SET @AmountCalculation = N'SELECT @Amount = ' + @AmountCalculation; EXEC sp_executesql @AmountCalculation, N'@Entries EntryList READONLY, @Amount money OUTPUT', @Entries = @Entries, @Amount = @Amount OUTPUT
 		IF LEFT(@ValueCalculation, 6) <> N'@BULK:' 
 		BEGIN
 			SET @ValueCalculation = N'SELECT @Value = ' + @ValueCalculation; 
-			EXEC sp_executesql @ValueCalculation,  N'@Entries EntryList READONLY, @Value money OUTPUT', @Entries = @Entries, @Value = @Value OUTPUT 
+			EXEC sp_executesql @ValueCalculation, N'@Entries EntryList READONLY, @Value money OUTPUT', @Entries = @Entries, @Value = @Value OUTPUT 
 		END
 		SET @NoteCalculation = N'SELECT @Note = ' + @NoteCalculation; EXEC sp_executesql @NoteCalculation, N'@Note nvarchar(255) OUTPUT', @Note = @NoteId OUTPUT			
-		SET @RelatedReferenceCalculation = N'SELECT @RelatedReference = ' + @RelatedReferenceCalculation; EXEC sp_executesql @RelatedReferenceCalculation,  N'@Entries EntryList READONLY, @RelatedReference NVARCHAR(255) OUTPUT', @Entries = @Entries, @RelatedReference = @RelatedReference OUTPUT			
+		SET @RelatedReferenceCalculation = N'SELECT @RelatedReference = ' + @RelatedReferenceCalculation; EXEC sp_executesql @RelatedReferenceCalculation, N'@Entries EntryList READONLY, @RelatedReference NVARCHAR(255) OUTPUT', @Entries = @Entries, @RelatedReference = @RelatedReference OUTPUT			
 		SET @RelatedAgentCalculation = N'SELECT @RelatedAgent = ' + @RelatedAgentCalculation; EXEC sp_executesql @RelatedAgentCalculation, N'@Entries EntryList READONLY, @RelatedAgent int OUTPUT', @Entries = @Entries, @RelatedAgent = @RelatedAgentId OUTPUT
-		SET @RelatedResourceCalculation = N'SELECT @RelatedResource = ' + @RelatedResourceCalculation; EXEC sp_executesql @RelatedResourceCalculation,  N'@Entries EntryList READONLY, @RelatedResource int OUTPUT', @Entries = @Entries, @RelatedResource = @RelatedResourceId OUTPUT
-		SET @RelatedAmountCalculation = N'SELECT @RelatedAmount = ' + @RelatedAmountCalculation; EXEC sp_executesql @RelatedAmountCalculation,  N'@Entries EntryList READONLY, @RelatedAmount money OUTPUT', @Entries = @Entries, @RelatedAmount = @RelatedAmount OUTPUT
+		SET @RelatedResourceCalculation = N'SELECT @RelatedResource = ' + @RelatedResourceCalculation; EXEC sp_executesql @RelatedResourceCalculation, N'@Entries EntryList READONLY, @RelatedResource int OUTPUT', @Entries = @Entries, @RelatedResource = @RelatedResourceId OUTPUT
+		SET @RelatedAmountCalculation = N'SELECT @RelatedAmount = ' + @RelatedAmountCalculation; EXEC sp_executesql @RelatedAmountCalculation, N'@Entries EntryList READONLY, @RelatedAmount money OUTPUT', @Entries = @Entries, @RelatedAmount = @RelatedAmount OUTPUT
 
 		UPDATE @Entries
 		SET 
@@ -123,7 +123,7 @@ BEGIN
 		IF LEFT(@ValueCalculation, 6) <> N'@BULK:' 
 		BEGIN
 			SET @ValueCalculation = N'SELECT @Value = ' + @ValueCalculation; 
-			EXEC sp_executesql @ValueCalculation,  N'@Entries EntryList READONLY, @Value money OUTPUT', @Entries = @Entries, @Value = @Value OUTPUT 
+			EXEC sp_executesql @ValueCalculation, N'@Entries EntryList READONLY, @Value money OUTPUT', @Entries = @Entries, @Value = @Value OUTPUT 
 		END
 			
 		UPDATE @Entries

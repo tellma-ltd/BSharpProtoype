@@ -1,12 +1,12 @@
 ﻿DECLARE @Notes AS TABLE (
-    [Id]              NVARCHAR (255)  NOT NULL,
-    [Name]            NVARCHAR (1024) NOT NULL,
-    [Code]            NVARCHAR (10)   NOT NULL,
-    [IsActive]        BIT             NOT NULL,
-    [ParentId]        NVARCHAR (255),
-    [NoteType]		NVARCHAR (10)   DEFAULT (N'Custom') NOT NULL,
-    [IsExtensible]    BIT            DEFAULT ((1)) NOT NULL,
-    PRIMARY KEY NONCLUSTERED ([Id] ASC)
+  [Id]       NVARCHAR (255) NOT NULL,
+  [Name]      NVARCHAR (1024) NOT NULL,
+  [Code]      NVARCHAR (10)  NOT NULL,
+  [IsActive]    BIT       NOT NULL,
+  [ParentId]    NVARCHAR (255),
+  [NoteType]		NVARCHAR (10)  DEFAULT (N'Custom') NOT NULL,
+  [IsExtensible]  BIT      DEFAULT ((1)) NOT NULL,
+  PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 INSERT INTO @Notes(NoteType, IsActive, Code, [Id], [Name]) VALUES
 (N'Extension', 1, N'11', N'PropertyPlantAndEquipment', N'Property, plant and equipment')
@@ -229,21 +229,21 @@ USING @Notes AS s
 ON s.Code = t.Code AND t.tenantId = [dbo].fn_TenantId()
 WHEN MATCHED AND
 (
-    t.[Name]			<>	s.[Name]			OR
-    t.[Code]			<>	s.[Code]			OR
-    t.[IsActive]		<>	s.[IsActive]		OR
-    t.[NoteType]		<>	s.[NoteType]		OR
-    t.[IsExtensible]	<>	s.[IsExtensible]
+  t.[Name]			<>	s.[Name]			OR
+  t.[Code]			<>	s.[Code]			OR
+  t.[IsActive]		<>	s.[IsActive]		OR
+  t.[NoteType]		<>	s.[NoteType]		OR
+  t.[IsExtensible]	<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-    t.[Name]			=	s.[Name],  
-    t.[Code]			=	s.[Code],
-    t.[IsActive]		=	s.[IsActive],
-    t.[NoteType]		=	s.[NoteType], 
-    t.[IsExtensible]	=	s.[IsExtensible]
+  t.[Name]			=	s.[Name], 
+  t.[Code]			=	s.[Code],
+  t.[IsActive]		=	s.[IsActive],
+  t.[NoteType]		=	s.[NoteType], 
+  t.[IsExtensible]	=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
-        DELETE
+    DELETE
 WHEN NOT MATCHED BY TARGET THEN
-        INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
-        VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
+    INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
+    VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

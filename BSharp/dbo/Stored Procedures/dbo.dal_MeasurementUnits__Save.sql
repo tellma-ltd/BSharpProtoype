@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Save]
 	@MeasurementUnits [MeasurementUnitForSaveList] READONLY,
-	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
+	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -34,13 +34,9 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]	= @Now,
 				t.[ModifiedBy]	= @UserId
 		WHEN NOT MATCHED THEN
-				INSERT ([TenantId], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-				VALUES (@TenantId, s.[UnitType], s.[Name], s.[Description], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
-			OUTPUT s.[Index], inserted.[Id] 
+			INSERT ([TenantId], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[UnitType], s.[Name], s.[Description], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
+		OUTPUT s.[Index], inserted.[Id] 
 	) As x
 
-	SELECT @IndexedIdsJson =
-	(
-		SELECT [Index], [Id] FROM @IndexedIds
-		FOR JSON PATH
-	);
+	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

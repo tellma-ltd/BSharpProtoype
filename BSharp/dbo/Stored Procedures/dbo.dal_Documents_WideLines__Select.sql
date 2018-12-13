@@ -1,14 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_WideLines__Select]
-	@IndexedIdsJson  NVARCHAR(MAX),
-	@DocumentsResultJson  NVARCHAR(MAX) OUTPUT,
-	@WideLinesResultJson  NVARCHAR(MAX) OUTPUT
+	@IndexedIds [dbo].[IndexedIdList] READONLY,
+	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
+	@WideLinesResultJson NVARCHAR(MAX) OUTPUT
 AS
-DECLARE @IndexedIds [dbo].[IndexedIdList];
-
-	INSERT INTO @IndexedIds( [Index], [Id])
-	SELECT [Index], [Id] 
-	FROM OpenJson(@IndexedIdsJson)
-	WITH ([Index] INT '$.Index', [Id] INT '$.Id')
+SET NOCOUNT ON;
 
 	SELECT @DocumentsResultJson =	(
 		SELECT T.[Index], D.[Id], D.[State], D.[TransactionType], D.[Mode], D.[SerialNumber], 
@@ -24,9 +19,6 @@ DECLARE @IndexedIds [dbo].[IndexedIdList];
 	SELECT @WideLinesResultJson = (
 		SELECT *, N'Unchanged' As [EntityState]
 		FROM [dbo].WideLinesView
-		WHERE [DocumentId] IN (
-			SELECT [Id]
-			FROM @IndexedIds
-		)
+		WHERE [DocumentId] IN (SELECT [Id] FROM @IndexedIds)
 		FOR JSON PATH
 	);

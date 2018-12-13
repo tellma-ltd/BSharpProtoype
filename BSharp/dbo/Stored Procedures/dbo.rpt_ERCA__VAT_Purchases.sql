@@ -13,7 +13,7 @@ BEGIN
 		SUM(S.RelatedAmount) AS TaxableAmount,
 		S.StartDateTime As InvoiceDate
 	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxReceivables' , @fromDate, @toDate) S
-	JOIN [dbo].Custodies C ON S.RelatedAgentId = C.Id
+	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	JOIN [dbo].Agents A ON C.Id = A.Id
 	WHERE S.Direction = 1
 	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime

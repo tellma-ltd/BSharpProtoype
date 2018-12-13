@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_Lines__Select]
 	@IndexedIds [dbo].IndexedIdList READONLY,
-	@DocumentsResultJson  NVARCHAR(MAX) OUTPUT,
-	@LinesResultJson  NVARCHAR(MAX) OUTPUT,
-	@EntriesResultJson  NVARCHAR(MAX) OUTPUT
+	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
+	@LinesResultJson NVARCHAR(MAX) OUTPUT,
+	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @DocumentsResultJson =	(
 		SELECT T.[Index], D.[Id], D.[State], D.[TransactionType], D.[Mode], D.[SerialNumber], 

@@ -59,7 +59,7 @@ BEGIN -- Insert individuals and organizations
 	(N'OrganizationUnit', N'Human Resources', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'OrganizationUnit', N'Materials & Purchasing', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
 
-	EXEC  [dbo].[api_Agents__Save]
+	EXEC [dbo].[api_Agents__Save]
 		@Agents = @A1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@AgentsResultJson = @A1ResultJson OUTPUT
@@ -101,11 +101,11 @@ END
 
 -- Inserting
 INSERT INTO @A2Save (
-	  [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
+	 [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
 	A.[Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
 FROM [dbo].Agents A
-JOIN [dbo].Custodies C ON A.Id = C.Id
+JOIN [dbo].[Custodies] C ON A.Id = C.Id
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 
 -- Updating MA TIN
@@ -126,7 +126,7 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 	SET [EntityState] = N'Deleted' 
 	WHERE [Name] = N'Yigezu Legesse';
 
-	EXEC  [dbo].[api_Agents__Save]
+	EXEC [dbo].[api_Agents__Save]
 		@Agents = @A2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@AgentsResultJson = @A2ResultJson OUTPUT
@@ -207,7 +207,7 @@ DECLARE @AgentSettingSave [dbo].SettingForSaveList, @AgentSettingResultJson nvar
 INSERT INTO @AgentSettingSave
 ([Field],[Value]) Values(N'TaxAuthority', @ERCA);
 
-EXEC  [dbo].[api_Settings__Save]
+EXEC [dbo].[api_Settings__Save]
 		@Settings = @AgentSettingSave,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@SettingsResultJson = @AgentSettingResultJson OUTPUT

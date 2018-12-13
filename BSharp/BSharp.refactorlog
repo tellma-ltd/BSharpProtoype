@@ -546,4 +546,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[dal_Documents_Mode__Update]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6172c071-af23-40fc-8260-2c620aa696cf" ChangeDateTime="12/11/2018 19:30:14">
+    <Property Name="ElementName" Value="[dbo].[bll_MeasurementUnits__Validate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_MeasurementUnits_Save__Validate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4bc196db-3dc0-4c3f-b120-a70535d92050" ChangeDateTime="12/11/2018 20:06:54">
+    <Property Name="ElementName" Value="[dbo].[bll_Documents_Lines__Fill]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ui_Documents_Lines__Fill]" />
+  </Operation>
 </Operations>

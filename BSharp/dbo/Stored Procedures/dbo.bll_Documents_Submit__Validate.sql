@@ -3,7 +3,7 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	DECLARE @ValidationErrors ValidationErrorList;
+	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
 	-- Cannot submit unless in draft mode
@@ -67,9 +67,4 @@ SET NOCOUNT ON;
 	JOIN dbo.Notes N ON E.NoteId = N.Id
 	WHERE N.IsActive = 0
 
-	SELECT @ValidationErrorsJson = 
-	(
-		SELECT [Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]
-		FROM @ValidationErrors
-		FOR JSON PATH
-	);
+	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

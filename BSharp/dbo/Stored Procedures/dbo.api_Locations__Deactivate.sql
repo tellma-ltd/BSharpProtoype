@@ -5,8 +5,8 @@
 	@LocationsResultJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	EXEC [dbo].[dal_Custodies__Activate] @IndexedIds = @IndexedIds, @IsActive = 0
+	EXEC [dbo].[dal_Custodies__Activate] @IndexedIds = @IndexedIds, @IsActive = 0;
 
 	IF (@ReturnEntities = 1)
 	EXEC [dbo].[dal_Locations__Select] 
-			@IndexedIds = @IndexedIds, @LocationsResultJson = @LocationsResultJson OUTPUT
+		@IndexedIds = @IndexedIds, @LocationsResultJson = @LocationsResultJson OUTPUT;

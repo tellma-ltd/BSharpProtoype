@@ -189,7 +189,7 @@ IF @ValidationErrorsJson IS NOT NULL
 		Print 'Manual JV: Location 4'
 		GOTO Err_Label;
 	END
-	--SELECT * FROM [dbo].[Documents];
+	SELECT * FROM [dbo].[Documents];
 	--SELECT * FROM [dbo].[Lines];
 	--SELECT * FROM [dbo].[Entries];
 

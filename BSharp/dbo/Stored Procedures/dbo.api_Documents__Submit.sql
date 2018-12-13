@@ -2,9 +2,9 @@
 	@Documents [dbo].IndexedIdList READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@DocumentsResultJson  NVARCHAR(MAX) OUTPUT,
-	@LinesResultJson  NVARCHAR(MAX) OUTPUT,
-	@EntriesResultJson  NVARCHAR(MAX) OUTPUT
+	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
+	@LinesResultJson NVARCHAR(MAX) OUTPUT,
+	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 	-- if all documents are already submitted, return
@@ -15,7 +15,7 @@ BEGIN
 	-- Validate
 	EXEC [dbo].[bll_Documents_Submit__Validate]
 		@Documents = @Documents,
-		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
@@ -26,8 +26,8 @@ IF (@ReturnEntities = 1)
 	EXEC [dbo].[dal_Documents_Lines__Select] 
 		@IndexedIds = @Documents, 
 		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-		@LinesResultJson  = @LinesResultJson OUTPUT,
-		@EntriesResultJson  = @EntriesResultJson OUTPUT
+		@LinesResultJson = @LinesResultJson OUTPUT,
+		@EntriesResultJson = @EntriesResultJson OUTPUT
 END;
 	
 	/*
@@ -36,7 +36,7 @@ END;
 	SELECT @InconsistentEntry = E.Id, @Amount = E.Amount, @Value = E.Value
 	FROM [dbo].Entries E
 	JOIN [dbo].[Lines] L ON E.DocumentId = L.DocumentId AND E.LineNumber = L.LineNumber
-	JOIN [dbo].Resources R ON E.ResourceId = R.Id
+	JOIN [dbo].[Resources] R ON E.ResourceId = R.Id
 	WHERE L.DocumentId = @DocumentId
 	AND R.ResourceType = N'Cash' 
 	AND R.UnitOfMeasure = [dbo].fn_Settings(N'FunctionalCurrency')

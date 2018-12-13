@@ -2,11 +2,11 @@
 	@Settings [SettingForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@SettingsResultJson  NVARCHAR(MAX) OUTPUT
+	@SettingsResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @FieldListJson NVARCHAR(MAX);
+DECLARE @FieldList dbo.StringList;
 
 -- Validate
 	EXEC [dbo].[bll_Settings__Validate]
@@ -21,11 +21,10 @@ DECLARE @FieldListJson NVARCHAR(MAX);
 	
 	IF (@ReturnEntities = 1)
 	BEGIN
-		SELECT @FieldListJson = (
-			SELECT [Field] FROM @Settings
-			FOR JSON PATH
-		)
+		INSERT INTO @FieldList
+		SELECT [Field] FROM @Settings;
+		
 		EXEC [dbo].[dal_Settings__Select] 
-			@FieldListJson = @FieldListJson, @SettingsResultJson = @SettingsResultJson OUTPUT
+			@FieldList = @FieldList, @SettingsResultJson = @SettingsResultJson OUTPUT;
 	END
 END

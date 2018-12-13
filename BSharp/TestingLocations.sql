@@ -14,7 +14,7 @@ BEGIN -- Insert
 	(N'Warehouse',	N'Fake Warehouse',			N'Far away', NULL, NULL),
 	(N'Warehouse',	N'Finished Goods Warehouse', NULL,		NULL, NULL);
 
-	EXEC  [dbo].[api_Locations__Save]
+	EXEC [dbo].[api_Locations__Save]
 		@Locations = @Loc1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@LocationsResultJson = @Loc1ResultJson OUTPUT
@@ -52,12 +52,12 @@ BEGIN -- Insert
 END
 BEGIN -- Updating RM Warehouse address
 	INSERT INTO @Loc2Save (
-		  [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
+		 [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
 	)
 	SELECT
 		L.[Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
 	FROM [dbo].Locations L
-	JOIN [dbo].Custodies C ON L.Id = C.Id
+	JOIN [dbo].[Custodies] C ON L.Id = C.Id
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse')
 
 	UPDATE @Loc2Save
@@ -71,7 +71,7 @@ BEGIN -- Updating RM Warehouse address
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake Warehouse';
 
-	EXEC  [dbo].[api_Locations__Save]
+	EXEC [dbo].[api_Locations__Save]
 		@Locations = @Loc2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@LocationsResultJson = @Loc2ResultJson OUTPUT
@@ -106,12 +106,13 @@ BEGIN -- Updating RM Warehouse address
 		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
+	DECLARE @Locs dbo.[IndexedIdList];
+	INSERT INTO @Locs([Index], [Id]) VALUES 
+	(0, 29),
+	(1, 31);
 
-	INSERT INTO @LocationActivationList([Id], IsActive)
-	VALUES(29, 0), (31, 0)
-
-	EXEC  [dbo].[api_Locations__Activate]
-	@ActivationList = @LocationActivationList,
+	EXEC [dbo].[api_Locations__Deactivate]
+	@IndexedIds = @Locs,
 	@LocationsResultJson = @Loc3ResultJson OUTPUT
 
 INSERT INTO @Loc3Result(

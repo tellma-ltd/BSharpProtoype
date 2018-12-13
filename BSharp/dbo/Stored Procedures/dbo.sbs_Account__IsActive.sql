@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[sbs_Account__IsActive] --  [dbo].[sbs_Account__IsActive] @Account = N'CashOnHand', @IsActive = 0
+﻿CREATE PROCEDURE [dbo].[sbs_Account__IsActive] -- [dbo].[sbs_Account__IsActive] @Account = N'CashOnHand', @IsActive = 0
 	@Account nvarchar(255),
 	@IsActive bit
 AS

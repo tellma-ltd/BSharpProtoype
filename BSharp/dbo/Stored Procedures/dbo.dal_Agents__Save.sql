@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Agents__Save]
 	@Agents [AgentForSaveList] READONLY,
-	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
+	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
@@ -15,7 +15,7 @@ AS
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].Custodies AS t
+		MERGE INTO [dbo].[Custodies] AS t
 		USING (
 			SELECT [Index], [Id], [AgentType], [Name], [Code], [Address], [BirthDateTime]
 			FROM @Agents 
@@ -56,8 +56,4 @@ AS
 		INSERT ([TenantId], [Id],			[AgentType],	[IsRelated],	[UserId],	[TaxIdentificationNumber], [Title], [Gender])
 		VALUES (@TenantId, s.[InsertedId], s.[AgentType], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[Title], s.[Gender]);
 	
-	SELECT @IndexedIdsJson =
-	(
-		SELECT [Index], [Id] FROM @IndexedIds
-		FOR JSON PATH
-	);
+	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds	FOR JSON PATH);

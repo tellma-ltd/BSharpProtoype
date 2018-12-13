@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[WideLinesView]   
+﻿CREATE VIEW [dbo].[WideLinesView]  
 AS
  SELECT
  	D.Id As DocumentId, D.TransactionType, D.ResponsibleAgentId, L.Id As [LineId], L.StartDateTime, L.EndDateTime,
@@ -45,7 +45,7 @@ AS
 FROM [dbo].Entries E JOIN [dbo].[Lines] L ON E.LineId = L.Id
 JOIN [dbo].[Documents] D ON D.Id = L.DocumentId
 GROUP BY
-	D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id,  L.StartDateTime, L.EndDateTime,
+	D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id, L.StartDateTime, L.EndDateTime,
 	L.[BaseLineId], L.[ScalingFactor], L.[Memo],
 	L.[CreatedAt], L.[CreatedBy], L.[ModifiedAt], L.[ModifiedBy]
  

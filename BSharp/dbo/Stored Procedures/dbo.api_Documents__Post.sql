@@ -2,9 +2,9 @@
 	@Documents [dbo].IndexedIdList READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@DocumentsResultJson  NVARCHAR(MAX) OUTPUT,
-	@LinesResultJson  NVARCHAR(MAX) OUTPUT,
-	@EntriesResultJson  NVARCHAR(MAX) OUTPUT
+	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
+	@LinesResultJson NVARCHAR(MAX) OUTPUT,
+	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents] 
@@ -25,6 +25,6 @@ IF (@ReturnEntities = 1)
 	EXEC [dbo].[dal_Documents_Lines__Select] 
 		@IndexedIds = @Documents, 
 		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-		@LinesResultJson  = @LinesResultJson OUTPUT,
-		@EntriesResultJson  = @EntriesResultJson OUTPUT
+		@LinesResultJson = @LinesResultJson OUTPUT,
+		@EntriesResultJson = @EntriesResultJson OUTPUT;
 END;

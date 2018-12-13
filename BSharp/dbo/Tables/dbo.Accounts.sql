@@ -1,16 +1,16 @@
 ﻿CREATE TABLE [dbo].[Accounts] (
 	[TenantId]				INT,
-    [Id]					NVARCHAR (255),
-    [Name]					NVARCHAR (1024) NOT NULL,
-    [Code]					NVARCHAR (255)   NOT NULL,
-    [IsActive]				BIT             NOT NULL,
-    [AccountType]			NVARCHAR (255)	NOT NULL CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom'),
---    [AccountSpecification]	NVARCHAR (50)	NOT NULL CONSTRAINT [DF_Accounts_AccountSpecifications] DEFAULT (N'Basic'),
-    [IsExtensible]			BIT				NOT NULL CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT (1),
-    [ParentId]				NVARCHAR (255),
-    CONSTRAINT [PK_Accounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
-    CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]), 
-    CONSTRAINT [CK_Accounts_AccountType] CHECK ([AccountType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory')),
+	[Id]					NVARCHAR (255),
+	[Name]					NVARCHAR (1024) NOT NULL,
+	[Code]					NVARCHAR (255)  NOT NULL,
+	[IsActive]				BIT				NOT NULL,
+	[AccountType]			NVARCHAR (255)	NOT NULL CONSTRAINT [DF_Accounts_AccountType] DEFAULT (N'Custom'),
+--  [AccountSpecification]	NVARCHAR (50)	NOT NULL CONSTRAINT [DF_Accounts_AccountSpecifications] DEFAULT (N'Basic'),
+	[IsExtensible]			BIT				NOT NULL CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT (1),
+	[ParentId]				NVARCHAR (255),
+	CONSTRAINT [PK_Accounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]), 
+	CONSTRAINT [CK_Accounts_AccountType] CHECK ([AccountType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory')),
 --	CONSTRAINT [CK_Accounts_AccountSpecification] CHECK ([AccountSpecification] IN (N'Agent', N'Basic', N'Capital', N'Forex', N'Inventory', N'PPE'))
 	);
 GO

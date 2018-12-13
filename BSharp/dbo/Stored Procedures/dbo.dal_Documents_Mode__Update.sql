@@ -16,5 +16,3 @@ BEGIN
 	)
 	AND [Mode] <> @Mode;
 END;
-
-

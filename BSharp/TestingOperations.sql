@@ -13,7 +13,7 @@ BEGIN -- Inserting
 		(N'OperatingSegment', N'Fake', 0),
 		(N'Investment', N'Expansion', 0);
 
-	EXEC  [dbo].[api_Operations__Save]
+	EXEC [dbo].[api_Operations__Save]
 		@Operations = @O1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@OperationsResultJson = @O1ResultJson OUTPUT
@@ -67,7 +67,7 @@ BEGIN
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake';
 
-	EXEC  [dbo].[api_Operations__Save]
+	EXEC [dbo].[api_Operations__Save]
 		@Operations = @O2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@OperationsResultJson = @O2ResultJson OUTPUT

@@ -2,15 +2,22 @@
 	@Documents [dbo].DocumentForSaveNoIdentityList READONLY, 
 	@Lines [dbo].LineForSaveNoIdentityList READONLY, 
 	@Entries [dbo].EntryForSaveNoIdentityList READONLY,
-	@IndexedIdsJson  NVARCHAR(MAX) OUTPUT
+	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @DocumentsIndexedIds [dbo].[IndexedIdList], @LinesIndexedIds [dbo].[IndexedIdList];
+	DECLARE @IndexedIds [dbo].[IndexedIdList], @LinesIndexedIds [dbo].[IndexedIdList];
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
+	-- Delete only if the last one of its type, (WARNING: WE NEED TO do it for the given transaction type)
 	DELETE FROM [dbo].[Documents]
+	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted')
+	AND [Id] > (SELECT MAX([Id]) FROM dbo.Documents WHERE Mode <> N'Void')
+
+	-- Otherwise, mark as void
+	UPDATE [dbo].[Documents]
+	SET Mode = N'Void'
 	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
 
 	DELETE FROM [dbo].Lines
@@ -19,7 +26,7 @@ BEGIN
 	DELETE FROM [dbo].Entries
 	WHERE [Id] IN (SELECT [Id] FROM @Entries WHERE [EntityState] = N'Deleted');
 
-	INSERT INTO @DocumentsIndexedIds([Index], [Id])
+	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
@@ -28,7 +35,10 @@ BEGIN
 			SELECT 
 				[Index], [Id], [State], [TransactionType], [ResponsibleAgentId], [FolderId], [LinesMemo],
 				[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
-				[LinesReference1], [LinesReference2], [LinesReference3]
+				[LinesReference1], [LinesReference2], [LinesReference3],
+				-- RowNumber should be for inserted only, and max(Id) per transaction type.
+				ROW_Number() OVER (ORDER BY [Index]) + 
+					(SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents) As [SerialNumber]
 			FROM @Documents 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -51,12 +61,12 @@ BEGIN
 				t.[ModifiedBy]			= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId],[State], [TransactionType], [ResponsibleAgentId], [FolderId], [LinesMemo],
+				[TenantId],[State], [TransactionType], [SerialNumber], [ResponsibleAgentId], [FolderId], [LinesMemo],
 				[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
 				[LinesReference1], [LinesReference2], [LinesReference3], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
 			)
 			VALUES (
-				@TenantId, s.[State], s.[TransactionType], s.[ResponsibleAgentId], s.[FolderId], s.[LinesMemo],
+				@TenantId, s.[State], s.[TransactionType], s.[SerialNumber], s.[ResponsibleAgentId], s.[FolderId], s.[LinesMemo],
 				s.[LinesStartDateTime], s.[LinesEndDateTime], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],
 				s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], @Now, @UserId, @Now, @UserId
 			)
@@ -71,7 +81,7 @@ BEGIN
 		USING (
 			SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo]
 			FROM @Lines L
-			JOIN @DocumentsIndexedIds II ON L.DocumentIndex = II.[Index]
+			JOIN @IndexedIds II ON L.DocumentIndex = II.[Index]
 			WHERE L.[EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.Id = s.Id
 		WHEN MATCHED THEN
@@ -127,17 +137,7 @@ BEGIN
 				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],
 				@Now, @UserId, @Now, @UserId);
 
-	SELECT @IndexedIdsJson =
-	(
-		SELECT [Index], [Id] FROM @DocumentsIndexedIds
-		FOR JSON PATH
-	);
-/*
-	-- Assign Serial Numbers, here are some solutions..
-	-- https://social.technet.microsoft.com/Forums/en-US/631cf0e1-c6db-4985-9147-718af0080d03/pdw-simulate-identity-column?forum=sqldatawarehousing
-	-- https://www.sqlservercentral.com/Forums/Topic123246-8-1.aspx
-	-- For each state/transaction type, get the last serial number, and add one
-*/
+	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;
 
 

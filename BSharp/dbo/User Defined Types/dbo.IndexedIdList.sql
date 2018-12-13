@@ -2,6 +2,6 @@
 (
 	[Index] INT,
 	[Id] INT
-    PRIMARY KEY CLUSTERED ([Id] ASC)
+  PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

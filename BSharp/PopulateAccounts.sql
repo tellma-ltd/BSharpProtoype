@@ -1,12 +1,12 @@
 ﻿DECLARE @Accounts AS TABLE (
-    [Id]              NVARCHAR (255),
-    [Name]            NVARCHAR (1024)	NOT NULL,
-    [Code]            NVARCHAR (10)		NOT NULL,
-    [IsActive]        BIT				NOT NULL,
-    [AccountType]     NVARCHAR (10)		NOT NULL DEFAULT (N'Custom'),
---    [AccountSpecification] NVARCHAR (50)   DEFAULT (N'Basic') NOT NULL,
-    [IsExtensible]    BIT				NOT NULL DEFAULT (1),
-    [ParentId]        NVARCHAR (255),
+  [Id]       NVARCHAR (255),
+  [Name]      NVARCHAR (1024)	NOT NULL,
+  [Code]      NVARCHAR (10)		NOT NULL,
+  [IsActive]    BIT				NOT NULL,
+  [AccountType]   NVARCHAR (10)		NOT NULL DEFAULT (N'Custom'),
+--  [AccountSpecification] NVARCHAR (50)  DEFAULT (N'Basic') NOT NULL,
+  [IsExtensible]  BIT				NOT NULL DEFAULT (1),
+  [ParentId]    NVARCHAR (255),
 	PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
@@ -389,25 +389,25 @@ USING @Accounts AS s
 ON s.Code = t.Code AND [dbo].fn_TenantId() = t.tenantId
 WHEN MATCHED AND
 (
-    t.[Name]					<>	s.[Name]			OR
-    t.[Code]					<>	s.[Code]			OR
-    t.[IsActive]				<>	s.[IsActive]		OR
-    t.[AccountType]				<>	s.[AccountType]		OR
---    t.[AccountSpecification]	<>	s.[AccountSpecification]	OR
-    t.[IsExtensible]			<>	s.[IsExtensible]
+  t.[Name]					<>	s.[Name]			OR
+  t.[Code]					<>	s.[Code]			OR
+  t.[IsActive]				<>	s.[IsActive]		OR
+  t.[AccountType]				<>	s.[AccountType]		OR
+--  t.[AccountSpecification]	<>	s.[AccountSpecification]	OR
+  t.[IsExtensible]			<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-    t.[Name]					=	s.[Name],  
-    t.[Code]					=	s.[Code],
-    t.[IsActive]				=	s.[IsActive],
-    t.[AccountType]				=	s.[AccountType], 
---    t.[AccountSpecification]	=	s.[AccountSpecification],
-    t.[IsExtensible]			=	s.[IsExtensible]
+  t.[Name]					=	s.[Name], 
+  t.[Code]					=	s.[Code],
+  t.[IsActive]				=	s.[IsActive],
+  t.[AccountType]				=	s.[AccountType], 
+--  t.[AccountSpecification]	=	s.[AccountSpecification],
+  t.[IsExtensible]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
-        DELETE
+    DELETE
 WHEN NOT MATCHED BY TARGET THEN
-        INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [AccountType],-- [AccountSpecification],
+    INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [AccountType],-- [AccountSpecification],
 			[IsExtensible])
-        VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
+    VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

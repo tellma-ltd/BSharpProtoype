@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[bll_Documents_Lines__Fill]
+﻿CREATE PROCEDURE [dbo].[ui_Documents_Lines__Fill]
 	@Documents [dbo].DocumentForSaveList READONLY, 
 	@Lines [dbo].LineForSaveList READONLY, 
 	@Entries [dbo].EntryForSaveList READONLY,

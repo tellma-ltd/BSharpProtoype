@@ -1,21 +1,21 @@
 ﻿DECLARE @TransactionSpecifications TABLE (
-    [TransactionType]         NVARCHAR (50)  NOT NULL,
-    [EntryNumber]      TINYINT        NOT NULL,
-    [Definition]       NVARCHAR (50)  NOT NULL,
-    [Operation]        NVARCHAR (255) NULL,
-    [Account]          NVARCHAR (255) NULL,
-    [Custody]          NVARCHAR (255) NULL,
-    [Resource]         NVARCHAR (255) NULL,
-    [Direction]        NVARCHAR (255) NULL,
-    [Amount]           NVARCHAR (255) NULL,
-    [Value]            NVARCHAR (255) NULL,
-    [Note]             NVARCHAR (255) NULL,
-    [RelatedReference] NVARCHAR (255) NULL,
-    [RelatedAgent]     NVARCHAR (255) NULL,
-    [RelatedResource]  NVARCHAR (255) NULL,
-    [RelatedAmount]    NVARCHAR (255) NULL,
-    [RelatedUDLMember] NVARCHAR (255) NULL,
-    PRIMARY KEY CLUSTERED ([TransactionType] ASC, [EntryNumber] ASC, [Definition] ASC)
+  [TransactionType]     NVARCHAR (50) NOT NULL,
+  [EntryNumber]   TINYINT    NOT NULL,
+  [Definition]    NVARCHAR (50) NOT NULL,
+  [Operation]    NVARCHAR (255) NULL,
+  [Account]     NVARCHAR (255) NULL,
+  [Custody]     NVARCHAR (255) NULL,
+  [Resource]     NVARCHAR (255) NULL,
+  [Direction]    NVARCHAR (255) NULL,
+  [Amount]      NVARCHAR (255) NULL,
+  [Value]      NVARCHAR (255) NULL,
+  [Note]       NVARCHAR (255) NULL,
+  [RelatedReference] NVARCHAR (255) NULL,
+  [RelatedAgent]   NVARCHAR (255) NULL,
+  [RelatedResource] NVARCHAR (255) NULL,
+  [RelatedAmount]  NVARCHAR (255) NULL,
+  [RelatedUDLMember] NVARCHAR (255) NULL,
+  PRIMARY KEY CLUSTERED ([TransactionType] ASC, [EntryNumber] ASC, [Definition] ASC)
 );
 INSERT @TransactionSpecifications ([TransactionType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [Resource], [Direction], [Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount], [RelatedUDLMember]) VALUES
 	(N'PaymentIssueToSupplier', 1, N'Calculation', NULL, N'''CurrentPayablesToTradeSuppliers''', NULL, N'[dbo].fn_FunctionalCurrency()', N'1', NULL, N'[dbo].Amount(1,@Entries)', NULL, NULL, NULL, NULL, NULL, NULL),
@@ -74,36 +74,36 @@ AND t.[EntryNumber] = s.[EntryNumber]
 AND t.[Definition] = s.[Definition]	 -- AND s.tenantId = t.tenantId
 WHEN MATCHED AND
 (
-    t.[Operation]			<>	s.[Operation]			OR
-    t.[Account]				<>	s.[Account]				OR
-    t.[Custody]				<>	s.[Custody]				OR
-    t.[Resource]			<>	s.[Resource]			OR
-    t.[Direction]			<>	s.[Direction]			OR
-    t.[Amount]				<>	s.[Amount]				OR
-    t.[Value]				<>	s.[Value]				OR
-    t.[Note]				<>	s.[Note]				OR
-    t.[RelatedReference]	<>	s.[RelatedReference]	OR
-    t.[RelatedAgent]		<>	s.[RelatedAgent]		OR
-    t.[RelatedResource]		<>	s.[RelatedResource]		OR
-    t.[RelatedAmount]		<>	s.[RelatedAmount]		OR
-    t.[RelatedUDLMember]	<>	s.[RelatedUDLMember]
+  t.[Operation]			<>	s.[Operation]			OR
+  t.[Account]				<>	s.[Account]				OR
+  t.[Custody]				<>	s.[Custody]				OR
+  t.[Resource]			<>	s.[Resource]			OR
+  t.[Direction]			<>	s.[Direction]			OR
+  t.[Amount]				<>	s.[Amount]				OR
+  t.[Value]				<>	s.[Value]				OR
+  t.[Note]				<>	s.[Note]				OR
+  t.[RelatedReference]	<>	s.[RelatedReference]	OR
+  t.[RelatedAgent]		<>	s.[RelatedAgent]		OR
+  t.[RelatedResource]		<>	s.[RelatedResource]		OR
+  t.[RelatedAmount]		<>	s.[RelatedAmount]		OR
+  t.[RelatedUDLMember]	<>	s.[RelatedUDLMember]
 ) THEN
 UPDATE SET
-    t.[Operation]			=	s.[Operation]			,
-    t.[Account]				=	s.[Account]				,
-    t.[Custody]				=	s.[Custody]				,
-    t.[Resource]			=	s.[Resource]			,
-    t.[Direction]			=	s.[Direction]			,
-    t.[Amount]				=	s.[Amount]				,
-    t.[Value]				=	s.[Value]				,
-    t.[Note]				=	s.[Note]				,
-    t.[RelatedReference]	=	s.[RelatedReference]	,
-    t.[RelatedAgent]		=	s.[RelatedAgent]		,
-    t.[RelatedResource]		=	s.[RelatedResource]		,
-    t.[RelatedAmount]		=	s.[RelatedAmount]		,
-    t.[RelatedUDLMember]	=	s.[RelatedUDLMember]
+  t.[Operation]			=	s.[Operation]			,
+  t.[Account]				=	s.[Account]				,
+  t.[Custody]				=	s.[Custody]				,
+  t.[Resource]			=	s.[Resource]			,
+  t.[Direction]			=	s.[Direction]			,
+  t.[Amount]				=	s.[Amount]				,
+  t.[Value]				=	s.[Value]				,
+  t.[Note]				=	s.[Note]				,
+  t.[RelatedReference]	=	s.[RelatedReference]	,
+  t.[RelatedAgent]		=	s.[RelatedAgent]		,
+  t.[RelatedResource]		=	s.[RelatedResource]		,
+  t.[RelatedAmount]		=	s.[RelatedAmount]		,
+  t.[RelatedUDLMember]	=	s.[RelatedUDLMember]
 WHEN NOT MATCHED BY SOURCE THEN
-        DELETE
+    DELETE
 WHEN NOT MATCHED BY TARGET THEN
 INSERT ([TransactionType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [Resource], [Direction],
 	[Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount], [RelatedUDLMember])

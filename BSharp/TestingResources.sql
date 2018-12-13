@@ -14,7 +14,7 @@
 	SELECT @pcsUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'pcs'; IF @pcsUnit IS NULL Print N'@pcsUnit is NULL!!!!'
 	SELECT @shareUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'share'; IF @shareUnit IS NULL Print N'@shareUnit is NULL!!!!'
 	SELECT @wmoUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'wmo'; IF @wmoUnit IS NULL Print N'@wmoUnit is NULL!!!!'
-	SELECT @hrUnit = [Id] FROM [dbo].MeasurementUnits		WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!'
+	SELECT @hrUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!'
 END
 BEGIN -- Inserting
 	INSERT INTO @R1Save
@@ -28,7 +28,7 @@ BEGIN -- Inserting
 	(N'WagesAndSalaries',	N'Labor',			NULL,	@wmoUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,		NULL),
 	(N'WagesAndSalaries',	N'Holiday Overtime', NULL,	@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,		NULL);
 
-	EXEC  [dbo].[api_Resources__Save]
+	EXEC [dbo].[api_Resources__Save]
 		@Resources = @R1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResourcesResultJson = @R1ResultJson OUTPUT
@@ -83,7 +83,7 @@ BEGIN -- Updating
 		[EntityState] = N'Deleted' 
 	WHERE [Name] = N'Fake';
 
-	EXEC  [dbo].[api_Resources__Save]
+	EXEC [dbo].[api_Resources__Save]
 		@Resources = @R2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResourcesResultJson = @R2ResultJson OUTPUT

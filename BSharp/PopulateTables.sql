@@ -26,5 +26,5 @@ INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
 	(N'StockIssueToCustomer', N'Voucher', N'Issues'),
 	(N'StockReceiptFromSupplier', N'Voucher', N'Receipts')
 */
---  We may be able to auto concatenate the table [Name] to the string, or simply dismiss it, or use Module as a qualifier
+-- We may be able to auto concatenate the table [Name] to the string, or simply dismiss it, or use Module as a qualifier
 -- instead of table

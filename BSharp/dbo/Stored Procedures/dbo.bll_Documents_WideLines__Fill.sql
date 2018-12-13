@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_WideLines__Fill]
 		@Documents [dbo].DocumentForSaveList READONLY, 
-		@WideLines  [dbo].WideLineForSaveList READONLY, 
+		@WideLines [dbo].WideLineForSaveList READONLY, 
 		@LinesResultJson NVARCHAR(MAX) OUTPUT,
 		@EntriesResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
@@ -10,7 +10,7 @@ DECLARE
 	@ResponsibleAgentId int,
 	@StartDateTime datetimeoffset(7),
 	@EndDateTime datetimeoffset(7),	
-	@Memo  nvarchar(255),
+	@Memo nvarchar(255),
 
 	@Operation1 int,
 	@Reference1 NVARCHAR(255),

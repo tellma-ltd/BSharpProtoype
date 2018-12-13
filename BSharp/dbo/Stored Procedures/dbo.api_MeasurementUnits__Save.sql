@@ -2,13 +2,13 @@
 	@MeasurementUnits [MeasurementUnitForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@MeasurementUnitsResultJson  NVARCHAR(MAX) OUTPUT
+	@MeasurementUnitsResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX);
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
 -- Validate
-	EXEC [dbo].[bll_MeasurementUnits__Validate]
+	EXEC [dbo].[bll_MeasurementUnits_Save__Validate]
 		@MeasurementUnits = @MeasurementUnits,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
@@ -17,9 +17,16 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX);
 
 	EXEC [dbo].[dal_MeasurementUnits__Save]
 		@MeasurementUnits = @MeasurementUnits,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
 	IF (@ReturnEntities = 1)
+	BEGIN
+		INSERT INTO @IndexedIds([Index], [Id])
+		SELECT [Index], [Id] 
+		FROM OpenJson(@IndexedIdsJson)
+		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
-			@IndexedIdsJson = @IndexedIdsJson, @MeasurementUnitsResultJson = @MeasurementUnitsResultJson OUTPUT
+			@IndexedIds = @IndexedIds, @MeasurementUnitsResultJson = @MeasurementUnitsResultJson OUTPUT;
+	END
 END;

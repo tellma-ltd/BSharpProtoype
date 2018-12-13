@@ -1,9 +1,9 @@
 ﻿DECLARE @Translations TABLE
 (
 	[Name]			nvarchar(255),
-    [Culture]		NVARCHAR(255),
+  [Culture]		NVARCHAR(255),
 	[Value]			nvarchar(2048) NOT NULL,
-    PRIMARY KEY NONCLUSTERED ([Name] ASC, [Culture] ASC)
+  PRIMARY KEY NONCLUSTERED ([Name] ASC, [Culture] ASC)
 );
 -- Modes
 INSERT INTO @Translations([Name], [Culture], [Value]) VALUES
@@ -70,13 +70,13 @@ USING @Translations AS s
 ON s.[Name] = t.[Name] AND s.[Culture] = t.[Culture]
 WHEN MATCHED AND
 (
-    t.[Value]	<>	s.[Value]			
+  t.[Value]	<>	s.[Value]			
 ) THEN
 UPDATE SET
-    t.[Value]	=	s.[Value]
+  t.[Value]	=	s.[Value]
 WHEN NOT MATCHED BY SOURCE THEN
-        DELETE
+    DELETE
 WHEN NOT MATCHED BY TARGET THEN
-        INSERT ([Name], [Culture], [Value])
-        VALUES (s.[Name], s.[Culture], s.[Value]);
+    INSERT ([Name], [Culture], [Value])
+    VALUES (s.[Name], s.[Culture], s.[Value]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

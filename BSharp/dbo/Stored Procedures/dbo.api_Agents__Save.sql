@@ -2,7 +2,7 @@
 	@Agents [AgentForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@AgentsResultJson  NVARCHAR(MAX) OUTPUT
+	@AgentsResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
