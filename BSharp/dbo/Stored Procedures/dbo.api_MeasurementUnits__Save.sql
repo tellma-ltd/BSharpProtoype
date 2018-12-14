@@ -1,22 +1,22 @@
 ﻿CREATE PROCEDURE [dbo].[api_MeasurementUnits__Save]
-	@MeasurementUnits [MeasurementUnitForSaveList] READONLY,
+	@Entities [MeasurementUnitForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@MeasurementUnitsResultJson NVARCHAR(MAX) OUTPUT
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
 -- Validate
 	EXEC [dbo].[bll_MeasurementUnits_Save__Validate]
-		@MeasurementUnits = @MeasurementUnits,
+		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
 	EXEC [dbo].[dal_MeasurementUnits__Save]
-		@MeasurementUnits = @MeasurementUnits,
+		@Entities = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
 	IF (@ReturnEntities = 1)
@@ -27,6 +27,6 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
-			@IndexedIds = @IndexedIds, @MeasurementUnitsResultJson = @MeasurementUnitsResultJson OUTPUT;
+			@IndexedIds = @IndexedIds, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
 	END
 END;

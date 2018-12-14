@@ -2,7 +2,7 @@
 	@IndexedIds [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) = NULL OUTPUT,
 	@ReturnEntities bit = 1,
-	@MeasurementUnitsResultJson NVARCHAR(MAX) OUTPUT
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
 	EXEC [dbo].[dal_MeasurementUnits__Activate] @IndexedIds = @IndexedIds, @IsActive = 1
@@ -10,4 +10,4 @@ SET NOCOUNT ON;
 	IF (@ReturnEntities = 1)
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
 				@IndexedIds = @IndexedIds,
-				@MeasurementUnitsResultJson = @MeasurementUnitsResultJson OUTPUT
+				@EntitiesResultJson = @EntitiesResultJson OUTPUT

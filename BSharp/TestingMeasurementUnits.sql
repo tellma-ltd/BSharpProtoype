@@ -32,9 +32,9 @@ BEGIN -- Inserting
 		(N'yr', N'Time', N'Year', 1, 31104000, NULL);
 
 	EXEC [dbo].[api_MeasurementUnits__Save]
-		@MeasurementUnits = @MU1Save,
+		@Entities = @MU1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@MeasurementUnitsResultJson = @MU1ResultJson OUTPUT
+		@EntitiesResultJson = @MU1ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -98,9 +98,9 @@ WHERE [Code] Like 'm%';
 
 -- Calling Save API
 	EXEC [dbo].[api_MeasurementUnits__Save]
-		@MeasurementUnits = @MU2Save,
+		@Entities = @MU2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@MeasurementUnitsResultJson = @MU2ResultJson OUTPUT
+		@EntitiesResultJson = @MU2ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL
 	BEGIN

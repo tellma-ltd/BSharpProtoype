@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Save]
-	@MeasurementUnits [MeasurementUnitForSaveList] READONLY,
+	@Entities [MeasurementUnitForSaveList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -10,7 +10,7 @@ SET NOCOUNT ON;
 
 -- Deletions
 	DELETE FROM [dbo].MeasurementUnits
-	WHERE [Id] IN (SELECT [Id] FROM @MeasurementUnits WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -19,7 +19,7 @@ SET NOCOUNT ON;
 		MERGE INTO [dbo].MeasurementUnits AS t
 		USING (
 			SELECT [Index], [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount]
-			FROM @MeasurementUnits 
+			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED 
