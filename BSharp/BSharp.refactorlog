@@ -560,4 +560,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[ui_Documents_Lines__Fill]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b0306e2e-731c-4fcd-9042-f222d982e63e" ChangeDateTime="12/14/2018 02:13:19">
+    <Property Name="ElementName" Value="[dbo].[bll_Documnets_Post__Validate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_Post__Validate]" />
+  </Operation>
 </Operations>

@@ -5,7 +5,10 @@
 	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	EXEC [dbo].[dal_MeasurementUnits__Activate] @IndexedIds = @IndexedIds, @IsActive = 1
+DECLARE @Ids [dbo].[IntegerList];
+	INSERT INTO @Ids([Id]) (SELECT [Id] FROM @IndexedIds);
+
+	EXEC [dbo].[dal_MeasurementUnits__Activate] @Ids = @Ids, @IsActive = 1
 
 	IF (@ReturnEntities = 1)
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
