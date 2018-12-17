@@ -22,19 +22,27 @@ BEGIN
 	) VALUES
 	(NULL, N'Voucher', N'ManualJournalVoucher', NULL,			NULL,		N'Capital Investment', '2018.01.01', NULL, N'Inserted'),
 	(NULL, N'Voucher', N'ManualJournalVoucher', NULL,			NULL,		N'Inventory migration', '2018.01.01', NULL, N'Inserted'),
-	(NULL, N'Voucher', N'ManualJournalVoucher', NULL,			NULL,		N'Fixed assets migratipm', '2018.01.01', NULL, N'Inserted');
+	(NULL, N'Voucher', N'ManualJournalVoucher', NULL,			NULL,		N'Fixed assets migration', '2018.01.01', NULL, N'Inserted'),
+	(NULL, N'Voucher', N'ManualJournalVoucher', NULL,			NULL,		N'Computer Acquisition & Depreciation', NULL, NULL, N'Inserted');
 	INSERT INTO @L1Save (
-		[Id], [DocumentIndex], [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo], [EntityState]	
+		[Id], [DocumentIndex], [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo],					[EntityState]	
 	) 
-	VALUES (NULL, 0,			NULL,			NULL,			NULL,			NULL,		NULL,			NULL, N'Inserted') ;
+	VALUES
+	(NULL,		0,				NULL,			NULL,			NULL,			NULL,			NULL,		NULL,					N'Inserted'),
+	(NULL,		3,				NULL,			'2018.01.10',	NULL,			NULL,			NULL,	N'Computer Acquisition',	N'Inserted'),
+	(NULL,		3,				NULL,			'2018.01.01',	'2022.01.01',	NULL,			NULL,	N'Computer Depreciation',	N'Inserted') ;
 
 	INSERT INTO @E1Save
-	([Id], [LineIndex], [LineId], EntryNumber, OperationId,		AccountId,			CustodyId,		ResourceId,	Direction, Amount, [Value],		NoteId,							[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]) VALUES
-	(NULL, 0,			NULL,		1,			@BusinessEntity, N'CashOnHand',		@TigistNegash,	@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares',	NULL,				NULL,				NULL,				NULL,			N'Inserted'),
-	(NULL, 0,			NULL, 		2,			@BusinessEntity, N'IssuedCapital',	@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),
-	(NULL, 0,			NULL, 		3,			@BusinessEntity, N'IssuedCapital',	@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted');
+	([Id], [LineIndex], [LineId], EntryNumber, OperationId,		AccountId,				CustodyId,		ResourceId,	Direction, Amount, [Value],		NoteId,							[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]) VALUES
+	(NULL, 0,			NULL,		1,			@BusinessEntity, N'CashOnHand',			@TigistNegash,	@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares',	NULL,				NULL,				NULL,				NULL,			N'Inserted'),
+	(NULL, 0,			NULL, 		2,			@BusinessEntity, N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),
+	(NULL, 0,			NULL, 		3,			@BusinessEntity, N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),
+	(NULL, 1,			NULL, 		1,			@BusinessEntity, N'MotorVehicles',		@BadegeKebede,	@CommonStock,	+1,		30000,	NULL,		N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),	
+	(NULL, 1,			NULL, 		2,			@BusinessEntity, N'CashOnHand',			@TigistNegash,	@ETB,			-1,		30000,	NULL,		N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),	
+	(NULL, 2,			NULL, 		1,		@BusinessEntity, N'AdministrativeExpense', @ExecutiveOffice,@ETB,			+1,		30000,	NULL,		N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted'),
+	(NULL, 2,			NULL, 		2,			@BusinessEntity, N'MotorVehicles',		@BadegeKebede,	@CommonStock,	-1,		30000,	NULL,		N'IssueOfEquity',				NULL,				NULL,				NULL,				NULL,			N'Inserted');
 
-	EXEC [dbo].[api_Documents_Lines__Save]
+	EXEC [dbo].[api_Documents__Save]
 		@Documents = @D1Save, @Lines = @L1Save, @Entries = @E1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@DocumentsResultJson = @D1ResultJson OUTPUT, @LinesResultJson = @L1ResultJson OUTPUT, @EntriesResultJson = @E1ResultJson OUTPUT
@@ -116,7 +124,7 @@ BEGIN
 		SELECT [DocumentIndex] FROM @L2Save WHERE [EntityState] IN (N'Inserted', N'Updated', N'Deleted')
 	)
 	
-	EXEC [dbo].[api_Documents_Lines__Save]
+	EXEC [dbo].[api_Documents__Save]
 		@Documents = @D2Save, @Lines = @L2Save, @Entries = @E2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@DocumentsResultJson = @D2ResultJson OUTPUT, @LinesResultJson = @L2ResultJson OUTPUT, @EntriesResultJson = @E2ResultJson OUTPUT

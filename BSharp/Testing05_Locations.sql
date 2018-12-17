@@ -145,7 +145,7 @@ END
 IF @LookupsSelect = 1
 BEGIN
 	SELECT * FROM @Loc1Result; SELECT * FROM @Loc2Result; SELECT * FROM @Loc3Result;
-	SELECT * FROM [dbo].Custodies;
+	SELECT * FROM [dbo].[Custodies];
 END
 
 SELECT

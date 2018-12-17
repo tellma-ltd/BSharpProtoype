@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents_Lines__Save]
+﻿CREATE PROCEDURE [dbo].[api_Documents__Save]
 	@Documents [dbo].DocumentForSaveList READONLY, 
 	@Lines [dbo].LineForSaveList READONLY, 
 	@Entries [dbo].EntryForSaveList READONLY,

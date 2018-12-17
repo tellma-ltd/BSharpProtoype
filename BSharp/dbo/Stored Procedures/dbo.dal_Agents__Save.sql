@@ -8,7 +8,7 @@ AS
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
-	DELETE FROM [dbo].Custodies
+	DELETE FROM [dbo].[Custodies]
 	WHERE [Id] IN (SELECT [Id] FROM @Agents WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])

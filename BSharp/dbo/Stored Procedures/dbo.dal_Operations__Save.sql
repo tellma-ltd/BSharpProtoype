@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Operations__Save]
-	@Operations [OperationForSaveList] READONLY,
+	@Entities [OperationForSaveList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -10,7 +10,7 @@ SET NOCOUNT ON;
 
 -- Deletions, if already user, we should deactivate instead
 	DELETE FROM [dbo].Operations
-	WHERE [Id] IN (SELECT [Id] FROM @Operations WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -19,7 +19,7 @@ SET NOCOUNT ON;
 		MERGE INTO [dbo].Operations AS t
 		USING (
 			SELECT [Index], [Id], [Code], [OperationType], [Name], [ParentId]
-			FROM @Operations 
+			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED 
@@ -42,7 +42,7 @@ SET NOCOUNT ON;
 	FROM [dbo].Operations BE
 	JOIN (
 		SELECT II.[Id], IIParent.[Id] As ParentId
-		FROM @Operations O
+		FROM @Entities O
 		JOIN @IndexedIds IIParent ON IIParent.[Index] = O.ParentIndex
 		JOIN @IndexedIds II ON II.[Index] = O.[Index]
 	) T ON BE.Id = T.[Id]

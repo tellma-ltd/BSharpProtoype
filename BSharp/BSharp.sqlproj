@@ -147,7 +147,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
-    <None Include="TestingManualJV.sql" />
+    <None Include="Testing10_ManualJV.sql" />
     <Build Include="dbo\Functions\dbo.fn_TenantId.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
@@ -160,8 +160,8 @@
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Save.sql" />
-    <None Include="TestingAgents.sql" />
-    <None Include="TestingLocations.sql" />
+    <None Include="Testing04_Agents.sql" />
+    <None Include="Testing05_Locations.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Agents__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Locations__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Save.sql" />
@@ -196,7 +196,7 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Lines__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_WideLines__Fill.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents_Lines__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents_WideLines__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_WideLines__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines__Fill.sql" />
@@ -224,11 +224,15 @@
     <None Include="PopulateTransactionTypes.sql" />
     <None Include="PopulateTranslations.sql" />
     <None Include="Testing.sql" />
-    <None Include="TestingSettings.sql" />
-    <None Include="TestingResources.sql" />
-    <None Include="TestingOperations.sql" />
+    <None Include="Testing00_Settings.sql" />
+    <None Include="Testing03_Resources.sql" />
+    <None Include="Testing02_Operations.sql" />
     <None Include="PopulateMeasurementUnits.sql" />
-    <None Include="TestingMeasurementUnits.sql" />
+    <None Include="Testing01_MeasurementUnits.sql" />
+    <None Include="Testing11_HRCycle.sql" />
+    <None Include="Testing12_PurchasingCycle.sql" />
+    <None Include="Testing13_ProductionCycle.sql" />
+    <None Include="Testing14_SalesCycle.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

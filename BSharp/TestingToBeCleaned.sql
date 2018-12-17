@@ -1,16 +1,4 @@
 ﻿BEGIN -- Cleanup
-	SET NOCOUNT ON;
-	DELETE FROM [dbo].[Entries];
-	DELETE FROM [dbo].[Lines];
-	DELETE FROM [dbo].[Documents];
-	DELETE FROM [dbo].Custodies;
-	DELETE FROM [dbo].Users;
-	DELETE FROM [dbo].[Operations];
-	DELETE FROM [dbo].Resources;	
-
-	DBCC CHECKIDENT ('[dbo].[Operations]', RESEED, 0) WITH NO_INFOMSGS;
-	DBCC CHECKIDENT ('[dbo].Custodies', RESEED, 0) WITH NO_INFOMSGS;
-	DBCC CHECKIDENT ('[dbo].Resources', RESEED, 0) WITH NO_INFOMSGS;;
 
 	Truncate Table [dbo].Settings;
 
@@ -36,49 +24,8 @@ END
 -- get acceptable document types; and user permissions and general settings;
 IF (1=1)-- Journal Vouchers
 BEGIN
--- Document 1: Manual JV
-	SELECT @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Voucher', @TransactionType = N'ManualJournalVoucher', @Mode = N'Draft';
-
-	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
-	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-
--- Line 1: A point in time transaction
-	SELECT @LineNumber = @LineNumber + 1, @EntryNumber = 0, @ResponsibleAgent = @BusinessEntity, @Memo = N'Capital Investment';
-	SELECT @StartDatetime = '01.01.2018', @EndDatetime = DATEADD(D, 1, @StartDatetime);
-
-	INSERT INTO @Lines(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
-	VALUES(@DocumentId, @LineNumber, @ResponsibleAgent, @StartDatetime, @EndDatetime, @Memo)
-
--- Entry 1
-	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @BusinessEntity, @Account = N'CashOnHand', @Custody = @TigistNegash, @Resource = @USD, @Direction = 1, @Amount = 200000, @Value = 4700000, @Note = N'ProceedsFromIssuingShares';
-	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
-	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
--- Entry 2
-	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @BusinessEntity, @Account = N'IssuedCapital', @Custody = @MohamadAkra, @Resource = @CommonStock, @Direction = -1, @Amount = 1000, @Value = 2350000, @Note = N'IssueOfEquity';
-	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
-	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction,@Amount, @Value, @Note)
--- Entry 3
-	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @BusinessEntity, @Account = N'IssuedCapital', @Custody = @AhmadAkra, @Resource = @CommonStock, @Direction = -1, @Amount = 1000, @Value = 2350000, @Note = N'IssueOfEquity';
-	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
-	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction,@Amount, @Value, @Note)
-
 -- Document 2: Manual JV Extended
-	SELECT @DocumentId = @DocumentId + 1, @LineNumber = 0, @State = N'Voucher', @TransactionType = N'ManualJournalVoucherExtended', @Mode = N'Draft';
-	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
-	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
--- Line 1: A period of time transaction
-	SELECT @LineNumber = @LineNumber + 1, @EntryNumber = 0, @ResponsibleAgent = @TizitaNigussie, @EntryNumber = 0, @Memo = N'Yearly Depreciation ';
-	--Defaults, can be modified
-	SELECT @StartDatetime = '01.01.2018', @EndDatetime = DATEADD(YEAR, 1, @StartDatetime);
-
-	INSERT INTO @Lines(DocumentId, LineNumber, ResponsibleAgentId, StartDateTime, EndDateTime, Memo)
-	VALUES(@DocumentId, @LineNumber, @ResponsibleAgent, @StartDatetime, @EndDatetime, @Memo)
 
 	-- Entry 1
 	SELECT @EntryNumber = @EntryNumber + 1;

@@ -11,7 +11,7 @@ SET NOCOUNT ON;
 
 	-- Cannot save with a future date
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].LinesStartDateTime' As [Key], N'TheStartDateTime{{0}}IsInTheFuture' As [ErrorName],
+	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].LinesStartDateTime' As [Key], N'Error_TheStartDateTime0IsInTheFuture' As [ErrorName],
 		FE.LinesStartDateTime AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	WHERE FE.LinesStartDateTime > @Now
@@ -19,7 +19,7 @@ SET NOCOUNT ON;
 		
 	-- Cannot save unless in draft mode
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Mode' As [Key], N'CannotSaveADocumentIn{{0}}Mode' As [ErrorName],
+	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Mode' As [Key], N'Error_CannotSaveADocumentIn0Mode' As [ErrorName],
 		BE.[Mode] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
@@ -30,7 +30,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
 				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
-				CAST(E.[Index] AS NVARCHAR(255)) + '].AccountId' As [Key], N'TheAccount{{0}}IsInactive' As [ErrorName],
+				CAST(E.[Index] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheAccount0IsInactive' As [ErrorName],
 				BE.[Name] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN @Lines L ON E.LineIndex = L.[Index]
@@ -42,7 +42,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
 				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
-				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'TheNote{{0}}IsInactive' As [ErrorName],
+				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNote0IsInactive' As [ErrorName],
 				E.[NoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN @Lines L ON E.LineIndex = L.[Index]

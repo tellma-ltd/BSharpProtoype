@@ -36,8 +36,9 @@ BEGIN
 				[Index], [Id], [State], [TransactionType], [ResponsibleAgentId], [FolderId], [LinesMemo],
 				[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
 				[LinesReference1], [LinesReference2], [LinesReference3],
-				-- RowNumber should be for inserted only, and max(Id) per transaction type.
-				ROW_Number() OVER (ORDER BY [Index]) + 
+				-- RowNumber should be for inserted only, 
+				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + 
+				-- and max(Id) per transaction type.
 					(SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents) As [SerialNumber]
 			FROM @Documents 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
