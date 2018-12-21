@@ -1,5 +1,4 @@
-﻿
-CREATE VIEW [dbo].[LineTemplatesCalculationView]
+﻿CREATE VIEW [dbo].[LineTemplatesCalculationView]
 AS
 SELECT *
 FROM [dbo].[TransactionSpecifications]

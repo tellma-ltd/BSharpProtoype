@@ -1,5 +1,4 @@
-﻿
-CREATE VIEW [dbo].[WideLinesLabelView]  
+﻿CREATE VIEW [dbo].[WideLinesLabelView]  
 AS
 SELECT [TransactionType], 
 	MAX(CASE WHEN EntryNumber = 1 THEN [Operation] ELSE NULL END) AS Operation1,
@@ -42,5 +41,4 @@ SELECT [TransactionType],
 	MAX(CASE WHEN EntryNumber = 3 THEN [RelatedAmount] ELSE NULL END) AS RelatedAmount3
 FROM [dbo].[TransactionSpecifications] 
 WHERE Definition = N'Label'
-GROUP BY [TransactionType]
-
+GROUP BY [TransactionType];

@@ -47,5 +47,4 @@ JOIN [dbo].[Documents] D ON D.Id = L.DocumentId
 GROUP BY
 	D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id, L.StartDateTime, L.EndDateTime,
 	L.[BaseLineId], L.[ScalingFactor], L.[Memo],
-	L.[CreatedAt], L.[CreatedBy], L.[ModifiedAt], L.[ModifiedBy]
- 
+	L.[CreatedAt], L.[CreatedBy], L.[ModifiedAt], L.[ModifiedBy];

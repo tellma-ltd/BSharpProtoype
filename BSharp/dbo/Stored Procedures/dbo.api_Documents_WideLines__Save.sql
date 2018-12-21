@@ -44,9 +44,9 @@ EXEC [dbo].[dal_Documents__Save]
 	@Entries = @Entries,
 	@IndexedIdsJson = @IndexedIdsJson OUTPUT
 
-IF (@ReturnEntities = 1)
-	EXEC [dbo].[dal_Documents_WideLines__Select] 
-		@IndexedIdsJson = @IndexedIdsJson, 
-		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-		@WideLinesResultJson = @WideLinesResultJson OUTPUT
+--IF (@ReturnEntities = 1)
+--	EXEC [dbo].[dal_Documents_WideLines__Select] 
+--		@IndexedIdsJson = @IndexedIdsJson, 
+--		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
+--		@WideLinesResultJson = @WideLinesResultJson OUTPUT
 END;

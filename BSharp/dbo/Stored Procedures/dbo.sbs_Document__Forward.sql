@@ -13,7 +13,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-		IF (SELECT Mode FROM [dbo].[Documents] WHERE [Id]= @FromDocument) <> N'Committed'
+		IF (SELECT Mode FROM [dbo].[Documents] WHERE [Id] = @FromDocument) <> N'Committed'
 			RAISERROR (N'Please commit the Document before moving to next stage', 16,1) 
 /*
 		IF EXISTS (

@@ -226,7 +226,7 @@ INSERT INTO @Notes(NoteType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'47', N'OtherExpenseByNature', N'Other expenses, by nature');
 MERGE [dbo].Notes AS t
 USING @Notes AS s
-ON s.Code = t.Code AND t.tenantId = [dbo].fn_TenantId()
+ON s.Code = t.Code
 WHEN MATCHED AND
 (
   t.[Name]			<>	s.[Name]			OR
@@ -245,5 +245,5 @@ WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
     INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
-    VALUES ([dbo].fn_TenantId(), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
+    VALUES (CONVERT(INT, SESSION_CONTEXT(N'TenantId')), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

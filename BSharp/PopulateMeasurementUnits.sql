@@ -1,4 +1,4 @@
-﻿IF NOT Exists(SELECT * FROM [dbo].[MeasurementUnits] WHERE TenantId = [dbo].fn_TenantId())
+﻿IF NOT Exists(SELECT * FROM [dbo].[MeasurementUnits])
 BEGIN
 	DECLARE @MeasurementUnits MeasurementUnitForSaveList;
 	INSERT INTO @MeasurementUnits ([Code], [UnitType], [Name], [UnitAmount], [BaseAmount], [IsActive]) VALUES

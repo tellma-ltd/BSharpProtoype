@@ -27,4 +27,3 @@ SET NOCOUNT ON;
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
 		VALUES (@TenantId, s.[Field], s.[Value], @Now, @UserId, @Now, @UserId);
-
