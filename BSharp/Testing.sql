@@ -11,7 +11,6 @@ BEGIN -- reset Identities
 
 	DECLARE @ValidationErrorsJson nvarchar(max); 
 	DECLARE @LookupsSelect bit = 0;
-	DECLARE @BusinessEntity int, @Existing int, @Expansion int;
 END
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -25,13 +24,17 @@ BEGIN TRY
 		:r .\Testing04_Agents.sql
 		:r .\Testing05_Locations.sql
 		:r .\Testing10_ManualJV.sql
-		:r .\Testing11_HRCycle.sql
-		:r .\Testing12_PurchasingCycle.sql
-		:r .\Testing13_ProductionCycle.sql
-		:r .\Testing14_SalesCycle.sql
-
-	SELECT * from ft_Journal('2018.01.01', '2018.01.31') ORDER BY [Id], [LineId], [EntryId];
-	EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;
+		--:r .\Testing11_HRCycle.sql
+		--:r .\Testing12_PurchasingCycle.sql
+		--:r .\Testing13_ProductionCycle.sql
+		--:r .\Testing14_SalesCycle.sql
+	DECLARE @fromDate Datetime = '2018.01.01', @toDate Datetime = '2018.12.31';
+	SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
+	--EXEC rpt_TrialBalance @fromDate = @toDate, @toDate = @toDate, @ByCustody = 0, @ByResource = 0;
+	--EXEC rpt_WithholdingTaxOnPayment;
+	--EXEC rpt_ERCA__VAT_Purchases;
+	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
+	EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
 	ROLLBACK;
 END TRY
 BEGIN CATCH
@@ -63,4 +66,3 @@ SELECT Debit, Credit from ft_Account__Statement(N'AdministrativeExpense', '2017.
 SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');
 
 EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;
-

@@ -1,6 +1,4 @@
-﻿CREATE TYPE [dbo].[AgentList] AS TABLE
-(
-	[Index]						INT,
+﻿CREATE TYPE [dbo].[AgentList] AS TABLE (
 	[Id]						INT,
 	[AgentType]					NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
@@ -18,9 +16,8 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]				NVARCHAR(450)		NOT NULL,
 	[EntityState]				NVARCHAR(255),
-	PRIMARY KEY CLUSTERED ([Index] ASC),
-	CHECK ([AgentType] IN (N'Individual', N'Organization', N'OrganizationUnit')),
+	PRIMARY KEY CLUSTERED ([Id] ASC),
+	CHECK ([AgentType] IN (N'Individual', N'Organization', N'Position')),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
-

@@ -8,4 +8,6 @@
 	CONSTRAINT [FK_Locations_Custodies] FOREIGN KEY ([TenantId], [Id], [LocationType]) REFERENCES [dbo].[Custodies] ([TenantId], [Id], [CustodyType]) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT [CK_Locations_LocationType] CHECK ([LocationType] IN (N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc'))
 );
-
+GO
+CREATE INDEX [IX_Locations__CustodianId] ON [dbo].[Locations]([TenantId] ASC, [CustodianId] ASC);
+GO

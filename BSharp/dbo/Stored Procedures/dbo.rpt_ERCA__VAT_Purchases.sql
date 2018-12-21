@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[rpt_ERCA__VAT_Purchases] -- EXEC [dbo].[sbs_ERCA__VAT] @fromDate = '01.01.2015', @toDate = '01.01.2020'
+﻿CREATE PROCEDURE [dbo].[rpt_ERCA__VAT_Purchases] -- EXEC [dbo].[sbs_ERCA__VAT] @fromDate = '01.01.2015', @toDate = '01.01.2020'
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
 AS

@@ -22,3 +22,5 @@
 	CONSTRAINT [FK_Lines_Lines] FOREIGN KEY ([TenantId], [BaseLineId]) REFERENCES [dbo].[Lines] ([TenantId], [Id])
 );
 GO
+CREATE INDEX [IX_Lines__DocumentId] ON [dbo].[Lines]([TenantId] ASC, [DocumentId] ASC);
+GO

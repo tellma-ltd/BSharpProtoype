@@ -1,32 +1,32 @@
 ﻿CREATE PROCEDURE [dbo].[api_Resources__Save]
-	@Resources [dbo].[ResourceForSaveList] READONLY,
+	@Entities [dbo].[ResourceForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@ResourcesResultJson NVARCHAR(MAX) OUTPUT
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
 	EXEC [dbo].[bll_Resources__Validate]
-		@Resources = @Resources,
+		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
 	EXEC [dbo].[dal_Resources__Save]
-		@Resources = @Resources,
+		@Resources = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
 	IF (@ReturnEntities = 1)
 	BEGIN
-		INSERT INTO @IndexedIds([Index], [Id])
-		SELECT [Index], [Id] 
+		INSERT INTO @Ids([Id])
+		SELECT [Id] 
 		FROM OpenJson(@IndexedIdsJson)
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_Resources__Select] 
-			@IndexedIds = @IndexedIds, @ResourcesResultJson = @ResourcesResultJson OUTPUT;
+			@Ids = @Ids, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
 	END
 END

@@ -1,15 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Resources__Select]
-	@IndexedIds dbo.IndexedIdList READONLY,
-	@ResourcesResultJson NVARCHAR(MAX) OUTPUT
+	@Ids [dbo].[IntegerList] READONLY,
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
-SELECT @ResourcesResultJson =	(
+SELECT @EntitiesResultJson = (
 	SELECT
-		T.[Index], R.[Id],R.[MeasurementUnitId], R.[ResourceType], R.[Name], R.[Source], R.[Purpose], 
-		R.[Memo], R.[Lookup1], R.[Lookup2], R.[Lookup3], R.[Lookup4], R.[FungibleParentId], R.[IsActive], R.[Code], 
-		R.[CreatedAt], R.[CreatedBy], R.[ModifiedAt], R.[ModifiedBy], N'Unchanged' As [EntityState]
-	FROM [dbo].[Resources] R JOIN (
-		SELECT [Index], [Id] 
-		FROM @IndexedIds
-	) T ON R.Id = T.Id
+		[Id],[MeasurementUnitId], [ResourceType], [Name], [Source], [Purpose], [Memo],  
+		[Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOfId], [InstanceOfId], [ServiceOfId], [IsActive], [Code], 
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
+	FROM [dbo].[Resources]
+	WHERE [Id] IN (SELECT [Id] FROM @Ids)
 	FOR JSON PATH
 );

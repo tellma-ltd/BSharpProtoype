@@ -43,15 +43,14 @@ BEGIN -- Inserting
 	END
 
 	INSERT INTO @MU1Result(
-		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [Description], [IsActive], [Code],
+		[Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [Description], [IsActive], [Code],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
-		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [Description], [IsActive], [Code],
+		[Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [Description], [IsActive], [Code],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	FROM OpenJson(@MU1ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
 		[UnitType] NVARCHAR (255) '$.UnitType',
 		[UnitAmount] FLOAT (53) '$.UnitAmount',
@@ -109,15 +108,14 @@ WHERE [Code] Like 'm%';
 	END
 
 	INSERT INTO @MU2Result(
-		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
-		[Index], [Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
+		[Id], [UnitType], [UnitAmount], [BaseAmount], [Name], [IsActive], [Code],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	FROM OpenJson(@MU2ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
 		[UnitType] NVARCHAR (255) '$.UnitType',
 		[UnitAmount] FLOAT (53) '$.UnitAmount',

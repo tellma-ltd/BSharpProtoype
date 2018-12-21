@@ -2,11 +2,11 @@
 	@Entities [OperationForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@OperationsResultJson NVARCHAR(MAX) OUTPUT
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
 	EXEC [dbo].[bll_Operations__Validate]
 		@Entities = @Entities,
@@ -21,12 +21,12 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @IndexedIds dbo.[IndexedIdList];
 
 	IF (@ReturnEntities = 1)
 	BEGIN
-		INSERT INTO @IndexedIds([Index], [Id])
-		SELECT [Index], [Id] 
+		INSERT INTO @Ids([Id])
+		SELECT [Id] 
 		FROM OpenJson(@IndexedIdsJson)
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_Operations__Select] 
-			@IndexedIds = @IndexedIds, @OperationsResultJson = @OperationsResultJson OUTPUT;
+			@Ids = @Ids, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
 	END
 END;

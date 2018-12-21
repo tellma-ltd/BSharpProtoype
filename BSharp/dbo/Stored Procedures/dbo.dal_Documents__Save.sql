@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents [dbo].DocumentForSaveNoIdentityList READONLY, 
-	@Lines [dbo].LineForSaveNoIdentityList READONLY, 
-	@Entries [dbo].EntryForSaveNoIdentityList READONLY,
+	@Documents [dbo].DocumentForSaveList READONLY, 
+	@Lines [dbo].LineForSaveList READONLY, 
+	@Entries [dbo].EntryForSaveList READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -140,6 +140,3 @@ BEGIN
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;
-
-
-

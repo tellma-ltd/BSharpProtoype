@@ -1,5 +1,4 @@
 ﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
-	[Index]					INT,
 	[Id]					INT,
 	[State]					NVARCHAR (255)		NOT NULL,
 	[TransactionType]		NVARCHAR (255)		NOT NULL,
@@ -22,7 +21,7 @@
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]			NVARCHAR(450)		NOT NULL,
 	[EntityState]			NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY CLUSTERED ([Index] ASC),
+	PRIMARY KEY CLUSTERED ([Id] ASC),
 	CHECK ([State]	IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
 	CHECK ([Mode]	IN (N'Void', N'Draft', N'Submitted', N'Posted')),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),

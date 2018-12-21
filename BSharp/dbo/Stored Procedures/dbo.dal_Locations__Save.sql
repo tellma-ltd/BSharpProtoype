@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Locations__Save]
-	@Locations [LocationForSaveList] READONLY,
+	@Entities [LocationForSaveList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -9,7 +9,7 @@ AS
 
 -- Deletions
 	DELETE FROM [dbo].[Custodies]
-	WHERE [Id] IN (SELECT [Id] FROM @Locations WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -18,7 +18,7 @@ AS
 		MERGE INTO [dbo].[Custodies] AS t
 		USING (
 			SELECT [Index], [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime]
-			FROM @Locations 
+			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED
@@ -40,7 +40,7 @@ AS
 	USING (
 		SELECT L.[Id], [LocationType], [CustodianId],
 				II.[Id] As [InsertedId]
-		FROM @Locations L
+		FROM @Entities L
 		JOIN @IndexedIds II ON L.[Index] = II.[Index]
 		WHERE [EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON (t.Id = s.Id)

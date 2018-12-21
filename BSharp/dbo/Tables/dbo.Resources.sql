@@ -13,8 +13,9 @@
 	[Lookup2]			NVARCHAR (255),
 	[Lookup3]			NVARCHAR (255),
 	[Lookup4]			NVARCHAR (255),
-	[PartOf]			INT, -- for compound assets
-	[FungibleParentId]	INT, -- to allow contracts at higher level.
+	[PartOfId]			INT, -- for compound assets
+	[InstanceOfId]		INT, -- to allow contracts at higher level.
+	[ServiceOfId]		INT, -- to relate services to their assets.
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedBy]			NVARCHAR(450)		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
@@ -23,8 +24,9 @@
 	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
 	CONSTRAINT [FK_Resources_MeasurementUnit] FOREIGN KEY ([TenantId], [MeasurementUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
-	CONSTRAINT [FK_Resources_Resources_FungibleParent] FOREIGN KEY ([TenantId], [FungibleParentId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
-	CONSTRAINT [FK_Resources_Resources_PartOf] FOREIGN KEY ([TenantId], [PartOf]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION
+	CONSTRAINT [FK_Resources_Resources_PartOfId] FOREIGN KEY ([TenantId], [PartOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
+	CONSTRAINT [FK_Resources_Resources_InstanceOfId] FOREIGN KEY ([TenantId], [InstanceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
+	CONSTRAINT [FK_Resources_Resources_ServiceOfId] FOREIGN KEY ([TenantId], [ServiceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Code]

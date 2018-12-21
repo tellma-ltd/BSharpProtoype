@@ -5,7 +5,7 @@
 
 	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int, @ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int;
 	DECLARE @BananIT int, @WaliaSteel int, @Lifan int, @Sesay int, @ERCA int, @Paint int, @Plastic int, @CBE int, @AWB int, @NIB int;
-	DECLARE @ExecutiveOffice int, @Production int, @Sales int, @Finance int, @HR int, @Purchasing int;
+	DECLARE @GeneralManager int, @ProductionManager int, @SalesManager int, @FinanceManager int, @HRManager int, @PurchasingManager int;
 END
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)
@@ -51,18 +51,18 @@ BEGIN -- Insert individuals and organizations
 	(N'Organization', N'Commercial Bank of Ethiopia', 0, NULL,					NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Awash Bank', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'NIB', 0,					NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-		
-	(N'OrganizationUnit', N'Executive Office', 0,		NULL,					NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'OrganizationUnit', N'Production', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'OrganizationUnit', N'Sales & Marketing', 0, NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'OrganizationUnit', N'Finance', 0,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'OrganizationUnit', N'Human Resources', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'OrganizationUnit', N'Materials & Purchasing', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
+	
+	(N'Position', N'General Manager',	1,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Production Manager', 0,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Sales & Marketing Manager', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Finance Manager',	0,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Human Resources Manager', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Materials & Purchasing Manager', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
 
 	EXEC [dbo].[api_Agents__Save]
-		@Agents = @A1Save,
+		@Entities = @A1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@AgentsResultJson = @A1ResultJson OUTPUT
+		@EntitiesResultJson = @A1ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -70,15 +70,14 @@ BEGIN -- Insert individuals and organizations
 		GOTO Err_Label;
 	END
 	INSERT INTO @A1Result(
-		[Index], [Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
+		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
 		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
 	)
 	SELECT 
-		[Index], [Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
+		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
 		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
 	FROM OpenJson(@A1ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
 		[AgentType] NVARCHAR (255) '$.AgentType',
 		[Name] NVARCHAR (255) '$.Name',
@@ -127,9 +126,9 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 	WHERE [Name] = N'Yigezu Legesse';
 
 	EXEC [dbo].[api_Agents__Save]
-		@Agents = @A2Save,
+		@Entities = @A2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@AgentsResultJson = @A2ResultJson OUTPUT
+		@EntitiesResultJson = @A2ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -138,15 +137,14 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 	END;
 	
 	INSERT INTO @A2Result(
-		[Index], [Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
+		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
 		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
 	)
 	SELECT 		
-		[Index], [Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
+		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
 		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
 	FROM OpenJson(@A2ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
 		[AgentType] NVARCHAR (255) '$.AgentType', 
 		[Name] NVARCHAR (255) '$.Name',
@@ -194,12 +192,12 @@ SELECT
 	@AWB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Awash Bank'),
 	@NIB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'NIB'),
 
-	@ExecutiveOffice = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Executive Office'),
-	@Production = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Production'),
-	@Sales = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Sales & Marketing'),
-	@Finance = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Finance'),
-	@HR = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Human Resources'),
-	@Purchasing = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Materials & Purchasing');
+	@GeneralManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'General Manager'),
+	@ProductionManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Production Manager'),
+	@SalesManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Sales & Marketing Manager'),
+	@FinanceManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Finance Manager'),
+	@HRManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Human Resources Manager'),
+	@PurchasingManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Materials & Purchasing Manager');
 
 --		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;
 DECLARE @AgentSettingSave [dbo].SettingForSaveList, @AgentSettingResultJson nvarchar(max)

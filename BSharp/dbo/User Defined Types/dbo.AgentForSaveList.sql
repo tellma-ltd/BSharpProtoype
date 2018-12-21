@@ -1,5 +1,4 @@
-﻿CREATE TYPE [dbo].[AgentForSaveList] AS TABLE
-(
+﻿CREATE TYPE [dbo].[AgentForSaveList] AS TABLE (
 	[Index]						INT					IDENTITY(0, 1),
 	[Id]						INT,
 	[AgentType]					NVARCHAR (255)		NOT NULL,
@@ -14,8 +13,7 @@
 	[Gender]					NCHAR (1),
 	[EntityState]				NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY CLUSTERED ([Index] ASC),
-	CHECK ([AgentType] IN (N'Individual', N'Organization', N'OrganizationUnit')),
+	CHECK ([AgentType] IN (N'Individual', N'Organization', N'Position')),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );
-

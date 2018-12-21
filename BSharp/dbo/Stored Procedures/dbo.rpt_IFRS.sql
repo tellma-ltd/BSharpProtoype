@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[rpt_IFRS] --R
+﻿CREATE PROCEDURE [dbo].[rpt_IFRS] --R
 	@fromDate Date = NULL, 
 	@toDate Date = NULL,
 	@PresentationCurrency nchar(3) = NULL,
@@ -11,12 +10,13 @@ BEGIN
 		SET @PresentationCurrency = [dbo].fn_Settings(N'FunctionalCurrency');
 
 	CREATE TABLE [dbo].#IFRS(
-		[Field] [nvarchar](255) PRIMARY KEY,
-		[Value] [nvarchar](255) NULL
+		[Id]	INT	Identity(1,1) PRIMARY KEY,
+		[Field] [nvarchar](255)	NOT NULL,
+		[Value] [nvarchar](255)
 	);
 
 	INSERT INTO #IFRS
-	SELECT * FROM [dbo].Settings
+	SELECT [Field], [Value] FROM [dbo].Settings
 	WHERE Field IN (
 		N'DisclosureOfGeneralInformationAboutFinancialStatementsExplanatory',
 		N'NameOfReportingEntityOrOtherMeansOfIdentification', -- Ok
@@ -31,6 +31,11 @@ BEGIN
 	(N'PeriodCoveredByFinancialStatements', @strPeriod),
 	(N'LevelOfRoundingUsedInFinancialStatements', @strRoundingLevel),
 	(N'DateOfEndOfReportingPeriod2013', @strToDate)
+
+	INSERT INTO #IFRS([Field], [Value])
+	SELECT [AccountId], SUM([Value] * [Direction] * [CoveringRatio])
+	FROM dbo.ft_Journal(@fromDate, @toDate)
+	GROUP BY [AccountId];
 
 	SELECT * FROM #IFRS;
 	DROP TABLE #IFRS;

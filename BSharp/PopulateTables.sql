@@ -6,7 +6,7 @@
 :r .\PopulateTransactionTypes.sql
 :r .\PopulateTransactionSpecifications.sql
 
-EXEC [dbo].adm_COA__Parents_Update;
+--EXEC [dbo].adm_COA__Parents_Update;
 
 -- We may be able to get rid of it, and construct the [Name] key on the fly...
 /*

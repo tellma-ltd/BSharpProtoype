@@ -29,12 +29,12 @@ BEGIN
 
 	-- Entry 1
 	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @BusinessEntity, @Account = N'AdministrativeExpense', @Custody = @ExecutiveOffice, @Resource = @ETB, @Direction = 1, @Amount = 120000, @Value = 120000	, @Note = N'DepreciationExpense';
+	SELECT @Operation = @Common, @Account = N'AdministrativeExpense', @Custody = @ExecutiveOffice, @Resource = @ETB, @Direction = 1, @Amount = 120000, @Value = 120000	, @Note = N'DepreciationExpense';
 	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
 	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
 	-- Entry 2
 	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @BusinessEntity, @Account = N'MotorVehicles', @Custody = @MohamadAkra, @Resource = @ETB, @Direction = -1, @Amount = 120000, @Value = 120000, @Note = N'DepreciationPropertyPlantAndEquipment';
+	SELECT @Operation = @Common, @Account = N'MotorVehicles', @Custody = @MohamadAkra, @Resource = @ETB, @Direction = -1, @Amount = 120000, @Value = 120000, @Note = N'DepreciationPropertyPlantAndEquipment';
 	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
 	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
 
@@ -75,7 +75,7 @@ BEGIN
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime);
 
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount1, Custody2, Reference2)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 
@@ -87,7 +87,7 @@ BEGIN
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime), @Memo = N'Assets Purchase';
 
 -- Witholding tax: 
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006';
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006';
 	SELECT @TaxableAmount = @AmountWithheld/0.02;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, 
 		Operation1, Custody1, Amount1, Reference2, RelatedAmount2, RelatedReference2)
@@ -159,17 +159,17 @@ BEGIN
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Department, @Attendance, @Employee);
 
 	SELECT @TransactionType = N'EmployeeIncomeTax';
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Employee = @MohamadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Employee = @MohamadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Employee = @AhmadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Employee = @AhmadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 /*
 --	SELECT @LineType = N'CashPaymentToEmployee';
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @Supplier = @Lifan, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Supplier = @Lifan, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
 	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, Custody2, Reference2)
 	VALUES(		@LineNumber, @LineType, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 */
@@ -181,7 +181,7 @@ BEGIN
 
 	SELECT @TransactionType = N'InventoryTransferOrder';
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @BusinessEntity, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody2, Custody1, Resource1, Amount1, Value1)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @IssuingWarehouse, @ReceivingWarehouse, @Item, @Quantity, @Value);
 END
@@ -196,8 +196,7 @@ RETURN
 
 SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY [Id], LineNumber, EntryNumber;
 EXEC rpt_TrialBalance;
-EXEC rpt_WithholdingTaxOnPayment;
-EXEC rpt_ERCA__VAT_Purchases; 
+
 
 SELECT Debit, Credit from ft_Account__Statement(N'AdministrativeExpense', '2017.06.30', '2019.01.01');
 SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');

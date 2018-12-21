@@ -3,20 +3,24 @@
 	DECLARE @O1Result [dbo].OperationList, @O2Result [dbo].OperationList;
 	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
 	DECLARE @OperationActivationList [dbo].ActivationList;
-
+	DECLARE @Common int, @Existing int, @Expansion int, @ExecutiveOffice int;
 END
 BEGIN -- Inserting
 	INSERT INTO @O1Save
-		([OperationType], [Name], [ParentIndex]) Values
-		(N'BusinessEntity', N'Walia Steel Industry', NULL),
-		(N'Investment', N'Existin', 0),
-		(N'OperatingSegment', N'Fake', 0),
-		(N'Investment', N'Expansion', 0);
+		([Name],				[ParentIndex]) Values
+		(N'Walia Steel Industry', NULL),
+		(N'Existin',			0),
+		(N'Fake',				0),
+		(N'Expansion',			0),
+		(N'WSI Common',			0),
+		(N'Executive Office',	4),
+		(N'HR Department',		4),
+		(N'MIS Department',		4);
 
 	EXEC [dbo].[api_Operations__Save]
 		@Entities = @O1Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@OperationsResultJson = @O1ResultJson OUTPUT
+		@EntitiesResultJson = @O1ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -25,18 +29,17 @@ BEGIN -- Inserting
 	END
 
 	INSERT INTO @O1Result(
-		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
-		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	FROM OpenJson(@O1ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
-		[OperationType] NVARCHAR (255) '$.OperationType',
 		[Name] NVARCHAR (255) '$.Name',
+		[IsOperatingSegment] BIT '$.IsOperatingSegment',
 		[IsActive] BIT '$.IsActive',
 		[Code] NVARCHAR (255) '$.Code',
 		[ParentId] INT '$.ParentId',
@@ -49,10 +52,10 @@ BEGIN -- Inserting
 END
 BEGIN
 	INSERT INTO @O2Save (
-		[Id], [OperationType], [Name], [Code], [ParentId], [EntityState]
+		[Id], [Name], [Code], [ParentId], [EntityState]
 	)
 	SELECT
-		[Id], [OperationType], [Name], [Code], [ParentId], N'Unchanged'
+		[Id], [Name], [Code], [ParentId], N'Unchanged'
 	FROM [dbo].Operations
 	WHERE [Name] IN (N'Existin', N'Fake')
 
@@ -70,7 +73,7 @@ BEGIN
 	EXEC [dbo].[api_Operations__Save]
 		@Entities = @O2Save,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@OperationsResultJson = @O2ResultJson OUTPUT
+		@EntitiesResultJson = @O2ResultJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -79,18 +82,17 @@ BEGIN
 	END
 
 	INSERT INTO @O2Result(
-		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	)
 	SELECT 
-		[Index], [Id], [OperationType], [Name], [IsActive], [Code], [ParentId],
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
 	FROM OpenJson(@O2ResultJson)
 	WITH (
-		[Index] INT '$.Index',
 		[Id] INT '$.Id',
-		[OperationType] NVARCHAR (255) '$.OperationType',
 		[Name] NVARCHAR (255) '$.Name',
+		[IsOperatingSegment] BIT '$.IsOperatingSegment',
 		[IsActive] BIT '$.IsActive',
 		[Code] NVARCHAR (255) '$.Code',
 		[ParentId] INT '$.ParentId',
@@ -101,11 +103,27 @@ BEGIN
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
 END
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = 2,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@EntitiesResultJson = @O2ResultJson OUTPUT
+
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = 1,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@EntitiesResultJson = @O2ResultJson OUTPUT
+
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = 2,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@EntitiesResultJson = @O2ResultJson OUTPUT
+
 IF @LookupsSelect = 1
 	SELECT * FROM [dbo].[Operations];
 
 SELECT 
-		@BusinessEntity = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Walia Steel Industry'), 
+		@Common = (SELECT [Id] FROM @O1Result WHERE [Name] = N'WSI Common'), 
 		@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),
-		@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion');
+		@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
+		@ExecutiveOffice = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion');
 	

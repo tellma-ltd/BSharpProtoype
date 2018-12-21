@@ -10,7 +10,7 @@
 	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_Agents_Custodies] FOREIGN KEY ([TenantId], [Id], [AgentType]) REFERENCES [dbo].[Custodies] ([TenantId], [Id], [CustodyType]) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT [FK_Agents_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id]) ON UPDATE CASCADE,
-	CONSTRAINT [CK_Agents_AgentType] CHECK ([AgentType] IN (N'Individual', N'Organization', N'OrganizationUnit'))
+	CONSTRAINT [CK_Agents_AgentType] CHECK ([AgentType] IN (N'Individual', N'Organization', N'Position'))
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Id_AgentType]

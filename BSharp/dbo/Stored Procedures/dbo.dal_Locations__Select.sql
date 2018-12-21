@@ -1,14 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Locations__Select]
-	@IndexedIds dbo.IndexedIdList READONLY,
-	@LocationsResultJson NVARCHAR(MAX) OUTPUT
+	@Ids [dbo].[IntegerList] READONLY,
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
-SELECT @LocationsResultJson = (
-	SELECT T.[Index], C.[Id], L.[LocationType], C.[Name], C.[Code], C.[Address], C.[BirthDateTime], C.IsActive, C.[CreatedAt], C.[CreatedBy], C.[ModifiedAt], C.[ModifiedBy],
+SELECT @EntitiesResultJson = (
+	SELECT C.[Id], L.[LocationType], C.[Name], C.[Code], C.[Address], C.[BirthDateTime], C.IsActive, C.[CreatedAt], C.[CreatedBy], C.[ModifiedAt], C.[ModifiedBy],
 			L.CustodianId, N'Unchanged' As [EntityState]
-	FROM [dbo].Locations L JOIN (
-		SELECT [Index], [Id] 
-		FROM @IndexedIds
-	) T ON L.Id = T.Id
+	FROM [dbo].Locations L
 	JOIN [dbo].[Custodies] C ON L.Id = C.Id
+	WHERE C.[Id] IN (SELECT [Id] FROM @Ids)
 	FOR JSON PATH
 );

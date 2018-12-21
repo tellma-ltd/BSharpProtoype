@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Agents__Save]
-	@Agents [AgentForSaveList] READONLY,
+	@Entities [AgentForSaveList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -9,7 +9,7 @@ AS
 
 -- Deletions
 	DELETE FROM [dbo].[Custodies]
-	WHERE [Id] IN (SELECT [Id] FROM @Agents WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -18,7 +18,7 @@ AS
 		MERGE INTO [dbo].[Custodies] AS t
 		USING (
 			SELECT [Index], [Id], [AgentType], [Name], [Code], [Address], [BirthDateTime]
-			FROM @Agents 
+			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED
@@ -40,7 +40,7 @@ AS
 	USING (
 		SELECT A.[Id], [AgentType], [IsRelated] , [UserId], [TaxIdentificationNumber], [Title], [Gender],
 				II.[Id] As [InsertedId]
-		FROM @Agents A
+		FROM @Entities A
 		JOIN @IndexedIds II ON A.[Index] = II.[Index]
 		WHERE [EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON (t.Id = s.Id)

@@ -1,17 +1,17 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_Lines__Select]
-	@IndexedIds [dbo].IndexedIdList READONLY,
+	@Ids [dbo].[IntegerList] READONLY,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @DocumentsResultJson =	(
-		SELECT T.[Index], D.[Id], D.[State], D.[TransactionType], D.[Mode], D.[SerialNumber], 
-		D.[ResponsibleAgentId], D.[ForwardedToAgentId], 
-		D.[FolderId], D.[LinesMemo], D.[LinesStartDateTime], D.[LinesEndDateTime], 
-		D.[LinesCustody1], D.[LinesCustody2], D.[LinesCustody3],
-		D.[CreatedAt], D.[CreatedBy], D.[ModifiedAt], D.[ModifiedBy], N'Unchanged' As [EntityState]
-		FROM [dbo].[Documents] D 
-		JOIN @IndexedIds T ON D.Id = T.Id
+		SELECT [Id], [State], [TransactionType], [Mode], [SerialNumber], 
+		[ResponsibleAgentId], [ForwardedToAgentId], 
+		[FolderId], [LinesMemo], [LinesStartDateTime], [LinesEndDateTime], 
+		[LinesCustody1], [LinesCustody2], [LinesCustody3],
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
+		FROM [dbo].[Documents]
+		WHERE [Id] IN (SELECT [Id] FROM @Ids)
 		FOR JSON PATH
 	);
 
@@ -20,7 +20,7 @@ AS
 		FROM [dbo].Lines
 		WHERE [DocumentId] IN (
 			SELECT [Id]
-			FROM @IndexedIds
+			FROM @Ids
 		)
 		FOR JSON PATH
 	);
@@ -33,7 +33,7 @@ AS
 			FROM [dbo].Lines
 			WHERE [DocumentId] IN (
 				SELECT [Id] 
-				FROM @IndexedIds
+				FROM @Ids
 			)
 		)
 		FOR JSON PATH

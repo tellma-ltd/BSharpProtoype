@@ -12,7 +12,7 @@
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]	NVARCHAR(450)		NOT NULL,
 	CONSTRAINT [PK_Custodies] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Individual', N'Organization', N'OrganizationUnit', N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc'))
+	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Individual', N'Organization', N'Position', N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc'))
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Id_CustodyType]

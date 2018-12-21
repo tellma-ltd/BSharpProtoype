@@ -302,11 +302,11 @@
     <Property Name="NewName" Value="[ForwardedToAgentId]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="140481c7-542a-4e6c-988a-970255bec5dc" ChangeDateTime="11/26/2018 15:11:22">
-    <Property Name="ElementName" Value="[dbo].[Resources].[PartOf]" />
+    <Property Name="ElementName" Value="[dbo].[Resources].[PartOfId]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[dbo].[Resources]" />
     <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="PartOfPPE" />
+    <Property Name="NewName" Value="PartOfIdPPE" />
   </Operation>
   <Operation Name="Rename Refactor" Key="7b1d5ba6-304b-4fbc-909a-b32156e9a4df" ChangeDateTime="11/27/2018 10:07:15">
     <Property Name="ElementName" Value="[dbo].[Locations].[ParentId]" />

@@ -26,19 +26,19 @@ SET NOCOUNT ON
 	DECLARE @TenantId int = [dbo].fn_TenantId();
 -- When deleting A, ParentID
 -- Delete all C, P where C = A or below, and P = ParentID or above
-	DELETE Accounts_H WHERE TenantId = @TenantId
-	AND (
-		C IN (SELECT [Id] FROM Deleted WHERE TenantId = @TenantId) OR
+	DELETE Accounts_H 
+	WHERE (
+		C IN (SELECT [Id] FROM Deleted) OR
 		C IN (
-			SELECT C FROM Accounts_H WHERE TenantId = @TenantId 
-			AND P IN (SELECT [Id] FROM Deleted WHERE TenantId = @TenantId)
+			SELECT C FROM Accounts_H  
+			WHERE P IN (SELECT [Id] FROM Deleted)
 		)
 	)
 	And (
-		P IN (SELECT ParentId FROM Deleted WHERE TenantId = @TenantId) OR
+		P IN (SELECT ParentId FROM Deleted) OR
 		P IN (
-			SELECT P FROM Accounts_H WHERE TenantId = @TenantId 
-			AND C IN (SELECT ParentId FROM Deleted WHERE TenantId = @TenantId)
+			SELECT P FROM Accounts_H 
+			WHERE C IN (SELECT ParentId FROM Deleted)
 		)
 	);
 GO
@@ -49,28 +49,26 @@ FOR INSERT -- when inserting a child to a parent, add it to table Accounts_H, ad
 AS
 SET NOCOUNT ON
 	DECLARE @TenantId int = [dbo].fn_TenantId();
-	/*
+
 	INSERT INTO Accounts_H([TenantId], [C], [P]) -- insert x y where x = A or below and y = parentid and above
 	SELECT @TenantId, T1.C, T2.P 
 	FROM (
-		SELECT [Id]As C FROM Inserted WHERE TenantId = @TenantId
+		SELECT [Id] As C FROM Inserted
 		UNION 
-		SELECT C FROM Accounts_H WHERE TenantId = @TenantId 
-		AND (
-			C IN (SELECT [Id] FROM Inserted WHERE TenantId = @TenantId) OR
-			P IN (SELECT [Id] FROM Inserted WHERE TenantId = @TenantId)
+		SELECT C FROM Accounts_H
+		WHERE (
+			C IN (SELECT [Id] FROM Inserted) OR
+			P IN (SELECT [Id] FROM Inserted)
 		)
 	) T1 CROSS JOIN (
-		SELECT ParentId As P FROM Inserted WHERE TenantId = @TenantId
-		AND ParentId is Not Null
+		SELECT ParentId As P FROM Inserted WHERE ParentId IS Not Null
 		UNION 
-		SELECT P FROM Accounts_H WHERE TenantId = @TenantId
-		AND (
-			P IN (SELECT ParentId FROM Inserted WHERE TenantId = @TenantId) OR
-			C IN (SELECT ParentId FROM inserted WHERE TenantId = @TenantId)
+		SELECT P FROM Accounts_H
+		WHERE (
+			P IN (SELECT ParentId FROM Inserted) OR
+			C IN (SELECT ParentId FROM inserted )
 		)
 	) T2;
-	*/
 GO
 CREATE TRIGGER [dbo].[trU_Accounts]
 ON [dbo].[Accounts]
@@ -80,41 +78,39 @@ SET NOCOUNT ON
 IF Update(Id) Or Update(ParentId)
 BEGIN
 	DECLARE @TenantId int = [dbo].fn_TenantId();
-	Delete Accounts_H WHERE TenantId = @TenantId
-	AND (
-		C IN (SELECT [Id] FROM Deleted WHERE TenantId = @TenantId) OR
+	Delete Accounts_H
+	WHERE (
+		C IN (SELECT [Id] FROM Deleted) OR
 		C IN (
-			SELECT C FROM Accounts_H WHERE TenantId = @TenantId
-			AND P IN (SELECT [Id] FROM Deleted WHERE TenantId = @TenantId)
+			SELECT C FROM Accounts_H
+			WHERE P IN (SELECT [Id] FROM Deleted)
 		)
 	)
 	AND (
-		P IN (SELECT ParentId FROM Deleted WHERE TenantId = @TenantId) OR
+		P IN (SELECT ParentId FROM Deleted) OR
 		P IN (
-			SELECT P FROM Accounts_H WHERE TenantId = @TenantId 
-			AND C IN (SELECT ParentId FROM Deleted WHERE TenantId = @TenantId)
+			SELECT P FROM Accounts_H 
+			WHERE C IN (SELECT ParentId FROM Deleted)
 		)
 	);
-	/*
+
 	INSERT INTO Accounts_H([TenantId], [C], [P]) -- insert x y where x = A or below and y = parentid and above
 	SELECT @TenantId, T1.C, T2.P FROM (
-		SELECT [Id]As C FROM Inserted WHERE TenantId = @TenantId
+		SELECT [Id] As C FROM Inserted
 		UNION 
-		SELECT C FROM Accounts_H WHERE TenantId = @TenantId 
-		AND (
-			C IN (SELECT [Id] FROM Inserted WHERE TenantId = @TenantId) OR
-			P IN (SELECT [Id] FROM Inserted WHERE TenantId = @TenantId)
+		SELECT C FROM Accounts_H
+		WHERE (
+			C IN (SELECT [Id] FROM Inserted) OR
+			P IN (SELECT [Id] FROM Inserted)
 		)
 	) T1 cross Join	(
-		SELECT ParentId As P FROM Inserted WHERE TenantId = @TenantId
-		AND ParentId is Not Null
+		SELECT ParentId As P FROM Inserted WHERE ParentId is Not Null
 		UNION 
-		SELECT P FROM Accounts_H WHERE TenantId = @TenantId
-		AND (
-			P IN (SELECT ParentId FROM Inserted WHERE TenantId = @TenantId) OR
-			C IN (SELECT ParentId FROM inserted WHERE TenantId = @TenantId)
+		SELECT P FROM Accounts_H
+		WHERE (
+			P IN (SELECT ParentId FROM Inserted) OR
+			C IN (SELECT ParentId FROM inserted )
 		)
 	) T2;
-	*/
 END;
 GO

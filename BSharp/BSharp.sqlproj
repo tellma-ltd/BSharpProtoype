@@ -199,16 +199,17 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents_WideLines__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_WideLines__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines__Fill.sql" />
-    <Build Include="dbo\User Defined Types\dbo.DocumentForSaveNoIdentityList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.LineForSaveNoIdentityList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.EntryForSaveNoIdentityList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Submit.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Submit__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Mode__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Post__Validate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Operation__SetOperatingSegment.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Operation__FirstSibling.sql" />
+    <Build Include="dbo\Tables\dbo.CustodiesResources.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_AssetRegister.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Post]
-	@Documents [dbo].IndexedIdList READONLY,
+	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
@@ -7,6 +7,7 @@
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
+	DECLARE @Ids [dbo].[IntegerList];
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents] 
 		WHERE [Id] IN (SELECT [Id] FROM @Documents) AND Mode <> N'Posted')
 		RETURN;
@@ -19,12 +20,18 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-EXEC [dbo].[dal_Documents_Mode__Update]	@Documents = @Documents, @Mode = N'Posted';
+	EXEC [dbo].[dal_Documents_Mode__Update]	@Documents = @Documents, @Mode = N'Posted';
 
-IF (@ReturnEntities = 1)
-	EXEC [dbo].[dal_Documents_Lines__Select] 
-		@IndexedIds = @Documents, 
-		@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-		@LinesResultJson = @LinesResultJson OUTPUT,
-		@EntriesResultJson = @EntriesResultJson OUTPUT;
+	IF (@ReturnEntities = 1)
+	BEGIN
+		INSERT INTO @Ids([Id])
+		SELECT [Id] 
+		FROM @Documents;
+
+		EXEC [dbo].[dal_Documents_Lines__Select] 
+			@Ids = @Ids, 
+			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
+			@LinesResultJson = @LinesResultJson OUTPUT,
+			@EntriesResultJson = @EntriesResultJson OUTPUT;
+	END
 END;

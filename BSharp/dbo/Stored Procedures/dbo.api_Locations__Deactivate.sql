@@ -1,12 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[api_Locations__Deactivate]
-	@IndexedIds [dbo].[IndexedIdList] READONLY,
+	@Ids [dbo].[IntegerList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) = NULL OUTPUT,
 	@ReturnEntities bit = 1,
-	@LocationsResultJson NVARCHAR(MAX) OUTPUT
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	EXEC [dbo].[dal_Custodies__Activate] @IndexedIds = @IndexedIds, @IsActive = 0;
+	EXEC [dbo].[dal_Custodies__Activate] @Ids = @Ids, @IsActive = 0;
 
 	IF (@ReturnEntities = 1)
-	EXEC [dbo].[dal_Locations__Select] 
-		@IndexedIds = @IndexedIds, @LocationsResultJson = @LocationsResultJson OUTPUT;
+		EXEC [dbo].[dal_Locations__Select] 
+			@Ids = @Ids,
+			@EntitiesResultJson = @EntitiesResultJson OUTPUT;

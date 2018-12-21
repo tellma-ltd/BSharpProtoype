@@ -18,7 +18,8 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].[Resources] AS t
 		USING (
-			SELECT [Index], [Id], [MeasurementUnitId], [ResourceType], [Name], [Code], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOf], [FungibleParentId]
+			SELECT [Index], [Id], [MeasurementUnitId], [ResourceType], [Name], [Code], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], 
+					[PartOfId], [InstanceOfId], [ServiceOfId]
 			FROM @Resources 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -34,23 +35,44 @@ SET NOCOUNT ON;
 				t.[Lookup2]					= s.[Lookup2],
 				t.[Lookup3]					= s.[Lookup3],
 				t.[Lookup4]					= s.[Lookup4],
-				t.[PartOf]					= s.[PartOf],
-				t.[FungibleParentId]		= s.[FungibleParentId],
+				t.[PartOfId]				= s.[PartOfId],
+				t.[InstanceOfId]			= s.[InstanceOfId],
+				t.[ServiceOfId]				= s.[ServiceOfId],
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedBy]				= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Code], 	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],		[Lookup4], [PartOf], [FungibleParentId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Code], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOf], s.[FungibleParentId], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Code], 	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],		[Lookup4], [PartOfId], [InstanceOfId], [ServiceOfId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Code], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
 
 	UPDATE BE
-	SET BE.[FungibleParentId]= T.[FungibleParentId]
+	SET BE.[PartOfId]= T.[PartOfId]
 	FROM [dbo].[Resources] BE
 	JOIN (
-		SELECT II.[Id], IIParent.[Id] As [FungibleParentId]
+		SELECT II.[Id], IIParent.[Id] As [PartOfId]
 		FROM @Resources R
-		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[FungibleParentIndex]
+		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[PartOfIndex]
+		JOIN @IndexedIds II ON II.[Index] = R.[Index]
+	) T ON BE.Id = T.[Id];
+
+	UPDATE BE
+	SET BE.[InstanceOfId]= T.[InstanceOfId]
+	FROM [dbo].[Resources] BE
+	JOIN (
+		SELECT II.[Id], IIParent.[Id] As [InstanceOfId]
+		FROM @Resources R
+		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[InstanceOfIndex]
+		JOIN @IndexedIds II ON II.[Index] = R.[Index]
+	) T ON BE.Id = T.[Id];
+
+	UPDATE BE
+	SET BE.[ServiceOfId]= T.[ServiceOfId]
+	FROM [dbo].[Resources] BE
+	JOIN (
+		SELECT II.[Id], IIParent.[Id] As [ServiceOfId]
+		FROM @Resources R
+		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[ServiceOfIndex]
 		JOIN @IndexedIds II ON II.[Index] = R.[Index]
 	) T ON BE.Id = T.[Id];
 

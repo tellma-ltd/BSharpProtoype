@@ -1,14 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Operations__Select]
-	@IndexedIds dbo.IndexedIdList READONLY,
-	@OperationsResultJson NVARCHAR(MAX) OUTPUT
+	@Ids [dbo].[IntegerList] READONLY,
+	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
 AS
-SELECT @OperationsResultJson =	(
+SELECT @EntitiesResultJson =	(
 	SELECT
-		T.[Index], O.[Id], O.[OperationType], O.[Name], O.[ParentId], O.[IsActive], O.[Code], 
-		O.[CreatedAt], O.[CreatedBy], O.[ModifiedAt], O.[ModifiedBy], N'Unchanged' As [EntityState]
-	FROM [dbo].Operations O JOIN (
-		SELECT [Index], [Id] 
-		FROM @IndexedIds
-	) T ON O.Id = T.Id
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId], 
+		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
+	FROM [dbo].Operations
+	WHERE [Id] IN (SELECT [Id] FROM @Ids)
 	FOR JSON PATH
 );

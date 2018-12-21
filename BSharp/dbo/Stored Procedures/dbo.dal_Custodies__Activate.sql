@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Custodies__Activate]
-	@IndexedIds dbo.[IndexedIdList] READONLY,
+	@Ids dbo.IntegerList READONLY,
 	@IsActive bit
 AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
@@ -7,8 +7,8 @@ AS
 
 	MERGE INTO [dbo].[Custodies] AS t
 		USING (
-			SELECT [Index], [Id]
-			FROM @IndexedIds 
+			SELECT [Id]
+			FROM @Ids 
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED AND (t.IsActive <> @IsActive)
 		THEN
