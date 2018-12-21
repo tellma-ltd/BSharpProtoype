@@ -23,7 +23,6 @@ ON [dbo].[Accounts]
 FOR DELETE 
 AS
 SET NOCOUNT ON
-	DECLARE @TenantId int = [dbo].fn_TenantId();
 -- When deleting A, ParentID
 -- Delete all C, P where C = A or below, and P = ParentID or above
 	DELETE Accounts_H 
