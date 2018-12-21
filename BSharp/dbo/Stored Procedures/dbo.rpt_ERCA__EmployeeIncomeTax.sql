@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[rpt_ERCA__EmployeeIncomeTax]
+﻿CREATE PROCEDURE [dbo].[rpt_ERCA__EmployeeIncomeTax]
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
 AS

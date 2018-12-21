@@ -148,7 +148,6 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
     <None Include="Testing10_ManualJV.sql" />
-    <Build Include="dbo\Functions\dbo.fn_TenantId.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\Functions\dbo.fn_Culture.sql" />

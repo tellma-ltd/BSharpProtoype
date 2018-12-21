@@ -8,7 +8,8 @@ RETURN
 		D.Id,
 		D.[TransactionType],
 		D.SerialNumber,
-		D.ResponsibleAgentId,
+		--D.ResponsibleAgentId,
+		--D.ForwardedToAgentId,
 		L.Id As [LineId],
 		CONVERT(NVARCHAR(255), 
 		(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END), 104) As StartDateTime,
@@ -23,17 +24,27 @@ RETURN
 		E.CustodyId,
 		E.ResourceId,
 		E.Direction,
-		-- covering ratio: (min(End, @to) - max(Start, @from))/(end - start)
-		CASE WHEN L.EndDateTime <= @toDate AND L.StartDateTime >= @fromDate THEN 1 ELSE
-		(
-		 DATEDIFF(s, 
-					(CASE WHEN @toDate < L.EndDateTime THEN @toDate ELSE L.EndDateTime END),
-					(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END))
-		/ CAST(DATEDIFF(s, L.EndDateTime, L.StartDateTime) AS float) 
-		) 
-		END As CoveringRatio,
-		E.Amount,
-		E.[Value],
+		CASE WHEN 
+			L.StartDateTime = L.EndDateTime 
+		THEN 
+			E.[Amount]
+		ELSE
+			DATEDIFF(DAY,
+				(SELECT MAX(startDT)	FROM (VALUES (L.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+				(SELECT MIN(endDT)		FROM (VALUES (L.EndDateTime),	(@toDate))	As EndTimes(endDT))
+			) * E.[Amount]
+		END AS Amount,
+		CASE WHEN 
+			L.StartDateTime = L.EndDateTime 
+		THEN 
+			E.[Value]
+		ELSE
+			DATEDIFF(DAY,
+				(SELECT MAX(startDT)	FROM (VALUES (L.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+				(SELECT MIN(endDT)		FROM (VALUES (L.EndDateTime),	(@toDate))	As EndTimes(endDT))
+			) * E.[Value]
+		END AS [Value],
+--CAST(DATEDIFF(DAY, L.EndDateTime, L.StartDateTime) AS FLOAT) 
 		E.NoteId,
 		E.RelatedReference,
 		E.RelatedAgentId,
@@ -44,8 +55,7 @@ RETURN
 		INNER JOIN [dbo].[Lines] L ON E.TenantId = L.TenantId AND E.LineId = L.Id
 		INNER JOIN [dbo].[Documents] D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
 	WHERE
-		D.TenantId = [dbo].fn_TenantId() AND
 		D.Mode = N'Posted' AND 
 		D.State = N'Voucher' AND
-		L.StartDateTime <= @toDate AND L.EndDateTime >= @fromDate
+		L.StartDateTime < @toDate AND L.EndDateTime >= @fromDate
 )

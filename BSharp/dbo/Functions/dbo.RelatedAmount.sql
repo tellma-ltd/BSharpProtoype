@@ -1,5 +1,4 @@
-﻿
-CREATE FUNCTION [dbo].[RelatedAmount](@EntryNumber tinyint, @Entries EntryList READONLY)
+﻿CREATE FUNCTION [dbo].[RelatedAmount](@EntryNumber tinyint, @Entries EntryList READONLY)
 RETURNS money
 AS
 BEGIN

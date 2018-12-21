@@ -19,4 +19,3 @@ BEGIN
 	-- if not translated, return the key itself.
 	RETURN ISNULL(@Result, @Key);
 END;
-	

@@ -10,8 +10,6 @@ BEGIN
 	SELECT @Result = Value
 	FROM [dbo].Settings
 	WHERE [Field] = @Field
-	AND [TenantId] = [dbo].fn_TenantId();
 
 	RETURN @Result;
-
 END

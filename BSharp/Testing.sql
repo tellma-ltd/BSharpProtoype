@@ -28,14 +28,23 @@ BEGIN TRY
 		--:r .\Testing12_PurchasingCycle.sql
 		--:r .\Testing13_ProductionCycle.sql
 		--:r .\Testing14_SalesCycle.sql
-	DECLARE @fromDate Datetime = '2018.01.01', @toDate Datetime = '2018.12.31';
+	DECLARE @fromDate Datetime = '2017.01.01', @toDate Datetime = '2024.01.01';
 	SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
-	--EXEC rpt_TrialBalance @fromDate = @toDate, @toDate = @toDate, @ByCustody = 0, @ByResource = 0;
+	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 0, @ByResource = 0;
+	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2018.01.01', @ByCustody = 0, @ByResource = 0;
 	--EXEC rpt_WithholdingTaxOnPayment;
 	--EXEC rpt_ERCA__VAT_Purchases;
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
-	EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
-	ROLLBACK;
+	DECLARE @i int = 0;
+	SELECT @fromDate = '2017.01.01', @toDate = '2018.01.01';
+	WHILE @i < 7
+	BEGIN
+		EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
+		SELECT @fromDate = DATEADD(year, 1, @fromDate), @toDate = DATEADD(year, 1, @toDate);
+		SET @i = @i + 1;
+	END
+	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.02.01', @toDate = '2018.02.01';
+	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.01.01', @toDate = '2023.12.31';
 END TRY
 BEGIN CATCH
 	ROLLBACK;

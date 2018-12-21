@@ -48,7 +48,7 @@ ON [dbo].[Accounts]
 FOR INSERT -- when inserting a child to a parent, add it to table Accounts_H, add also the grandparents
 AS
 SET NOCOUNT ON
-	DECLARE @TenantId int = [dbo].fn_TenantId();
+	DECLARE @TenantId int = CONVERT(int, SESSION_CONTEXT(N'Tenantid'));
 
 	INSERT INTO Accounts_H([TenantId], [C], [P]) -- insert x y where x = A or below and y = parentid and above
 	SELECT @TenantId, T1.C, T2.P 
@@ -77,7 +77,7 @@ AS
 SET NOCOUNT ON
 IF Update(Id) Or Update(ParentId)
 BEGIN
-	DECLARE @TenantId int = [dbo].fn_TenantId();
+	DECLARE @TenantId int = CONVERT(int, SESSION_CONTEXT(N'Tenantid'));
 	Delete Accounts_H
 	WHERE (
 		C IN (SELECT [Id] FROM Deleted) OR

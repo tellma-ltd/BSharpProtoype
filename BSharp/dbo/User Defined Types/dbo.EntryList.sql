@@ -9,7 +9,7 @@
 	[ResourceId]		INT,
 	[Direction]			SMALLINT,
 	[Amount]			MONEY,
-	[Value]				MONEY,
+	[Value]				DECIMAL(38,10),
 	[NoteId]			NVARCHAR (255),
 	[RelatedReference]	NVARCHAR (255),
 	[RelatedAgentId]	INT,

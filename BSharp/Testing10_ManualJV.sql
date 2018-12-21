@@ -15,18 +15,29 @@ END
 -- Journal Vouchers
 
 INSERT INTO @D1Save(
-	[State], [TransactionType],				[LinesMemo],		[LinesStartDateTime], [LinesEndDateTime]
+	[State], [TransactionType],			[LinesMemo],				[LinesStartDateTime]
 --		[ResponsibleAgentId], [FolderId], , [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3],
 ) VALUES
-(N'Voucher', N'ManualJournalVoucher',		N'Capital Investment',	'2018.01.01',		NULL),
-(N'Voucher', N'ManualJournalVoucher',		N'Exchange of $50000',	'2018.01.01',		NULL),
-(N'Voucher', N'ManualJournalVoucher',		N'Vehicle purchases',	'2018.01.05',		NULL),
-(N'Voucher', N'ManualJournalVoucher',		N'Vehicles Put in use',	'2018.02.01',		NULL),
-(N'Voucher', N'ManualJournalVoucherExtended',N'Vehicles Depreciation','2018.02.01',		'2023.02.01');
-INSERT INTO @L1Save ([DocumentIndex]) VALUES (0), (1), (2), (3), (4);
+(N'Voucher', N'ManualJournalVoucher',	N'Capital Investment',		'2017.01.01'),
+(N'Voucher', N'ManualJournalVoucher',	N'Exchange of $50000',		'2017.01.01'),
+(N'Voucher', N'ManualJournalVoucher',	N'Vehicles cash purchase',	'2017.01.05'),
+(N'Voucher', N'ManualJournalVoucher',	N'Vehicles Put in use',		'2017.02.01'),
+(N'Voucher', N'ManualJournalVoucher',	N'Vehicle 1 Reinforcement',	'2018.02.01');
 
+
+INSERT INTO @D1Save(
+	[State], [TransactionType],				[LinesMemo],			[LinesStartDateTime], [LinesEndDateTime]
+--		[ResponsibleAgentId], [FolderId], , [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3],
+) VALUES
+(N'Voucher', N'ManualJournalVoucherExtended',N'Vehicles Depreciation','2017.02.01',			'2022.02.01'),
+(N'Voucher', N'ManualJournalVoucherExtended',N'Reverse Depreciation', '2018.02.01',			'2022.02.01'),
+(N'Voucher', N'ManualJournalVoucherExtended',N'Vehicles Depreciation','2018.02.01',			'2023.02.01');
+INSERT INTO @L1Save ([DocumentIndex]) VALUES (0), (1), (2), (3), (4), (5), (6), (7);
+DECLARE @V Decimal(38,10) = CAST(300000 AS DECIMAL(38,10))/1826;
+-- The number -59967 is the depreciation resulting between 2017.02.01 and 2018.02.01
+DECLARE @VU Decimal(38,10) = (CAST(420000 AS DECIMAL(38,10))-59967.141292)/1826;
 INSERT INTO @E1Save
-([LineIndex], EntryNumber, OperationId,	AccountId,				CustodyId,		ResourceId,	Direction, Amount, [Value],		NoteId,							[Reference],	[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount]) VALUES
+([LineIndex], EntryNumber, OperationId,	AccountId,				CustodyId,		ResourceId,	Direction, Amount,	[Value],		NoteId,							[Reference],	[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount]) VALUES
 (	0,			1,			@Common,	N'BalancesWithBanks',	@CBEUSD,		@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares',	NULL,			NULL,				NULL,				NULL,				NULL),
 (	0,			2,			@Common,	N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,			NULL,				NULL,				NULL,				NULL),
 (	0,			3,			@Common,	N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',				NULL,			NULL,				NULL,				NULL,				NULL),
@@ -39,11 +50,21 @@ INSERT INTO @E1Save
 (	2,			3,			@Common,	N'CurrentWithholdingTaxPayable',@ERCA,	@ETB,			-1,		12000,	NULL,		NULL,							N'WT0901',		NULL,				@Lifan,				NULL,				600000),
 (	2,			4,			@Common,	N'BalancesWithBanks',	@CBEETB,		@ETB,			-1,		678000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',NULL,NULL,NULL,	NULL,				NULL),	
 
-(	3,			1,			@ExecutiveOffice, N'MotorVehicles',	@GeneralManager,@Car1Svc,		+1,		5,		300000,		N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment',NULL,NULL,NULL,@Car1,				NULL),
+(	3,			1,			@ExecutiveOffice,N'MotorVehicles',	@GeneralManager,@Car1Svc,		+1,		1826,	300000,		N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment',NULL,NULL,NULL,@Car1,				NULL),
 (	3,			2,			@Common,	N'OtherInventories',	@MiscWarehouse,	@Camry2018,		-1,		1,		300000,		NULL,							NULL,			NULL,				NULL,				NULL,				NULL),
 
-(	4,			1,			@ExecutiveOffice, N'AdministrativeExpense',@GeneralManager,@Car1Svc,+1,		5,		300000,		N'DepreciationExpense',			NULL,			NULL,				NULL,				NULL,				NULL),
-(	4,			2,			@ExecutiveOffice, N'MotorVehicles',	@GeneralManager,@Car1Svc,		-1,		5,		300000,		N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,				@Car1,				NULL);
+(	4,			1,			@ExecutiveOffice,N'MotorVehicles',	@GeneralManager,@Car1Svc,		+1,		365,	120000,		N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment',NULL,NULL,NULL,@Car1,				NULL),
+(	4,			4,			@Common,	N'BalancesWithBanks',	@CBEETB,		@ETB,			-1,		120000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',NULL,NULL,NULL,	NULL,				NULL),
+
+(	5,			1,			@ExecutiveOffice, N'AdministrativeExpense',@GeneralManager,@Car1Svc,+1,		+1,		@V,			N'DepreciationExpense',			NULL,			NULL,				NULL,				NULL,				NULL),
+(	5,			2,			@ExecutiveOffice, N'MotorVehicles',	@GeneralManager,@Car1Svc,		-1,		+1,		@V,			N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,				@Car1,				NULL),
+
+(	6,			1,			@ExecutiveOffice, N'AdministrativeExpense',@GeneralManager,@Car1Svc,+1,		-1,		-@V,		N'DepreciationExpense',			NULL,			NULL,				NULL,				NULL,				NULL),
+(	6,			2,			@ExecutiveOffice, N'MotorVehicles',	@GeneralManager,@Car1Svc,		-1,		-1,		-@V,		N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,				@Car1,				NULL),
+
+(	7,			1,			@ExecutiveOffice, N'AdministrativeExpense',@GeneralManager,@Car1Svc,+1,		+1,		@VU,		N'DepreciationExpense',			NULL,			NULL,				NULL,				NULL,				NULL),
+(	7,			2,			@ExecutiveOffice, N'MotorVehicles',	@GeneralManager,@Car1Svc,		-1,		+1,		@VU,		N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,				@Car1,				NULL);
+
 
 BEGIN -- UI logic to fill missing fields
 	UPDATE D -- For instant transaction types, make end time equals start time
@@ -212,11 +233,7 @@ WITH (
 
 DECLARE @Docs [dbo].[IndexedIdList];
 INSERT INTO @Docs([Id]) VALUES
-	(1),
-	(2),
-	(3),
-	(4),
-	(5);
+	(1), (2), (3), (4),	(5), (6), (7), (8);
 
 EXEC [dbo].[api_Documents__Submit]
 	@Documents = @Docs,
@@ -238,7 +255,7 @@ EXEC [dbo].[api_Documents__Post]
 	@ReturnEntities = 0,
  	@DocumentsResultJson = @D3ResultJson OUTPUT,
 	@LinesResultJson = @L3ResultJson OUTPUT,
-	@EntriesResultJson = @E3ResultJson OUTPUT
+	@EntriesResultJson = @E3ResultJson OUTPUT;
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN

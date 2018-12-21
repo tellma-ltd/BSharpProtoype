@@ -8,7 +8,7 @@
 	DECLARE @CommonStock int;
 	DECLARE @Camry2018 int, @TeddyBear int, @Car1 int, @Car2 int;
 	DECLARE @HolidayOvertime int, @Labor int, @Car1Svc int, @Car2Dep int;
-	DECLARE @ETBUnit int, @USDUnit int, @eaUnit int, @pcsUnit int, @shareUnit int, @wmoUnit int, @hrUnit int, @yrUnit int;
+	DECLARE @ETBUnit int, @USDUnit int, @eaUnit int, @pcsUnit int, @shareUnit int, @wmoUnit int, @hrUnit int, @yrUnit int, @dayUnit int;
 	SELECT @ETBUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'ETB'; IF @ETBUnit IS NULL Print N'@ETBUnit is NULL!!!!';
 	SELECT @USDUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'USD'; IF @USDUnit IS NULL Print N'@USDUnit is NULL!!!!';
 	SELECT @pcsUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'pcs'; IF @pcsUnit IS NULL Print N'@pcsUnit is NULL!!!!';
@@ -17,6 +17,7 @@
 	SELECT @wmoUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'wmo'; IF @wmoUnit IS NULL Print N'@wmoUnit is NULL!!!!';
 	SELECT @hrUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!';
 	SELECT @yrUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'yr'; IF @yrUnit IS NULL Print N'@yrUnit is NULL!!!!';
+	SELECT @dayUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'd'; IF @yrUnit IS NULL Print N'@dayUnit is NULL!!!!';
 END
 BEGIN -- Inserting
 	INSERT INTO @R1Save
@@ -32,8 +33,8 @@ BEGIN -- Inserting
 	(N'Shares',				N'Premium Stock',		NULL,		@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Labor',				NULL,		@wmoUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Holiday Overtime',	NULL,		@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'MotorVehiclesServices',N'Car 101 - Svc',		N'101D',	@yrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
-	(N'MotorVehiclesServices',N'Car 102 - Svc',		N'102D',	@yrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);
+	(N'MotorVehiclesServices',N'Car 101 - Svc',		N'101D',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
+	(N'MotorVehiclesServices',N'Car 102 - Svc',		N'102D',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);
 
 	EXEC [dbo].[api_Resources__Save]
 		@Entities = @R1Save,

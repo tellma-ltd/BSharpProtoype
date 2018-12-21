@@ -33,7 +33,7 @@ BEGIN
 	(N'DateOfEndOfReportingPeriod2013', @strToDate)
 
 	INSERT INTO #IFRS([Field], [Value])
-	SELECT [AccountId], SUM([Value] * [Direction] * [CoveringRatio])
+	SELECT [AccountId], SUM([Value] * [Direction])
 	FROM dbo.ft_Journal(@fromDate, @toDate)
 	GROUP BY [AccountId];
 

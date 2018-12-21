@@ -9,7 +9,7 @@
 	[ResourceId]		INT					NOT NULL,
 	[Direction]			SMALLINT			NOT NULL,
 	[Amount]			MONEY				NOT NULL,
-	[Value]				MONEY				NOT NULL,
+	[Value]				DECIMAL(38,10)		NOT NULL,
 	[NoteId]			NVARCHAR (255),
 	[Reference]			NVARCHAR (255),
 	[RelatedReference]	NVARCHAR (255),

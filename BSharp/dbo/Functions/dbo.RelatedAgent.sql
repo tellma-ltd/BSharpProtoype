@@ -1,5 +1,4 @@
-﻿
-CREATE FUNCTION [dbo].[RelatedAgent](@EntryNumber tinyint, @Entries EntryList READONLY)
+﻿CREATE FUNCTION [dbo].[RelatedAgent](@EntryNumber tinyint, @Entries EntryList READONLY)
 RETURNS int
 AS
 BEGIN
@@ -10,5 +9,4 @@ BEGIN
 	WHERE EntryNumber = @EntryNumber
 
 	RETURN @Result
-
 END

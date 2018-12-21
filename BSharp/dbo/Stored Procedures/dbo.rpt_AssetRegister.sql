@@ -6,8 +6,8 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT
 		R.[Name] As [Asset], J.[NoteId], 
-		SUM([Value] * [Direction] * [CoveringRatio]) AS [Value],
-		SUM([Amount] * [Direction] * [CoveringRatio]) AS [Lifetime], MU.[Name] As Unit
+		SUM([Value] * [Direction]) AS [Value],
+		SUM([Amount] * [Direction]) AS [Lifetime], MU.[Name] As Unit
 	FROM [dbo].ft_Journal(@fromDate, @toDate) J
 	JOIN [dbo].[Resources] R ON J.ResourceId = R.Id
 	JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id

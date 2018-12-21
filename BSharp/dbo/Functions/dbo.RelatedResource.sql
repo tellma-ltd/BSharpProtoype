@@ -1,5 +1,4 @@
-﻿
-CREATE FUNCTION [dbo].[RelatedResource](@EntryNumber tinyint, @Entries EntryList READONLY)
+﻿CREATE FUNCTION [dbo].[RelatedResource](@EntryNumber tinyint, @Entries EntryList READONLY)
 RETURNS int
 AS
 BEGIN
