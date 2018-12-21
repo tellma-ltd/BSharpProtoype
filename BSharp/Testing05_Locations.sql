@@ -2,8 +2,7 @@
 	DECLARE @Loc1Save LocationForSaveList, @Loc2Save LocationForSaveList;
 	DECLARE @Loc1Result [dbo].LocationList, @Loc2Result [dbo].LocationList, @Loc3Result [dbo].LocationList;
 	DECLARE @Loc1ResultJson NVARCHAR(MAX), @Loc2ResultJson NVARCHAR(MAX), @Loc3ResultJson NVARCHAR(MAX);
-	DECLARE @LocationActivationList [dbo].ActivationList;
-
+	
 	DECLARE @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int, @MiscWarehouse int, @CBEUSD int, @CBEETB int; 
 END
 

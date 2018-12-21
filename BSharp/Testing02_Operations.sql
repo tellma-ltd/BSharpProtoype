@@ -2,7 +2,6 @@
 	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
 	DECLARE @O1Result [dbo].OperationList, @O2Result [dbo].OperationList;
 	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
-	DECLARE @OperationActivationList [dbo].ActivationList;
 	DECLARE @Common int, @Existing int, @Expansion int, @ExecutiveOffice int;
 END
 BEGIN -- Inserting

@@ -2,7 +2,6 @@
 	DECLARE @R1Save [dbo].ResourceForSaveList, @R2Save [dbo].ResourceForSaveList;
 	DECLARE @R1Result [dbo].ResourceList, @R2Result [dbo].ResourceList;
 	DECLARE @R1ResultJson NVARCHAR(MAX), @R2ResultJson NVARCHAR(MAX), @R3ResultJson NVARCHAR(MAX);
-	DECLARE @ResourceActivationList [dbo].ActivationList;
 
 	DECLARE @ETB int, @USD int;
 	DECLARE @CommonStock int;
