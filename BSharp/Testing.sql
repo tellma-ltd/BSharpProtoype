@@ -32,9 +32,9 @@ BEGIN TRY
 	SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
 	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 0, @ByResource = 0;
 	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2018.01.01', @ByCustody = 0, @ByResource = 0;
-	--EXEC rpt_WithholdingTaxOnPayment;
-	--EXEC rpt_ERCA__VAT_Purchases;
-	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
+	EXEC rpt_WithholdingTaxOnPayment;
+	EXEC rpt_ERCA__VAT_Purchases;
+	EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
 	DECLARE @i int = 0;
 	SELECT @fromDate = '2017.01.01', @toDate = '2018.01.01';
 	WHILE @i < 7
@@ -45,6 +45,8 @@ BEGIN TRY
 	END
 	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.02.01', @toDate = '2018.02.01';
 	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.01.01', @toDate = '2023.12.31';
+
+	ROLLBACK;
 END TRY
 BEGIN CATCH
 	ROLLBACK;
@@ -65,13 +67,3 @@ ERR_LABEL:
 	);
 	ROLLBACK;
 RETURN;
-
-SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY [Id], [LineId], EntryId
-EXEC rpt_TrialBalance;
-EXEC rpt_WithholdingTaxOnPayment;
-EXEC rpt_ERCA__VAT_Purchases; 
-
-SELECT Debit, Credit from ft_Account__Statement(N'AdministrativeExpense', '2017.06.30', '2019.01.01');
-SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');
-
-EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0;

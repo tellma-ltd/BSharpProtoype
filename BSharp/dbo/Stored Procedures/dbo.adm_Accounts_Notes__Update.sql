@@ -1,37 +1,10 @@
-﻿
-CREATE PROCEDURE [dbo].[adm_COA__Parents_Update]
+﻿CREATE PROCEDURE [dbo].[adm_Accounts_Notes__Update]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	UPDATE [dbo].Accounts Set ParentId = NULL WHERE ParentId IS NOT NULL;
-	
-	DECLARE @i INT = 1
-	WHILE @i < 15
-	BEGIN
-		UPDATE AC
-		SET AC.ParentId = AP.Id
-		FROM [dbo].Accounts AC JOIN [dbo].Accounts AP
-		ON AC.Code LIKE AP.Code + '%' AND AC.Code <> AP.Code AND AC.TenantId = AP.TenantId
-		WHERE LEN(AP.Code) = @i
-		SET @i = @i + 1
-	END
+	DECLARE @Code nvarchar(255);
 
-	UPDATE [dbo].Notes Set ParentId = NULL WHERE ParentId IS NOT NULL ;
-	
-	--DECLARE @i int = 1
-	SET @i = 1
-	WHILE @i < 15
-	BEGIN
-		UPDATE NC
-		SET NC.ParentId = NP.Id
-		FROM [dbo].Notes NC JOIN [dbo].Notes NP
-		ON NC.Code LIKE NP.Code + '%' AND NC.Code <> NP.Code AND NC.TenantId = NP.TenantId
-		WHERE LEN(NP.Code) = @i
-		SET @i = @i + 1
-	END
-
-	DECLARE @Code nvarchar(255)
-	SELECT @Code = min(Code) FROM [dbo].Accounts;
+	SELECT @Code = MIN(Code) FROM [dbo].Accounts;
 	WHILE @Code IS NOT NULL
 	BEGIN
 		IF (SELECT AccountType FROM [dbo].Accounts WHERE Code = @Code) IN (N'Custom', N'Extension')
@@ -46,8 +19,7 @@ BEGIN
 		SELECT @Code = min(Code) FROM [dbo].Accounts WHERE Code > @Code;
 	END
 
-	--DECLARE @Code nvarchar(255)
-	SELECT @Code = min(Code) FROM [dbo].Notes;
+	SELECT @Code = MIN(Code) FROM [dbo].Notes;
 	WHILE @Code IS NOT NULL
 	BEGIN
 		IF (SELECT NoteType FROM [dbo].Notes WHERE Code = @Code) IN (N'Custom', N'Extension')
@@ -61,6 +33,7 @@ BEGIN
 
 		SELECT @Code = min(Code) FROM [dbo].Notes WHERE Code > @Code;
 	END
+
 	/*
 	UPDATE [dbo].Accounts -- Agent/Location
 	SET [AccountSpecification] = N'PropertyPlantAndEquipment'

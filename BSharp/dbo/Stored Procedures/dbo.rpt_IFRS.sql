@@ -1,13 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_IFRS] --R
 	@fromDate Date = NULL, 
 	@toDate Date = NULL,
-	@PresentationCurrency nchar(3) = NULL,
+	@PresentationCurrencyCode nchar(3) = NULL,
 	@RoundingLevel int = 0
 AS
 BEGIN
 	SET NOCOUNT ON;
-	IF @PresentationCurrency IS NULL
-		SET @PresentationCurrency = [dbo].fn_Settings(N'FunctionalCurrency');
+	IF @PresentationCurrencyCode IS NULL
+		SET @PresentationCurrencyCode = [dbo].fn_Settings(N'FunctionalCurrencyCode');
+	DECLARE @PresentationCurrency NVARCHAR(255);
+	SELECT @PresentationCurrency = [Description] FROM dbo.[MeasurementUnits]
+	WHERE [Code] = @PresentationCurrencyCode;
 
 	CREATE TABLE [dbo].#IFRS(
 		[Id]	INT	Identity(1,1) PRIMARY KEY,

@@ -574,4 +574,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[api_Documents__Save]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="93a437b2-abeb-44a1-8555-05b32b626498" ChangeDateTime="12/22/2018 04:49:09">
+    <Property Name="ElementName" Value="[dbo].[adm_COA__Parents_Update]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[adm_Accounts__Update]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3bebb359-c030-4f97-93e4-f0a125046648" ChangeDateTime="12/22/2018 04:50:53">
+    <Property Name="ElementName" Value="[dbo].[adm_Accounts__Update]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[adm_Accounts_Notes__Update]" />
+  </Operation>
 </Operations>

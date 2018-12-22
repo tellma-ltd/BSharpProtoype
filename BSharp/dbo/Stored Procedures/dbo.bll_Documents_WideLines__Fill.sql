@@ -182,7 +182,7 @@ DECLARE
 */
 	-- Bulk Update all null operations to root
 	UPDATE @EntriesLocal
-	SET OperationId = (SELECT [Id] FROM [dbo].[Operations] WHERE [ParentId] IS NULL)
+	SET OperationId = (SELECT MIN([Id]) FROM [dbo].[Operations] WHERE [ParentId] IS NULL)
 	WHERE OperationId IS NULL
 
 	--Bulk Balance all lines having only one null value, by setting the value to the total of the other entries

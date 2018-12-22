@@ -5,11 +5,11 @@
 END
 BEGIN -- Inserting
 	INSERT INTO @MU1Save ([Name], [UnitType], [Description], [UnitAmount], [BaseAmount], [Code]) VALUES
-		(N'AED', N'Money', N'AE Dirhams', 3.67, 1, N'AED'),
+		(N'AED', N'Money', N'UAE Dirham', 3.67, 1, N'AED'),
 		(N'd', N'Time', N'Day', 1, 86400, NULL),
 		(N'dozen', N'Count', N'Dozen', 1, 12, NULL),
 		(N'ea', N'Pure', N'Each', 1, 1, NULL),
-		(N'ETB', N'Money', N'ET Birr', 27.8, 1, N'ETB'),
+		(N'ETB', N'Money', N'Ethiopian Birr', 27.8, 1, N'ETB'),
 		(N'g', N'Mass', N'Gram', 1, 1, NULL),
 		(N'hr', N'Time', N'Hour', 1, 3600, NULL),
 		(N'in', N'Distance', N'inch', 1, 2.541, NULL),
@@ -22,7 +22,7 @@ BEGIN -- Inserting
 		(N'pcs', N'Count', N'Pieces', 1, 1, NULL),
 		(N's', N'Time', N'second', 1, 1, NULL),
 		(N'share', N'Pure', N'Shares', 1, 1, NULL),
-		(N'USD', N'Money', N'US Dollars', 1, 1, N'USD'),
+		(N'USD', N'Money', N'US Dollar', 1, 1, N'USD'),
 		(N'usg', N'Volume', N'US Gallon', 1, 3.785411784, NULL),
 		(N'wd', N'Time', N'work day', 1, 8, NULL),
 		(N'wk', N'Time', N'week', 1, 604800, NULL),

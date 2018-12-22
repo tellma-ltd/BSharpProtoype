@@ -13,4 +13,44 @@
 GO
 CREATE CLUSTERED INDEX [IX_Notes_Code]
   ON [dbo].[Notes]([Code] ASC);
+GO;
 
+CREATE TRIGGER [dbo].[trD_Notes]
+ON [dbo].[Notes]
+FOR DELETE 
+AS
+SET NOCOUNT ON
+	Delete Notes_H
+	WHERE	(C IN (SELECT [Id] FROM Deleted))
+	OR		(P IN (SELECT [Id] FROM Deleted));
+GO;
+
+CREATE TRIGGER [dbo].[trIU_Notes]
+ON [dbo].[Notes]
+FOR INSERT, UPDATE
+AS
+SET NOCOUNT ON
+IF UPDATE(Code)
+BEGIN
+	DECLARE @TenantId int = CONVERT(int, SESSION_CONTEXT(N'Tenantid'));
+	Delete Notes_H
+	WHERE	(C IN (SELECT [Id] FROM Deleted))
+	OR		(P IN (SELECT [Id] FROM Deleted));
+
+	MERGE INTO Notes_H As t -- insert x y where x = A or below and y = parentid and above
+	USING (
+		SELECT T1.C, T2.P FROM (
+			SELECT [Code], [Id] As C FROM Inserted
+			UNION 
+			SELECT [Code], [Id] FROM Notes
+		) T1 Join (
+			SELECT [Code], [Id] As P FROM Inserted
+			UNION 
+			SELECT [Code], [Id] FROM Notes
+		) T2 ON (T1.Code Like T2.Code + '%' AND T1.Code <> T2.Code)
+	) AS s ON (t.C = s.C AND t.P = s.P)
+	WHEN NOT MATCHED THEN
+	INSERT ([TenantId], C, P)
+	VALUES(@TenantId, s.C, s.P);
+END;
+GO;

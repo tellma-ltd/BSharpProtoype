@@ -1,4 +1,5 @@
 ﻿EXEC sp_set_session_context 'Tenantid', 106;
+DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 --:r .\PopulateMeasurementUnits.sql
 :r .\PopulateTranslations.sql
 :r .\PopulateAccounts.sql
@@ -6,7 +7,7 @@
 :r .\PopulateTransactionTypes.sql
 :r .\PopulateTransactionSpecifications.sql
 
---EXEC [dbo].adm_COA__Parents_Update;
+EXEC [dbo].[adm_Accounts_Notes__Update];
 
 -- We may be able to get rid of it, and construct the [Name] key on the fly...
 /*

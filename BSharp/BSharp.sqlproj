@@ -122,13 +122,12 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Document__Forward.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.adm_COA__Parents_Update.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.adm_Accounts_Notes__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_IFRS.sql" />
     <Build Include="dbo\Stored Procedures\dbo.sbs_Account__IsActive.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_ERCA__EmployeeIncomeTax.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WithholdingTaxOnPayment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_VAT__Declaration.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.adm_Accounts_H__FIX.sql" />
     <Build Include="dbo\User Defined Types\dbo.EntryList.sql" />
     <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
     <Build Include="dbo\User Defined Types\dbo.WideLineList.sql" />
@@ -209,6 +208,7 @@
     <Build Include="dbo\Functions\dbo.fn_Operation__FirstSibling.sql" />
     <Build Include="dbo\Tables\dbo.CustodiesResources.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_AssetRegister.sql" />
+    <Build Include="dbo\Tables\dbo.Notes_H.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -245,5 +245,5 @@ WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
     INSERT ([TenantId],			[Id], [Name], [Code], [IsActive], [NoteType], [IsExtensible])
-    VALUES (CONVERT(INT, SESSION_CONTEXT(N'TenantId')), s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
+    VALUES (@TenantId, s.[Id], s.[Name], s.[Code], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

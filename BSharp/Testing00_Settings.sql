@@ -17,33 +17,33 @@ INSERT INTO @S1Save
 (N'NameOfUltimateParentOfGroup', N'BIOSS'),
 -- Non IFRS values
 (N'TaxIdentificationNumber', N'123456789'),
-(N'FunctionalCurrencyUnit', N'ETB');
+(N'FunctionalCurrencyCode', N'ETB');
 
-	EXEC [dbo].[api_Settings__Save]
-		@Settings = @S1Save,
-		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@SettingsResultJson = @S1ResultJson OUTPUT
+EXEC [dbo].[api_Settings__Save]
+	@Settings = @S1Save,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@SettingsResultJson = @S1ResultJson OUTPUT
 
-	IF @ValidationErrorsJson IS NOT NULL 
-	BEGIN
-		Print 'Location: Settings 1'
-		GOTO Err_Label;
-	END
+IF @ValidationErrorsJson IS NOT NULL 
+BEGIN
+	Print 'Location: Settings 1'
+	GOTO Err_Label;
+END
 
-	INSERT INTO @S1Result(
-		[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	)
-	SELECT 
-		[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@S1ResultJson)
-	WITH (
-		[Field] NVARCHAR (255) '$.Field',
-		[Value] NVARCHAR (255) '$.Value',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+INSERT INTO @S1Result(
+	[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+)
+SELECT 
+	[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
+FROM OpenJson(@S1ResultJson)
+WITH (
+	[Field] NVARCHAR (255) '$.Field',
+	[Value] NVARCHAR (255) '$.Value',
+	[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
+	[CreatedBy] NVARCHAR(450) '$.CreatedBy',
+	[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
+	[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
+	[EntityState] NVARCHAR(255) '$.EntityState'
+);
 IF @LookupsSelect = 1
 	SELECT * FROM [dbo].Settings;
