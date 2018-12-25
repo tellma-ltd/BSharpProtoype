@@ -1,14 +1,14 @@
-﻿CREATE PROCEDURE [dbo].[dal_Documents_Lines__Select]
+﻿CREATE PROCEDURE [dbo].[dal_Documents__Select]
 	@Ids [dbo].[IntegerList] READONLY,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @DocumentsResultJson =	(
-		SELECT [Id], [State], [TransactionType], [Mode], [SerialNumber], 
-		[ResponsibleAgentId], [ForwardedToAgentId], 
-		[FolderId], [LinesMemo], [LinesStartDateTime], [LinesEndDateTime], 
-		[LinesCustody1], [LinesCustody2], [LinesCustody3],
+		SELECT [Id], [State], [TransactionType], [Frequency], [Duration],  
+		[StartDateTime], [EndDateTime], [Mode],	[SerialNumber], 
+		[ResponsibleAgentId], [ForwardedToAgentId], [FolderId], 
+		[LinesMemo], [LinesCustody1], [LinesCustody2], [LinesCustody3],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
 		FROM [dbo].[Documents]
 		WHERE [Id] IN (SELECT [Id] FROM @Ids)

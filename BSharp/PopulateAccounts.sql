@@ -267,6 +267,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'3212421', N'ShorttermEmployeeBenefitsAccruals', N'Short-term employee benefits accruals')
 ,(N'Regulatory', 1, N'3212422', N'RentAccrualClassifiedAsCurrent', N'Rent accrual classified as current')
 ,(N'Extension', 1, N'3212423', N'GoodsAndServicesReceivedFromSupplierButNotBilled', N'Goods and services received from supplier but not billed')
+,(N'Extension', 1, N'3212424', N'ShorttermPensionContributionAccruals', N'Short-term pension contribution accruals')
 ,(N'Regulatory', 1, N'32125', N'CurrentPayablesOnSocialSecurityAndTaxesOtherThanIncomeTax', N'Current payables on social security and taxes other than income tax')
 ,(N'Regulatory', 1, N'321251', N'CurrentValueAddedTaxPayables', N'Current value added tax payables')
 ,(N'Regulatory', 1, N'321252', N'CurrentExciseTaxPayables', N'Current excise tax payables')

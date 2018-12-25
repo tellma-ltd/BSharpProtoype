@@ -9,7 +9,7 @@
 	[ResourceId]		INT					NOT NULL,
 	[Direction]			SMALLINT			NOT NULL,
 	[Amount]			MONEY				NOT NULL,
-	[Value]				DECIMAL(38,10)		NOT NULL,
+	[Value]				VTYPE		NOT NULL,
 	[NoteId]			NVARCHAR (255),
 	[Reference]			NVARCHAR (255),
 	[RelatedReference]	NVARCHAR (255),
@@ -27,7 +27,8 @@
 	CONSTRAINT [FK_Entries_Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_Custodies]	FOREIGN KEY ([TenantId], [CustodyId])	REFERENCES [dbo].[Custodies] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
-	CONSTRAINT [FK_Entries_Notes]		FOREIGN KEY ([TenantId], [NoteId])		REFERENCES [dbo].[Notes] ([TenantId], [Id])
+	CONSTRAINT [FK_Entries_Notes]		FOREIGN KEY ([TenantId], [NoteId])		REFERENCES [dbo].[Notes] ([TenantId], [Id]),
+	CONSTRAINT [FK_Entries_AccountsNotes] FOREIGN KEY ([TenantId], [AccountId], [NoteId], [Direction]) REFERENCES [dbo].[AccountsNotes] ([TenantId], [AccountId], [NoteId], [Direction]),
 );
 GO
 CREATE UNIQUE INDEX [IX_Entries_PK] ON [dbo].[Entries] ([TenantId], [LineId], [EntryNumber]);

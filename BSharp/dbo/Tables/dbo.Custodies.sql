@@ -15,10 +15,10 @@
 	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Individual', N'Organization', N'Position', N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc'))
 );
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Id_CustodyType]
+CREATE UNIQUE INDEX [IX_Custodies__Id_CustodyType]
   ON [dbo].[Custodies]([TenantId] ASC, [Id] ASC, [CustodyType] ASC);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Code]
+CREATE UNIQUE INDEX [IX_Custodies__Code]
   ON [dbo].[Custodies]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
 
 

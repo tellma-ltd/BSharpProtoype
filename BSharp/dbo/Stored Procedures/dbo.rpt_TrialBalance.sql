@@ -22,7 +22,7 @@ BEGIN
 	IF (@ByResource = 1)
 		SET @Query = @Query + N'
 			R.Name As Resource,
-			T.Amount, R.UnitOfMeasure As UOM,'
+			T.Amount, MU.Name As UOM,'
 	IF (@ByNote = 1)
 		SET @Query = @Query + N'
 			T.NoteId As Note,'
@@ -50,7 +50,9 @@ BEGIN
 	IF (@ByCustody = 1) SET @Query = @Query + N'
 		JOIN [dbo].[Custodies] C ON T.CustodyId = C.Id'
 	IF (@ByResource = 1) SET @Query = @Query + N'
-		JOIN [dbo].[Resources] R ON T.ResourceId = R.Id'
+		JOIN [dbo].[Resources] R ON T.ResourceId = R.Id
+		JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id
+		'
 	SET @Query = @Query + N'
 		ORDER BY A.Code'
 

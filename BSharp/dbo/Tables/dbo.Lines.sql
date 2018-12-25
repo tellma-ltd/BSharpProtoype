@@ -3,8 +3,6 @@
 	[Id]			INT IDENTITY (1, 1),
 	[DocumentId]	INT					NOT NULL,
 	[Assertion]		SMALLINT			NOT NULL CONSTRAINT [DF_Lines_Assertion] DEFAULT(1), -- (-1) for negation.
-	[StartDateTime]	DATETIMEOFFSET (7)	NOT NULL, -- in future for demands and in past for vouchers, validity period for template and plan. Meaningless for inquiries.
-	[EndDateTime]	DATETIMEOFFSET (7)	NOT NULL, -- if we make start and period, then period will have meaning for templates
 --	Ideally, instead of BaseLineId to store the price list or BOM used, it should be the info needed to compute the line.
 --	Function Name, with list of Params. 
 --	Depreciation based on units produced: V0, R, Capacity in (RelatedAmount), Units (in Amount), T0 and T1 are irrelevant.

@@ -588,4 +588,25 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[adm_Accounts_Notes__Update]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="20810b2d-1bde-49de-aa78-c55f1a236dc3" ChangeDateTime="12/24/2018 17:04:16">
+    <Property Name="ElementName" Value="[dbo].[Documents].[StartDateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[StartDateTime]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6c578ca0-a7ed-450a-ab3d-0142d061ed11" ChangeDateTime="12/24/2018 17:04:29">
+    <Property Name="ElementName" Value="[dbo].[Documents].[EndDateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[EndDateTime]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="59ea8931-7c9f-4d7a-8939-7a16c2bec073" ChangeDateTime="12/25/2018 05:07:20">
+    <Property Name="ElementName" Value="[dbo].[dal_Documents_Lines__Select]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Documents__Select]" />
+  </Operation>
 </Operations>

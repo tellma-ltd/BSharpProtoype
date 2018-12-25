@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Submit]
-	@Documents [dbo].IndexedIdList READONLY,
+	@Documents [dbo].[IndexedIdForSaveList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
@@ -29,7 +29,7 @@ BEGIN
 		SELECT [Id] 
 		FROM @Documents;
 
-		EXEC [dbo].[dal_Documents_Lines__Select] 
+		EXEC [dbo].[dal_Documents__Select] 
 			@Ids = @Ids, 
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 			@LinesResultJson = @LinesResultJson OUTPUT,

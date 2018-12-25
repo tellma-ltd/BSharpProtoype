@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [dbo].[WideLinesView]  
 AS
  SELECT
- 	D.Id As DocumentId, D.TransactionType, D.ResponsibleAgentId, L.Id As [LineId], L.StartDateTime, L.EndDateTime,
+ 	D.Id As DocumentId, D.TransactionType, D.ResponsibleAgentId, L.Id As [LineId], D.StartDateTime, D.EndDateTime,
 	L.[BaseLineId], L.[ScalingFactor], L.[Memo], L.[CreatedAt], L.[CreatedBy], L.[ModifiedAt], L.[ModifiedBy],
 	MAX(CASE WHEN E.EntryNumber = 1 THEN E.[OperationId] ELSE NULL END) AS Operation1,
 	MAX(CASE WHEN E.EntryNumber = 1 THEN E.[AccountId] ELSE NULL END) AS Account1,
@@ -45,6 +45,6 @@ AS
 FROM [dbo].Entries E JOIN [dbo].[Lines] L ON E.LineId = L.Id
 JOIN [dbo].[Documents] D ON D.Id = L.DocumentId
 GROUP BY
-	D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id, L.StartDateTime, L.EndDateTime,
+	D.Id, D.TransactionType, D.ResponsibleAgentId, L.Id, D.StartDateTime, D.EndDateTime,
 	L.[BaseLineId], L.[ScalingFactor], L.[Memo],
 	L.[CreatedAt], L.[CreatedBy], L.[ModifiedAt], L.[ModifiedBy];

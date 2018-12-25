@@ -12,7 +12,8 @@ SET NOCOUNT ON;
 		S.Amount As [Tax Withheld], 
 		S.Reference As [Receipt Number], 
 		S.StartDateTime As [Receipt Date]
-	FROM [dbo].ft_Account__Statement(N'CurrentWithholdingTaxPayable', @fromDate, @toDate) S
-	LEFT JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	LEFT JOIN [dbo].Agents A ON C.Id = A.Id
-	WHERE S.Direction = -1;
+	FROM [dbo].ft_Account__Statement(N'CurrentWithholdingTaxPayable', 0, 0, @fromDate, @toDate) S
+	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
+	JOIN [dbo].Agents A ON C.Id = A.Id
+	WHERE S.Direction = -1
+	ORDER BY S.StartDateTime;

@@ -3,11 +3,13 @@
 	[Id]					INT,
 	[State]					NVARCHAR (255)		NOT NULL,
 	[TransactionType]		NVARCHAR (255)		NOT NULL,
+	[Frequency]				NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'),
+	[Duration]				INT					NOT NULL DEFAULT (0),
+	[StartDateTime]			DATETIMEOFFSET (7)	NOT NULL,
+	[EndDateTime]			DATETIMEOFFSET (7),
 	[ResponsibleAgentId]	INT,
 	[FolderId]				INT,
 	[LinesMemo]				NVARCHAR (255),
-	[LinesStartDateTime]	DATETIMEOFFSET (7),
-	[LinesEndDateTime]		DATETIMEOFFSET (7),
 	[LinesCustody1]			INT,
 	[LinesCustody2]			INT,
 	[LinesCustody3]			INT,
@@ -17,6 +19,7 @@
 	[EntityState]			NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY CLUSTERED ([Index] ASC),
 	CHECK ([State] IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
+	CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );

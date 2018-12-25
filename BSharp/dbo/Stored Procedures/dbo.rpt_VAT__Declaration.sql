@@ -4,27 +4,30 @@
 AS
 SET NOCOUNT ON;
 	SELECT
-		C.[Name] As [Supplier],
-		A.TaxIdentificationNumber As [TIN],
-		S.RelatedReference As [m/c No], 
-		S.RelatedAmount As [VAT excl.], 
-		S.Amount As VAT, 
-		S.Reference As [FS No.], 
-		S.StartDateTime As [Invoice Date]
-	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxReceivables', @fromDate, @toDate) S
-	LEFT JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	LEFT JOIN [dbo].Agents A On A.Id = C.Id
-	WHERE S.Direction = 1;
+		--(CASE WHEN S.Direction = 1 THEN N'Purchase' Else N'Sale' END) AS Activity,
+		C.[Name] As [Agent], 
+		A.TaxIdentificationNumber As TIN, 
+		S.Reference As InvoiceNumber, S.RelatedReference As [CashMC],
+		SUM(S.Amount) AS VAT,
+		SUM(S.RelatedAmount) AS TaxableAmount,
+		S.StartDateTime As InvoiceDate
+	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxReceivables' , 0, 0, @fromDate, @toDate) S
+	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
+	JOIN [dbo].Agents A ON C.Id = A.Id
+	WHERE S.Direction = 1
+	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime
+	ORDER BY S.StartDateTime;
 
 	SELECT
-		C.[Name] As [Supplier],
+		C.[Name] As [Customer],
 		A.TaxIdentificationNumber As [TIN],
-		S.RelatedReference As [m/c No], 
-		S.RelatedAmount As [VAT excl.], 
-		S.Amount As VAT, 
-		S.Reference As [FS No.], 
+		S.Reference As [Invoice #], S.RelatedReference As [Cash M/C #],
+		SUM(S.Amount) AS VAT,
+		SUM(S.RelatedAmount) AS TaxableAmount,
 		S.StartDateTime As [Invoice Date]
-	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxPayables', @fromDate, @toDate) S
-	LEFT JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	LEFT JOIN [dbo].Agents A On A.Id = C.Id
-	WHERE S.Direction = -1;
+	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxPayables', 0, 0, @fromDate, @toDate) S
+	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
+	JOIN [dbo].Agents A ON C.Id = A.Id
+	WHERE S.Direction = -1
+	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime
+	ORDER BY S.StartDateTime;

@@ -2,16 +2,14 @@
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
 AS
-SET NOCOUNT ON
-
+SET NOCOUNT ON;
 SELECT
 	A.TaxIdentificationNumber As [Employee TIN],
 	C.[Name] As [Employee Full Name],
 	S.RelatedAmount As [Taxable Income], 
-	S.Amount As [Income Tax],
-	S.StartDateTime AS [Month Start],
-	S.EndDateTime AS [Month End]
-FROM [dbo].ft_Account__Statement(N'CurrentEmployeeIncomeTaxPayable' , @fromDate, @toDate) S
-JOIN [dbo].[Custodies] C ON S.CustodyId = C.Id
+	S.Amount As [Tax Withheld],
+	S.Reference AS [Salary Period]
+FROM [dbo].ft_Account__Statement(N'CurrentEmployeeIncomeTaxPayable' , 0, 0, @fromDate, @toDate) S
+JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 JOIN [dbo].Agents A ON C.Id = A.Id
 WHERE S.Direction = -1

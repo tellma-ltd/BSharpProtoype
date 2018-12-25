@@ -33,7 +33,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		FROM OpenJson(@IndexedIdsJson)
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
-		EXEC [dbo].[dal_Documents_Lines__Select] 
+		EXEC [dbo].[dal_Documents__Select] 
 			@Ids = @Ids, 
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 			@LinesResultJson = @LinesResultJson OUTPUT,

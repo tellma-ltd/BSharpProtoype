@@ -23,30 +23,12 @@
 END
 -- get acceptable document types; and user permissions and general settings;
 IF (1=1)-- Journal Vouchers
-BEGIN
--- Document 2: Manual JV Extended
-
-
-	-- Entry 1
-	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @Common, @Account = N'AdministrativeExpense', @Custody = @ExecutiveOffice, @Resource = @ETB, @Direction = 1, @Amount = 120000, @Value = 120000	, @Note = N'DepreciationExpense';
-	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
-	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
-	-- Entry 2
-	SELECT @EntryNumber = @EntryNumber + 1;
-	SELECT @Operation = @Common, @Account = N'MotorVehicles', @Custody = @MohamadAkra, @Resource = @ETB, @Direction = -1, @Amount = 120000, @Value = 120000, @Note = N'DepreciationPropertyPlantAndEquipment';
-	INSERT INTO @Entries(DocumentId, LineNumber, EntryNumber, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], NoteId)
-	VALUES(@DocumentId, @LineNumber, @EntryNumber, @Operation, @Account, @Custody ,@Resource, @Direction, @Amount, @Value, @Note)
-
-	EXEC [bll_Documents_Save__Validate] @Documents = @Documents, @Lines = @Lines, @Entries = @Entries, @ValidationMessage = @ValidationMessage OUTPUT
-	IF @ValidationMessage IS NOT NULL GOTO UI_Error;
-END
 IF (1=0)-- Purchase Order
 BEGIN 
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Purchase', @Mode = N'Draft';
 
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
+  [StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	SELECT @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = '2018.01.02', @EndDatetime = DATEADD(D, 1, @StartDatetime);
@@ -69,7 +51,7 @@ IF (1=0)-- Purchase Event
 BEGIN
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'CashIssueToSupplier', @Mode = N'Draft';
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
+  [StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime);
@@ -81,7 +63,7 @@ BEGIN
 
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'PurchaseWitholdingTax', @Mode = N'Draft';
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
+  [StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime), @Memo = N'Assets Purchase';
@@ -110,7 +92,7 @@ BEGIN
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Voucher', @TransactionType = N'Purchase', @Mode = N'Draft';
 		
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
+  [StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	SELECT @ResponsibleAgent = @AyelechHora, @Supplier = @Lifan, @StartDatetime = '2018.01.31', @EndDatetime = DATEADD(D, 1, @StartDatetime);
@@ -127,7 +109,7 @@ BEGIN
 	SELECT @DocumentId = @DocumentId + 1, @State = N'Order', @TransactionType = N'Labor', @Mode = N'Draft';
 
 	INSERT INTO @Documents([Id], [State], [TransactionType], [SerialNumber], [Mode], [FolderId], [LinesMemo], [ResponsibleAgentId],
-  [LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
+  [StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1],	[LinesReference2], [LinesReference3])
 	VALUES(@DocumentId, @State, @TransactionType, @SerialNumber, @Mode, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	SELECT @ResponsibleAgent = @BadegeKebede, @Employee = @MohamadAkra, 
@@ -150,7 +132,7 @@ BEGIN
 	SELECT @TransactionType = N'LaborReceiptFromEmployee';
 -- Labor receipt
 -- MA
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Expansion, @Employee = @MohamadAkra, @Attendance = 208, @Department = @ExecutiveOffice;
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Expansion, @Employee = @MohamadAkra, @Attendance = 208, @Department = @ExecOffice;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [TransactionType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, Custody2)
 	VALUES(@DocumentId, @LineNumber, @TransactionType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Department, @Attendance, @Employee);
 -- Ahmad
@@ -193,16 +175,3 @@ RETURN
 UI_Error:
 	Print @ValidationMessage;
 RETURN
-
-SELECT * from ft_Journal('01.01.2000', '01.01.2200') ORDER BY [Id], LineNumber, EntryNumber;
-EXEC rpt_TrialBalance;
-
-
-SELECT Debit, Credit from ft_Account__Statement(N'AdministrativeExpense', '2017.06.30', '2019.01.01');
-SELECT * FROM ft_Journal('2017.06.30', '2019.01.01');
-
-EXEC rpt_TrialBalance @fromDate = '2018.01.01', @toDate = '2018.06.30', @ByCustody = 0, @ByResource = 0
-
-SELECT * FROM [dbo].[Documents];
-SELECT * FROM [dbo].[Lines];
-SELECT * FROM [dbo].[Entries];

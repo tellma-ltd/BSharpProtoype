@@ -3,9 +3,13 @@
 	DECLARE @A1Result [dbo].AgentList, @A2Result [dbo].AgentList;
 	DECLARE @A1ResultJson NVARCHAR(MAX), @A2ResultJson NVARCHAR(MAX);
 
-	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int, @ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int;
-	DECLARE @BananIT int, @WaliaSteel int, @Lifan int, @Sesay int, @ERCA int, @Paint int, @Plastic int, @CBE int, @AWB int, @NIB int;
-	DECLARE @GeneralManager int, @ProductionManager int, @SalesManager int, @FinanceManager int, @HRManager int, @PurchasingManager int;
+	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int,
+			@ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int,
+			@MesfinWolde int;
+	DECLARE @BananIT int, @WaliaSteel int, @Lifan int, @Sesay int, @ERCA int, @Paint int, @Plastic int, @CBE int, @AWB int,
+			@NIB int, @Regus int;
+	DECLARE @GeneralManager int, @ProductionManager int, @SalesManager int, @FinanceManager int, @HRManager int,
+			@PurchasingManager int;
 END
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)
@@ -40,23 +44,25 @@ BEGIN -- Insert individuals and organizations
 	(N'Individual',	N'Mestawet G/Egziyabhare',	0,N'mestawetezige@gmail.com',	NULL,						NULL,				N'Ms.',		'F',	NULL),
 	(N'Individual',	N'Ayelech Hora',	0,		N'ayelech.hora@gmail.com',		NULL,						NULL,				N'Ms.',		'F',	NULL),
 	(N'Individual',	N'Yigezu Legesse',	0,		NULL,							NULL,						NULL,				N'ATO',		'F',	NULL),
+	(N'Individual',	N'Mesfin Wolde',	0,		NULL,							N'0059603732',				NULL,				N'Eng.',		'M',	NULL),
 
-	(N'Organization', N'Banan Information technologies, plc', 1, N'info@banan-it.com',N'0054901530',	N'AA, Bole, 316/3/203 A',	NULL,		NULL, '2017.08.09'),
+	(N'Organization', N'Banan Information technologies, plc', 1, N'info@banan-it.com',N'0054901530', N'AA, Bole, 316/3/203 A',	NULL,		NULL,	'2017.08.09'),
 	(N'Organization', N'Walia Steel Industry, plc', 1, NULL,					N'0001656462',				NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Yangfan Motors, PLC', 0,	NULL,						N'0005306731',		N'AA, Bole, 06, New',		NULL,		NULL,	NULL),
 	(N'Organization', N'Sisay Tesfaye, PLC', 0,	NULL,							N'',						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Ethiopian Revenues and Customs Authority', 0, NULL,		NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Organization', N'Best Paint Industry', 0,		NULL,					NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Best Paint Industry', 0,NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Best Plastic Industry', 0, NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Commercial Bank of Ethiopia', 0, NULL,					NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Organization', N'Awash Bank', 0,			NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Organization', N'NIB', 0,					NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Awash Bank',	0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'NIB',			0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Regus',			0,		NULL,							N'0008895353',		N'AA, Girgi, 22, New',		NULL,		NULL,	NULL),
 	
-	(N'Position', N'General Manager',	1,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Production Manager', 0,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'General Manager',	1,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Production Manager', 0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Position', N'Sales & Marketing Manager', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Finance Manager',	0,			NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Human Resources Manager', 0,	NULL,						NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Finance Manager',	0,		NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Position', N'Human Resources Manager', 0,NULL,							NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Position', N'Materials & Purchasing Manager', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
 
 	EXEC [dbo].[api_Agents__Save]
@@ -181,6 +187,7 @@ SELECT
 	@Mestawet = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mestawet G/Egziyabhare'), 
 	@AyelechHora = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ayelech Hora'), 
 	@YigezuLegesse = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Yigezu Legesse'), 
+	@MesfinWolde = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mesfin Wolde'),
 	@BananIT = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Banan Information technologies, plc'),
 	@WaliaSteel = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Walia Steel Industry, plc'),
 	@Lifan = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Yangfan Motors, PLC'),
@@ -191,6 +198,7 @@ SELECT
 	@CBE = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Commercial Bank of Ethiopia'),
 	@AWB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Awash Bank'),
 	@NIB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'NIB'),
+	@Regus = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Regus'),
 
 	@GeneralManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'General Manager'),
 	@ProductionManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Production Manager'),

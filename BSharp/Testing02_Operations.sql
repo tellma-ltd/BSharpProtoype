@@ -2,7 +2,7 @@
 	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
 	DECLARE @O1Result [dbo].OperationList, @O2Result [dbo].OperationList;
 	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
-	DECLARE @Common int, @Existing int, @Expansion int, @ExecutiveOffice int;
+	DECLARE @Common int, @Existing int, @Expansion int, @ExecOffice int, @Sales int, @Production int;
 END
 BEGIN -- Inserting
 	INSERT INTO @O1Save
@@ -14,6 +14,8 @@ BEGIN -- Inserting
 		(N'WSI Common',			0),
 		(N'Executive Office',	4),
 		(N'HR Department',		4),
+		(N'Sales & Marketing',	4),
+		(N'Production',			4),
 		(N'MIS Department',		4);
 
 	EXEC [dbo].[api_Operations__Save]
@@ -121,8 +123,9 @@ IF @LookupsSelect = 1
 	SELECT * FROM [dbo].[Operations];
 
 SELECT 
-		@Common = (SELECT [Id] FROM @O1Result WHERE [Name] = N'WSI Common'), 
-		@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),
-		@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
-		@ExecutiveOffice = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion');
-	
+	@Common = (SELECT [Id] FROM @O1Result WHERE [Name] = N'WSI Common'), 
+	@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),
+	@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
+	@ExecOffice = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
+	@Sales = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Sales & Marketing'),
+	@Production = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Production');

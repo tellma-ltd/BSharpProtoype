@@ -4,36 +4,39 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @Code nvarchar(255);
 
-	SELECT @Code = MIN(Code) FROM [dbo].Accounts;
+	SELECT @Code = min(Code) FROM [dbo].Accounts;
 	WHILE @Code IS NOT NULL
 	BEGIN
-		IF (SELECT AccountType FROM [dbo].Accounts WHERE Code = @Code) IN (N'Custom', N'Extension')
-			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE Code = @Code;
-		ELSE -- Regulatory and/or fix
-
-		IF EXISTS(SELECT * FROM [dbo].Accounts WHERE Code Like @Code + '%' AND Code <> @Code AND AccountType NOT IN (N'Custom', N'Extension'))
-			UPDATE [dbo].Accounts SET IsExtensible = 0 WHERE Code = @Code
+		IF EXISTS(SELECT * FROM [dbo].Accounts WHERE Code Like @Code + '%' AND Code <> @Code AND AccountType IN  (N'Regulatory', N'Correction'))
+			UPDATE [dbo].Accounts SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
 		ELSE
-			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE Code = @Code
-
+			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
 		SELECT @Code = min(Code) FROM [dbo].Accounts WHERE Code > @Code;
 	END
 
-	SELECT @Code = MIN(Code) FROM [dbo].Notes;
+	SELECT @Code = min(Code) FROM [dbo].Notes;
 	WHILE @Code IS NOT NULL
 	BEGIN
-		IF (SELECT NoteType FROM [dbo].Notes WHERE Code = @Code) IN (N'Custom', N'Extension')
-			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE Code = @Code;
-		ELSE -- Regulatory and/or fix
-
-		IF EXISTS(SELECT * FROM [dbo].Notes WHERE Code Like @Code + '%' AND Code <> @Code AND NoteType NOT IN (N'Custom', N'Extension'))
-			UPDATE [dbo].Notes SET IsExtensible = 0 WHERE Code = @Code;
+		IF EXISTS(SELECT * FROM [dbo].Notes WHERE Code Like @Code + '%' AND Code <> @Code AND NoteType IN  (N'Regulatory', N'Correction'))
+			UPDATE [dbo].Notes SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
 		ELSE
-			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE Code = @Code;
-
+			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
 		SELECT @Code = min(Code) FROM [dbo].Notes WHERE Code > @Code;
 	END
 
+	SELECT A.[Id] As AccountId, N.[Id] AS [NoteId]
+	FROM dbo.[Accounts] A
+	CROSS JOIN dbo.[Notes] N
+	WHERE A.IsExtensible = 1 AND N.IsExtensible = 1
+	AND (
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'') OR
+		(A.Code Like N'' AND N.Code Like N'')
+	)
 	/*
 	UPDATE [dbo].Accounts -- Agent/Location
 	SET [AccountSpecification] = N'PropertyPlantAndEquipment'

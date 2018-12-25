@@ -149,8 +149,6 @@
     <None Include="Testing10_ManualJV.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
-    <Build Include="dbo\Functions\dbo.fn_Culture.sql" />
-    <Build Include="dbo\Functions\dbo.fn_Translate.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
     <Build Include="dbo\User Defined Types\dbo.MeasurementUnitForSaveList.sql" />
     <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
@@ -191,7 +189,7 @@
     <Build Include="dbo\User Defined Types\dbo.LineForSaveList.sql" />
     <Build Include="dbo\User Defined Types\dbo.EntryForSaveList.sql" />
     <Build Include="dbo\User Defined Types\dbo.WideLineForSaveList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Lines__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_WideLines__Fill.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
@@ -209,6 +207,12 @@
     <Build Include="dbo\Tables\dbo.CustodiesResources.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_AssetRegister.sql" />
     <Build Include="dbo\Tables\dbo.Notes_H.sql" />
+    <Build Include="dbo\Tables\dbo.AccountsNotes.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Account__Code.sql" />
+    <Build Include="dbo\Functions\dbo.fn_Note__Code.sql" />
+    <Build Include="dbo\User Defined Types\dbo.VType.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IndexedIdForSaveList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_Paysheet.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -222,7 +226,6 @@
     <None Include="PopulateNotes.sql" />
     <None Include="PopulateTransactionSpecifications.sql" />
     <None Include="PopulateTransactionTypes.sql" />
-    <None Include="PopulateTranslations.sql" />
     <None Include="Testing.sql" />
     <None Include="Testing00_Settings.sql" />
     <None Include="Testing03_Resources.sql" />
@@ -233,6 +236,7 @@
     <None Include="Testing12_PurchasingCycle.sql" />
     <None Include="Testing13_ProductionCycle.sql" />
     <None Include="Testing14_SalesCycle.sql" />
+    <None Include="PopulateAccountsNotes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PopulateTables.sql" />

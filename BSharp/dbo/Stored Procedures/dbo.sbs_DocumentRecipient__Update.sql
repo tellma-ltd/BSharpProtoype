@@ -9,4 +9,3 @@ BEGIN
 	SET [ForwardedToAgentId] = @ForwardedTo
 	WHERE [Id]= @Id
 END
-

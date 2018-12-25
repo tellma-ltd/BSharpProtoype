@@ -33,8 +33,8 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [State], [TransactionType], [ResponsibleAgentId], [FolderId], [LinesMemo],
-				[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
+				[Index], [Id], [State], [TransactionType], [Frequency], [Duration], [ResponsibleAgentId], [FolderId], [LinesMemo],
+				[StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
 				[LinesReference1], [LinesReference2], [LinesReference3],
 				-- RowNumber should be for inserted only, 
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + 
@@ -47,11 +47,13 @@ BEGIN
 		THEN
 			UPDATE SET
 				t.[State]				= s.[State],
+				t.[Frequency]			= s.[Frequency],
+				t.[Duration]			= s.[Duration],
+				t.[StartDateTime]		= s.[StartDateTime],
+				t.[EndDateTime]			= s.[EndDateTime],
 				t.[ResponsibleAgentId]	= s.[ResponsibleAgentId],
 				t.[FolderId]			= s.[FolderId],
 				t.[LinesMemo]			= s.[LinesMemo],
-				t.[LinesStartDateTime]	= s.[LinesStartDateTime],
-				t.[LinesEndDateTime]	= s.[LinesEndDateTime],
 				t.[LinesCustody1]		= s.[LinesCustody1],
 				t.[LinesCustody2]		= s.[LinesCustody2],
 				t.[LinesCustody3]		= s.[LinesCustody3],
@@ -62,14 +64,18 @@ BEGIN
 				t.[ModifiedBy]			= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId],[State], [TransactionType], [SerialNumber], [ResponsibleAgentId], [FolderId], [LinesMemo],
-				[LinesStartDateTime], [LinesEndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
-				[LinesReference1], [LinesReference2], [LinesReference3], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
+				[TenantId],[State], [TransactionType], [Frequency], [Duration], [StartDateTime], [EndDateTime], 
+				[SerialNumber], [ResponsibleAgentId], [FolderId], [LinesMemo],
+				[LinesCustody1], [LinesCustody2], [LinesCustody3],
+				[LinesReference1], [LinesReference2], [LinesReference3], 
+				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
 			)
 			VALUES (
-				@TenantId, s.[State], s.[TransactionType], s.[SerialNumber], s.[ResponsibleAgentId], s.[FolderId], s.[LinesMemo],
-				s.[LinesStartDateTime], s.[LinesEndDateTime], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],
-				s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], @Now, @UserId, @Now, @UserId
+				@TenantId, s.[State], s.[TransactionType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], 
+				s.[SerialNumber], s.[ResponsibleAgentId], s.[FolderId], s.[LinesMemo],
+				s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],
+				s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], 
+				@Now, @UserId, @Now, @UserId
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -80,23 +86,21 @@ BEGIN
 	(
 		MERGE INTO [dbo].[Lines] AS t
 		USING (
-			SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo]
+			SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [BaseLineId], [ScalingFactor], [Memo]
 			FROM @Lines L
 			JOIN @IndexedIds II ON L.DocumentIndex = II.[Index]
 			WHERE L.[EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.Id = s.Id
 		WHEN MATCHED THEN
 			UPDATE SET 
-				t.[StartDateTime]	= s.[StartDateTime],
-				t.[EndDateTime]		= s.[EndDateTime],
 				t.[BaseLineId]		= s.[BaseLineId], 
 				t.[ScalingFactor]	= s.[ScalingFactor],
 				t.[Memo]			= s.[Memo],
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [DocumentId], [StartDateTime], [EndDateTime], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[DocumentId], s.[StartDateTime], s.[EndDateTime], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id]
 	) As x
 

@@ -16,7 +16,6 @@ BEGIN TRY
 	BEGIN TRANSACTION
 		EXEC sp_set_session_context 'TenantId', 106;
 		EXEC sp_set_session_context 'UserId', N'mohamad.akra@banan-it.com';
-		EXEC sp_set_session_context 'Language', N'AR';
 		:r .\Testing00_Settings.sql
 		:r .\Testing01_MeasurementUnits.sql
 		:r .\Testing02_Operations.sql
@@ -28,24 +27,30 @@ BEGIN TRY
 		--:r .\Testing12_PurchasingCycle.sql
 		--:r .\Testing13_ProductionCycle.sql
 		--:r .\Testing14_SalesCycle.sql
-	DECLARE @fromDate Datetime = '2017.01.01', @toDate Datetime = '2024.01.01';
-	SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
-	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 0, @ByResource = 0;
-	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2018.01.01', @ByCustody = 0, @ByResource = 0;
-	EXEC rpt_WithholdingTaxOnPayment;
-	EXEC rpt_ERCA__VAT_Purchases;
-	EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
-	DECLARE @i int = 0;
-	SELECT @fromDate = '2017.01.01', @toDate = '2018.01.01';
-	WHILE @i < 7
-	BEGIN
-		EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
-		SELECT @fromDate = DATEADD(year, 1, @fromDate), @toDate = DATEADD(year, 1, @toDate);
-		SET @i = @i + 1;
-	END
-	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.02.01', @toDate = '2018.02.01';
-	EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.01.01', @toDate = '2023.12.31';
+	DECLARE @fromDate Datetime, @toDate Datetime;
 
+	SELECT @fromDate = '2017.02.01', @toDate = '2018.03.01'
+	SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
+	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
+	--EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
+	--EXEC rpt_WithholdingTaxOnPayment;
+	--EXEC rpt_ERCA__VAT_Purchases;
+	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
+	--DECLARE @i int = 0;
+	--SELECT @fromDate = '2017.01.01', @toDate = '2018.01.01';
+	--WHILE @i < 7
+	--BEGIN
+	--	EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
+	--	SELECT @fromDate = DATEADD(year, 1, @fromDate), @toDate = DATEADD(year, 1, @toDate);
+	--	SET @i = @i + 1;
+	--END
+	--EXEC [dbo].[rpt_AssetRegister] @fromDate = '2017.02.01', @toDate = '2018.02.01';
+	--SELECT @fromDate = '2017.01.01', @toDate = '2024.01.01';
+	--EXEC [dbo].[rpt_AssetRegister] @fromDate = @fromDate, @toDate = @toDate;
+	--SELECT * from ft_Account__Statement(N'BalancesWithBanks', @CBEETB, @ETB, @fromDate, @toDate) ORDER BY StartDateTime;
+	--SELECT * from ft_Account__Statement(N'DistributionCosts', @SalesManager, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
+	EXEC [dbo].[rpt_ERCA__EmployeeIncomeTax] @fromDate = '2018.02.01', @toDate = '2018.03.01';
+	EXEC [dbo].[rpt_Paysheet] @Reference = '2018.02';
 	ROLLBACK;
 END TRY
 BEGIN CATCH

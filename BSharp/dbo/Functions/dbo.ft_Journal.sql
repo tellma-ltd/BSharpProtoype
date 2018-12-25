@@ -12,9 +12,9 @@ RETURN
 		--D.ForwardedToAgentId,
 		L.Id As [LineId],
 		CONVERT(NVARCHAR(255), 
-		(CASE WHEN @fromDate > L.StartDateTime THEN @fromDate ELSE L.StartDateTime END), 104) As StartDateTime,
+		(CASE WHEN @fromDate > D.StartDateTime THEN @fromDate ELSE D.StartDateTime END), 102) As StartDateTime,
 		CONVERT(NVARCHAR(255), 			
-		(CASE WHEN @toDate < L.EndDateTime THEN @toDate ELSE L.EndDateTime END), 104) As EndDateTime,
+		(CASE WHEN @toDate < D.EndDateTime THEN @toDate ELSE D.EndDateTime END), 102) As EndDateTime,
 		L.Memo,
 		E.Id As EntryId,
 		E.EntryNumber,
@@ -24,27 +24,72 @@ RETURN
 		E.CustodyId,
 		E.ResourceId,
 		E.Direction,
-		CASE WHEN 
-			L.StartDateTime = L.EndDateTime 
-		THEN 
-			E.[Amount]
-		ELSE
-			DATEDIFF(DAY,
-				(SELECT MAX(startDT)	FROM (VALUES (L.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-				(SELECT MIN(endDT)		FROM (VALUES (L.EndDateTime),	(@toDate))	As EndTimes(endDT))
-			) * E.[Amount]
-		END AS Amount,
-		CASE WHEN 
-			L.StartDateTime = L.EndDateTime 
-		THEN 
-			E.[Value]
-		ELSE
-			DATEDIFF(DAY,
-				(SELECT MAX(startDT)	FROM (VALUES (L.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-				(SELECT MIN(endDT)		FROM (VALUES (L.EndDateTime),	(@toDate))	As EndTimes(endDT))
-			) * E.[Value]
+		CASE 
+			WHEN D.Frequency = N'OneTime' THEN E.[Amount]
+			WHEN D.Frequency = N'Daily'
+			THEN
+				DATEDIFF(DAY,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Amount]
+			WHEN D.Frequency = N'Weekly'
+			THEN
+				DATEDIFF(WEEK,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Amount]
+			WHEN D.Frequency = N'Monthly'
+			THEN
+				DATEDIFF(MONTH,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Amount]
+			WHEN D.Frequency = N'Quarterly'
+			THEN
+				DATEDIFF(QUARTER,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Amount]
+			WHEN D.Frequency = N'Yearly'
+			THEN
+				DATEDIFF(YEAR,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Amount]
+		END AS [Amount],
+		CASE 
+			WHEN D.Frequency = N'OneTime' THEN E.[Value]
+			WHEN D.Frequency = N'Daily'
+			THEN
+				DATEDIFF(DAY,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Value]
+			WHEN D.Frequency = N'Weekly'
+			THEN
+				DATEDIFF(WEEK,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Value]
+			WHEN D.Frequency = N'Monthly'
+			THEN
+				DATEDIFF(MONTH,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Value]
+			WHEN D.Frequency = N'Quarterly'
+			THEN
+				DATEDIFF(QUARTER,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Value]
+			WHEN D.Frequency = N'Yearly'
+			THEN
+				DATEDIFF(YEAR,
+					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
+					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
+				) * E.[Value]
 		END AS [Value],
---CAST(DATEDIFF(DAY, L.EndDateTime, L.StartDateTime) AS FLOAT) 
 		E.NoteId,
 		E.RelatedReference,
 		E.RelatedAgentId,
@@ -54,8 +99,9 @@ RETURN
 		[dbo].Entries E
 		INNER JOIN [dbo].[Lines] L ON E.TenantId = L.TenantId AND E.LineId = L.Id
 		INNER JOIN [dbo].[Documents] D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
+		INNER JOIN [dbo].[Resources] R ON E.ResourceId = R.Id
 	WHERE
 		D.Mode = N'Posted' AND 
 		D.State = N'Voucher' AND
-		L.StartDateTime < @toDate AND L.EndDateTime >= @fromDate
+		D.StartDateTime < @toDate AND D.EndDateTime >= @fromDate
 )
