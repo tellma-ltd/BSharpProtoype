@@ -1,5 +1,6 @@
 ﻿DECLARE @TransactionTypes TABLE([id] NVARCHAR(255) PRIMARY KEY)
 INSERT @TransactionTypes ([Id]) VALUES
+	(N'CapitalInvestment'),
 	(N'PaymentIssueToSupplier'),
 	(N'PaymentReceiptFromCustomer'),
 	(N'EmployeeIncomeTax'),

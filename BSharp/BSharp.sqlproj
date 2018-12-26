@@ -69,6 +69,8 @@
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="dbo\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="Tests" />
+    <Folder Include="Initialization" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Agents.sql" />
@@ -135,7 +137,6 @@
     <Build Include="dbo\User Defined Types\dbo.LineList.sql" />
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
-    <None Include="PopulateAccounts.sql" />
     <Build Include="dbo\User Defined Types\dbo.AgentForSaveList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
@@ -146,7 +147,6 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
-    <None Include="Testing10_ManualJV.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
@@ -156,8 +156,6 @@
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Save.sql" />
-    <None Include="Testing04_Agents.sql" />
-    <None Include="Testing05_Locations.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Agents__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Locations__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Save.sql" />
@@ -213,6 +211,27 @@
     <Build Include="dbo\User Defined Types\dbo.VType.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdForSaveList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_Paysheet.sql" />
+    <None Include="Tests\Main.sql" />
+    <None Include="Tests\00_Settings.sql" />
+    <None Include="Tests\01_MeasurementUnits.sql" />
+    <None Include="Tests\02_Operations.sql" />
+    <None Include="Tests\03_Resources.sql" />
+    <None Include="Tests\04_Agents.sql" />
+    <None Include="Tests\05_Locations.sql" />
+    <None Include="Tests\10_ManualJV.sql" />
+    <None Include="Tests\30_HRCycle.sql" />
+    <None Include="Tests\40_PurchasingCycle.sql" />
+    <None Include="Tests\50_ProductionCycle.sql" />
+    <None Include="Tests\60_SalesCycle.sql" />
+    <None Include="Tests\20_Financing.sql" />
+    <None Include="Tests\TestingToBeCleaned.sql" />
+    <None Include="Initialization\PopulateAccounts.sql" />
+    <None Include="Initialization\PopulateAccountsNotes.sql" />
+    <None Include="Initialization\PopulateMeasurementUnits.sql" />
+    <None Include="Initialization\PopulateNotes.sql" />
+    <PostDeploy Include="Initialization\PopulateTables.sql" />
+    <None Include="Initialization\PopulateTransactionSpecifications.sql" />
+    <None Include="Initialization\PopulateTransactionTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -220,26 +239,6 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="TestingToBeCleaned.sql" />
-    <None Include="PopulateNotes.sql" />
-    <None Include="PopulateTransactionSpecifications.sql" />
-    <None Include="PopulateTransactionTypes.sql" />
-    <None Include="Testing.sql" />
-    <None Include="Testing00_Settings.sql" />
-    <None Include="Testing03_Resources.sql" />
-    <None Include="Testing02_Operations.sql" />
-    <None Include="PopulateMeasurementUnits.sql" />
-    <None Include="Testing01_MeasurementUnits.sql" />
-    <None Include="Testing11_HRCycle.sql" />
-    <None Include="Testing12_PurchasingCycle.sql" />
-    <None Include="Testing13_ProductionCycle.sql" />
-    <None Include="Testing14_SalesCycle.sql" />
-    <None Include="PopulateAccountsNotes.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="PopulateTables.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BSharp.refactorlog" />
