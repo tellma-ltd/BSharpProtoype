@@ -1,10 +1,7 @@
 ﻿CREATE TYPE [dbo].[WideLineList] AS TABLE (
 	[LineId]				INT,
 	[DocumentId]			INT					NOT NULL,
-	[TransactionType]		NVARCHAR (255)		NOT NULL,
-	[ResponsibleAgentId]	INT,
-	[StartDateTime]			DATETIMEOFFSET (7),
-	[EndDateTime]			DATETIMEOFFSET (7),
+	[LineType]				NVARCHAR (255)		NOT NULL,
 	[BaseLineId]			INT, -- this is like FunctionId, good for linear functions.
 	[ScalingFactor]			FLOAT, -- Qty sold for Price list, Qty produced for BOM, throughput rate for oil well.
 	[Memo]					NVARCHAR (255),
@@ -47,7 +44,7 @@
 	[RelatedAgent3]			INT,
 	[RelatedResource3]		INT,
 	[RelatedAmount3]		MONEY,
-	[EntityState]			NVARCHAR(255)			NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]			NVARCHAR(255)			NOT NULL,
 	PRIMARY KEY CLUSTERED ([LineId] ASC),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [LineId] IS NULL)	

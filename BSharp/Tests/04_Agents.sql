@@ -1,7 +1,5 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @A1Save [dbo].AgentForSaveList, @A2Save [dbo].AgentForSaveList;
-	DECLARE @A1Result [dbo].AgentList, @A2Result [dbo].AgentList;
-	DECLARE @A1ResultJson NVARCHAR(MAX), @A2ResultJson NVARCHAR(MAX);
+	DECLARE @AgentsDTO [dbo].[AgentList];
 
 	DECLARE @MohamadAkra int, @AhmadAkra int, @BadegeKebede int, @TizitaNigussie int, @Ashenafi int, @YisakTegene int,
 			@ZewdineshHora int, @TigistNegash int, @RomanZenebe int, @Mestawet int, @AyelechHora int, @YigezuLegesse int,
@@ -30,7 +28,7 @@ BEGIN -- Users
 	(N'DESKTOP-V0VNDC4\Mohamad Akra', N'Dr. Akra')
 END
 BEGIN -- Insert individuals and organizations
-	INSERT INTO @A1Save
+	INSERT INTO @AgentsDTO
 	([AgentType],		[Name],			[IsRelated], [UserId],					[TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime]) VALUES
 	(N'Individual',	N'Mohamad Akra',	0,		 N'mohamad.akra@banan-it.com',	NULL,						NULL,				N'Dr.',		'M',	'1966.02.19'),
 	(N'Individual',	N'Ahmad Akra',		0,		 N'ahmad.akra@banan-it.com',	NULL,						NULL,				N'Mr.',		'M',	'1992.09.21'),
@@ -66,46 +64,23 @@ BEGIN -- Insert individuals and organizations
 	(N'Position', N'Materials & Purchasing Manager', 0,	NULL,					NULL,						NULL,				NULL,		NULL,	NULL);
 
 	EXEC [dbo].[api_Agents__Save]
-		@Entities = @A1Save,
+		@Entities = @AgentsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @A1ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
 		Print 'Agents: Location 1'
 		GOTO Err_Label;
-	END
-	INSERT INTO @A1Result(
-		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
-		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
-	)
-	SELECT 
-		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
-		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
-	FROM OpenJson(@A1ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[AgentType] NVARCHAR (255) '$.AgentType',
-		[Name] NVARCHAR (255) '$.Name',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[Address] NVARCHAR (255) '$.Address',
-		[BirthDateTime] DATETIMEOFFSET (7) '$.BirthDateTime',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[IsRelated] BIT '$.IsRelated', 
-		[UserId] NVARCHAR (450) '$.UserId', 
-		[TaxIdentificationNumber] NVARCHAR (255) '$.TaxIdentificationNumber',
-		[Title] NVARCHAR (255) '$.Title',
-		[Gender] NCHAR (1) '$.Gender',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+	END;
+
+	IF @DebugAgents = 1
+		SELECT * FROM [dbo].[ft_Agents__Json](@ResultsJson);
 END
 
 -- Inserting
-INSERT INTO @A2Save (
+DELETE FROM @AgentsDTO;
+INSERT INTO @AgentsDTO (
 	 [Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
 	A.[Id], [AgentType], [Name], [Code], [IsRelated], [UserId], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
@@ -114,27 +89,27 @@ JOIN [dbo].[Custodies] C ON A.Id = C.Id
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 
 -- Updating MA TIN
-	UPDATE @A2Save
+	UPDATE @AgentsDTO
 	SET 
 		[TaxIdentificationNumber] = N'0059603732',
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Ahmad Akra';
 
-	--UPDATE @A2Save 
+	--UPDATE @AgentsDTO 
 	--SET 
 	--	[Code] = N'MA',
 	--	[EntityState] = N'Updated'
 	--WHERE [Name] Like N'%Akra';
 
 -- Deleting Legesse record
-	UPDATE @A2Save
+	UPDATE @AgentsDTO
 	SET [EntityState] = N'Deleted' 
 	WHERE [Name] = N'Yigezu Legesse';
 
 	EXEC [dbo].[api_Agents__Save]
-		@Entities = @A2Save,
+		@Entities = @AgentsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @A2ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -142,73 +117,47 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 		GOTO Err_Label;
 	END;
 	
-	INSERT INTO @A2Result(
-		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
-		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
-	)
-	SELECT 		
-		[Id], [AgentType], [Name], [IsActive], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy],
-		[ModifiedAt], [ModifiedBy], [IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], [EntityState]
-	FROM OpenJson(@A2ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[AgentType] NVARCHAR (255) '$.AgentType', 
-		[Name] NVARCHAR (255) '$.Name',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[Address] NVARCHAR (255) '$.Address',
-		[BirthDateTime] DATETIMEOFFSET (7) '$.BirthDateTime',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[IsRelated] BIT '$.IsRelated', 
-		[UserId] NVARCHAR (450) '$.UserId', 
-		[TaxIdentificationNumber] NVARCHAR (255) '$.TaxIdentificationNumber',
-		[Title] NVARCHAR (255) '$.Title',
-		[Gender] NCHAR (1) '$.Gender',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
-	IF @LookupsSelect = 1
-	BEGIN
-		SELECT * FROM @A1Result; SELECT * FROM @A2Result;
-		SELECT * FROM [dbo].[Custodies];
-	END
-SELECT 
-	@MohamadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mohamad Akra'), 
-	@AhmadAkra = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ahmad Akra'), 
-	@BadegeKebede = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Badege Kebede'), 
-	@TizitaNigussie = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Tizita Nigussie'), 
-	@Ashenafi = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ashenafi Fantahun'), 
-	@YisakTegene = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Yisak Tegene'), 
-	@ZewdineshHora = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Zewdinesh Hora'), 
-	@TigistNegash = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Tigist Negash'), 
-	@RomanZenebe = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Roman Zenebe'), 
-	@Mestawet = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mestawet G/Egziyabhare'), 
-	@AyelechHora = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ayelech Hora'), 
-	@YigezuLegesse = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Yigezu Legesse'), 
-	@MesfinWolde = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Mesfin Wolde'),
-	@BananIT = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Banan Information technologies, plc'),
-	@WaliaSteel = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Walia Steel Industry, plc'),
-	@Lifan = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Yangfan Motors, PLC'),
-	@Sesay = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Sisay Tesfaye, PLC'),
-	@ERCA = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Ethiopian Revenues and Customs Authority'),
-	@Paint = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Best Paint Industry'),
-	@Plastic = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Best Plastic Industry'),
-	@CBE = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Commercial Bank of Ethiopia'),
-	@AWB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Awash Bank'),
-	@NIB = (SELECT [Id] FROM @A1Result WHERE [Name] = N'NIB'),
-	@Regus = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Regus'),
+	IF @DebugAgents = 1
+		SELECT * FROM [dbo].[ft_Agents__Json](@ResultsJson);
 
-	@GeneralManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'General Manager'),
-	@ProductionManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Production Manager'),
-	@SalesManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Sales & Marketing Manager'),
-	@FinanceManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Finance Manager'),
-	@HRManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Human Resources Manager'),
-	@PurchasingManager = (SELECT [Id] FROM @A1Result WHERE [Name] = N'Materials & Purchasing Manager');
+	IF @DebugAgents = 1
+		SELECT * FROM [dbo].[Custodies];
+
+SELECT 
+	@MohamadAkra = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mohamad Akra'), 
+	@AhmadAkra = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ahmad Akra'), 
+	@BadegeKebede = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Badege Kebede'), 
+	@TizitaNigussie = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tizita Nigussie'), 
+	@Ashenafi = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ashenafi Fantahun'), 
+	@YisakTegene = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yisak Tegene'), 
+	@ZewdineshHora = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Zewdinesh Hora'), 
+	@TigistNegash = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tigist Negash'), 
+	@RomanZenebe = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Roman Zenebe'), 
+	@Mestawet = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mestawet G/Egziyabhare'), 
+	@AyelechHora = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ayelech Hora'), 
+	@YigezuLegesse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yigezu Legesse'), 
+	@MesfinWolde = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mesfin Wolde'),
+	@BananIT = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Banan Information technologies, plc'),
+	@WaliaSteel = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Walia Steel Industry, plc'),
+	@Lifan = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yangfan Motors, PLC'),
+	@Sesay = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sisay Tesfaye, PLC'),
+	@ERCA = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ethiopian Revenues and Customs Authority'),
+	@Paint = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Best Paint Industry'),
+	@Plastic = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Best Plastic Industry'),
+	@CBE = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Commercial Bank of Ethiopia'),
+	@AWB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Awash Bank'),
+	@NIB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'NIB'),
+	@Regus = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Regus'),
+
+	@GeneralManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'General Manager'),
+	@ProductionManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Production Manager'),
+	@SalesManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sales & Marketing Manager'),
+	@FinanceManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finance Manager'),
+	@HRManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Human Resources Manager'),
+	@PurchasingManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Manager');
 
 --		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;
-DECLARE @AgentSettingSave [dbo].SettingForSaveList, @AgentSettingResultJson nvarchar(max)
+DECLARE @AgentSettingSave [dbo].SettingList, @AgentSettingResultJson nvarchar(max)
 
 INSERT INTO @AgentSettingSave
 ([Field],[Value]) Values(N'TaxAuthority', @ERCA);
@@ -216,4 +165,4 @@ INSERT INTO @AgentSettingSave
 EXEC [dbo].[api_Settings__Save]
 		@Settings = @AgentSettingSave,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@SettingsResultJson = @AgentSettingResultJson OUTPUT
+		@ResultsJson = @AgentSettingResultJson OUTPUT

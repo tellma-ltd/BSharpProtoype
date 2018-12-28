@@ -1,7 +1,7 @@
 ﻿CREATE TYPE [dbo].[EntryForSaveList] AS TABLE (
 	[Index]				INT					IDENTITY(0, 1),
-	[Id]				INT,
 	[LineIndex]			INT					NOT NULL,
+	[Id]				INT,
 	[LineId]			INT,
 	[EntryNumber]		INT					NOT NULL,
 	[OperationId]		INT,

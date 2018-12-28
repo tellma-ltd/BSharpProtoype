@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Settings__Select]
 	@FieldList dbo.StringList READONLY,
-	@SettingsResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
-SELECT @SettingsResultJson = (
+SELECT @ResultsJson = (
 		SELECT
 			[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
 		FROM [dbo].Settings 

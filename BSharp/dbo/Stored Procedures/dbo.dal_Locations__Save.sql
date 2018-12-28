@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Locations__Save]
-	@Entities [LocationForSaveList] READONLY,
+	@Entities [LocationList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];

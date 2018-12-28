@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Select]
 	@Ids [dbo].[IntegerList] READONLY,
-	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
-SELECT @EntitiesResultJson = (
+SELECT @ResultsJson = (
 	SELECT
 		[Id], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [IsActive], [Code], 
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]

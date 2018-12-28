@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Resources__Validate]
-	@Entities [dbo].[ResourceForSaveList] READONLY,
+	@Entities [dbo].[ResourceList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

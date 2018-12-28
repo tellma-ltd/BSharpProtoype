@@ -1,12 +1,12 @@
 ﻿CREATE FUNCTION [dbo].[ft_Journal] (-- SELECT * FROM [dbo].[ft_Journal]('01.01.2015','01.01.2020')
 	@fromDate Datetime = '2000.01.01', 
 	@toDate Datetime = '2100.01.01'
-) RETURNS TABLE AS
+) RETURNS TABLE
+AS
 RETURN
-(
 	SELECT
 		D.Id,
-		D.[TransactionType],
+		D.[DocumentType],
 		D.SerialNumber,
 		--D.ResponsibleAgentId,
 		--D.ForwardedToAgentId,
@@ -103,5 +103,4 @@ RETURN
 	WHERE
 		D.Mode = N'Posted' AND 
 		D.State = N'Voucher' AND
-		D.StartDateTime < @toDate AND D.EndDateTime >= @fromDate
-)
+		D.StartDateTime < @toDate AND D.EndDateTime >= @fromDate;

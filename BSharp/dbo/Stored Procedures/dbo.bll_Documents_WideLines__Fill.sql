@@ -6,8 +6,10 @@
 AS
 DECLARE
 	@DocumentId int = 0,
-	@TransactionType NVARCHAR(255),
-	@ResponsibleAgentId int,
+	@LineType NVARCHAR(255),
+
+	@Frequency NVARCHAR (255),
+	@Duration INT,
 	@StartDateTime datetimeoffset(7),
 	@EndDateTime datetimeoffset(7),	
 	@Memo nvarchar(255),
@@ -59,6 +61,10 @@ DECLARE
 	@EntriesTransit EntryList;
 	-- in memory processing
 	SET @DocumentId = (SELECT MIN(Id) FROM @Documents WHERE [Id]> @DocumentId);
+
+	SELECT @Frequency = [Frequency], @Duration = [Duration],  @StartDateTime = StartDateTime, @EndDateTime = EndDateTime
+	FROM @Documents WHERE Id = @DocumentId;
+
 	WHILE @DocumentId IS NOT NULL
 	BEGIN
 		DECLARE	@LineId int = 0;
@@ -68,10 +74,7 @@ DECLARE
 			--Print 'Document ' + cast(@DocumentId as NVARCHAR(255)) + ', Line ' + Cast(@LineId as NVARCHAR(255));
 			SELECT
 				@DocumentId = DocumentId,
-				@TransactionType = TransactionType,
-				@ResponsibleAgentId = ResponsibleAgentId,
-				@StartDateTime = StartDateTime,
-				@EndDateTime = EndDateTime,
+				@LineType = LineType,
 				@Memo = Memo,
 
 				@Operation1 = Operation1,
@@ -121,7 +124,7 @@ DECLARE
 			INSERT INTO @EntriesTransit 
 			EXEC [dbo].[bll_WideLine__Entries] 
 				@LineId = @LineId,
-				@TransactionType = @TransactionType,
+				@LineType = @LineType,
 
 				@Operation1 = @Operation1,
 				@Reference1 = @Reference1,

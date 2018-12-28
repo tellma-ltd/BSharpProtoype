@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[api_MeasurementUnits__Save]
-	@Entities [MeasurementUnitForSaveList] READONLY,
+	@Entities [MeasurementUnitList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -27,6 +27,6 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
-			@Ids = @Ids, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
+			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END;

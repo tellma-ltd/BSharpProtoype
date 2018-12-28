@@ -2,21 +2,21 @@
 @WideLines WideLineList READONLY,
 @Entries EntryList READONLY
 AS
-DECLARE @EntryNumber tinyint, @EntriesCount tinyint, @ValueCalculation nvarchar(255), @TransactionType NVARCHAR(255), @AccountId nvarchar(255), @Direction smallint,
+DECLARE @EntryNumber tinyint, @EntriesCount tinyint, @ValueCalculation nvarchar(255), @LineType NVARCHAR(255), @AccountId nvarchar(255), @Direction smallint,
 	@LineOffset int, @EntriesCopy EntryList;
 SET NOCOUNT ON
 
 INSERT INTO @EntriesCopy 
 SELECT * FROM @Entries;
 
-SELECT @TransactionType = MIN(TransactionType) FROM @WideLines
-WHILE @TransactionType IS NOT NULL
+SELECT @LineType = MIN(LineType) FROM @WideLines
+WHILE @LineType IS NOT NULL
 BEGIN
-	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType;
+	SELECT @EntryNumber = 1, @EntriesCount = COUNT(*) FROM [dbo].[LineTypeCalculationsView] WHERE [LineType] = @LineType;
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
 		-- Determine value of resource issue or receipt from an available invoice (event) or contract (order)
-		SELECT	@ValueCalculation = [Value] FROM [dbo].LineTemplatesCalculationView WHERE [TransactionType] = @TransactionType AND EntryNumber = @EntryNumber
+		SELECT	@ValueCalculation = [Value] FROM [dbo].[LineTypeCalculationsView] WHERE [LineType] = @LineType AND EntryNumber = @EntryNumber
 		IF LEFT(@ValueCalculation, 6) = N'@BULK:'
 		BEGIN
 			SET @ValueCalculation = REPLACE(@ValueCalculation, N'@Bulk:', N'SELECT ');
@@ -44,6 +44,6 @@ BEGIN
 		END
 		SET @EntryNumber = @EntryNumber + 1;
 	END
-	SET @TransactionType = (SELECT MIN(TransactionType) FROM @WideLines WHERE TransactionType > @TransactionType);
+	SET @LineType = (SELECT MIN(LineType) FROM @WideLines WHERE LineType > @LineType);
 END
 SELECT * FROM @EntriesCopy;

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Settings__Save]
-	@Settings [SettingForSaveList] READONLY
+	@Settings [SettingList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];

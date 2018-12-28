@@ -1,11 +1,9 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @O1Save OperationForSaveList, @O2Save OperationForSaveList;
-	DECLARE @O1Result [dbo].OperationList, @O2Result [dbo].OperationList;
-	DECLARE @O1ResultJson NVARCHAR(MAX), @O2ResultJson NVARCHAR(MAX), @O3ResultJson NVARCHAR(MAX);
+	DECLARE @OperationsDTO dbo.[OperationList];
 	DECLARE @Common int, @Existing int, @Expansion int, @ExecOffice int, @Sales int, @Production int;
 END
 BEGIN -- Inserting
-	INSERT INTO @O1Save
+	INSERT INTO @OperationsDTO
 		([Name],				[ParentIndex]) Values
 		(N'Walia Steel Industry', NULL),
 		(N'Existin',			0),
@@ -19,9 +17,9 @@ BEGIN -- Inserting
 		(N'MIS Department',		4);
 
 	EXEC [dbo].[api_Operations__Save]
-		@Entities = @O1Save,
+		@Entities = @OperationsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @O1ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
@@ -29,103 +27,72 @@ BEGIN -- Inserting
 		GOTO Err_Label;
 	END
 
-	INSERT INTO @O1Result(
-		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	)
-	SELECT 
-		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@O1ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[Name] NVARCHAR (255) '$.Name',
-		[IsOperatingSegment] BIT '$.IsOperatingSegment',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[ParentId] INT '$.ParentId',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson)
 END
 BEGIN
-	INSERT INTO @O2Save (
+	DELETE FROM @OperationsDTO;
+	INSERT INTO @OperationsDTO (
 		[Id], [Name], [Code], [ParentId], [EntityState]
 	)
 	SELECT
 		[Id], [Name], [Code], [ParentId], N'Unchanged'
 	FROM [dbo].Operations
-	WHERE [Name] IN (N'Existin', N'Fake')
+	WHERE [Name] IN (N'Existin', N'Fake');
 
-	UPDATE @O2Save 
+	UPDATE @OperationsDTO 
 	SET 
 		[Name] = N'Existing',
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Existin';
 
-	UPDATE @O2Save 
+	UPDATE @OperationsDTO 
 	SET 
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake';
 
 	EXEC [dbo].[api_Operations__Save]
-		@Entities = @O2Save,
+		@Entities = @OperationsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @O2ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
 		Print 'Location: Operations 2'
 		GOTO Err_Label;
 	END
-
-	INSERT INTO @O2Result(
-		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	)
-	SELECT 
-		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@O2ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[Name] NVARCHAR (255) '$.Name',
-		[IsOperatingSegment] BIT '$.IsOperatingSegment',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[ParentId] INT '$.ParentId',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
 END
+	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = 2,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@EntitiesResultJson = @O2ResultJson OUTPUT
-
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = 1,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@EntitiesResultJson = @O2ResultJson OUTPUT
-
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = 2,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@EntitiesResultJson = @O2ResultJson OUTPUT
-
-IF @LookupsSelect = 1
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+	--SELECT * FROM [dbo].[Operations];
+IF @DebugOperations = 1
 	SELECT * FROM [dbo].[Operations];
 
 SELECT 
-	@Common = (SELECT [Id] FROM @O1Result WHERE [Name] = N'WSI Common'), 
-	@Existing = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Existing'),
-	@Expansion = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
-	@ExecOffice = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Expansion'),
-	@Sales = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Sales & Marketing'),
-	@Production = (SELECT [Id] FROM @O1Result WHERE [Name] = N'Production');
+	@Common = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'WSI Common'), 
+	@Existing = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Existing'),
+	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion'),
+	@ExecOffice = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion'),
+	@Sales = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Sales & Marketing'),
+	@Production = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Production');

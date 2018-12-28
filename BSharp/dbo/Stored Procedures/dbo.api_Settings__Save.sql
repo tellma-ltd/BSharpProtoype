@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[api_Settings__Save]
-	@Settings [SettingForSaveList] READONLY,
+	@Settings [SettingList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@SettingsResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -25,6 +25,6 @@ DECLARE @FieldList dbo.StringList;
 		SELECT [Field] FROM @Settings;
 		
 		EXEC [dbo].[dal_Settings__Select] 
-			@FieldList = @FieldList, @SettingsResultJson = @SettingsResultJson OUTPUT;
+			@FieldList = @FieldList, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END

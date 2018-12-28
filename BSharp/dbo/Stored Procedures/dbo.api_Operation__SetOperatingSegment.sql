@@ -2,7 +2,7 @@
 	@OperationId INT,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -27,6 +27,6 @@ DECLARE @Id int, @Ids [dbo].[IntegerList];
 		SELECT [Id] FROM dbo.Operations;
 
 		EXEC [dbo].[dal_Operations__Select] 
-			@EntitiesResultJson = @EntitiesResultJson OUTPUT;
+			@ResultsJson = @ResultsJson OUTPUT;
 	END
 END;	

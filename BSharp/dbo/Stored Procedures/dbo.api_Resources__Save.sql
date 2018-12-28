@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[api_Resources__Save]
-	@Entities [dbo].[ResourceForSaveList] READONLY,
+	@Entities [dbo].[ResourceList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -27,6 +27,6 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_Resources__Select] 
-			@Ids = @Ids, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
+			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END

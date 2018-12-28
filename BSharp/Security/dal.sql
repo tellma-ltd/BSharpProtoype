@@ -1,3 +1,2 @@
 ﻿CREATE SCHEMA [dal]
-  AUTHORIZATION [dbo];
-
+	AUTHORIZATION [dbo];

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[bll_WideLine__Entries] -- [dbo].[sub_Line__Entries] 1,N'ManualJV'
 	@LineId int,
-	@TransactionType NVARCHAR(255),
+	@LineType NVARCHAR(255),
 	
 	@Operation1 int = NULL,
 	@Reference1 NVARCHAR(255) = NULL,
@@ -59,7 +59,7 @@ BEGIN
 		(@LineId, 2, @Operation2, @Reference2, @Account2, @Custody2, @Resource2 , @Direction2 , @Amount2, @Value2, @Note2, @RelatedReference2 , @RelatedAgent2, @RelatedResource2, @RelatedAmount2),
 		(@LineId, 3, @Operation3, @Reference3, @Account3, @Custody3, @Resource3 , @Direction3 , @Amount3, @Value3, @Note3, @RelatedReference3 , @RelatedAgent3, @RelatedResource3, @RelatedAmount3);
 
-	SELECT @EntriesCount = max(EntryNumber) FROM [dbo].[TransactionSpecifications] WHERE [TransactionType] = @TransactionType
+	SELECT @EntriesCount = max(EntryNumber) FROM [dbo].[LineTypeSpecifications] WHERE [LineType] = @LineType
 	DELETE FROM @Entries WHERE EntryNumber > @EntriesCount;
 
 	-- Calculate the remaining fields based on the logic in line templates 	
@@ -68,11 +68,11 @@ BEGIN
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
 		SELECT
-			@AccountCalculation = Account, @CustodyCalculation = Custody, @ResourceCalculation = [Resource], 
+			@AccountCalculation = Account, @CustodyCalculation = Custody, @ResourceCalculation = [ResourceExpression], 
 			@DirectionCalculation = Direction, @AmountCalculation = Amount, @ValueCalculation = [Value], @NoteCalculation = Note,
 			@RelatedReferenceCalculation = RelatedReference, @RelatedAgentCalculation = RelatedAgent, @RelatedResourceCalculation = RelatedResource, @RelatedAmountCalculation = RelatedAmount
-		FROM [dbo].LineTemplatesCalculationView
-		WHERE [TransactionType] = @TransactionType
+		FROM [dbo].[LineTypeCalculationsView]
+		WHERE [LineType] = @LineType
 		AND EntryNumber = @EntryNumber;
 
 		-- Account calculation may need to be done in bulk, as when receiving thousands of items in stocks, then each item type may end up with different inventory classification.
@@ -116,8 +116,8 @@ BEGIN
 	WHILE @EntryNumber <= @EntriesCount
 	BEGIN
 		SELECT @ValueCalculation = [Value]
-		FROM [dbo].LineTemplatesCalculationView 
-		WHERE [TransactionType] = @TransactionType
+		FROM [dbo].[LineTypeCalculationsView] 
+		WHERE [LineType] = @LineType
 		AND EntryNumber = @EntryNumber;
 			
 		IF LEFT(@ValueCalculation, 6) <> N'@BULK:' 

@@ -1,28 +1,12 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @R1Save [dbo].ResourceForSaveList, @R2Save [dbo].ResourceForSaveList;
-	DECLARE @R1Result [dbo].ResourceList, @R2Result [dbo].ResourceList;
-	DECLARE @R1ResultJson NVARCHAR(MAX), @R2ResultJson NVARCHAR(MAX), @R3ResultJson NVARCHAR(MAX);
+	DECLARE @ResourcesDTO [dbo].ResourceList;
 
-	DECLARE @ETB int, @USD int;
-	DECLARE @CommonStock int;
+	DECLARE @ETB int, @USD int, @CommonStock int;
 	DECLARE @Camry2018 int, @Cotton int, @TeddyBear int, @Car1 int, @Car2 int;
 	DECLARE @HOvertime int, @Basic int, @Transportation int, @Labor int, @Car1Svc int, @GOff int;
-	DECLARE @ETBUnit int, @USDUnit int, @eaUnit int, @pcsUnit int, @shareUnit int, @kgUnit int,
-			@wmoUnit int, @hrUnit int, @yrUnit int, @dayUnit int, @moUnit int;
-	SELECT @ETBUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'ETB'; IF @ETBUnit IS NULL Print N'@ETBUnit is NULL!!!!';
-	SELECT @USDUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'USD'; IF @USDUnit IS NULL Print N'@USDUnit is NULL!!!!';
-	SELECT @KgUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'Kg'; IF @KgUnit IS NULL Print N'@KgUnit is NULL!!!!';
-	SELECT @pcsUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'pcs'; IF @pcsUnit IS NULL Print N'@pcsUnit is NULL!!!!';
-	SELECT @eaUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'ea'; IF @eaUnit IS NULL Print N'@eaUnit is NULL!!!!';
-	SELECT @shareUnit = [Id] FROM [dbo].MeasurementUnits WHERE [Name] = N'share'; IF @shareUnit IS NULL Print N'@shareUnit is NULL!!!!';
-	SELECT @wmoUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'wmo'; IF @wmoUnit IS NULL Print N'@wmoUnit is NULL!!!!';
-	SELECT @hrUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'hr'; IF @hrUnit IS NULL Print N'@hrUnit is NULL!!!!';
-	SELECT @yrUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'yr'; IF @yrUnit IS NULL Print N'@yrUnit is NULL!!!!';
-	SELECT @dayUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'd'; IF @dayUnit IS NULL Print N'@dayUnit is NULL!!!!';
-	SELECT @moUnit = [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'mo'; IF @moUnit IS NULL Print N'@moUnit is NULL!!!!';
 END
 BEGIN -- Inserting
-	INSERT INTO @R1Save
+	INSERT INTO @ResourcesDTO
 	([ResourceType],		[Name],					[Code],		[MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOfIndex], [InstanceOfIndex], [ServiceOfIndex]) VALUES
 	(N'Money',				N'ETB',					N'ETB',		@ETBUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'Money',				N'USD',					N'USD',		@USDUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
@@ -32,8 +16,8 @@ BEGIN -- Inserting
 	(N'SKD',				N'Fake',				N'199',		@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
 	(N'GeneralGoods',		N'Cotton',				NULL,		@KgUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'GeneralGoods',		N'Teddy bear',			NULL,		@pcsUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'Shares',				N'Common Stock',		NULL,		@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'Shares',				N'Premium Stock',		NULL,		@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'Shares',				N'Common Stock',		N'CMNSTCK',	@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'Shares',				N'Premium Stock',		N'PRMMSTCK',@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Basic',				NULL,		@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Transportation',		NULL,		@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Holiday Overtime',	NULL,		@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
@@ -43,43 +27,21 @@ BEGIN -- Inserting
 	(N'PPEServices',		N'Car 102 - Svc',		N'102D',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);
 
 	EXEC [dbo].[api_Resources__Save]
-		@Entities = @R1Save,
+		@Entities = @ResourcesDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @R1ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
 		Print 'Location: Resources 1'
 		GOTO Err_Label;
-	END
-
-	INSERT INTO @R1Result(
-		[Id], [MeasurementUnitId], [ResourceType], [Name], [IsActive], [Code], [PartOfId], [InstanceOfId], [ServiceOfId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	)
-	SELECT 
-		[Id], [MeasurementUnitId], [ResourceType], [Name], [IsActive], [Code], [PartOfId], [InstanceOfId], [ServiceOfId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@R1ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[MeasurementUnitId] INT '$.MeasurementUnitId',
-		[ResourceType] NVARCHAR (255) '$.ResourceType',
-		[Name] NVARCHAR (255) '$.Name',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[PartOfId] INT '$.PartOfId',
-		[InstanceOfId] INT '$.InstanceOfId',
-		[ServiceOfId] INT '$.ServiceOfId',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+	END;
+	IF @DebugResources = 1
+		SELECT * FROM [dbo].[ft_Resources__Json] (@ResultsJson);
 END
 BEGIN -- Updating
-	INSERT INTO @R2Save (
+	DELETE FROM @ResourcesDTO;
+	INSERT INTO @ResourcesDTO (
 		[Id], [MeasurementUnitId], [ResourceType], [Name], [Code], [Lookup1], [Lookup2], [Lookup3], [Lookup4],
 		[PartOfId], [InstanceOfId], [ServiceOfId], [EntityState]
 	)
@@ -89,69 +51,46 @@ BEGIN -- Updating
 	FROM [dbo].Resources
 	WHERE [ResourceType] IN (N'MotorVehicles', N'SKD')
 
-	UPDATE @R2Save 
+	UPDATE @ResourcesDTO 
 	SET 
 		[Lookup3] = N'2018',
 		[EntityState] = N'Updated'
 	WHERE [Name] <> N'Fake';
 
-	UPDATE @R2Save 
+	UPDATE @ResourcesDTO 
 	SET
 		[EntityState] = N'Deleted' 
 	WHERE [Name] = N'Fake';
 
 	EXEC [dbo].[api_Resources__Save]
-		@Entities = @R2Save,
+		@Entities = @ResourcesDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@EntitiesResultJson = @R2ResultJson OUTPUT
+		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
 		Print 'Location: Resources 2'
 		GOTO Err_Label;
 	END
-
-	INSERT INTO @R2Result(
-		[Id], [MeasurementUnitId], [ResourceType], [Name], [IsActive], [Code], [PartOfId], [InstanceOfId], [ServiceOfId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	)
-	SELECT 
-		[Id], [MeasurementUnitId], [ResourceType], [Name], [IsActive], [Code], [PartOfId], [InstanceOfId], [ServiceOfId],
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-	FROM OpenJson(@R2ResultJson)
-	WITH (
-		[Id] INT '$.Id',
-		[MeasurementUnitId] INT '$.MeasurementUnitId',
-		[ResourceType] NVARCHAR (255) '$.ResourceType',
-		[Name] NVARCHAR (255) '$.Name',
-		[IsActive] BIT '$.IsActive',
-		[Code] NVARCHAR (255) '$.Code',
-		[PartOfId] INT '$.PartOfId',
-		[InstanceOfId] INT '$.InstanceOfId',
-		[ServiceOfId] INT '$.ServiceOfId',
-		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-		[EntityState] NVARCHAR(255) '$.EntityState'
-	);
+	IF @DebugResources = 1
+		SELECT * FROM [dbo].[ft_Resources__Json] (@ResultsJson);
 END 
 
-IF @LookupsSelect = 1
+IF @DebugResources = 1
 	SELECT * FROM [dbo].Resources;
 
 SELECT 
-	@ETB = (SELECT [Id] FROM @R1Result WHERE [Name] = N'ETB'), 
-	@USD = (SELECT [Id] FROM @R1Result WHERE [Name] = N'USD'),
-	@Camry2018 = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Toyota Camry 2018'),
-	@Car1 = (SELECT [Id] FROM @R1Result WHERE [Code] = N'101'),
-	@Car2 = (SELECT [Id] FROM @R1Result WHERE [Code] = N'102'),
-	@Car1Svc = (SELECT [Id] FROM @R1Result WHERE [Code] = N'101D'),
-	@GOff = (SELECT [Id] FROM @R1Result WHERE [Code] = N'Goff'),
-	@Cotton = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Cotton'),
-	@TeddyBear = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Teddy bear'),
-	@CommonStock = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Common Stock'),
-	@HOvertime = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Holiday Overtime'),
-	@Basic = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Basic'),
-	@Transportation = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Transportation'),
-	@Labor = (SELECT [Id] FROM @R1Result WHERE [Name] = N'Labor');
+	@ETB = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'ETB'), 
+	@USD = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'USD'),
+	@Camry2018 = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Toyota Camry 2018'),
+	@Car1 = (SELECT [Id] FROM [dbo].[Resources] WHERE [Code] = N'101'),
+	@Car2 = (SELECT [Id] FROM [dbo].[Resources] WHERE [Code] = N'102'),
+	@Car1Svc = (SELECT [Id] FROM [dbo].[Resources] WHERE [Code] = N'101D'),
+	@GOff = (SELECT [Id] FROM [dbo].[Resources] WHERE [Code] = N'Goff'),
+	@Cotton = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Cotton'),
+	@TeddyBear = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Teddy bear'),
+	@CommonStock = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Common Stock'),
+	@HOvertime = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Holiday Overtime'),
+	@Basic = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Basic'),
+	@Transportation = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Transportation'),
+	@Labor = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Labor');

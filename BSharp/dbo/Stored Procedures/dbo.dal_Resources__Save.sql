@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Resources__Save]
-	@Resources [dbo].[ResourceForSaveList] READONLY,
+	@Resources [dbo].[ResourceList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Save__Validate]
-	@Documents [dbo].DocumentForSaveList READONLY,
+	@Documents [dbo].DocumentForSaveList2 READONLY,
 	--@WideLines [dbo]. [dbo].WideLineForSaveList READONLY,
-	@Lines [dbo].LineForSaveList READONLY,
-	@Entries [dbo].EntryForSaveList READONLY,
+	@Lines [dbo].LineForSaveList2 READONLY,
+	@Entries [dbo].EntryForSaveList2 READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

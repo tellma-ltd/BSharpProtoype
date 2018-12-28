@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Save]
-	@Entities [MeasurementUnitForSaveList] READONLY,
+	@Entities [MeasurementUnitList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

@@ -70,14 +70,14 @@
     <Folder Include="dbo\User Defined Types\" />
     <Folder Include="Security\" />
     <Folder Include="Tests" />
-    <Folder Include="Initialization" />
+    <Folder Include="Provisioning" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Agents.sql" />
     <Build Include="dbo\Tables\dbo.Locations.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionSpecifications.sql" />
+    <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.Users.sql" />
     <Build Include="dbo\Tables\dbo.DocumentForwardings.sql" />
     <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
@@ -88,18 +88,17 @@
     <Build Include="dbo\Tables\dbo.Entries.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionTypes.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
     <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
     <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.Operations.sql" />
-    <Build Include="dbo\Views\dbo.DocumentsView.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
     <Build Include="dbo\Views\dbo.IndividualsView.sql" />
     <Build Include="dbo\Views\dbo.WideLinesView.sql" />
-    <Build Include="dbo\Views\dbo.LineTemplatesCalculationView.sql" />
-    <Build Include="dbo\Views\dbo.LineTemplatesLabelView.sql" />
-    <Build Include="dbo\Views\dbo.LineTemplatesValidationView.sql" />
+    <Build Include="dbo\Views\dbo.LineTypeCalculationsView.sql" />
+    <Build Include="dbo\Views\dbo.LinetypeLabelsView.sql" />
+    <Build Include="dbo\Views\dbo.LineTypeValidationsView.sql" />
     <Build Include="dbo\Views\dbo.WideLinesLabelView.sql" />
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
@@ -116,7 +115,6 @@
     <Build Include="dbo\Functions\dbo.ft_Account__Statement.sql" />
     <Build Include="dbo\Functions\dbo.ft_Journal.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_WideLine__Entries.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.sbs_DocumentRecipient__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Document_Values__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_ERCA__VAT_Purchases.sql" />
@@ -131,26 +129,22 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_WithholdingTaxOnPayment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_VAT__Declaration.sql" />
     <Build Include="dbo\User Defined Types\dbo.EntryList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
     <Build Include="dbo\User Defined Types\dbo.WideLineList.sql" />
     <Build Include="dbo\User Defined Types\dbo.ValidationErrorList.sql" />
     <Build Include="dbo\User Defined Types\dbo.LineList.sql" />
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
-    <Build Include="dbo\User Defined Types\dbo.AgentForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.LocationForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Save.sql" />
     <Build Include="dbo\Tables\dbo.Translations.sql" />
-    <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
-    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
     <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits_Save__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
@@ -159,27 +153,24 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Agents__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Locations__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Locations__Select.sql" />
-    <Build Include="dbo\User Defined Types\dbo.LocationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Select.sql" />
-    <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Custodies__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Locations__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Activate.sql" />
-    <Build Include="dbo\User Defined Types\dbo.OperationForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Operations__Validate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.SettingForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Settings__Validate.sql" />
-    <Build Include="dbo\User Defined Types\dbo.ResourceForSaveList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources__Validate.sql" />
@@ -191,7 +182,6 @@
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_WideLines__Fill.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents_WideLines__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_WideLines__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Submit.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Submit__Validate.sql" />
@@ -218,20 +208,39 @@
     <None Include="Tests\03_Resources.sql" />
     <None Include="Tests\04_Agents.sql" />
     <None Include="Tests\05_Locations.sql" />
-    <None Include="Tests\10_ManualJV.sql" />
+    <None Include="Tests\10_Documents.sql" />
     <None Include="Tests\30_HRCycle.sql" />
     <None Include="Tests\40_PurchasingCycle.sql" />
     <None Include="Tests\50_ProductionCycle.sql" />
     <None Include="Tests\60_SalesCycle.sql" />
-    <None Include="Tests\20_Financing.sql" />
+    <None Include="Tests\11W_Financing.sql" />
     <None Include="Tests\TestingToBeCleaned.sql" />
-    <None Include="Initialization\PopulateAccounts.sql" />
-    <None Include="Initialization\PopulateAccountsNotes.sql" />
-    <None Include="Initialization\PopulateMeasurementUnits.sql" />
-    <None Include="Initialization\PopulateNotes.sql" />
-    <PostDeploy Include="Initialization\PopulateTables.sql" />
-    <None Include="Initialization\PopulateTransactionSpecifications.sql" />
-    <None Include="Initialization\PopulateTransactionTypes.sql" />
+    <None Include="Provisioning\PopulateAccounts.sql" />
+    <None Include="Provisioning\PopulateAccountsNotes.sql" />
+    <None Include="Provisioning\PopulateMeasurementUnits.sql" />
+    <None Include="Provisioning\PopulateNotes.sql" />
+    <PostDeploy Include="Provisioning\PopulateTables.sql" />
+    <None Include="Provisioning\PopulateLineTypeSpecifications.sql" />
+    <None Include="Provisioning\PopulateDocumentTypes.sql" />
+    <Build Include="Security\bll.sql" />
+    <Build Include="dbo\Tables\dbo.LineTypes.sql" />
+    <Build Include="dbo\Functions\dbo.fn_EndDateTime__StartDateTime_Frequency_Duration.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Json.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentForSaveList2.sql" />
+    <Build Include="dbo\User Defined Types\dbo.EntryForSaveList2.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LineForSaveList2.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents__Fill.sql" />
+    <Build Include="dbo\Functions\dbo.ft2_Documents__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft2_Lines__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft2_Entries__Json.sql" />
+    <Build Include="dbo\User Defined Types\dbo.WideLineForSaveList2.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentLineTypeForSaveList.sql" />
+    <Build Include="dbo\Functions\dbo.ft_MeasurementUnits__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft_Settings__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft_Operations__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft_Resources__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft_Agents__Json.sql" />
+    <Build Include="dbo\Functions\dbo.ft_Locations__Json.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -242,5 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BSharp.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tests\11M_Financing.sql" />
+    <None Include="Tests\12_ManualMisc.sql" />
   </ItemGroup>
 </Project>

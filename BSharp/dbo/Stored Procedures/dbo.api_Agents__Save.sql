@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[api_Agents__Save]
-	@Entities [AgentForSaveList] READONLY,
+	@Entities [AgentList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@EntitiesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
@@ -28,6 +28,6 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
 		EXEC [dbo].[dal_Agents__Select] 
-			@Ids = @Ids, @EntitiesResultJson = @EntitiesResultJson OUTPUT;
+			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END

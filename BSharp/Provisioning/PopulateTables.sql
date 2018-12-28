@@ -6,14 +6,14 @@ DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 --EXEC [dbo].[adm_Accounts_Notes__Update];
 --:r .\PopulateAccountsNotes.sql
 
-:r .\PopulateTransactionTypes.sql
-:r .\PopulateTransactionSpecifications.sql
+:r .\PopulateDocumentTypes.sql
+:r .\PopulateLineTypeSpecifications.sql
 
 
 
 -- We may be able to get rid of it, and construct the [Name] key on the fly...
 /*
-INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
+INSERT [dbo].[DocumentTypes] ([DocumentType], [State], [NameKey]) VALUES
 	(N'PaymentIssueToSupplier', N'Voucher', N'PaymentIssueToSupplierEvent'),
 	(N'PaymentReceiptFromCustomer', N'Voucher', N'PaymentReceiptFromCustomerEvent'),
 	(N'EmployeeIncomeTax', N'Voucher', N'Employee Income Tax'),
@@ -21,7 +21,7 @@ INSERT [dbo].[DocumentTypes] ([TransactionType], [State], [NameKey]) VALUES
 	(N'InventoryTransfer', N'Order', N'Inventory transfer Order'),
 	(N'Labor', N'Voucher', N'Salary'),
 	(N'LaborReceiptFromEmployee', N'Voucher', N'Labor'),
-	(N'ManualJournalVoucher', N'Voucher', N'Journal Entry'),
+	(N'ManualJournal', N'Voucher', N'Journal Entry'),
 	(N'Purchase', N'Voucher', N'Purchase Invoice'),
 	(N'PurchaseWitholdingTax', N'Voucher', N'Withholding Tax'),
 	(N'Sale', N'Voucher', N'Cash Sale'),

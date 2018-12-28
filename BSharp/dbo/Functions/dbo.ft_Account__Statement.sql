@@ -4,12 +4,12 @@
 	@ResourceId int = 0,
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
-) RETURNS TABLE AS
-RETURN
-(
+) RETURNS TABLE
+AS
+	RETURN
 	SELECT 	
 		Id,
-		[TransactionType],
+		[DocumentType],
 		SerialNumber As [Serial Number],
 		--ResponsibleAgentId,
 		--ForwardedToAgentId,
@@ -32,5 +32,4 @@ RETURN
 	FROM [dbo].ft_Journal(@fromDate, @toDate)
 	WHERE AccountId = @Account
 	AND (@CustodyId = 0 OR CustodyId = @CustodyId)
-	AND (@ResourceId = 0 OR ResourceId = @ResourceId)
-)
+	AND (@ResourceId = 0 OR ResourceId = @ResourceId);

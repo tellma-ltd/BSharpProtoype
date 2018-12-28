@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents [dbo].DocumentForSaveList READONLY, 
-	@Lines [dbo].LineForSaveList READONLY, 
-	@Entries [dbo].EntryForSaveList READONLY,
+	@Documents [dbo].DocumentForSaveList2 READONLY, 
+	@Lines [dbo].LineForSaveList2 READONLY, 
+	@Entries [dbo].EntryForSaveList2 READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -33,9 +33,9 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [State], [TransactionType], [Frequency], [Duration], [ResponsibleAgentId], [FolderId], [LinesMemo],
-				[StartDateTime], [EndDateTime], [LinesCustody1], [LinesCustody2], [LinesCustody3],
-				[LinesReference1], [LinesReference2], [LinesReference3],
+				[Index], [Id], [State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], 
+				--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],
+				--[LinesReference1], [LinesReference2], [LinesReference3],
 				-- RowNumber should be for inserted only, 
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + 
 				-- and max(Id) per transaction type.
@@ -51,30 +51,24 @@ BEGIN
 				t.[Duration]			= s.[Duration],
 				t.[StartDateTime]		= s.[StartDateTime],
 				t.[EndDateTime]			= s.[EndDateTime],
-				t.[ResponsibleAgentId]	= s.[ResponsibleAgentId],
-				t.[FolderId]			= s.[FolderId],
-				t.[LinesMemo]			= s.[LinesMemo],
-				t.[LinesCustody1]		= s.[LinesCustody1],
-				t.[LinesCustody2]		= s.[LinesCustody2],
-				t.[LinesCustody3]		= s.[LinesCustody3],
-				t.[LinesReference1]		= s.[LinesReference1],
-				t.[LinesReference2]		= s.[LinesReference2],
-				t.[LinesReference3]		= s.[LinesReference3],
+				--t.[Memo]			= s.[Memo],
+				--t.[LinesCustody1]		= s.[LinesCustody1],
+				--t.[LinesCustody2]		= s.[LinesCustody2],
+				--t.[LinesCustody3]		= s.[LinesCustody3],
+				--t.[LinesReference1]		= s.[LinesReference1],
+				--t.[LinesReference2]		= s.[LinesReference2],
+				--t.[LinesReference3]		= s.[LinesReference3],
 				t.[ModifiedAt]			= @Now,
 				t.[ModifiedBy]			= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId],[State], [TransactionType], [Frequency], [Duration], [StartDateTime], [EndDateTime], 
-				[SerialNumber], [ResponsibleAgentId], [FolderId], [LinesMemo],
-				[LinesCustody1], [LinesCustody2], [LinesCustody3],
-				[LinesReference1], [LinesReference2], [LinesReference3], 
+				[TenantId],[State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], [SerialNumber], 
+				--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],	[LinesReference1], [LinesReference2], [LinesReference3], 
 				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
 			)
 			VALUES (
-				@TenantId, s.[State], s.[TransactionType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], 
-				s.[SerialNumber], s.[ResponsibleAgentId], s.[FolderId], s.[LinesMemo],
-				s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],
-				s.[LinesReference1], s.[LinesReference2], s.[LinesReference3], 
+				@TenantId, s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber], 
+				--s.[Memo], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],	s.[LinesReference1], s.[LinesReference2], s.[LinesReference3],
 				@Now, @UserId, @Now, @UserId
 			)
 			OUTPUT s.[Index], inserted.[Id] 

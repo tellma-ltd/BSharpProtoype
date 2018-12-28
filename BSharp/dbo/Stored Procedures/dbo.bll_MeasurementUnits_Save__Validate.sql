@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_MeasurementUnits_Save__Validate]
-	@Entities [MeasurementUnitForSaveList] READONLY,
+	@Entities [MeasurementUnitList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

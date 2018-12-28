@@ -9,8 +9,12 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].Lines)				DBCC CHECKIDENT ('[dbo].[Lines]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 
-	DECLARE @ValidationErrorsJson nvarchar(max); 
+	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
+	DECLARE @DebugSettings bit = 0, @DebugMeasurementUnits bit = 0;
+	DECLARE @DebugOperations bit = 0, @DebugResources bit = 0;
+	DECLARE @DebugAgents bit = 0, @DebugLocations bit = 0;
 	DECLARE @LookupsSelect bit = 0;
+	DECLARE @fromDate Datetime, @toDate Datetime;
 END
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -22,16 +26,10 @@ BEGIN TRY
 		:r .\03_Resources.sql
 		:r .\04_Agents.sql
 		:r .\05_Locations.sql
-		:r .\10_ManualJV.sql
-		--:r .\11_HRCycle.sql
-		--:r .\12_PurchasingCycle.sql
-		--:r .\13_ProductionCycle.sql
-		--:r .\14_SalesCycle.sql
-	DECLARE @fromDate Datetime, @toDate Datetime;
+		--:r .\10_Documents.sql
 
 	--SELECT @fromDate = '2017.02.01', @toDate = '2024.03.01'
 	--SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
-	--EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
 	--EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
 	--EXEC rpt_WithholdingTaxOnPayment;
 	--EXEC rpt_ERCA__VAT_Purchases;

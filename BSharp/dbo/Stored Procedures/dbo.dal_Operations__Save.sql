@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Operations__Save]
-	@Entities [OperationForSaveList] READONLY,
+	@Entities [OperationList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

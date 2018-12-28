@@ -1,9 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @S1Result [dbo].SettingList, @S2Result [dbo].SettingList;
-	DECLARE @S1Save SettingForSaveList, @S2Save SettingForSaveList;
-	DECLARE @S1ResultJson NVARCHAR(MAX), @S2ResultJson NVARCHAR(MAX);
+	DECLARE @SettingsDTO SettingList;
 END
-INSERT INTO @S1Save
+INSERT INTO @SettingsDTO
 ([Field],[Value]) Values
 -- IFRS values
 (N'NameOfReportingEntityOrOtherMeansOfIdentification', N'Banan IT, plc'),
@@ -20,9 +18,9 @@ INSERT INTO @S1Save
 (N'FunctionalCurrencyCode', N'ETB');
 
 EXEC [dbo].[api_Settings__Save]
-	@Settings = @S1Save,
+	@Settings = @SettingsDTO,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@SettingsResultJson = @S1ResultJson OUTPUT
+	@ResultsJson = @ResultsJson OUTPUT
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
@@ -30,20 +28,8 @@ BEGIN
 	GOTO Err_Label;
 END
 
-INSERT INTO @S1Result(
-	[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-)
-SELECT 
-	[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], [EntityState]
-FROM OpenJson(@S1ResultJson)
-WITH (
-	[Field] NVARCHAR (255) '$.Field',
-	[Value] NVARCHAR (255) '$.Value',
-	[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-	[CreatedBy] NVARCHAR(450) '$.CreatedBy',
-	[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-	[ModifiedBy] NVARCHAR(450) '$.ModifiedBy',
-	[EntityState] NVARCHAR(255) '$.EntityState'
-);
-IF @LookupsSelect = 1
+IF @DebugSettings = 1
+	SELECT * FROM dbo.ft_Settings__Json(@ResultsJson);
+
+IF @DebugSettings = 1
 	SELECT * FROM [dbo].Settings;

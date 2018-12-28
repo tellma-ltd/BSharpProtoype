@@ -10,7 +10,8 @@
 	PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
-(N'Regulatory', 1, N'1', N'Assets', N'Assets')
+(N'Extension',	1, N'0', N'ControlAccount', N'Control account')
+,(N'Regulatory', 1, N'1', N'Assets', N'Assets')
 ,(N'Regulatory', 1, N'11', N'NoncurrentAssets', N'Non-current assets')
 ,(N'Regulatory', 1, N'1101', N'PropertyPlantAndEquipment', N'Property, plant and equipment')
 ,(N'Regulatory', 1, N'110101', N'LandAndBuildings', N'Land and buildings')

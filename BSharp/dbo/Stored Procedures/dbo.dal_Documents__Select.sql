@@ -5,10 +5,9 @@
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @DocumentsResultJson =	(
-		SELECT [Id], [State], [TransactionType], [Frequency], [Duration],  
+		SELECT [Id], [State], [DocumentType], [Frequency], [Duration],  
 		[StartDateTime], [EndDateTime], [Mode],	[SerialNumber], 
-		[ResponsibleAgentId], [ForwardedToAgentId], [FolderId], 
-		[LinesMemo], [LinesCustody1], [LinesCustody2], [LinesCustody3],
+		--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],
 		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
 		FROM [dbo].[Documents]
 		WHERE [Id] IN (SELECT [Id] FROM @Ids)
