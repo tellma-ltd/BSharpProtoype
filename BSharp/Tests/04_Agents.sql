@@ -75,7 +75,7 @@ BEGIN -- Insert individuals and organizations
 	END;
 
 	IF @DebugAgents = 1
-		SELECT * FROM [dbo].[ft_Agents__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Agents__Json](@ResultsJson);
 END
 
 -- Inserting
@@ -118,7 +118,7 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 	END;
 	
 	IF @DebugAgents = 1
-		SELECT * FROM [dbo].[ft_Agents__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Agents__Json](@ResultsJson);
 
 	IF @DebugAgents = 1
 		SELECT * FROM [dbo].[Custodies];

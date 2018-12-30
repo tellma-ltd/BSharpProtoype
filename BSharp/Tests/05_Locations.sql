@@ -26,7 +26,7 @@ BEGIN -- Insert
 	END;
 
 	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[ft_Locations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
 END
 BEGIN -- Updating RM Warehouse address
 	DELETE FROM @LocationsDTO;
@@ -62,7 +62,7 @@ BEGIN -- Updating RM Warehouse address
 	END;
 
 	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[ft_Locations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
 
 	DECLARE @Locs dbo.IntegerList;
 	INSERT INTO @Locs([Id]) VALUES 
@@ -74,7 +74,7 @@ BEGIN -- Updating RM Warehouse address
 		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[ft_Locations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
 END
 
 IF @DebugLocations = 1

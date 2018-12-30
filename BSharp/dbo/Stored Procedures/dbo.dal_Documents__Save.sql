@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents [dbo].DocumentForSaveList2 READONLY, 
-	@Lines [dbo].LineForSaveList2 READONLY, 
-	@Entries [dbo].EntryForSaveList2 READONLY,
+	@Documents [dbo].[DocumentList] READONLY, 
+	@Lines [dbo].[LineList] READONLY, 
+	@Entries [dbo].[EntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -11,14 +11,14 @@ BEGIN
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
 	-- Delete only if the last one of its type, (WARNING: WE NEED TO do it for the given transaction type)
-	DELETE FROM [dbo].[Documents]
-	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted')
-	AND [Id] > (SELECT MAX([Id]) FROM dbo.Documents WHERE Mode <> N'Void')
+	--DELETE FROM [dbo].[Documents]
+	--WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted')
+	--AND [Id] > (SELECT MAX([Id]) FROM dbo.Documents WHERE Mode <> N'Void')
 
-	-- Otherwise, mark as void
-	UPDATE [dbo].[Documents]
-	SET Mode = N'Void'
-	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
+	---- Otherwise, mark as void
+	--UPDATE [dbo].[Documents]
+	--SET Mode = N'Void'
+	--WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
 
 	DELETE FROM [dbo].Lines
 	WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
@@ -51,24 +51,15 @@ BEGIN
 				t.[Duration]			= s.[Duration],
 				t.[StartDateTime]		= s.[StartDateTime],
 				t.[EndDateTime]			= s.[EndDateTime],
-				--t.[Memo]			= s.[Memo],
-				--t.[LinesCustody1]		= s.[LinesCustody1],
-				--t.[LinesCustody2]		= s.[LinesCustody2],
-				--t.[LinesCustody3]		= s.[LinesCustody3],
-				--t.[LinesReference1]		= s.[LinesReference1],
-				--t.[LinesReference2]		= s.[LinesReference2],
-				--t.[LinesReference3]		= s.[LinesReference3],
 				t.[ModifiedAt]			= @Now,
 				t.[ModifiedBy]			= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
 				[TenantId],[State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], [SerialNumber], 
-				--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],	[LinesReference1], [LinesReference2], [LinesReference3], 
 				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
 			)
 			VALUES (
 				@TenantId, s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber], 
-				--s.[Memo], s.[LinesCustody1], s.[LinesCustody2], s.[LinesCustody3],	s.[LinesReference1], s.[LinesReference2], s.[LinesReference3],
 				@Now, @UserId, @Now, @UserId
 			)
 			OUTPUT s.[Index], inserted.[Id] 

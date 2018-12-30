@@ -26,7 +26,7 @@ BEGIN TRY
 		:r .\03_Resources.sql
 		:r .\04_Agents.sql
 		:r .\05_Locations.sql
-		--:r .\10_Documents.sql
+		:r .\10_Documents.sql
 
 	--SELECT @fromDate = '2017.02.01', @toDate = '2024.03.01'
 	--SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];

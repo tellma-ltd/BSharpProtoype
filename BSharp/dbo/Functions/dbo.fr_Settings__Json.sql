@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_Settings__Json] (
+﻿CREATE FUNCTION [dbo].[fr_Settings__Json] (
 	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE

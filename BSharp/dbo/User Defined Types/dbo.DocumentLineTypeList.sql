@@ -1,5 +1,5 @@
-﻿CREATE TYPE [dbo].[DocumentLineTypeForSaveList] AS TABLE (
-	[Index]				INT,
+﻿CREATE TYPE [dbo].[DocumentLineTypeList] AS TABLE (
+	[DocumentIndex]		INT,
 	[LineType]			NVARCHAR (255),
 	[BaseLineId]		INT,
 	[ScalingFactor]		FLOAT,
@@ -10,12 +10,14 @@
 	[ResourceId]		INT	,
 	[Direction]			SMALLINT,
 	[Amount]			MONEY,
-	[Value]				VTYPE		NOT NULL,
+	[Value]				VTYPE,
 	[NoteId]			NVARCHAR (255),
 	[Reference]			NVARCHAR (255),
 	[RelatedReference]	NVARCHAR (255),
 	[RelatedAgentId]	INT,
 	[RelatedResourceId]	INT,
-	[RelatedAmount]		MONEY
-	PRIMARY KEY ([Index] ASC, [LineType] ASC)
+	[RelatedAmount]		MONEY,
+	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
+	PRIMARY KEY ([DocumentIndex] ASC, [LineType] ASC),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_Locations__Json] (
+﻿CREATE FUNCTION [dbo].[fr_Operations__Json] (
 	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE
@@ -8,13 +8,11 @@ AS
 	FROM OpenJson(@Json)
 	WITH (
 		[Id] INT '$.Id',
-		[LocationType] NVARCHAR (255) '$.LocationType',
 		[Name] NVARCHAR (255) '$.Name',
+		[IsOperatingSegment] BIT '$.IsOperatingSegment',
 		[IsActive] BIT '$.IsActive',
 		[Code] NVARCHAR (255) '$.Code',
-		[Address] NVARCHAR (255) '$.Address',
-		[BirthDateTime] DATETIMEOFFSET (7) '$.BirthDateTime',
-		[CustodianId] INT '$.CustodianId',
+		[ParentId] INT '$.ParentId',
 		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
 		[CreatedBy] NVARCHAR(450) '$.CreatedBy',
 		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',

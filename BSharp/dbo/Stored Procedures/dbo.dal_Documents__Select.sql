@@ -3,8 +3,10 @@
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
+	-- We need to return the WideLines and the DocumentLineTypes as well.
+	-- We need to return the lines only for the Manual JV line case
 AS
-	SELECT @DocumentsResultJson =	(
+	SELECT @DocumentsResultJson = (
 		SELECT [Id], [State], [DocumentType], [Frequency], [Duration],  
 		[StartDateTime], [EndDateTime], [Mode],	[SerialNumber], 
 		--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],

@@ -37,7 +37,7 @@ BEGIN -- Inserting
 		GOTO Err_Label;
 	END;
 	IF @DebugResources = 1
-		SELECT * FROM [dbo].[ft_Resources__Json] (@ResultsJson);
+		SELECT * FROM [dbo].[fr_Resources__Json] (@ResultsJson);
 END
 BEGIN -- Updating
 	DELETE FROM @ResourcesDTO;
@@ -73,7 +73,7 @@ BEGIN -- Updating
 		GOTO Err_Label;
 	END
 	IF @DebugResources = 1
-		SELECT * FROM [dbo].[ft_Resources__Json] (@ResultsJson);
+		SELECT * FROM [dbo].[fr_Resources__Json] (@ResultsJson);
 END 
 
 IF @DebugResources = 1

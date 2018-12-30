@@ -1,4 +1,4 @@
-﻿CREATE TYPE [dbo].[DocumentForSaveList2] AS TABLE (
+﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
 	[Index]				INT,
 	[Id]				INT,
 	[State]				NVARCHAR (255)		NOT NULL DEFAULT (N'Voucher'), -- N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher'

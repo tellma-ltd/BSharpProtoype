@@ -1,43 +1,42 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Save]
-	@Documents [dbo].DocumentForSaveList READONLY, 
-	@Lines [dbo].LineForSaveList READONLY, 
-	@Entries [dbo].EntryForSaveList READONLY,
-	@WideLines [dbo].WideLineForSaveList READONLY,
+	@Documents [dbo].[DocumentList] READONLY,
+	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
+	@WideLines [dbo].[WideLineList] READONLY,
+	@Lines [dbo].[LineList] READONLY, 
+	@Entries [dbo].[EntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
+	-- We need to return the WideLines and the DocumentLineTypes as well.
+	-- We need to return the lines only for the Manual JV line case
 AS
 BEGIN
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
-DECLARE @DocumentsLocal [dbo].DocumentForSaveList2 , @LinesLocal [dbo].LineForSaveList2, @EntriesLocal [dbo].EntryForSaveList2, @WideLinesLocal [dbo].WideLineForSaveList2;
+DECLARE @DocumentsLocal [dbo].[DocumentList] , @LinesLocal [dbo].[LineList], @EntriesLocal [dbo].[EntryList];
 DECLARE @DocumentsLocalResultJson NVARCHAR(MAX), @LinesLocalResultJson NVARCHAR(MAX), @EntriesLocalResultJson NVARCHAR(MAX);
-INSERT INTO @DocumentsLocal SELECT * FROM @Documents;
-INSERT INTO @LinesLocal SELECT * FROM @Lines
-INSERT INTO @EntriesLocal SELECT * FROM @Entries;
-INSERT INTO @WideLinesLocal SELECT * FROM @WideLines;
-	-- Fill Lines
---SELECT * FROM @DocumentsLocal; SELECT * FROM @LinesLocal; SELECT * FROM @EntriesLocal;
+	-- Fill in the blanks
 	EXEC [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
-		@Documents = @DocumentsLocal, 
-		@Lines = @LinesLocal,
-		@Entries = @EntriesLocal,
-		@WideLines = @WideLinesLocal,
+		@Documents = @Documents,
+		@DocumentLineTypes = @DocumentLineTypes,
+		@Lines = @Lines,
+		@Entries = @Entries,
+		@WideLines = @WideLines,
 		@DocumentsResultJson = @DocumentsLocalResultJson OUTPUT,
 		@LinesResultJson = @LinesLocalResultJson OUTPUT,
 		@EntriesResultJson = @EntriesLocalResultJson OUTPUT;
 
-	--SELECT * FROM dbo.ft2_Documents__Json(@DocumentsLocalResultJson);
-	DELETE FROM @DocumentsLocal; INSERT INTO @DocumentsLocal SELECT * FROM dbo.ft2_Documents__Json(@DocumentsLocalResultJson);
-	DELETE FROM @LinesLocal; INSERT INTO @LinesLocal SELECT * FROM dbo.ft2_Lines__Json(@LinesLocalResultJson);
-	DELETE FROM @EntriesLocal; INSERT INTO @EntriesLocal SELECT * FROM dbo.ft2_Entries__Json(@EntriesLocalResultJson);
+	--SELECT * FROM dbo.[fw_Documents__Json](@DocumentsLocalResultJson) ORDER BY [Index]; 
+	--SELECT * FROM dbo.[fw_Lines__Json](@LinesLocalResultJson) ORDER BY DocumentIndex, [Index];
+	--SELECT * FROM dbo.[fw_Entries__Json](@EntriesLocalResultJson) ORDER BY LineIndex, [Index];
 
-SELECT * FROM @DocumentsLocal order by [Index]; 
-SELECT * FROM @LinesLocal order by DocumentIndex, [Index]; SELECT * FROM @EntriesLocal order by LineIndex, [Index];
+	INSERT INTO @DocumentsLocal SELECT * FROM dbo.[fw_Documents__Json](@DocumentsLocalResultJson);
+	INSERT INTO @LinesLocal SELECT * FROM dbo.[fw_Lines__Json](@LinesLocalResultJson);
+	INSERT INTO @EntriesLocal SELECT * FROM dbo.[fw_Entries__Json](@EntriesLocalResultJson);
 
-	-- Validate
-	EXEC [dbo].[bll_Documents_Save__Validate]
+	--Validate Domain rules
+	EXEC [dbo].[bll_Documents_Validate__Save]
 		@Documents = @DocumentsLocal,
 		@Lines = @LinesLocal,
 		@Entries = @EntriesLocal,
@@ -45,6 +44,8 @@ SELECT * FROM @LinesLocal order by DocumentIndex, [Index]; SELECT * FROM @Entrie
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
+
+	-- Validate business rules (read from the table)
 
 	EXEC [dbo].[dal_Documents__Save]
 		@Documents = @DocumentsLocal,
@@ -64,5 +65,7 @@ SELECT * FROM @LinesLocal order by DocumentIndex, [Index]; SELECT * FROM @Entrie
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 			@LinesResultJson = @LinesResultJson OUTPUT,
 			@EntriesResultJson = @EntriesResultJson OUTPUT;
+			-- We need to return the WideLines and the DocumentLineTypes as well.
+			-- We need to return the lines only for the Manual JV line case
 	END;
 END;

@@ -1,25 +1,25 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @DSave [dbo].DocumentForSaveList;
-	DECLARE @LSave [dbo].LineForSaveList, @WLSave [dbo].WideLineForSaveList;
-	DECLARE @ESave [dbo].EntryForSaveList;
+	DECLARE @DSave [dbo].[DocumentList];
+	DECLARE @LSave [dbo].LineList, @WLSave [dbo].[WideLineList];
+	DECLARE @ESave [dbo].EntryList, @DLTSave [dbo].DocumentLineTypeList;
 
 	DECLARE @DResultJson NVARCHAR(MAX), @LResultJson NVARCHAR(MAX), @EResultJson NVARCHAR(MAX), @WLResultJson NVARCHAR(MAX);;
 
-	DECLARE @Docs [dbo].[IndexedIdForSaveList], @DIdx INT, @LIdx INT;
+	DECLARE @Docs [dbo].[IndexedIdList], @DIdx INT, @LIdx INT, @WLIdx INT, @EIdx INT;
 END
 -- get acceptable document types; and user permissions and general settings;
 -- Journal Vouchers
 DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U int, @PU_3 int, @P2_3 int,
 		@d1 datetime = '2017.02.01', @d2 datetime = '2022.02.01', @dU datetime = '2018.02.01', @d3 datetime = '2023.02.01';
-		--:r .\11M_Financing.sql
+		:r .\11M_Financing.sql
 		:r .\11W_Financing.sql
-		--:r .\12_PurchasingCycle.sql
+		:r .\40_PurchasingCycle.sql
 		--:r .\13_ProductionCycle.sql
 		--:r .\14_SalesCycle.sql
 --		:r .\12_ManualMisc.sql
---SELECT @fromDate = '2017.01.01', @toDate = '2017.01.02'
---SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
---EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
+SELECT @fromDate = '2017.01.01', @toDate = '2017.01.31'
+SELECT * from ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
+EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
 
 
 /*
@@ -78,6 +78,9 @@ BEGIN
 END
 ) */
 
+--select * FROM Documents;
+--SElect * from lines;
+--select * from entries;
 
 --select * FROM Documents where  Id in (Select Id from @Docs);
 --SElect * from lines where DocumentId in (Select Id from @Docs);

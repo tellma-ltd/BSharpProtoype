@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_Mode__Update]
-	@Documents [dbo].[IndexedIdForSaveList] READONLY,
+	@Documents [dbo].[IndexedIdList] READONLY,
 	@Mode nvarchar(255)
 AS
 BEGIN

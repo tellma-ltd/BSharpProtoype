@@ -1,53 +1,46 @@
-﻿INSERT INTO @DSave(
-[DocumentType],		[Memo],			[StartDateTime]) VALUES
-(N'ManualJournal',	N'Capital investment',	'2017.01.01');
-SET @DIdx = SCOPE_IDENTITY();
+﻿SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
+INSERT INTO @DSave(
+[Index], [DocumentType],	[StartDateTime],	[Memo],					[OperationId]) VALUES (
+@DIdx, N'ManualJournal',	'2017.01.01',		N'Capital investment',	@Common
+);
 
-INSERT INTO @LSave ([DocumentIndex], [LineType], [EntriesOperationId]) 
-VALUES (@DIdx, N'ManualJournalLine', @Common); -- Issue of Equity
-SET @LIdx = SCOPE_IDENTITY();
+INSERT INTO @DLTSave(
+	[DocumentIndex],	[LineType]) VALUES(
+	@DIdx,				N'ManualJournalLine'
+);
 
-INSERT INTO @ESave
-([LineIndex],EntryNumber,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
-(@LIdx,	1,	N'ControlAccount',			@System,		@ETB,			+1,		2350000, NULL,		NULL),
-(@LIdx,	2,	N'IssuedCapital',			@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
+SELECT @LIdx = ISNULL(MAX([Index]), -1) + 1 FROM @LSave;
+INSERT INTO @LSave (
+	[Index],	[DocumentIndex],	[LineType]) VALUES (
+	@LIdx,		@DIdx,				N'ManualJournalLine'
+); -- Issue of Equity
 
-INSERT INTO @LSave ([DocumentIndex], [LineType], [EntriesOperationId]) 
-VALUES (@DIdx, N'ManualJournalLine', @Common); -- Issue of Equity
-SET @LIdx = SCOPE_IDENTITY();
-
-INSERT INTO @ESave
-([LineIndex],EntryNumber,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
-(@LIdx,	1,	N'ControlAccount',			@System,		@ETB,			+1,		2350000, NULL,		NULL),
-(@LIdx,	2,	N'IssuedCapital',			@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
-
-INSERT INTO @LSave ([DocumentIndex], [LineType], [EntriesOperationId]) 
-VALUES (@DIdx, N'ManualJournalLine', @Common); -- Proceeds from issuing shares
-SET @LIdx = SCOPE_IDENTITY();
-
-INSERT INTO @ESave
-([LineIndex],EntryNumber,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
--- Capital Investment
-(@LIdx,	1,	N'BalancesWithBanks',		@CBEUSD,		@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares'),
-(@LIdx,	2,	N'ControlAccount',			@System,		@ETB,			-1,		4700000, NULL,		NULL);
+SELECT @EIdx = ISNULL(MAX([Index]), -1) + 1 FROM @ESave;
+INSERT INTO @ESave (
+[Index],	[LineIndex],EntryNumber,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
+(@EIdx,		@LIdx,		1,N'BalancesWithBanks',		@CBEUSD,		@USD,			+1,		100000, NULL,		N'ProceedsFromIssuingShares'),
+(@EIdx + 1, @LIdx,		2,N'IssuedCapital',			@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
+(@EIdx + 2, @LIdx,		3,N'IssuedCapital',			@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
 
 --SELECT * FROM @DSave; SELECT * FROM @LSave; SELECT * FROM @ESave;
 EXEC [dbo].[api_Documents__Save]
-	@Documents = @DSave, @Lines = @LSave, @Entries = @ESave,
+	@Documents = @DSave, @DocumentLineTypes = @DLTSave, @WideLines = @WLSave,
+	@Lines = @LSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@DocumentsResultJson = @DResultJson OUTPUT, @LinesResultJson = @LResultJson OUTPUT, @EntriesResultJson = @EResultJson OUTPUT
-PRINT @DResultJson;
+
+	DELETE FROM @DSave; DELETE FROM @DLTSave; DELETE FROM @WLSave; DELETE FROM @LSave; DELETE FROM @ESave;
+
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
 	Print 'Capital Investment (M): Save'
 	GOTO Err_Label;
-END
+END;
 
 DELETE FROM @Docs;
 INSERT INTO @Docs([Id]) 
 SELECT [Id] FROM dbo.Documents 
-WHERE [DocumentType] = N'ManualJournal' 
-AND [Id] IN (SELECT DocumentId FROM dbo.Lines WHERE Memo = N'Capital Investment');
+WHERE [Mode] = N'Draft';
 
 EXEC [dbo].[api_Documents__Submit]
 	@Documents = @Docs,

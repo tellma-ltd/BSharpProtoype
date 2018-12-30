@@ -1,11 +1,11 @@
-﻿CREATE FUNCTION [dbo].[ft2_Documents__Json] (
-	@DocumentsResultJson NVARCHAR(MAX)
+﻿CREATE FUNCTION [dbo].[fw_Documents__Json] (
+	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE
 AS
 RETURN
 SELECT *
-	FROM OpenJson(@DocumentsResultJson)
+	FROM OpenJson(@Json)
 	WITH (
 		[Index]				INT '$.Index',
 		[Id]				INT '$.Id',

@@ -44,7 +44,7 @@ BEGIN -- Inserting
 	END
 
 	IF @DebugMeasurementUnits = 1
-		SELECT * FROM dbo.ft_MeasurementUnits__Json(@ResultsJson);
+		SELECT * FROM dbo.[fr_MeasurementUnits__Json](@ResultsJson);
 END
 
 -- Display units whose code starts with m
@@ -89,7 +89,7 @@ BEGIN
 END
 
 IF @DebugMeasurementUnits = 1
-	SELECT * FROM dbo.ft_MeasurementUnits__Json(@ResultsJson);
+	SELECT * FROM dbo.[fr_MeasurementUnits__Json](@ResultsJson);
 
 IF @DebugMeasurementUnits = 1
 	SELECT * FROM [dbo].MeasurementUnits;

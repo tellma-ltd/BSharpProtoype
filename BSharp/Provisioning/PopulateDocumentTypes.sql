@@ -19,7 +19,9 @@ INSERT @DocumentTypes ([Id]) VALUES
 
 DECLARE @LineTypes TABLE([id] NVARCHAR(255) PRIMARY KEY)
 INSERT @LineTypes ([Id]) VALUES
-	(N'ManualJournalLine');
+	(N'ManualJournalLine'),
+	(N'IssueOfEquity'),
+	(N'PaymentIssueToSupplier');
 
 MERGE [dbo].DocumentTypes AS t
 USING @DocumentTypes AS s

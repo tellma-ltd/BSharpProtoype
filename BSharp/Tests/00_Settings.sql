@@ -29,7 +29,7 @@ BEGIN
 END
 
 IF @DebugSettings = 1
-	SELECT * FROM dbo.ft_Settings__Json(@ResultsJson);
+	SELECT * FROM dbo.[fr_Settings__Json](@ResultsJson);
 
 IF @DebugSettings = 1
 	SELECT * FROM [dbo].Settings;

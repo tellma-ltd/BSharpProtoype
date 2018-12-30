@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[bll_Documents_Submit__Validate]
-	@Documents [dbo].[IndexedIdForSaveList] READONLY,
+﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Submit]
+	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

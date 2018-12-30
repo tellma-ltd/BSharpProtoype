@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Post]
-	@Documents [dbo].[IndexedIdForSaveList] READONLY,
+	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
@@ -13,7 +13,7 @@ BEGIN
 		RETURN;
 
 	-- Validate, checking available signatures for transaction type
-	EXEC [dbo].[bll_Documents_Post__Validate]
+	EXEC [dbo].[bll_Documents_Validate__Post]
 		@Documents = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 			

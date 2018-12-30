@@ -1,6 +1,6 @@
 ﻿EXEC sp_set_session_context 'Tenantid', 106;
 DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
---:r .\PopulateMeasurementUnits.sql
+--:r .\PopulateMeasurementUnits.sql -- WRONG. To provision, use the code in Testing instead
 --:r .\PopulateAccounts.sql
 --:r .\PopulateNotes.sql
 --EXEC [dbo].[adm_Accounts_Notes__Update];

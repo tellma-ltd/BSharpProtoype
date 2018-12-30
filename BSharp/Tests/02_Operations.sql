@@ -28,7 +28,7 @@ BEGIN -- Inserting
 	END
 
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson)
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson)
 END
 BEGIN
 	DELETE FROM @OperationsDTO;
@@ -62,7 +62,7 @@ BEGIN
 		GOTO Err_Label;
 	END
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 END
 	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
@@ -70,21 +70,21 @@ EXEC api_Operation__SetOperatingSegment
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = 1,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 	--SELECT * FROM [dbo].[Operations];
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = 2,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[ft_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 	--SELECT * FROM [dbo].[Operations];
 IF @DebugOperations = 1
 	SELECT * FROM [dbo].[Operations];

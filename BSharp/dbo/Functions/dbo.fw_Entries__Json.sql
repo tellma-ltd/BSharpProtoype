@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft2_Entries__Json] (
+﻿CREATE FUNCTION [dbo].[fw_Entries__Json] (
 	@EntriesResultJson NVARCHAR(MAX)
 )
 RETURNS TABLE
@@ -15,7 +15,6 @@ SELECT *
 		[OperationId]			INT '$.OperationId',
 		[Reference]				NVARCHAR (255) '$.Reference',
 		[AccountId]				NVARCHAR (255) '$.AccountId',
-
 		[CustodyId]				INT '$.CustodyId',
 		[ResourceId]			INT '$.ResourceId',
 		[Direction]				SMALLINT '$.Direction',
