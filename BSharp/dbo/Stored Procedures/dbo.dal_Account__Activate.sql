@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[sbs_Account__IsActive] -- [dbo].[sbs_Account__IsActive] @Account = N'CashOnHand', @IsActive = 0
+﻿CREATE PROCEDURE [dbo].[dal_Account__Activate] -- [dbo].[sbs_Account__IsActive] @Account = N'CashOnHand', @IsActive = 0
 	@Account nvarchar(255),
 	@IsActive bit
 AS
@@ -15,7 +15,9 @@ BEGIN
 		-- deactivate all active descendants
 		UPDATE [dbo].Accounts
 		SET IsActive = @IsActive
-		WHERE Code Like (SELECT Code FROM [dbo].Accounts WHERE [Id]= @Account) + N'%' AND IsActive = 1
+		WHERE Code Like (
+			SELECT Code FROM [dbo].Accounts WHERE [Id]= @Account) + N'%' 
+			AND IsActive = 1
 	END
 
 	IF @IsActive = 1 -- activate all inactive acendants
@@ -23,5 +25,4 @@ BEGIN
 		SET IsActive = @IsActive
 		WHERE Code + '%' Like (SELECT Code FROM [dbo].Accounts WHERE [Id]= @Account)
 		AND IsActive = 0;
-END
-
+END;

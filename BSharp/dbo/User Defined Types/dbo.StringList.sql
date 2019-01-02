@@ -1,4 +1,4 @@
 ﻿CREATE TYPE [dbo].[StringList] AS TABLE (
 	[Id] NVARCHAR(255),
-	PRIMARY KEY CLUSTERED ([Id] ASC)
+	PRIMARY KEY ([Id] ASC)
 );

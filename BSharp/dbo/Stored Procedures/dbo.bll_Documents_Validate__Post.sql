@@ -13,7 +13,7 @@ SET NOCOUNT ON;
 		BE.[SerialNumber] AS Argument1, BE.[Mode] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE BE.Mode <> N'Submitted';
+	WHERE (BE.Mode <> N'Submitted');
 
 	-- Cannot post without having the necessary signatures
 

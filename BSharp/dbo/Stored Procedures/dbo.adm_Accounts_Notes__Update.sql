@@ -12,7 +12,7 @@ BEGIN
 		ELSE
 			UPDATE [dbo].Accounts SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
 		SELECT @Code = min(Code) FROM [dbo].Accounts WHERE Code > @Code;
-	END
+	END;
 
 	SELECT @Code = min(Code) FROM [dbo].Notes;
 	WHILE @Code IS NOT NULL
@@ -22,7 +22,7 @@ BEGIN
 		ELSE
 			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
 		SELECT @Code = min(Code) FROM [dbo].Notes WHERE Code > @Code;
-	END
+	END;
 
 	SELECT A.[Id] As AccountId, N.[Id] AS [NoteId]
 	FROM dbo.[Accounts] A

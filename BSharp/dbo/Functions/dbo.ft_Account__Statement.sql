@@ -6,7 +6,7 @@
 	@toDate Datetime = '01.01.2100'
 ) RETURNS TABLE
 AS
-	RETURN
+RETURN
 	SELECT 	
 		Id,
 		[DocumentType],

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[sbs_Document__Forward] 
+﻿CREATE PROCEDURE [dbo].[api_Documents__Forward] 
 	@FromDocument int,
 	@ToDocument int = 0 OUTPUT,
 	@ToState	NVARCHAR(255),

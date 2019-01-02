@@ -13,7 +13,7 @@ SET NOCOUNT ON;
 		BE.[SerialNumber] AS Argument1, BE.[Mode] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE BE.Mode <> N'Draft';
+	WHERE (BE.Mode <> N'Draft');
 
 	-- Cannot submit with no lines
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -26,7 +26,7 @@ SET NOCOUNT ON;
 		FROM dbo.Lines L
 		JOIN dbo.Entries E ON L.[Id] = E.[LineId]
 	) BE ON D.[Id] = BE.[DocumentId]
-	WHERE BE.DocumentId IS NULL;
+	WHERE (BE.DocumentId IS NULL);
 
 	-- Cannot submit a non-balanced transaction
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -52,7 +52,7 @@ SET NOCOUNT ON;
 	JOIN dbo.Lines L ON D.[Id] = L.[DocumentId]
 	JOIN dbo.Entries E ON L.[Id] = E.[LineId]
 	JOIN dbo.Accounts A ON E.AccountId = A.Id
-	WHERE A.IsActive = 0
+	WHERE (A.IsActive = 0);
 
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -65,6 +65,9 @@ SET NOCOUNT ON;
 	JOIN dbo.Lines L ON D.[Id] = L.[DocumentId]
 	JOIN dbo.Entries E ON L.[Id] = E.[LineId]
 	JOIN dbo.Notes N ON E.NoteId = N.Id
-	WHERE N.IsActive = 0
+	WHERE (N.IsActive = 0);
+
+	-- No inactive custody
+	-- No inactive resource
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

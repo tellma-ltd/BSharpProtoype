@@ -9,7 +9,7 @@ SET NOCOUNT ON;
 DECLARE @FieldList dbo.StringList;
 
 -- Validate
-	EXEC [dbo].[bll_Settings__Validate]
+	EXEC [dbo].[bll_Settings_Validate__Save]
 		@Settings = @Settings,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
@@ -27,4 +27,4 @@ DECLARE @FieldList dbo.StringList;
 		EXEC [dbo].[dal_Settings__Select] 
 			@FieldList = @FieldList, @ResultsJson = @ResultsJson OUTPUT;
 	END
-END
+END;

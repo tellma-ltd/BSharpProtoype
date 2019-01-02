@@ -6,5 +6,5 @@
 	[Argument3]		NVARCHAR (255),
 	[Argument4]		NVARCHAR (255),
 	[Argument5]		NVARCHAR (255),
-	PRIMARY KEY CLUSTERED ([Key] ASC, [ErrorName] ASC)
+	PRIMARY KEY ([Key] ASC, [ErrorName] ASC)
 );

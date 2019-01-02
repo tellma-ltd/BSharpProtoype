@@ -8,7 +8,7 @@ BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
-	EXEC [dbo].[bll_Resources__Validate]
+	EXEC [dbo].[bll_Resources_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
@@ -29,4 +29,4 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		EXEC [dbo].[dal_Resources__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
-END
+END;

@@ -1,9 +1,9 @@
 ﻿CREATE TYPE [dbo].[LineList] AS TABLE (
 	[Index]				INT,
-	[DocumentIndex]		INT					NOT NULL,
+	[DocumentIndex]		INT				NOT NULL,
 	[Id]				INT,
 	[DocumentId]		INT,
-	[LineType]			NVARCHAR(255)		NOT NULL DEFAULT (N'ManualJournalLine'),
+	[LineType]			NVARCHAR(255)	NOT NULL DEFAULT (N'ManualJournalLine'),
 	[BaseLineId]		INT,
 	[ScalingFactor]		FLOAT,
 	[Memo]				NVARCHAR (255),
@@ -21,8 +21,8 @@
 	[RelatedAgentId]	INT,
 	[RelatedResourceId]	INT,
 	[RelatedAmount]		MONEY,
-	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY CLUSTERED ([Index] ASC),
+	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	PRIMARY KEY ([Index] ASC),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
 );

@@ -1,8 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[rpt_WithholdingTaxOnPayment]
+﻿CREATE FUNCTION [dbo].[ft_WithholdingTaxOnPayment] (
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
-AS
-SET NOCOUNT ON;
+)
+RETURNS TABLE 
+AS 
+RETURN
 	SELECT
 		A.TaxIdentificationNumber As [Withholdee TIN],
 		C.Name As [Organization/Person Name],
@@ -15,5 +17,4 @@ SET NOCOUNT ON;
 	FROM [dbo].ft_Account__Statement(N'CurrentWithholdingTaxPayable', 0, 0, @fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	JOIN [dbo].Agents A ON C.Id = A.Id
-	WHERE S.Direction = -1
-	ORDER BY S.StartDateTime;
+	WHERE S.Direction = -1;

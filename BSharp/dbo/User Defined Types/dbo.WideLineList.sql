@@ -50,7 +50,7 @@
 	[RelatedResource3]		INT,
 	[RelatedAmount3]		MONEY,
 	[EntityState]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY CLUSTERED ([LineIndex] ASC),
+	PRIMARY KEY ([LineIndex] ASC),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [LineId] IS NULL)	
 );

@@ -35,10 +35,13 @@ INSERT @LineTypeSpecifications (
 	(N'IssueOfEquity', 1,			N'Equal',				N'BalancesWithBanks',	N'Input',					NULL,				N'Equal',					N'+1',					N'Equal',			N'ProceedsFromIssuingShares'),
 	(N'IssueOfEquity', 2,			N'Equal',				N'IssuedCapital',		N'FromCode',				N'CMNSTCK',			N'Equal',					N'-1',					N'Equal',			N'IssueOfEquity');
 
+-- Supplier, Invoice #, Invoice Amount, Amount Withheld,	WT Ref,	Amount Paid,	Check Ref
+-- Custody 1, Ref 1		Amount 1,		Amount 2,			Ref 2,	Amount 3,		Ref 3
 INSERT @LineTypeSpecifications (
-	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression]) VALUES
-	(N'PaymentIssueToSupplier', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL),
-	(N'PaymentIssueToSupplier', 2,	N'Equal',				N'BalancesWithBanks',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'FromEntry',			N'1',				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices');
+	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression], [RelatedAmountCalculationBase], [RelatedAmountExpression], [RelatedAgentCalculationBase], [RelatedAgentExpression]) VALUES
+	(N'PaymentIssueToSupplier', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL,				N'Equal',						NULL,						N'Equal',						NULL),
+	(N'PaymentIssueToSupplier', 2,	N'Equal',	N'CurrentWithholdingTaxPayable',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'FromSQL',		N'0.02 * [RelatedAmount]',	N'Equal',			NULL,				N'Related',						N'1',						N'Related',						N'1'),
+	(N'PaymentIssueToSupplier', 3,	N'Equal',				N'BalancesWithBanks',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'FromEntry',			N'1',				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
 	/*
 INSERT @LineTypeSpecifications (
 	[LineType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [ResourceExpression], [Direction], [Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount]) VALUES	

@@ -40,7 +40,7 @@ DECLARE @DocumentsLocalResultJson NVARCHAR(MAX), @LinesLocalResultJson NVARCHAR(
 		@Documents = @DocumentsLocal,
 		@Lines = @LinesLocal,
 		@Entries = @EntriesLocal,
-		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
@@ -51,7 +51,7 @@ DECLARE @DocumentsLocalResultJson NVARCHAR(MAX), @LinesLocalResultJson NVARCHAR(
 		@Documents = @DocumentsLocal,
 		@Lines = @LinesLocal,
 		@Entries = @EntriesLocal,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT
+		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
 	IF (@ReturnEntities = 1)
 	BEGIN

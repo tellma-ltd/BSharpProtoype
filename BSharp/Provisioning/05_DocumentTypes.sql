@@ -4,24 +4,25 @@ INSERT @DocumentTypes ([Id]) VALUES
 	(N'CapitalInvestment'),
 	(N'PaymentIssueToSupplier'),
 	(N'PaymentReceiptFromCustomer'),
-	(N'EmployeeIncomeTax'),
 	(N'InventoryTransfer'),
-	(N'Labor'),
-	(N'LaborReceiptFromEmployee'),
 	(N'LeaseIssueToCustomer'),
-	(N'LeaseReceiptFromSupplier'),
 	(N'Purchase'),
-	(N'PurchaseWitholdingTax'),
+
 	(N'Sale'),
 	(N'SaleWitholdingTax'),
-	(N'StockIssueToCustomer'),
-	(N'StockReceiptFromSupplier');
+	(N'StockIssueToCustomer');
 
 DECLARE @LineTypes TABLE([id] NVARCHAR(255) PRIMARY KEY)
 INSERT @LineTypes ([Id]) VALUES
 	(N'ManualJournalLine'),
 	(N'IssueOfEquity'),
-	(N'PaymentIssueToSupplier');
+	(N'PaymentIssueToSupplier'),
+	(N'PurchaseWitholdingTax'),
+	(N'Labor'),
+	(N'LaborReceiptFromEmployee'),
+	(N'EmployeeIncomeTax'),	
+	(N'LeaseReceiptFromSupplier'),	
+	(N'StockReceiptFromSupplier');	
 
 MERGE [dbo].DocumentTypes AS t
 USING @DocumentTypes AS s

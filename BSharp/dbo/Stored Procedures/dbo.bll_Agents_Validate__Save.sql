@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[bll_Locations__Validate]
-	@Entities [LocationList] READONLY,
+﻿CREATE PROCEDURE [dbo].[bll_Agents_Validate__Save]
+	@Entities [AgentList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -17,14 +17,14 @@ SET NOCOUNT ON;
 		FE.Code AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entities FE 
 	JOIN [dbo].[Custodies] BE ON FE.Code = BE.Code
-	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id)
+	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id);
 
-	-- Custodian must be active
+	-- User Id must be unique
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].CustodianId' As [Key], N'Error_TheCustodian0IsInactive' As [ErrorName],
-		FE.CustodianId AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].UserId' As [Key], N'Error_TheUserId0IsUsed' As [ErrorName],
+		FE.Code AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entities FE 
-	JOIN [dbo].[Custodies] BE ON FE.CustodianId = BE.Id
-	WHERE (BE.IsActive = 0)
-	
+	JOIN [dbo].Agents BE ON FE.UserId = BE.UserId
+	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id);
+
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

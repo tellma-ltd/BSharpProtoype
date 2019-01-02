@@ -1,9 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[rpt_ERCA__VAT_Purchases] -- EXEC [dbo].[sbs_ERCA__VAT] @fromDate = '01.01.2015', @toDate = '01.01.2020'
+﻿CREATE FUNCTION [dbo].[ft_ERCA__VAT_Purchases] (
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
-AS
-BEGIN
-	SET NOCOUNT ON;
+)
+RETURNS TABLE
+AS 
+RETURN
 	SELECT
 		C.[Name] As [Supplier], 
 		A.TaxIdentificationNumber As TIN, 
@@ -15,6 +16,4 @@ BEGIN
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	JOIN [dbo].Agents A ON C.Id = A.Id
 	WHERE S.Direction = 1
-	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime
-	ORDER BY S.StartDateTime;
-END
+	GROUP BY C.[Name], A.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime;

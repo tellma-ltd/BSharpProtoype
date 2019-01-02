@@ -9,7 +9,7 @@ SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 
 -- Validate
-	EXEC [dbo].[bll_Agents__Validate]
+	EXEC [dbo].[bll_Agents_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 

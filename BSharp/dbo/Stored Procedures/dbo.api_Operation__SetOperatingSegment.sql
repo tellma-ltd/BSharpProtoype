@@ -8,7 +8,7 @@ BEGIN
 SET NOCOUNT ON;
 DECLARE @Id int, @Ids [dbo].[IntegerList];
 -- Validate
-	--EXEC [dbo].[bll_Operation_SetOperatingSegment__Validate]
+	--EXEC [dbo].[bll_Operation_Validate__SetOperatingSegment]
 	--	@Entity = @OperationId,
 	--	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 

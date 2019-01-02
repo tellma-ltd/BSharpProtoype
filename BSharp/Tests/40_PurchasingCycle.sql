@@ -1,7 +1,7 @@
 ﻿SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
 INSERT INTO @DSave(
 [Index], [DocumentType],			[StartDateTime],[Memo],						[OperationId], [ResourceId]) VALUES (
-@DIdx,	N'PaymentIssueToSupplier',	'2017.01.02',	N'Purchase of two vehicles',@ExecOffice, @ETB
+@DIdx,	N'Purchase',				'2017.01.02',	N'Purchase of two vehicles',@ExecOffice, @ETB
 );
 
 INSERT INTO @DLTSave(

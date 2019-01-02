@@ -1,9 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[rpt_AssetRegister] -- EXEC [dbo].[rpt_AssetRegister] @fromDate = '01.01.2015', @toDate = '01.01.2020'
+﻿CREATE FUNCTION [dbo].[ft_AssetRegister] (
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
-AS
-BEGIN
-	SET NOCOUNT ON;
+)
+RETURNS TABLE 
+AS 
+RETURN
 	SELECT
 		RR.[Name] As [Asset], J.[NoteId], 
 		SUM(J.[Value] * J.[Direction]) AS [Value],
@@ -15,5 +16,4 @@ BEGIN
 	JOIN dbo.[Notes] N ON J.NoteId = N.Id
 	JOIN dbo.Accounts_H AH ON J.AccountId = AH.C
 	WHERE AH.P IN (N'PropertyPlantAndEquipment')
-	GROUP BY RR.[Name], J.[NoteId], MU.[Name]
-END
+	GROUP BY RR.[Name], J.[NoteId], MU.[Name];

@@ -18,7 +18,8 @@
 	[RelatedResourceId]	INT,
 	[RelatedAmount]		MONEY,
 	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY CLUSTERED ([Index] ASC),
+	PRIMARY KEY ([Index] ASC),
+	INDEX IX_EntryList_LineIndex (LineIndex),
 	CHECK ([Direction] IN (-1, 1)),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)

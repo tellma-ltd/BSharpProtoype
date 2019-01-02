@@ -15,14 +15,14 @@ BEGIN
 	N'
 		SET NOCOUNT ON;
 		SELECT
-			A.Code, A.[Name] As Account,'
+			A.[Code], A.[Name] As Account,'
 	IF (@ByCustody = 1)
 		SET @Query = @Query + N'
-			C.Name As Custody,'
+			C.[Name] As Custody,'
 	IF (@ByResource = 1)
 		SET @Query = @Query + N'
-			R.Name As Resource,
-			T.Amount, MU.Name As UOM,'
+			R.[Name] As Resource,
+			T.[Amount], MU.[Name] As UOM,'
 	IF (@ByNote = 1)
 		SET @Query = @Query + N'
 			T.NoteId As Note,'
@@ -36,15 +36,15 @@ BEGIN
 	IF (@ByResource = 1) SET @Query = @Query + N'ResourceId, '
 	IF (@ByNote = 1) SET @Query = @Query + N'NoteId, '
 	SET @Query = @Query + N'
-			CAST(SUM(Direction * [Amount]) AS money) AS Amount,	
-			CAST(SUM(Direction * [Value]) AS money) AS NET
+			CAST(SUM([Direction] * [Amount]) AS money) AS Amount,	
+			CAST(SUM([Direction] * [Value]) AS money) AS NET
 			FROM [dbo].[ft_Journal](@fromDate, @toDate) E
 			GROUP BY AccountId'
 	IF (@ByCustody = 1) SET @Query = @Query + N', CustodyId'
 	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'
 	IF (@ByNote = 1) SET @Query = @Query + N', NoteId'
 	SET @Query = @Query + N'		
-			HAVING SUM(Direction * [Value]) <> 0
+			HAVING SUM([Direction] * [Value]) <> 0
 		) T 
 		JOIN [dbo].Accounts A ON T.AccountId = A.Id'
 	IF (@ByCustody = 1) SET @Query = @Query + N'
@@ -54,7 +54,7 @@ BEGIN
 		JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id
 		'
 	SET @Query = @Query + N'
-		ORDER BY A.Code'
+		ORDER BY A.[Code]'
 
 	IF (@PrintQuery = 1)
 		Print @Query

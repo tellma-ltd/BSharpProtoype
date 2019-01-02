@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[bll_MeasurementUnits_Save__Validate]
+﻿CREATE PROCEDURE [dbo].[bll_MeasurementUnits_Validate__Save]
 	@Entities [MeasurementUnitList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -9,7 +9,9 @@ SET NOCOUNT ON;
     INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
     SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_TheId0WasNotFound' As [ErrorName], CAST([Id] As NVARCHAR(255)) As [Argument1]
     FROM @Entities
-    WHERE Id Is NOT NULL AND Id NOT IN (SELECT Id from [dbo].[MeasurementUnits])
+    WHERE Id Is NOT NULL
+	AND Id NOT IN (SELECT Id from [dbo].[MeasurementUnits])
+	OPTION(HASH JOIN);
 
 	-- Code must not be already in the back end
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -17,7 +19,9 @@ SET NOCOUNT ON;
 		FE.Code AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entities FE 
 	JOIN [dbo].MeasurementUnits BE ON FE.Code = BE.Code
-	WHERE (FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id);
+	WHERE FE.[Code] IS NOT NULL
+	AND ((FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id))
+	OPTION(HASH JOIN);
 
 	-- Code must not be duplicated in the uploaded list
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -27,9 +31,10 @@ SET NOCOUNT ON;
 	WHERE [Code] IN (
 		SELECT [Code]
 		FROM @Entities
+		WHERE [Code] IS NOT NULL
 		GROUP BY [Code]
 		HAVING COUNT(*) > 1
-	)
+	) OPTION(HASH JOIN);
 
 	-- Name must not exist in the db
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -37,7 +42,8 @@ SET NOCOUNT ON;
 		FE.[Name] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entities FE 
 	JOIN [dbo].MeasurementUnits BE ON FE.[Name] = BE.[Name]
-	WHERE (FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id);
+	WHERE (FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id)
+	OPTION(HASH JOIN);
 
 	-- Name must be unique in the uploaded list
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -49,7 +55,7 @@ SET NOCOUNT ON;
 		FROM @Entities
 		GROUP BY [Name]
 		HAVING COUNT(*) > 1
-	)
+	) OPTION(HASH JOIN);
 
 	-- Name2 must not exist in the db
 	-- Name2 must be unique in the uploaded list

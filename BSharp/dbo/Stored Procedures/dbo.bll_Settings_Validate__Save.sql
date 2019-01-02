@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[bll_Settings__Validate]
+﻿CREATE PROCEDURE [dbo].[bll_Settings_Validate__Save]
 	@Settings [SettingList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[bll_Resources__Validate]
+﻿CREATE PROCEDURE [dbo].[bll_Resources_Validate__Save]
 	@Entities [dbo].[ResourceList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
