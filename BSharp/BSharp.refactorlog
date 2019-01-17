@@ -1001,4 +1001,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[fn_CashAccount__Custody_Resource]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="4c6e1d14-1181-49e3-9c48-c58615338421" ChangeDateTime="01/17/2019 09:42:34">
+    <Property Name="ElementName" Value="[dbo].[Users].[FriendlyName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Users]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Name]" />
+  </Operation>
 </Operations>

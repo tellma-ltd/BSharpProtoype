@@ -12,7 +12,7 @@ END
 BEGIN -- Users
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)
-	INSERT INTO [dbo].Users([TenantId], [Id], FriendlyName) VALUES
+	INSERT INTO [dbo].Users([TenantId], [Id], [Name]) VALUES
 	(@TenantId, N'system@banan-it.com', N'B#'),
 	(@TenantId, N'mohamad.akra@banan-it.com', N'Mohamad Akra'),
 	(@TenantId, N'ahmad.akra@banan-it.com', N'Ahmad Akra'),
