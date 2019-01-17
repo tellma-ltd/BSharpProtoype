@@ -9,7 +9,7 @@ RETURNS TABLE
 AS 
 RETURN
 	SELECT
-		A.TaxIdentificationNumber As [Employee TIN],
+		C.TaxIdentificationNumber As [Employee TIN],
 		C.[Name] As [Employee Full Name],
 		SUM(CASE 
 			WHEN (S.AccountId = N'ShorttermEmployeeBenefitsAccruals' 
@@ -43,6 +43,6 @@ RETURN
 			END) AS [Pension Contribution 11%]
 	FROM [dbo].ft_Journal(@fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	JOIN [dbo].Agents A ON C.Id = A.Id
 	WHERE (@Reference IS NULL OR S.Reference = @Reference)
-	GROUP BY A.TaxIdentificationNumber, C.[Name];
+	AND C.CustodyType = N'Agent'
+	GROUP BY C.TaxIdentificationNumber, C.[Name];

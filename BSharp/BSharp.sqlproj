@@ -73,8 +73,6 @@
     <Folder Include="Provisioning" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\dbo.Agents.sql" />
-    <Build Include="dbo\Tables\dbo.Places.sql" />
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
     <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />

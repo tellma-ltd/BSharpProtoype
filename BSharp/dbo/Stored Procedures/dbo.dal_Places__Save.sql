@@ -17,7 +17,7 @@ AS
 	(
 		MERGE INTO [dbo].[Custodies] AS t
 		USING (
-			SELECT [Index], [Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime]
+			SELECT [Index], [Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], [CustodianId]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -28,28 +28,13 @@ AS
 				t.[Code]			= s.[Code],
 				t.[Address]			= s.[Address],
 				t.[BirthDateTime]	= s.[BirthDateTime],
+				t.[CustodianId]		= s.[CustodianId],
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [CustodyType], [Name], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[PlaceType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [CustodyType], [PlaceType], [Name], [Code], [Address], [BirthDateTime], [CustodianId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, N'Place', s.[PlaceType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], s.[CustodianId], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
-
-	MERGE INTO [dbo].Places t
-	USING (
-		SELECT L.[Id], [PlaceType], [CustodianId],
-				II.[Id] As [InsertedId]
-		FROM @Entities L
-		JOIN @IndexedIds II ON L.[Index] = II.[Index]
-		WHERE [EntityState] IN (N'Inserted', N'Updated')
-	) AS s ON (t.Id = s.Id)
-	WHEN MATCHED THEN
-		UPDATE SET
-			t.[Id]						= s.[Id],
-			t.[CustodianId]				= s.[CustodianId]
-	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [Id],			[PlaceType],	[CustodianId])
-		VALUES (@TenantId, s.[InsertedId], s.[PlaceType], s.[CustodianId]);
 	
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

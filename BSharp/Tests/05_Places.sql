@@ -33,12 +33,11 @@ END
 BEGIN -- Updating RM Warehouse address
 	DELETE FROM @PlacesDTO;
 	INSERT INTO @PlacesDTO (
-		 [Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
+		[Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
 	)
 	SELECT
-		L.[Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
-	FROM [dbo].Places L
-	JOIN [dbo].[Custodies] C ON L.Id = C.Id
+		[Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', [CustodianId]
+	FROM [dbo].[Custodies]
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse');
 
 	UPDATE @PlacesDTO

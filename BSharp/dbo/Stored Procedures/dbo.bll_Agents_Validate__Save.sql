@@ -25,7 +25,7 @@ SET NOCOUNT ON;
 	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].UserId' As [Key], N'Error_TheUserName0IsUsed' As [ErrorName],
 		(CASE WHEN @Language = 2 THEN COALESCE(U.[Name2], U.[Name]) ELSE U.[Name] END) AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entities FE 
-	JOIN [dbo].Agents BE ON FE.UserId = BE.UserId
+	JOIN [dbo].Custodies BE ON FE.UserId = BE.UserId
 	JOIN dbo.Users U ON FE.UserId = U.Id
 	WHERE (FE.Id IS NULL) OR (FE.Id <> BE.Id);
 

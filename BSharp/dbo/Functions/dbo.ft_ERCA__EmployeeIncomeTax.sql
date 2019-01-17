@@ -6,12 +6,12 @@ RETURNS TABLE
 AS
 RETURN
 	SELECT
-		A.TaxIdentificationNumber As [Employee TIN],
+		C.TaxIdentificationNumber As [Employee TIN],
 		C.[Name] As [Employee Full Name],
 		S.RelatedAmount As [Taxable Income], 
 		S.Amount As [Tax Withheld],
 		S.Reference AS [Salary Period]
 	FROM [dbo].ft_Account__Statement(N'CurrentEmployeeIncomeTaxPayable' , default, default, @fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	JOIN [dbo].Agents A ON C.Id = A.Id
-	WHERE S.Direction = -1;
+	WHERE C.CustodyType = N'Agent'
+	AND S.Direction = -1;

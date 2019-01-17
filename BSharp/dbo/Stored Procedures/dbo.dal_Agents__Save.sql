@@ -17,7 +17,7 @@ AS
 	(
 		MERGE INTO [dbo].[Custodies] AS t
 		USING (
-			SELECT [Index], [Id], [AgentType], [Name], [Code], [Address], [BirthDateTime]
+			SELECT [Index], [Id], [AgentType], [Name], [Code], [Address], [BirthDateTime], [IsRelated] , [UserId], [TaxIdentificationNumber], [Title], [Gender]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -28,32 +28,19 @@ AS
 				t.[Code]			= s.[Code],
 				t.[Address]			= s.[Address],
 				t.[BirthDateTime]	= s.[BirthDateTime],
+
+				t.[IsRelated]		= s.[IsRelated],
+				t.[UserId]			= s.[UserId],
+				t.[TaxIdentificationNumber] = s.[TaxIdentificationNumber],
+				t.[Title]			= s.[Title],
+				t.[Gender]			= s.[Gender],
+
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [CustodyType], [Name], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[AgentType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [CustodyType], [AgentType], [Name], [Code], [Address], [BirthDateTime], [IsRelated],	[UserId], [TaxIdentificationNumber], [Title], [Gender], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, N'Agent',	s.[AgentType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[Title], s.[Gender], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
-
-	MERGE INTO [dbo].Agents t
-	USING (
-		SELECT A.[Id], [AgentType], [IsRelated] , [UserId], [TaxIdentificationNumber], [Title], [Gender],
-				II.[Id] As [InsertedId]
-		FROM @Entities A
-		JOIN @IndexedIds II ON A.[Index] = II.[Index]
-		WHERE [EntityState] IN (N'Inserted', N'Updated')
-	) AS s ON (t.Id = s.Id)
-	WHEN MATCHED THEN
-		UPDATE SET
-			t.[Id]						= s.[Id],
-			t.[IsRelated]				= s.[IsRelated],
-			t.[UserId]					= s.[UserId],
-			t.[TaxIdentificationNumber] = s.[TaxIdentificationNumber],
-			t.[Title]					= s.[Title],
-			t.[Gender]					= s.[Gender]
-	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [Id],			[AgentType],	[IsRelated],	[UserId],	[TaxIdentificationNumber], [Title], [Gender])
-		VALUES (@TenantId, s.[InsertedId], s.[AgentType], s.[IsRelated], s.[UserId], s.[TaxIdentificationNumber], s.[Title], s.[Gender]);
 	
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds	FOR JSON PATH);
