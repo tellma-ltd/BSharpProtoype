@@ -10,22 +10,23 @@
 			@PurchasingManager int;
 END
 BEGIN -- Users
+	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)
-	INSERT INTO [dbo].Users([Id], FriendlyName) VALUES
-	(N'system@banan-it.com', N'B#'),
-	(N'mohamad.akra@banan-it.com', N'Mohamad Akra'),
-	(N'ahmad.akra@banan-it.com', N'Ahmad Akra'),
-	(N'badegek@gmail.com', N'Badege'),
-	(N'mintewelde00@gmail.com', N'Tizita'),
-	(N'ashenafi935@gmail.com', N'Ashenafi'),
-	(N'yisak.tegene@gmail.com', N'Yisak'),
-	(N'zewdnesh.hora@gmail.com', N'Zewdinesh Hora'),
-	(N'tigistnegash74@gmail.com', N'Tigist'),
-	(N'roman.zen12@gmail.com', N'Roman'),
-	(N'mestawetezige@gmail.com', N'Mestawet'),
-	(N'ayelech.hora@gmail.com', N'Ayelech'),
-	(N'info@banan-it.com', N'Banan IT'),
-	(N'DESKTOP-V0VNDC4\Mohamad Akra', N'Dr. Akra')
+	INSERT INTO [dbo].Users([TenantId], [Id], FriendlyName) VALUES
+	(@TenantId, N'system@banan-it.com', N'B#'),
+	(@TenantId, N'mohamad.akra@banan-it.com', N'Mohamad Akra'),
+	(@TenantId, N'ahmad.akra@banan-it.com', N'Ahmad Akra'),
+	(@TenantId, N'badegek@gmail.com', N'Badege'),
+	(@TenantId, N'mintewelde00@gmail.com', N'Tizita'),
+	(@TenantId, N'ashenafi935@gmail.com', N'Ashenafi'),
+	(@TenantId, N'yisak.tegene@gmail.com', N'Yisak'),
+	(@TenantId, N'zewdnesh.hora@gmail.com', N'Zewdinesh Hora'),
+	(@TenantId, N'tigistnegash74@gmail.com', N'Tigist'),
+	(@TenantId, N'roman.zen12@gmail.com', N'Roman'),
+	(@TenantId, N'mestawetezige@gmail.com', N'Mestawet'),
+	(@TenantId, N'ayelech.hora@gmail.com', N'Ayelech'),
+	(@TenantId, N'info@banan-it.com', N'Banan IT'),
+	(@TenantId, N'DESKTOP-V0VNDC4\Mohamad Akra', N'Dr. Akra')
 END
 BEGIN -- Insert individuals and organizations
 	INSERT INTO @AgentsDTO

@@ -12,7 +12,9 @@
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]	NVARCHAR(450)		NOT NULL,
 	CONSTRAINT [PK_Custodies] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Individual', N'Organization', N'Position', N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc'))
+	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Individual', N'Organization', N'Position', N'CashSafe', N'BankAccount', N'Warehouse', N'Farm', N'ProductionPoint', N'Misc')),
+	CONSTRAINT [FK_Custodies_CreatedBy] FOREIGN KEY ([TenantId], [CreatedBy]) REFERENCES [dbo].[Users] ([TenantId], [Id]),
+	CONSTRAINT [FK_Custodies_ModifiedBy] FOREIGN KEY ([TenantId], [ModifiedBy]) REFERENCES [dbo].[Users] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE INDEX [IX_Custodies__Id_CustodyType]
@@ -20,5 +22,3 @@ CREATE UNIQUE INDEX [IX_Custodies__Id_CustodyType]
 GO
 CREATE UNIQUE INDEX [IX_Custodies__Code]
   ON [dbo].[Custodies]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
-
-
