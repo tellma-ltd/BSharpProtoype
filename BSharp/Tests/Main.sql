@@ -15,11 +15,12 @@ BEGIN -- reset Identities
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
+	EXEC sp_set_session_context 'TenantId', 106;
+	EXEC sp_set_session_context 'UserId', N'DESKTOP-V0VNDC4\Mohamad Akra';
+	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 END
 BEGIN TRY
 	BEGIN TRANSACTION
-		EXEC sp_set_session_context 'TenantId', 106;
-		EXEC sp_set_session_context 'UserId', N'mohamad.akra@banan-it.com';
 		:r .\00_Settings.sql
 		:r .\01_MeasurementUnits.sql
 		:r .\02_Operations.sql

@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].MeasurementUnits AS t
 		USING (
-			SELECT [Index], [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount]
+			SELECT [Index], [Id], [Code], [UnitType], [Name], [Name2], [Description], [UnitAmount], [BaseAmount]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -27,6 +27,7 @@ SET NOCOUNT ON;
 			UPDATE SET 
 				t.[UnitType]	= s.[UnitType],
 				t.[Name]		= s.[Name],
+				t.[Name2]		= s.[Name2],
 				t.[Description]	= s.[Description],
 				t.[UnitAmount]	= s.[UnitAmount],
 				t.[BaseAmount]	= s.[BaseAmount],
@@ -34,8 +35,8 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]	= @Now,
 				t.[ModifiedBy]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[UnitType], s.[Name], s.[Description], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [UnitType], [Name], [Name2], [Description], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[UnitType], s.[Name], s.[Name2], s.[Description], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

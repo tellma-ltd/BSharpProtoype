@@ -224,6 +224,7 @@
     <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
     <Build Include="dbo\Functions\dbo.f0_CashAccount__Custody_Resource.sql" />
     <Build Include="dbo\Functions\dbo.fn_User__Language.sql" />
+    <Build Include="dbo\User Defined Types\dbo.UserList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -3,6 +3,7 @@
 	[Id]			INT					IDENTITY(1,1),
 	[UnitType]		NVARCHAR (255)		NOT NULL,
 	[Name]			NVARCHAR (255)		NOT NULL,
+	[Name2]			NVARCHAR (255),
 	[Description]	NVARCHAR (255)		NOT NULL,
 	[UnitAmount]	FLOAT (53)			NOT NULL CONSTRAINT [DF_UnitsOfMeasure_UnitAmount] DEFAULT(1),
 	[BaseAmount]	FLOAT (53)			NOT NULL CONSTRAINT [DF_UnitsOfMeasure_BaseAmount] DEFAULT(1),

@@ -10,4 +10,3 @@
 	INDEX IX_AccountList_Code UNIQUE CLUSTERED ([Code] ASC),
 	CHECK ([AccountType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory'))
 );
-GO;

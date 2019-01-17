@@ -3,8 +3,8 @@
 	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @ResultsJson = (
-		SELECT [Id], [AgentType], [Name], [Code], [Address], [BirthDateTime], IsActive, [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy],
-				[IsRelated], [UserId], [TaxIdentificationNumber], [Title], [Gender], N'Unchanged' As [EntityState]
+		SELECT [Id], [AgentType], [Name], [Name2], [Code], [Address], [BirthDateTime], IsActive, [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy],
+				[IsRelated], [TaxIdentificationNumber], [Title], [Gender], N'Unchanged' As [EntityState]
 		FROM [dbo].[Custodies]
 		WHERE CustodyType = N'Agent'
 		AND [Id] IN (SELECT [Id] FROM @Ids)

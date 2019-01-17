@@ -5,5 +5,11 @@
 	[Name2]				NVARCHAR (255),
 	[PreferredLanguage] NCHAR(2)		NOT NULL DEFAULT (N'en'), 
 	[ProfilePhoto]		VARBINARY (MAX),
-	CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC)
+	[AgentId]			INT,
+	CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [FK_Users_Agents] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id]) ON UPDATE CASCADE,
 );
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__AgentId]
+  ON [dbo].[Users]([TenantId] ASC, [AgentId] ASC) WHERE [AgentId] IS NOT NULL;
+GO

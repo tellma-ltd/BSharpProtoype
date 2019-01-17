@@ -3,6 +3,7 @@
 	[Id]			INT,
 	[UnitType]		NVARCHAR (255)	NOT NULL,
 	[Name]			NVARCHAR (255)	NOT NULL,
+	[Name2]			NVARCHAR (255),
 	[Description]	NVARCHAR (255)	NOT NULL,
 	[UnitAmount]	FLOAT (53)		NOT NULL,
 	[BaseAmount]	FLOAT (53)		NOT NULL,

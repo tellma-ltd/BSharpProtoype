@@ -11,7 +11,6 @@
 --	Agents specific
 	[AgentType]					NVARCHAR (255),
 	[IsRelated]					BIT					CONSTRAINT [DF_Agents_IsRelated] DEFAULT (0),
-	[UserId]					NVARCHAR (450),
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[Title]						NVARCHAR (255),
 	[Gender]					NCHAR (1),
@@ -26,7 +25,6 @@
 	CONSTRAINT [PK_Custodies] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([CustodyType] IN (N'Agent', N'Place')),
 
-	CONSTRAINT [FK_Agents_Users] FOREIGN KEY ([TenantId], [UserId]) REFERENCES [dbo].[Users] ([TenantId], [Id]) ON UPDATE CASCADE,
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([AgentType] IN (N'Individual', N'Organization', N'Position')),
 
 	CONSTRAINT [FK_Places_Agents] FOREIGN KEY ([TenantId], [CustodianId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id]),
@@ -44,9 +42,6 @@ CREATE UNIQUE INDEX [IX_Custodies__Code]
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Id_AgentType]
   ON [dbo].[Custodies]([Id] ASC, [AgentType] ASC) WHERE [AgentType] IS NOT NULL;
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__UserId]
-  ON [dbo].[Custodies]([TenantId] ASC, [UserId] ASC) WHERE [UserId] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Places__Id_PlaceType]
   ON [dbo].[Custodies]([Id] ASC, [PlaceType] ASC) WHERE [PlaceType] IS NOT NULL;

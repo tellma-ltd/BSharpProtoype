@@ -11,6 +11,7 @@ AS
 		[Id] INT '$.Id',
 		[UnitType] NVARCHAR (255) '$.UnitType',
 		[Name] NVARCHAR (255) '$.Name',
+		[Name2] NVARCHAR (255) '$.Name2',
 		[Description] NVARCHAR (255) '$.Description',
 		[UnitAmount] FLOAT (53) '$.UnitAmount',
 		[BaseAmount] FLOAT (53) '$.BaseAmount',
