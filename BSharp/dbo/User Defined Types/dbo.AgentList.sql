@@ -4,7 +4,7 @@
 	[AgentType]					NVARCHAR (255)	NOT NULL,
 	[Name]						NVARCHAR (255)	NOT NULL,
 	[Code]						NVARCHAR (255),
-	[Address]					NVARCHAR (255),
+	[Address]					NVARCHAR (1024),
 	[BirthDateTime]				DATETIMEOFFSET (7),
 	[IsRelated]					BIT				NOT NULL DEFAULT (0),
 	[UserId]					NVARCHAR (450),

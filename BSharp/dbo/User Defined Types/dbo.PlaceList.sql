@@ -4,7 +4,7 @@
 	[PlaceType]		NVARCHAR (255)	NOT NULL,
 	[Name]				NVARCHAR (255)	NOT NULL,
 	[Code]				NVARCHAR (255),
-	[Address]			NVARCHAR (255),
+	[Address]			NVARCHAR (1024),
 	[BirthDateTime]		DATETIMEOFFSET (7),
 	[CustodianId]		INT,
 	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),

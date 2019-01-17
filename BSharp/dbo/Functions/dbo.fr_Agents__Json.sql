@@ -13,7 +13,7 @@ AS
 		[Name] NVARCHAR (255) '$.Name',
 		[IsActive] BIT '$.IsActive',
 		[Code] NVARCHAR (255) '$.Code',
-		[Address] NVARCHAR (255) '$.Address',
+		[Address] NVARCHAR (1024) '$.Address',
 		[BirthDateTime] DATETIMEOFFSET (7) '$.BirthDateTime',
 		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
 		[CreatedBy] NVARCHAR(450) '$.CreatedBy',

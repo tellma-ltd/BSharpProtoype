@@ -5,7 +5,7 @@
 	[Name]			NVARCHAR (255)		NOT NULL,
 	[IsActive]		BIT					NOT NULL CONSTRAINT [DF_Custodies_IsActive] DEFAULT (1),
 	[Code]			NVARCHAR (255),
-	[Address]		NVARCHAR (255),
+	[Address]		NVARCHAR (1024),
 	[BirthDateTime]	DATETIMEOFFSET (7),
 	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedBy]		NVARCHAR(450)		NOT NULL,
