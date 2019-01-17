@@ -1,83 +1,85 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @LocationsDTO [dbo].[LocationList];
-	DECLARE @System int, @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int, @MiscWarehouse int, @CBEUSD int, @CBEETB int; 
+	DECLARE @PlacesDTO [dbo].[PlaceList];
+	DECLARE @System int, @RawMaterialsWarehouse int, @FinishedGoodsWarehouse int, @MiscWarehouse int, 
+			@CBEUSD int, @CBEETB int, @TigistSafe int; 
 END;
 
 BEGIN -- Insert 
-	INSERT INTO @LocationsDTO
-	([LocationType], [Name],					[Address], [BirthDateTime], [CustodianId]) VALUES
+	INSERT INTO @PlacesDTO
+	([PlaceType], [Name],					[Address], [BirthDateTime], [CustodianId]) VALUES
 	(N'Warehouse',	N'System',					NULL,		NULL,			NULL),
 	(N'Warehouse',	N'Raw Materials Warehouse', NULL,		NULL,			NULL),
 	(N'Warehouse',	N'Fake Warehouse',		N'Far away',	NULL,			NULL),
 	(N'Warehouse',	N'Finished Goods Warehouse', NULL,		NULL,			NULL),
 	(N'Warehouse',	N'Misc Warehouse',			NULL,		NULL,			NULL),
-	(N'BankAccount',N'CBE - USD',				N'144-1200',NULL,			@CBE),
-	(N'BankAccount',N'CBE - ETB',				N'144-1299',NULL,			@CBE);
+	(N'BankAccount',N'CBE - USD',			N'144-1200',	NULL,			@CBE),
+	(N'BankAccount',N'CBE - ETB',			N'144-1299',	NULL,			@CBE),
+	(N'CashSafe',	N'Tigist - Safe',		N'Cashier Office',NULL,			@TigistNegash);
 
-	EXEC [dbo].[api_Locations__Save]
-		@Entities = @LocationsDTO,
+	EXEC [dbo].[api_Places__Save]
+		@Entities = @PlacesDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Locations: Location 1'
+		Print 'Places: Place 1'
 		GOTO Err_Label;
 	END;
 
-	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
+	IF @DebugPlaces = 1
+		SELECT * FROM [dbo].[fr_Places__Json](@ResultsJson);
 END
 BEGIN -- Updating RM Warehouse address
-	DELETE FROM @LocationsDTO;
-	INSERT INTO @LocationsDTO (
-		 [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
+	DELETE FROM @PlacesDTO;
+	INSERT INTO @PlacesDTO (
+		 [Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], [EntityState], [CustodianId]
 	)
 	SELECT
-		L.[Id], [LocationType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
-	FROM [dbo].Locations L
+		L.[Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', L.[CustodianId]
+	FROM [dbo].Places L
 	JOIN [dbo].[Custodies] C ON L.Id = C.Id
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse');
 
-	UPDATE @LocationsDTO
+	UPDATE @PlacesDTO
 	SET 
 		[Address] = N'Alemgena, Oromia',
 		[EntityState] = N'Updated'
 	WHERE [Name] = N'Raw Materials Warehouse';
 
-	UPDATE @LocationsDTO
+	UPDATE @PlacesDTO
 	SET 
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake Warehouse';
 
-	EXEC [dbo].[api_Locations__Save]
-		@Entities = @LocationsDTO,
+	EXEC [dbo].[api_Places__Save]
+		@Entities = @PlacesDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResultsJson = @ResultsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Locations: Location 2'
+		Print 'Places: Place 2'
 		GOTO Err_Label;
 	END;
 
-	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
+	IF @DebugPlaces = 1
+		SELECT * FROM [dbo].[fr_Places__Json](@ResultsJson);
 
 	DECLARE @Locs dbo.IntegerList;
 	INSERT INTO @Locs([Id]) VALUES 
 		(29),
 		(31);
 
-	EXEC [dbo].[api_Locations__Deactivate]
+	EXEC [dbo].[api_Places__Deactivate]
 		@Ids = @Locs,
 		@ResultsJson = @ResultsJson OUTPUT;
 
-	IF @DebugLocations = 1
-		SELECT * FROM [dbo].[fr_Locations__Json](@ResultsJson);
+	IF @DebugPlaces = 1
+		SELECT * FROM [dbo].[fr_Places__Json](@ResultsJson);
 END
 
-IF @DebugLocations = 1
+IF @DebugPlaces = 1
 	SELECT * FROM [dbo].[Custodies];
 
 SELECT
@@ -86,5 +88,5 @@ SELECT
 	@FinishedGoodsWarehouse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finished Goods Warehouse'),
 	@MiscWarehouse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Misc Warehouse'),
 	@CBEUSD = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'CBE - USD'),
-	@CBEETB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'CBE - ETB');
-	
+	@CBEETB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'CBE - ETB'),
+	@TigistSafe = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tigist - Safe');

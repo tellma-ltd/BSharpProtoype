@@ -7,7 +7,7 @@
 --  [AccountSpecification] NVARCHAR (50)  DEFAULT (N'Basic') NOT NULL,
 	[IsExtensible]	BIT			NOT NULL DEFAULT (1),
 	[ParentId]		NVARCHAR (255),
-	PRIMARY KEY NONCLUSTERED ([Id] ASC)
+	PRIMARY KEY NONCLUSTERED ([Id])
 );
 INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 (N'Extension',	1, N'0', N'ControlAccount', N'Control account')

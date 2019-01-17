@@ -28,7 +28,7 @@
 	--- If changing any of the above properties, the state will change
 	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
-	CHECK ([State] IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
+	CHECK ([State] IN (N'Plan', N'Template', N'Demand', N'Voucher')),
 	CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)

@@ -1,14 +1,14 @@
-﻿CREATE FUNCTION [dbo].[fr_Locations__Json] (
+﻿CREATE FUNCTION [dbo].[fr_Places__Json] (
 	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE
 AS
-	RETURN
+RETURN
 	SELECT *
 	FROM OpenJson(@Json)
 	WITH (
 		[Id] INT '$.Id',
-		[LocationType] NVARCHAR (255) '$.LocationType',
+		[PlaceType] NVARCHAR (255) '$.PlaceType',
 		[Name] NVARCHAR (255) '$.Name',
 		[IsActive] BIT '$.IsActive',
 		[Code] NVARCHAR (255) '$.Code',

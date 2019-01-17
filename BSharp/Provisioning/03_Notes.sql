@@ -91,6 +91,7 @@ INSERT INTO @Notes(NoteType, IsActive, Direction, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, -1, N'1511', N'DecreaseThroughClassifiedAsHeldForSaleBiologicalAssets', N'Decrease through classified as held for sale, biological assets')
 
 ,(N'Extension', 1, 0, N'16', N'CashAndCashEquivalents', N'Cash and cash equivalents')
+,(N'Extension', 1, 0, N'160', N'InternalCashManagement', N'Internal cash management')
 ,(N'Regulatory', 1, 0, N'161', N'IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges', N'Increase (decrease) in cash and cash equivalents before effect of exchange rate changes')
 ,(N'Regulatory', 1, 0, N'1611', N'CashFlowsFromUsedInOperatingActivities', N'Cash flows from (used in) operating activities')
 ,(N'Regulatory', 1, 0, N'16111', N'CashFlowsFromUsedInOperations', N'Cash flows from (used in) operations')
@@ -150,7 +151,6 @@ INSERT INTO @Notes(NoteType, IsActive, Direction, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, -1, N'161312', N'InterestPaidClassifiedAsFinancingActivities', N'Interest paid, classified as financing activities')
 ,(N'Regulatory', 1, 0, N'161313', N'IncomeTaxesPaidRefundClassifiedAsFinancingActivities', N'Income taxes paid (refund), classified as financing activities')
 ,(N'Regulatory', 1, 0, N'161314', N'OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities', N'Other inflows (outflows) of cash, classified as financing activities')
-,(N'Extension', 1, 0, N'1614', N'InternalCashTransfer', N'Internal cash transfer')
 ,(N'Regulatory', 1, 0, N'162', N'EffectOfExchangeRateChangesOnCashAndCashEquivalents', N'Effect of exchange rate changes on cash and cash equivalents')
 
 ,(N'Extension', 1, 0, N'2', N'Equity', N'Equity')

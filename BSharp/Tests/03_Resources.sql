@@ -33,7 +33,7 @@ BEGIN -- Inserting
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Location: Resources 1'
+		Print 'Place: Resources 1'
 		GOTO Err_Label;
 	END;
 	IF @DebugResources = 1
@@ -69,7 +69,7 @@ BEGIN -- Updating
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Location: Resources 2'
+		Print 'Place: Resources 2'
 		GOTO Err_Label;
 	END
 	IF @DebugResources = 1

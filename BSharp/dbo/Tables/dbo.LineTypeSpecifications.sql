@@ -2,6 +2,7 @@
 	[TenantId]							INT,
 	[LineType]							NVARCHAR (255)	NOT NULL,
 	[EntryNumber]						TINYINT			NOT NULL,
+	[IsActive]							BIT				NOT NULL CONSTRAINT DF_LineTypeSpecifications_IsActive DEFAULT (1),
 	[Definition]						NVARCHAR (255)	NOT NULL DEFAULT(N'Calculation'),
 	[OperationCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
 	[OperationExpression]				NVARCHAR (MAX),

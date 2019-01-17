@@ -9,14 +9,12 @@
 	[IsExtensible]	BIT				DEFAULT (0) NOT NULL,
 	[ParentId]		NVARCHAR (255),
 	CONSTRAINT [PK_Notes] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [IX_Notes_Code] UNIQUE CLUSTERED ([TenantId] ASC, [Code] ASC),
 	CONSTRAINT [FK_Notes_Notes] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Notes] ([TenantId], [Id]),
 	CONSTRAINT [CK_Notes_NoteType] CHECK ([NoteType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory')),
 	CONSTRAINT [CK_Notes_Direction] CHECK ([Direction] IN (-1, 0, 1))
 );
 GO
-CREATE CLUSTERED INDEX [IX_Notes_Code]
-  ON [dbo].[Notes]([Code] ASC);
-GO;
 
 CREATE TRIGGER [dbo].[trD_Notes]
 ON [dbo].[Notes]

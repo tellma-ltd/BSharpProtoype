@@ -1,7 +1,9 @@
 ﻿CREATE FUNCTION [dbo].[ft_Paysheet] (
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100',
-	@Reference nvarchar(255) = NULL
+	@Reference nvarchar(255) = NULL,
+	@BasicSalaryResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Basic')
+	@TransportationAllowanceResourceId int -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
 )
 RETURNS TABLE
 AS 
@@ -11,12 +13,12 @@ RETURN
 		C.[Name] As [Employee Full Name],
 		SUM(CASE 
 			WHEN (S.AccountId = N'ShorttermEmployeeBenefitsAccruals' 
-			AND S.ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [Name] = N'Basic'))
+			AND S.ResourceId = @BasicSalaryResourceId)
 			THEN S.Direction * S.[Value] Else 0 
 			END) AS [Basic Salary],
 		SUM(CASE
 			WHEN (S.AccountId = N'ShorttermEmployeeBenefitsAccruals' 
-			AND S.ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [Name] = N'Transportation'))
+			AND S.ResourceId = @TransportationAllowanceResourceId)
 			THEN S.Direction * S.[Value] Else 0 
 			END) AS [Overtime],
 		SUM(CASE 

@@ -23,7 +23,7 @@ BEGIN
 			UPDATE [dbo].Notes SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
 		SELECT @Code = min(Code) FROM [dbo].Notes WHERE Code > @Code;
 	END;
-
+	/*
 	SELECT A.[Id] As AccountId, N.[Id] AS [NoteId]
 	FROM dbo.[Accounts] A
 	CROSS JOIN dbo.[Notes] N
@@ -37,12 +37,12 @@ BEGIN
 		(A.Code Like N'' AND N.Code Like N'') OR
 		(A.Code Like N'' AND N.Code Like N'')
 	)
-	/*
-	UPDATE [dbo].Accounts -- Agent/Location
+
+	UPDATE [dbo].Accounts -- Agent/Place
 	SET [AccountSpecification] = N'PropertyPlantAndEquipment'
 	WHERE Code Like '1101%' AND IsExtensible = 1
 
-	UPDATE [dbo].Accounts -- Location
+	UPDATE [dbo].Accounts -- Place
 	SET [AccountSpecification] = N'InvestmentProperty'
 	WHERE Code Like '1102%' AND IsExtensible = 1
 
@@ -63,19 +63,19 @@ BEGIN
 	WHERE (Code Like '1108%' OR Code Like '1212%' OR Code Like '312%' OR Code Like '3212%') AND IsExtensible = 1
 	
 	UPDATE [dbo].Accounts
-	SET [AccountSpecification] = N'Inventories' -- location
+	SET [AccountSpecification] = N'Inventories' -- Place
 	WHERE (Code Like '1109%' OR Code Like '1211%') AND IsExtensible = 1
 
 	UPDATE [dbo].Accounts
-	SET [AccountSpecification] = N'Cash' -- location
+	SET [AccountSpecification] = N'Cash' -- Place
 	WHERE (Code Like '1217') AND IsExtensible = 1
 
 	UPDATE [dbo].Accounts
-	SET [AccountSpecification] = N'Capital' -- location
+	SET [AccountSpecification] = N'Capital' -- Place
 	WHERE (Code Like '211%') AND IsExtensible = 1
 
 	UPDATE [dbo].Accounts
-	SET [AccountSpecification] = N'Basic' -- location
+	SET [AccountSpecification] = N'Basic' -- Place
 	WHERE [AccountSpecification] IS NULL
 	*/
 END

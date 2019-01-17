@@ -31,7 +31,7 @@ SET NOCOUNT ON;
 	-- Cannot submit a non-balanced transaction
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Lines[' + CAST(L.[Id] AS NVARCHAR(255)) + ']' As [Key], 
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR(255)),'') + '].Lines[' + ISNULL(CAST(L.[Id] AS NVARCHAR(255)),'') + ']' As [Key], 
 		N'Error_Document0Line1HasDebitCreditDifference2' As [ErrorName],
 		D.[SerialNumber] AS Argument1, L.[Id] AS Argument2, SUM(E.[Direction] * E.[Value]) AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE

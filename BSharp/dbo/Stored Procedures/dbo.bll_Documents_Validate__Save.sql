@@ -86,5 +86,71 @@ SET NOCOUNT ON;
 	WHERE (E.NoteId IS NOT NULL)
 	AND (AN.NoteId IS NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
- 
+
+	-- Reference is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+				CAST(E.[Index] AS NVARCHAR(255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
+				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Entries E
+	JOIN @Lines L ON E.LineIndex = L.[Index]
+	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	WHERE (E.[Reference] IS NULL)
+	AND (AM.ReferenceLabel IS NOT NULL)
+	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+
+		-- RelatedReference is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedReference' As [Key], N'Error_TheRelatedReferenceIsNotSpecified' As [ErrorName],
+				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Entries E
+	JOIN @Lines L ON E.LineIndex = L.[Index]
+	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	WHERE (E.[RelatedReference] IS NULL)
+	AND (AM.RelatedReferenceLabel IS NOT NULL)
+	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+
+	-- RelatedAgent is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAgentId' As [Key], N'Error_TheRelatedAgentIsNotSpecified' As [ErrorName],
+				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Entries E
+	JOIN @Lines L ON E.LineIndex = L.[Index]
+	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	WHERE (E.[RelatedAgentId] IS NULL)
+	AND (AM.RelatedAgentLabel IS NOT NULL)
+	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	
+	-- RelatedResource is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedResourceId' As [Key], N'Error_TheRelatedResourceIsNotSpecified' As [ErrorName],
+				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Entries E
+	JOIN @Lines L ON E.LineIndex = L.[Index]
+	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	WHERE (E.[RelatedResourceId] IS NULL)
+	AND (AM.RelatedResourceLabel IS NOT NULL)
+	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+
+	-- RelatedAmount is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
+				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Entries E
+	JOIN @Lines L ON E.LineIndex = L.[Index]
+	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	WHERE (E.[RelatedAmount] IS NULL)
+	AND (AM.RelatedAmountLabel IS NOT NULL)
+	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	
+
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

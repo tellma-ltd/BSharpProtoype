@@ -39,7 +39,7 @@ BEGIN -- Inserting
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'MeasurementUnits: Location 1'
+		Print 'MeasurementUnits: Place 1'
 		GOTO Err_Label;
 	END
 
@@ -84,7 +84,7 @@ EXEC [dbo].[api_MeasurementUnits__Save]
 
 IF @ValidationErrorsJson IS NOT NULL
 BEGIN
-	Print 'MeasurementUnits: Location 2'
+	Print 'MeasurementUnits: Place 2'
 	GOTO Err_Label;
 END
 

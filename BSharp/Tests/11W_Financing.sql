@@ -11,7 +11,7 @@ INSERT INTO @DLTSave(
 SELECT @WLIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 INSERT INTO @WLSave ([LineIndex],
 [DocumentIndex], [LineType], [Custody2], [Amount2],	[Value2],	[Amount1],	[Resource1], [Custody1])   
-					-- Operation, Shareholder,	NumberOfShares, CapitalInvested, PaidInAmount, PaidInCurrency, PaidInAccount
+				-- Operation, Shareholder,	NumberOfShares, CapitalInvested, PaidInAmount, PaidInCurrency, PaidInAccount
 VALUES
 (@WLIdx + 1, @DIdx, N'IssueOfEquity',	@MohamadAkra,	1000,	2350000,	100000,		@USD,		@CBEUSD),
 (@WLIdx + 2, @DIdx,	N'IssueOfEquity',	@AhmadAkra,		1000,	2350000,	100000,		@USD,		@CBEUSD);
@@ -30,8 +30,8 @@ BEGIN
 END;
 
 DELETE FROM @Docs;
-INSERT INTO @Docs([Id]) 
-SELECT [Id] FROM dbo.Documents 
+INSERT INTO @Docs([Index], [Id]) 
+SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [Mode] = N'Draft';
 
 EXEC [dbo].[api_Documents__Submit]

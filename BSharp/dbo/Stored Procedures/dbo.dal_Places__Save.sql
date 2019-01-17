@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[dal_Locations__Save]
-	@Entities [LocationList] READONLY,
+﻿CREATE PROCEDURE [dbo].[dal_Places__Save]
+	@Entities [PlaceList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -17,7 +17,7 @@ AS
 	(
 		MERGE INTO [dbo].[Custodies] AS t
 		USING (
-			SELECT [Index], [Id], [LocationType], [Name], [Code], [Address], [BirthDateTime]
+			SELECT [Index], [Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -32,13 +32,13 @@ AS
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT ([TenantId], [CustodyType], [Name], [Code], [Address], [BirthDateTime], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[LocationType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], @Now, @UserId, @Now, @UserId)
+			VALUES (@TenantId, s.[PlaceType], s.[Name], s.[Code], s.[Address], s.[BirthDateTime], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
 
-	MERGE INTO [dbo].Locations t
+	MERGE INTO [dbo].Places t
 	USING (
-		SELECT L.[Id], [LocationType], [CustodianId],
+		SELECT L.[Id], [PlaceType], [CustodianId],
 				II.[Id] As [InsertedId]
 		FROM @Entities L
 		JOIN @IndexedIds II ON L.[Index] = II.[Index]
@@ -49,7 +49,7 @@ AS
 			t.[Id]						= s.[Id],
 			t.[CustodianId]				= s.[CustodianId]
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [Id],			[LocationType],	[CustodianId])
-		VALUES (@TenantId, s.[InsertedId], s.[LocationType], s.[CustodianId]);
+		INSERT ([TenantId], [Id],			[PlaceType],	[CustodianId])
+		VALUES (@TenantId, s.[InsertedId], s.[PlaceType], s.[CustodianId]);
 	
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

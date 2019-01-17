@@ -70,7 +70,7 @@ BEGIN -- Insert individuals and organizations
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Agents: Location 1'
+		Print 'Agents: Place 1'
 		GOTO Err_Label;
 	END;
 
@@ -113,7 +113,7 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
-		Print 'Agents: Location 2'
+		Print 'Agents: Place 2'
 		GOTO Err_Label;
 	END;
 	

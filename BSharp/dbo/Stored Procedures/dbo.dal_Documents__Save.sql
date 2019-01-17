@@ -92,12 +92,12 @@ BEGIN
 	MERGE INTO [dbo].Entries AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [LineId], [EntryNumber], [OperationId], [Reference],
-			[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
-			[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount]
+			E.[Id], II.[Id] AS [LineId], E.[EntryNumber], E.[OperationId], E.[Reference],
+			E.[AccountId], E.[CustodyId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
+			E.[RelatedReference], E.[RelatedAgentId], E.[RelatedResourceId], E.[RelatedAmount]
 		FROM @Entries E
 		JOIN @LinesIndexedIds II ON E.LineIndex = II.[Index]
-		WHERE [EntityState] IN (N'Inserted', N'Updated')
+		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET 

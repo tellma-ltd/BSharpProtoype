@@ -147,11 +147,13 @@ BEGIN
 			E.CustodyId = (CASE 
 								WHEN LC.[CustodyCalculationBase] = N'Equal' THEN LC.[CustodyExpression]
 								WHEN LC.[CustodyCalculationBase] = N'FromCode' THEN (SELECT MIN([Id]) FROM dbo.Custodies WHERE [Code] = LC.[CustodyExpression])
+								WHEN LC.[CustodyCalculationBase] = N'Related' THEN (SELECT [RelatedAgentId] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[CustodyExpression])
 								ELSE E.CustodyId 
 							END),
 			E.ResourceId = (CASE
 								WHEN LC.[ResourceCalculationBase] = N'Equal' THEN LC.[ResourceExpression]
 								WHEN LC.[ResourceCalculationBase] = N'FromCode' THEN (SELECT MIN([Id]) FROM dbo.Resources WHERE [Code] = LC.[ResourceExpression])
+								WHEN LC.[ResourceCalculationBase] = N'Related' THEN (SELECT [RelatedResourceId] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[ResourceExpression])
 								ELSE E.ResourceId 
 							END),
 			E.Direction = (CASE 
@@ -162,6 +164,7 @@ BEGIN
 			E.Amount = (CASE 
 								WHEN LC.[AmountCalculationBase] = N'Equal' THEN LC.[AmountExpression]								
 								WHEN LC.[AmountCalculationBase] = N'FromEntry' THEN (SELECT [Amount] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[AmountExpression])
+								WHEN LC.[AmountCalculationBase] = N'Related' THEN (SELECT [RelatedAmount] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[AmountExpression]								)
 								ELSE E.Amount 
 							END),
 			E.NoteId = (CASE 
@@ -170,24 +173,29 @@ BEGIN
 						END),
 			E.Reference = (CASE 
 								WHEN LC.[ReferenceCalculationBase] = N'Equal' THEN LC.[ReferenceExpression]
+								WHEN LC.[ReferenceCalculationBase] = N'Related' THEN (SELECT [RelatedReference] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[ReferenceExpression])
 								ELSE E.Reference 
 							END),
 			E.RelatedReference = (CASE 
 								WHEN LC.[RelatedReferenceCalculationBase] = N'Equal' THEN LC.[RelatedReferenceExpression]
+								WHEN LC.[RelatedReferenceCalculationBase] = N'Related' THEN (SELECT [Reference] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[RelatedReferenceExpression])
 								ELSE E.RelatedReference 
 							END),
 			E.RelatedAgentId = (CASE
 								WHEN LC.[RelatedAgentCalculationBase] = N'Equal' THEN LC.[RelatedAgentExpression]
 								WHEN LC.[RelatedAgentCalculationBase] = N'FromCode' THEN (SELECT MIN([Id]) FROM dbo.Custodies WHERE [Code] = LC.[RelatedAgentExpression])
+								WHEN LC.[RelatedAgentCalculationBase] = N'Related' THEN (SELECT [CustodyId] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[RelatedAgentExpression])
 								ELSE E.RelatedAgentId 
 							END),
 			E.RelatedResourceId = (CASE
 								WHEN LC.[RelatedResourceCalculationBase] = N'Equal' THEN LC.[RelatedResourceExpression]
 								WHEN LC.[RelatedResourceCalculationBase] = N'FromCode' THEN (SELECT MIN([Id]) FROM dbo.Resources WHERE [Code] = LC.[RelatedResourceExpression])
+								WHEN LC.[RelatedResourceCalculationBase] = N'Related' THEN (SELECT [ResourceId] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[RelatedResourceExpression])
 								ELSE E.RelatedResourceId 
 							END),
 			E.RelatedAmount = (CASE 
 								WHEN LC.[RelatedAmountCalculationBase] = N'Equal' THEN LC.[RelatedAmountExpression]								
+								WHEN LC.[RelatedAmountCalculationBase] = N'Related' THEN (SELECT [Amount] FROM @EntriesLocal WHERE LineIndex = E.LineIndex AND EntryNumber = LC.[RelatedAmountExpression]								)
 								ELSE E.RelatedAmount 
 							END)
 		FROM @EntriesLocal E 

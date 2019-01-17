@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[api_Locations__Save]
-	@Entities [LocationList] READONLY,
+﻿CREATE PROCEDURE [dbo].[api_Places__Save]
+	@Entities [PlaceList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultsJson NVARCHAR(MAX) OUTPUT
@@ -8,14 +8,14 @@ BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
-	EXEC [dbo].[bll_Locations_Validate__Save]
+	EXEC [dbo].[bll_Places_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Locations__Save]
+	EXEC [dbo].[dal_Places__Save]
 		@Entities = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
@@ -26,7 +26,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		FROM OpenJson(@IndexedIdsJson)
 		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
 
-		EXEC [dbo].[dal_Locations__Select] 
+		EXEC [dbo].[dal_Places__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END;

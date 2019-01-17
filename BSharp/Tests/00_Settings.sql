@@ -24,7 +24,7 @@ EXEC [dbo].[api_Settings__Save]
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
-	Print 'Location: Settings 1'
+	Print 'Place: Settings 1'
 	GOTO Err_Label;
 END
 

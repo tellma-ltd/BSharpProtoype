@@ -211,9 +211,9 @@
     <Property Name="NewName" Value="[NameKey]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="0b6d1f03-2681-46af-8a14-5a5487a6c141" ChangeDateTime="11/12/2018 19:31:56">
-    <Property Name="ElementName" Value="[dbo].[Locations].[Custodian]" />
+    <Property Name="ElementName" Value="[dbo].[Places].[Custodian]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[Locations]" />
+    <Property Name="ParentElementName" Value="[dbo].[Places]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[CustodianId]" />
   </Operation>
@@ -309,9 +309,9 @@
     <Property Name="NewName" Value="PartOfIdPPE" />
   </Operation>
   <Operation Name="Rename Refactor" Key="7b1d5ba6-304b-4fbc-909a-b32156e9a4df" ChangeDateTime="11/27/2018 10:07:15">
-    <Property Name="ElementName" Value="[dbo].[Locations].[ParentId]" />
+    <Property Name="ElementName" Value="[dbo].[Places].[ParentId]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[Locations]" />
+    <Property Name="ParentElementName" Value="[dbo].[Places]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ParentId]" />
   </Operation>
@@ -421,11 +421,11 @@
     <Property Name="NewName" Value="[AgentList]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="43823d3c-dd4c-4da8-a574-514114cc2fe6" ChangeDateTime="12/05/2018 08:55:06">
-    <Property Name="ElementName" Value="[dbo].[LocationList]" />
+    <Property Name="ElementName" Value="[dbo].[PlaceList]" />
     <Property Name="ElementType" Value="SqlTableType" />
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
-    <Property Name="NewName" Value="[LocationList]" />
+    <Property Name="NewName" Value="[PlaceList]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="0907d7fb-cc33-4b0d-88b6-459279f3fa94" ChangeDateTime="12/05/2018 14:45:25">
     <Property Name="ElementName" Value="[dbo].[Custodies].[Address]" />
@@ -701,11 +701,11 @@
     <Property Name="NewName" Value="[AgentList]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="7c581ceb-0a93-431b-98bb-c15bc185d7ca" ChangeDateTime="12/28/2018 19:43:46">
-    <Property Name="ElementName" Value="[dbo].[LocationList]" />
+    <Property Name="ElementName" Value="[dbo].[PlaceList]" />
     <Property Name="ElementType" Value="SqlTableType" />
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
-    <Property Name="NewName" Value="[LocationList]" />
+    <Property Name="NewName" Value="[PlaceList]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="7b7048df-fd69-458f-97b6-b34b5c5ff2c0" ChangeDateTime="12/28/2018 19:56:31">
     <Property Name="ElementName" Value="[dbo].[ft_Agents__Json]" />
@@ -715,11 +715,11 @@
     <Property Name="NewName" Value="[fr_Agents__Json]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="84d32fc0-c07f-4639-8293-94d32fd5b1b2" ChangeDateTime="12/28/2018 19:56:58">
-    <Property Name="ElementName" Value="[dbo].[ft_Locations__Json]" />
+    <Property Name="ElementName" Value="[dbo].[ft_Places__Json]" />
     <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
-    <Property Name="NewName" Value="[fr_Locations__Json]" />
+    <Property Name="NewName" Value="[fr_Places__Json]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="73e3a07d-c080-42d0-b5ca-28a14af934a1" ChangeDateTime="12/28/2018 19:57:19">
     <Property Name="ElementName" Value="[dbo].[ft_MeasurementUnits__Json]" />
@@ -953,11 +953,11 @@
     <Property Name="NewName" Value="[bll_Agents_Validate__Save]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="37e53550-d5dd-44cf-9f47-0448d6d10502" ChangeDateTime="01/02/2019 07:23:27">
-    <Property Name="ElementName" Value="[dbo].[bll_Locations__Validate]" />
+    <Property Name="ElementName" Value="[dbo].[bll_Places__Validate]" />
     <Property Name="ElementType" Value="SqlProcedure" />
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
-    <Property Name="NewName" Value="[bll_Locations_Validate__Save]" />
+    <Property Name="NewName" Value="[bll_Places_Validate__Save]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="68601cd7-f16b-4007-a387-53a023db8bac" ChangeDateTime="01/02/2019 07:24:02">
     <Property Name="ElementName" Value="[dbo].[bll_Operations__Validate]" />
@@ -993,5 +993,12 @@
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[api_Documents__Forward]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="22f177ca-4017-4077-9bbe-a22a8d4ae408" ChangeDateTime="01/03/2019 12:51:36">
+    <Property Name="ElementName" Value="[dbo].[fn_Custody__Account]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fn_CashAccount__Custody_Resource]" />
   </Operation>
 </Operations>

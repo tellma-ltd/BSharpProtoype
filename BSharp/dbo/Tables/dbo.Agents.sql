@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Agents] (-- العاقل
+﻿CREATE TABLE [dbo].[Agents] (-- المكلف
 	[TenantId]					INT,
 	[Id]						INT,
 	[AgentType]					NVARCHAR (255)		NOT NULL,

@@ -9,15 +9,12 @@
 	[IsExtensible]			BIT				NOT NULL CONSTRAINT [DF_Accounts_IsExtensible] DEFAULT (1),
 	[ParentId]				NVARCHAR (255),
 	CONSTRAINT [PK_Accounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [IX_Accounts_Code] UNIQUE CLUSTERED ([TenantId] ASC, [Code] ASC),
 	CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]), 
 	CONSTRAINT [CK_Accounts_AccountType] CHECK ([AccountType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory')),
 --	CONSTRAINT [CK_Accounts_AccountSpecification] CHECK ([AccountSpecification] IN (N'Agent', N'Basic', N'Capital', N'Forex', N'Inventory', N'PPE'))
 	);
 GO;
-
-CREATE UNIQUE CLUSTERED INDEX [IX_Accounts__Code] ON [dbo].[Accounts]([TenantId] ASC, [Code] ASC);
-GO;
-
 CREATE TRIGGER [dbo].[trD_Accounts]
 ON [dbo].[Accounts]
 FOR DELETE 

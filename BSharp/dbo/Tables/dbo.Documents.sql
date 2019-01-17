@@ -9,20 +9,12 @@
 	[EndDateTime]				DATETIMEOFFSET (7)	NOT NULL,
 	[Mode]						NVARCHAR (255)		NOT NULL DEFAULT (N'Draft'), -- N'Void', N'Draft', N'Submitted', N'Posted'
 	[SerialNumber]				INT,				-- auto generated
-	-- Line properties
-	--[Memo]					NVARCHAR (255),
-	--[LinesCustody1]				INT,
-	--[LinesCustody2]				INT,
-	--[LinesCustody3]				INT,
-	--[LinesReference1]			NVARCHAR(255),
-	--[LinesReference2]			NVARCHAR(255),
-	--[LinesReference3]			NVARCHAR(255),
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedBy]					NVARCHAR(450)		NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]				NVARCHAR(450)		NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC), -- Data/Demand/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
-	CONSTRAINT [CK_Documents_State] CHECK ([State] IN (N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher')),
+	CONSTRAINT [CK_Documents_State] CHECK ([State] IN (N'Plan', N'Template', N'Demand', N'Voucher')),
 	CONSTRAINT [CK_Documents_Frequency] CHECK (
 		[EndDateTime] =
 			CASE 

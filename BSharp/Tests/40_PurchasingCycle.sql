@@ -12,10 +12,11 @@ SELECT @WLIdx = ISNULL(MAX([Index]), -1) FROM @LSave
 SELECT @WLIdx = @WLIdx + ISNULL(MAX([LineIndex]), -1) FROM @WLSave;
 ;
 INSERT INTO @WLSave ([LineIndex],
-[DocumentIndex], [LineType], [Custody2], [Amount1],	[Custody1])   
-				--		Supplier, Amount Paid, From Cash Account
+[DocumentIndex], [LineType], [Custody1], [Reference1], [Amount1], [Amount2], [Reference2], [Amount3], [Reference3], [Custody3], [Custody2])   
+			-- Supplier, Invoice #, Invoice Amount, Amount Withheld,	WT Ref,	Amount Paid,	Check Ref, Paid From, WT Entity
+			-- Custody 1, Ref 1		Amount 1,		Amount 2,			Ref 2,	Amount 3,		Ref 3, Custody 3
 VALUES
-(@WLIdx + 1, @DIdx, N'PaymentIssueToSupplier',	@Lifan,	200000,	@CBEETB);
+(@WLIdx + 1, @DIdx, N'PaymentIssueToSupplier',	@Lifan,	N'FS104', 200000, 4000, N'WT101', 196000, N'CK1201', @TigistSafe, @ERCA);
 
 EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave, @WideLines = @WLSave,
@@ -31,8 +32,8 @@ BEGIN
 END;
 
 DELETE FROM @Docs;
-INSERT INTO @Docs([Id]) 
-SELECT [Id] FROM dbo.Documents 
+INSERT INTO @Docs([Index], [Id]) 
+SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [Mode] = N'Draft';
 
 EXEC [dbo].[api_Documents__Submit]

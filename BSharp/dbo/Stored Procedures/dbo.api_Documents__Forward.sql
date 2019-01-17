@@ -31,10 +31,10 @@ BEGIN
 		)
 			RAISERROR (N'Some events have less amount than you are trying to forward', 16,1)
 
-		DECLARE @DocumentType NVARCHAR(255), @OperatingSegment int, @FromDocumentDateTime datetimeoffset(7), @Agent int, @Location int, @Resource int
+		DECLARE @DocumentType NVARCHAR(255), @OperatingSegment int, @FromDocumentDateTime datetimeoffset(7), @Agent int, @Place int, @Resource int
 
 		SELECT @DocumentType = DocumentType, @OperatingSegment = OperatingSegmentId, @FromDocumentDateTime = DocumentDateTime, 
-			@Agent = AgentId, @Location = LocationId, @Resource = ResourceId
+			@Agent = AgentId, @Place = PlaceId, @Resource = ResourceId
 		FROM [dbo].[Documents] 
 		WHERE [Id]= @FromDocument
 
@@ -46,8 +46,8 @@ BEGIN
 			FROM [dbo].[Documents]
 			WHERE DocumentType = @DocumentType AND State = @ToState
 
-		INSERT INTO [dbo].[Documents](State, DocumentType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, LocationId, ResourceId, ReminderDateTime)
-		VALUES(@ToState, @DocumentType, @OperatingSegment, @SerialNumber, @ToDocumentDateTime, @Actor, @Reason, @Reference, @Agent, @Location, @Resource, @ReminderDateTime )
+		INSERT INTO [dbo].[Documents](State, DocumentType, OperatingSegmentId, SerialNumber, DocumentDateTime, ActorId, Reason, Reference, AgentId, PlaceId, ResourceId, ReminderDateTime)
+		VALUES(@ToState, @DocumentType, @OperatingSegment, @SerialNumber, @ToDocumentDateTime, @Actor, @Reason, @Reference, @Agent, @Place, @Resource, @ReminderDateTime )
 		
 		SET @ToDocument = SCOPE_IDENTITY() */
 END;

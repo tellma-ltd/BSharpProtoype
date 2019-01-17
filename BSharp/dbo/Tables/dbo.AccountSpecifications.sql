@@ -1,5 +1,20 @@
 ﻿CREATE TABLE [dbo].[AccountSpecifications] (
-  [Id] NVARCHAR (255) NOT NULL,
-  CONSTRAINT [PK_AccountTemplates] PRIMARY KEY CLUSTERED ([Id] ASC)
+	[TenantId]				INT,
+	[AccountId]				NVARCHAR (255),
+	[Direction]				SMALLINT,
+	[CustodyLabel]			NVARCHAR (255),
+	[CustodyFilter]			NVARCHAR (255),
+	[ResourceLabel]			NVARCHAR (255),
+	[ResourceFilter]		NVARCHAR (255),
+	[AmountLabel]			NVARCHAR (255),
+	[ReferenceLabel]		NVARCHAR (255),
+	[RelatedReferenceLabel]	NVARCHAR (255),
+	[RelatedAgentLabel]		NVARCHAR (255),
+	[RelatedAgentFilter]	NVARCHAR (255),
+	[RelatedResourceLabel]	NVARCHAR (255),
+	[RelatedResourceFilter]	NVARCHAR (255),
+	[RelatedAmountLabel]	NVARCHAR (255)
+	CONSTRAINT [PK_AccountSpecifications] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [AccountId] ASC, [Direction] ASC),
+	CONSTRAINT [FK_AccountSpecifications_Accounts] FOREIGN KEY ([TenantId], [AccountId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]) ON DELETE CASCADE,
+	CONSTRAINT [CK_Accountpecifications_Direction] CHECK ([Direction] IN (-1, 0,  +1)),
 );
-
