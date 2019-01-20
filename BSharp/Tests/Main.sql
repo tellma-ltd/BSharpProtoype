@@ -18,6 +18,9 @@ BEGIN -- reset Identities
 	EXEC sp_set_session_context 'TenantId', 106;
 	EXEC sp_set_session_context 'UserId', N'DESKTOP-V0VNDC4\Mohamad Akra';
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
+	IF NOT EXISTS(SELECT * FROM [dbo].Users)
+	INSERT INTO [dbo].Users([TenantId], [Id], [Name], [AgentId]) VALUES
+	(@TenantId, N'DESKTOP-V0VNDC4\Mohamad Akra', N'Dr. Akra', NULL);
 END
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -39,17 +42,17 @@ BEGIN TRY
 	--SELECT @fromDate = '2017.01.1'; SELECT @toDate = DATEADD(DAY, 90, @fromDate);
 	--WHILE @i < 30
 	--BEGIN
-	--	SELECT * FROM [dbo].[ft_AssetRegister](@fromDate, @toDate);
+	--	SELECT * FROM [dbo].[fi_AssetRegister](@fromDate, @toDate);
 	--	SELECT @fromDate = DATEADD(DAY, 90, @fromDate), @toDate = DATEADD(DAY, 90, @toDate);
 	--	SET @i = @i + 1;
 	--END
-	--	SELECT * FROM dbo.[ft_AssetRegister]('2017.02.01', '2018.02.01');
+	--	SELECT * FROM dbo.[fi_AssetRegister]('2017.02.01', '2018.02.01');
 	--SELECT @fromDate = '2017.01.01', @toDate = '2024.01.01';
-	--SELECT * FROM dbo.ft_AssetRegister(@fromDate, @toDate);
-	--SELECT * from dbo.ft_Account__Statement(N'BalancesWithBanks', @CBEETB, @ETB, @fromDate, @toDate) ORDER BY StartDateTime;
-	--SELECT * from dbo.ft_Account__Statement(N'DistributionCosts', @SalesManager, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
-	--SELECT * FROM dbo.ft_ERCA__EmployeeIncomeTax('2018.02.01', '2018.03.01');
-	--SELECT * FROM dbo.ft_Paysheet(default, default, '2018.02', @Basic, @Transportation);
+	--SELECT * FROM dbo.fi_AssetRegister(@fromDate, @toDate);
+	--SELECT * from dbo.fi_Account__Statement(N'BalancesWithBanks', @CBEETB, @ETB, @fromDate, @toDate) ORDER BY StartDateTime;
+	--SELECT * from dbo.fi_Account__Statement(N'DistributionCosts', @SalesManager, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
+	--SELECT * FROM dbo.fi_ERCA__EmployeeIncomeTax('2018.02.01', '2018.03.01');
+	--SELECT * FROM dbo.fi_Paysheet(default, default, '2018.02', @Basic, @Transportation);
 	ROLLBACK;
 END TRY
 BEGIN CATCH

@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].Operations AS t
 		USING (
-			SELECT [Index], [Id], [Code], [Name], [ParentId]
+			SELECT [Index], [Id], [Code], [Name], [Name2], [ParentId]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -26,13 +26,14 @@ SET NOCOUNT ON;
 		THEN
 			UPDATE SET 
 				t.[Name]			= s.[Name],
+				t.[Name2]			= s.[Name2],
 				t.[ParentId]		= s.[ParentId],
 				t.[Code]			= s.[Code],
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedBy]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [Name], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[Name], s.[Code], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [Name],		[Name2], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], @Now,			@UserId,	@Now,			@UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

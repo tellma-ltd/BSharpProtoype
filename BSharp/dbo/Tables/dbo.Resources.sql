@@ -4,6 +4,7 @@
 	[MeasurementUnitId]	INT					NOT NULL,
 	[ResourceType]		NVARCHAR (255)		NOT NULL,
 	[Name]				NVARCHAR (255)		NOT NULL,
+	[Name2]				NVARCHAR (255),
 	[IsActive]			BIT					NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
 	[Source]			NVARCHAR (255), -- Lease In/Acquisition/Production
 	[Purpose]			NVARCHAR (255), -- Lease out/Sale/Production/SG&A
@@ -29,5 +30,12 @@
 	CONSTRAINT [FK_Resources_Resources_ServiceOfId] FOREIGN KEY ([TenantId], [ServiceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 );
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name]
+  ON [dbo].[Resources]([TenantId] ASC, [Name] ASC);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name2]
+  ON [dbo].[Resources]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Code]
   ON [dbo].[Resources]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+GO

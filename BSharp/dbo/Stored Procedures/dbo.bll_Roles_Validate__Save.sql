@@ -5,10 +5,9 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
-	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
     INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
-    SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_0IsInactive' As [ErrorName], CAST([Id] As NVARCHAR(255)) As [Argument1]
+    SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_CannotModifyInactiveItem' As [ErrorName], NULL As [Argument1]
     FROM @Roles
     WHERE Id IN (SELECT Id from [dbo].[Roles] WHERE IsActive = 0)
 	OPTION(HASH JOIN);
@@ -63,7 +62,7 @@ SET NOCOUNT ON;
 
 	-- Name must be unique in the uploaded list
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST([Index] AS NVARCHAR(255)) + '].Name' As [Key], N'Error_TheName0IsUsedInTheList' As [ErrorName],
+	SELECT '[' + CAST([Index] AS NVARCHAR(255)) + '].Name' As [Key], N'Error_TheName0IsDuplicated' As [ErrorName],
 		[Name] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Roles
 	WHERE [Name] IN (
@@ -75,7 +74,7 @@ SET NOCOUNT ON;
 
 	-- Name2 must be unique in the uploaded list
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST([Index] AS NVARCHAR(255)) + '].Name2' As [Key], N'Error_TheName0IsUsedInTheList' As [ErrorName],
+	SELECT '[' + CAST([Index] AS NVARCHAR(255)) + '].Name2' As [Key], N'Error_TheName0IsDuplicated' As [ErrorName],
 		[Name2] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Roles
 	WHERE [Name2] IN (

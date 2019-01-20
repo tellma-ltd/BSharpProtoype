@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Views] (
 	[TenantId]			INT,
 	[Id]				NVARCHAR (255),
-	[IsActive]			BIT					NOT NULL DEFAULT(0),
+	[IsActive]				BIT					NOT NULL CONSTRAINT [DF_Views_IsActive] DEFAULT (1),
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedBy]			NVARCHAR(450)		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 

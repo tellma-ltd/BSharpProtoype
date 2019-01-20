@@ -2,6 +2,7 @@
 	[Index]				INT				IDENTITY(0, 1),
 	[Id]				INT	,
 	[Name]				NVARCHAR (255)	NOT NULL,
+	[Name2]				NVARCHAR (255),
 	[Code]				NVARCHAR (255),
 	[ParentIndex]		INT,
 	[ParentId]			INT,  

@@ -17,5 +17,11 @@
 	CONSTRAINT [CK_UnitsOfMeasure_UnitType] CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money'))
 );
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_MeasurementUnits__Name]
+  ON [dbo].[MeasurementUnits]([TenantId] ASC, [Name] ASC);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_MeasurementUnits__Name2]
+  ON [dbo].[MeasurementUnits]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_MeasurementUnits__Code]
   ON [dbo].[MeasurementUnits]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;

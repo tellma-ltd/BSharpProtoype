@@ -3,8 +3,7 @@
 	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 SELECT @ResultsJson = (
-		SELECT
-			[Field], [Value], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
+		SELECT *, N'Unchanged' As [EntityState]
 		FROM [dbo].Settings 
 		WHERE [Field] IN (
 			SELECT [Field]

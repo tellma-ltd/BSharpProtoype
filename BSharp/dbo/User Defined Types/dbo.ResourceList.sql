@@ -4,6 +4,7 @@
 	[MeasurementUnitId]		INT				NOT NULL, 
 	[ResourceType]			NVARCHAR (255)	NOT NULL,
 	[Name]					NVARCHAR (255)	NOT NULL,
+	[Name2]					NVARCHAR (255),
 	[Source]				NVARCHAR (255), -- Lease In/Acquisition/Production
 	[Purpose]				NVARCHAR (255), -- Lease out/Sale/Production/SG&A
 	[Code]					NVARCHAR (255),

@@ -39,9 +39,16 @@ GO
 CREATE UNIQUE INDEX [IX_Custodies__Id_CustodyType]
   ON [dbo].[Custodies]([TenantId] ASC, [Id] ASC, [CustodyType] ASC);
 GO
-CREATE UNIQUE INDEX [IX_Custodies__Code]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Name]
+  ON [dbo].[Custodies]([TenantId] ASC, [Name] ASC);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Name2]
+  ON [dbo].[Custodies]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Code]
   ON [dbo].[Custodies]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
 GO
+
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Id_AgentType]
   ON [dbo].[Custodies]([Id] ASC, [AgentType] ASC) WHERE [AgentType] IS NOT NULL;
 GO

@@ -38,7 +38,7 @@ BEGIN
 	SET @Query = @Query + N'
 			CAST(SUM([Direction] * [Amount]) AS money) AS Amount,	
 			CAST(SUM([Direction] * [Value]) AS money) AS NET
-			FROM [dbo].[ft_Journal](@fromDate, @toDate) E
+			FROM [dbo].[fi_Journal](@fromDate, @toDate) E
 			GROUP BY AccountId'
 	IF (@ByCustody = 1) SET @Query = @Query + N', CustodyId'
 	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'

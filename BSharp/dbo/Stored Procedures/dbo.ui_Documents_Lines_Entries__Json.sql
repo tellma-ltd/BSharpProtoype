@@ -39,4 +39,4 @@ WITH (
 	[EntityState]			NVARCHAR(255) '$.EntityState'
 )
 
-RETURN 0
+RETURN 0;

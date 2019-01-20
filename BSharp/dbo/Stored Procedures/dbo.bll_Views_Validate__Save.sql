@@ -8,7 +8,7 @@ SET NOCOUNT ON;
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
     INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
-    SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_0IsInactive' As [ErrorName], CAST([Id] As NVARCHAR(255)) As [Argument1]
+    SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_CannotModifyInactiveItem' As [ErrorName], NULL As [Argument1]
     FROM @Views
     WHERE Id NOT IN (SELECT Id from [dbo].[Views] WHERE IsActive = 1)
 	OPTION(HASH JOIN);

@@ -17,7 +17,7 @@ BEGIN
 
 	-- if last signed by someone else, add user signature
 	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [Signatory])
-	SELECT @TenantId, [DocumentId], @UserId, @Now
+	SELECT @TenantId, [DocumentId], @Now, @UserId
 	FROM Signatures
 	WHERE [Id] IN (
 		SELECT MAX(Id) As [Id] FROM dbo.Signatures
@@ -28,7 +28,7 @@ BEGIN
 	
 	-- if never signed, add user signature
 	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [Signatory])
-	SELECT @TenantId, [Id], @UserId, @Now
+	SELECT @TenantId, [Id], @Now, @UserId
 	FROM @Documents
 	WHERE [Id] NOT IN (
 		SELECT [DocumentId] FROM dbo.Signatures 

@@ -9,11 +9,6 @@
 	DECLARE @GeneralManager int, @ProductionManager int, @SalesManager int, @FinanceManager int, @HRManager int,
 			@PurchasingManager int;
 END
-BEGIN -- Add superuser
-	IF NOT EXISTS(SELECT * FROM [dbo].Users)
-	INSERT INTO [dbo].Users([TenantId], [Id], [Name], [AgentId]) VALUES
-	(@TenantId, N'DESKTOP-V0VNDC4\Mohamad Akra', N'Dr. Akra', NULL);
-END
 BEGIN -- Insert individuals and organizations
 	INSERT INTO @AgentsDTO
 	([AgentType],		[Name],		[IsRelated],[TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime]) VALUES
