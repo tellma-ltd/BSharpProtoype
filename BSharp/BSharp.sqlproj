@@ -254,6 +254,14 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Roles__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Roles__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Roles__Select.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ViewList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Views__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Views_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Views__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Views__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Views__Deactivate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Views__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Views__Save.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
