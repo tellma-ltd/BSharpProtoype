@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Settings]
-(
+﻿CREATE FUNCTION [dbo].[fn_Settings] (
 	@Field NVARCHAR(255)
 )
 RETURNS NVARCHAR(255)
@@ -12,4 +11,4 @@ BEGIN
 	WHERE [Field] = @Field
 
 	RETURN @Result;
-END
+END;

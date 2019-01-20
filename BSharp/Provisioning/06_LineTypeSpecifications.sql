@@ -41,13 +41,13 @@ INSERT @LineTypeSpecifications (
 	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression], [RelatedAmountCalculationBase], [RelatedAmountExpression], [RelatedAgentCalculationBase], [RelatedAgentExpression]) VALUES
 	(N'PaymentIssueToSupplier', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL,				N'Equal',						NULL,						N'Equal',						NULL),
 	(N'PaymentIssueToSupplier', 2,	N'Equal',	N'CurrentWithholdingTaxPayable',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			NULL,				N'Related',						N'1',						N'Related',						N'1'),
-	(N'PaymentIssueToSupplier', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
+	(N'PaymentIssueToSupplier', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',N'Equal',N'-1',		N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
 
 INSERT @LineTypeSpecifications (
 	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression], [RelatedAmountCalculationBase], [RelatedAmountExpression], [RelatedAgentCalculationBase], [RelatedAgentExpression]) VALUES
 	(N'ForeignTransitPurchase', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL,				N'Equal',						NULL,						N'Equal',						NULL),
 	(N'ForeignTransitPurchase', 2,	N'Equal',	N'CurrentWithholdingTaxPayable',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			NULL,				N'Related',						N'1',						N'Related',						N'1'),
-	(N'ForeignTransitPurchase', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
+	(N'ForeignTransitPurchase', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',N'Equal',N'-1',		N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
 
 	/*
 INSERT @LineTypeSpecifications (

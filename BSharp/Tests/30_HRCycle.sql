@@ -35,20 +35,6 @@ INSERT INTO @Docs([Id])
 SELECT [Id] FROM dbo.Documents 
 WHERE [Mode] = N'Draft';
 
-EXEC [dbo].[api_Documents__Submit]
-	@Documents = @Docs,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ReturnEntities = 0,
- 	@DocumentsResultJson = @DResultJson OUTPUT,
-	@LinesResultJson = @LResultJson OUTPUT,
-	@EntriesResultJson = @EResultJson OUTPUT
-
-IF @ValidationErrorsJson IS NOT NULL 
-BEGIN
-	Print 'Payment to Supplier: Submit'
-	GOTO Err_Label;
-END
-
 EXEC [dbo].[api_Documents__Post]
 	@Documents = @Docs,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,

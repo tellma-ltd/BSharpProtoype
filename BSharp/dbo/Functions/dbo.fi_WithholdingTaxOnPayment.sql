@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_WithholdingTaxOnPayment] (
+﻿CREATE FUNCTION [dbo].[fi_WithholdingTaxOnPayment] (
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
 )
@@ -14,7 +14,7 @@ RETURN
 		S.Amount As [Tax Withheld], 
 		S.Reference As [Receipt Number], 
 		S.StartDateTime As [Receipt Date]
-	FROM [dbo].ft_Account__Statement(N'CurrentWithholdingTaxPayable', 0, 0, @fromDate, @toDate) S
+	FROM [dbo].[fi_Account__Statement](N'CurrentWithholdingTaxPayable', 0, 0, @fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	WHERE C.CustodyType = N'Agent'
 	AND S.Direction = -1;

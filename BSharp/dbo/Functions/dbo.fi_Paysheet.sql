@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_Paysheet] (
+﻿CREATE FUNCTION [dbo].[fi_Paysheet] (
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100',
 	@Reference nvarchar(255) = NULL,
@@ -41,7 +41,7 @@ RETURN
 			WHEN (S.AccountId = N'ShorttermPensionContributionAccruals')
 			THEN S.Direction * S.[Value] Else 0 
 			END) AS [Pension Contribution 11%]
-	FROM [dbo].ft_Journal(@fromDate, @toDate) S
+	FROM [dbo].[fi_Journal](@fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	WHERE (@Reference IS NULL OR S.Reference = @Reference)
 	AND C.CustodyType = N'Agent'

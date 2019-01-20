@@ -14,6 +14,8 @@
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[Title]						NVARCHAR (255),
 	[Gender]					NCHAR (1),
+	[PreferredContactChannel]	NVARCHAR(255),
+	[PreferredContactAddress]	NVARCHAR(255),
 --	Place
 	[PlaceType]					NVARCHAR (255),
 	[CustodianId]				INT, -- Accountable Id

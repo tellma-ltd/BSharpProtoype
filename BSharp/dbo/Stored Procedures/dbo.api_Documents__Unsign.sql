@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents__Submit]
+﻿CREATE PROCEDURE [dbo].[api_Documents__Unsign]
 	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
@@ -8,20 +8,23 @@
 AS
 BEGIN
 	DECLARE @Ids [dbo].[IntegerList];
-	-- if all documents are already submitted, return
-	IF NOT EXISTS(SELECT * FROM [dbo].[Documents] 
-		WHERE [Id] IN (SELECT [Id] FROM @Documents) AND Mode <> N'Submitted')
+	-- if all documents are already unsigned, return
+	IF NOT EXISTS(
+		SELECT * FROM [dbo].[Documents]
+		WHERE [Id] IN (SELECT [Id] FROM @Documents)
+		AND Mode <> N'Draf'
+	)
 		RETURN;
 
-	-- Validate
-	EXEC [dbo].[bll_Documents_Validate__Submit]
+	-- Validate, checking available signatures for transaction type
+	EXEC [dbo].[bll_Documents_Validate__Unsign]
 		@Documents = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents_Mode__Update]	@Documents = @Documents, @Mode = N'Submitted';
+	EXEC [dbo].[dal_Documents__Unsign] @Documents = @Documents;
 
 	IF (@ReturnEntities = 1)
 	BEGIN
@@ -33,6 +36,6 @@ BEGIN
 			@Ids = @Ids, 
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
 			@LinesResultJson = @LinesResultJson OUTPUT,
-			@EntriesResultJson = @EntriesResultJson OUTPUT
+			@EntriesResultJson = @EntriesResultJson OUTPUT;
 	END
 END;

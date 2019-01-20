@@ -42,20 +42,6 @@ INSERT INTO @Docs([Index], [Id])
 SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [Mode] = N'Draft';
 
-EXEC [dbo].[api_Documents__Submit]
-	@Documents = @Docs,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ReturnEntities = 0,
- 	@DocumentsResultJson = @DResultJson OUTPUT,
-	@LinesResultJson = @LResultJson OUTPUT,
-	@EntriesResultJson = @EResultJson OUTPUT
-
-IF @ValidationErrorsJson IS NOT NULL 
-BEGIN
-	Print 'Capital Investment: Submit'
-	GOTO Err_Label;
-END
-
 EXEC [dbo].[api_Documents__Post]
 	@Documents = @Docs,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
@@ -68,4 +54,4 @@ IF @ValidationErrorsJson IS NOT NULL
 BEGIN
 	Print 'Capital Investment: Post'
 	GOTO Err_Label;
-END
+END;

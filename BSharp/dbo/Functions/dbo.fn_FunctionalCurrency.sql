@@ -11,4 +11,4 @@ BEGIN
 	AND MU.[Code] = [dbo].fn_Settings(N'FunctionalCurrencyCode');
 
 	RETURN @Result;
-END
+END;

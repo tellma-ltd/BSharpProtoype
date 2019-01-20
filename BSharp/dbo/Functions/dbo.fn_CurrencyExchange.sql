@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_CurrencyExchange]
-(
+﻿CREATE FUNCTION [dbo].[fn_CurrencyExchange] (
 	@Date DATE = NULL,
 	@BaseCurrency char(3),
 	@TargetCurrency char(3) = NULL,
@@ -16,5 +15,4 @@ BEGIN
 	WHERE [Date] = @Date AND BaseCurrency = @BaseCurrency AND TargetCurrency = @TargetCurrency
 
 	RETURN @Result;
-END
-
+END;

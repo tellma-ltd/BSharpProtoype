@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Note__Code]
-(
+﻿CREATE FUNCTION [dbo].[fn_Note__Code] (
 	@NoteId NVARCHAR(255)
 )
 RETURNS NVARCHAR(255)

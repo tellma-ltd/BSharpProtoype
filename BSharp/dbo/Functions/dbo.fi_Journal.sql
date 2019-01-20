@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_Journal] (-- SELECT * FROM [dbo].[ft_Journal]('01.01.2015','01.01.2020')
+﻿CREATE FUNCTION [dbo].[fi_Journal] (-- SELECT * FROM [dbo].[fi_Journal]('01.01.2015','01.01.2020')
 	@fromDate Datetime = '2000.01.01', 
 	@toDate Datetime = '2100.01.01'
 ) RETURNS TABLE

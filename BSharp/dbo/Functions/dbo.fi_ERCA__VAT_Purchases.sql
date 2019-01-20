@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[ft_ERCA__VAT_Purchases] (
+﻿CREATE FUNCTION [dbo].[fi_ERCA__VAT_Purchases] (
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
 )
@@ -12,7 +12,7 @@ RETURN
 		SUM(S.Amount) AS VAT,
 		SUM(S.RelatedAmount) AS [Taxable Amount],
 		S.StartDateTime As [Invoice Date]
-	FROM [dbo].ft_Account__Statement(N'CurrentValueAddedTaxReceivables' , 0, 0, @fromDate, @toDate) S
+	FROM [dbo].[fi_Account__Statement](N'CurrentValueAddedTaxReceivables' , 0, 0, @fromDate, @toDate) S
 	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
 	WHERE C.CustodyType = N'Agent'
 	AND S.Direction = 1

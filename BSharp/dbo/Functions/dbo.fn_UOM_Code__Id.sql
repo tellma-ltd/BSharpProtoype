@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_UOM_Code__Id]
-(
+﻿CREATE FUNCTION [dbo].[fn_UOM_Code__Id] (
 	@Code NVARCHAR(255)
 )
 RETURNS INT

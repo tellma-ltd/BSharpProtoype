@@ -30,10 +30,10 @@ BEGIN TRY
 		:r .\10_Documents.sql
 
 	SELECT @fromDate = '2017.02.01', @toDate = '2024.03.01'
-	SELECT * from dbo.ft_Journal(@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
+	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
 	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
-	SELECT * FROM dbo.ft_WithholdingTaxOnPayment(default, default);
-	SELECT * FROM dbo.ft_ERCA__VAT_Purchases(default, default);
+	SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
+	SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
 	--DECLARE @i int = 0;
 	--SELECT @fromDate = '2017.01.1'; SELECT @toDate = DATEADD(DAY, 90, @fromDate);

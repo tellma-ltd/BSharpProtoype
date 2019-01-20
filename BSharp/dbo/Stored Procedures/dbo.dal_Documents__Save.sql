@@ -34,9 +34,6 @@ BEGIN
 		USING (
 			SELECT 
 				[Index], [Id], [State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], 
-				--[Memo], [LinesCustody1], [LinesCustody2], [LinesCustody3],
-				--[LinesReference1], [LinesReference2], [LinesReference3],
-				-- RowNumber should be for inserted only, 
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + 
 				-- and max(Id) per transaction type.
 					(SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents) As [SerialNumber]
@@ -56,11 +53,11 @@ BEGIN
 		WHEN NOT MATCHED THEN
 			INSERT (
 				[TenantId],[State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], [SerialNumber], 
-				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
+				[AssigneeId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
 			)
 			VALUES (
 				@TenantId, s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber], 
-				@Now, @UserId, @Now, @UserId
+				@UserId,		@Now,		@UserId,	@Now,			@UserId
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;

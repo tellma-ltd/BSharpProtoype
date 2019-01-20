@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Resource__UnitOfMeasure]
-(
+﻿CREATE FUNCTION [dbo].[fn_Resource__UnitOfMeasure] (
 	@Resource int
 )
 RETURNS NVARCHAR(255)
@@ -8,10 +7,9 @@ BEGIN
 	DECLARE @Result NVARCHAR(255)
 
 	SELECT @Result = U.Code
-	FROM [dbo].[Resources] R JOIN [dbo].[MeasurementUnits] U ON R.[MeasurementUnitId] = U.Id
-	AND R.TenantId = U.TenantId
+	FROM [dbo].[Resources] R
+	JOIN [dbo].[MeasurementUnits] U ON R.[MeasurementUnitId] = U.Id
 	WHERE R.Id = @Resource
 
 	RETURN @Result
-
-END
+END;

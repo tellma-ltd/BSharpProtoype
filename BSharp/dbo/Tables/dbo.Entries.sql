@@ -29,6 +29,8 @@
 	CONSTRAINT [FK_Entries_Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_Notes]		FOREIGN KEY ([TenantId], [NoteId])		REFERENCES [dbo].[Notes] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_AccountsNotes] FOREIGN KEY ([TenantId], [AccountId], [NoteId], [Direction]) REFERENCES [dbo].[AccountsNotes] ([TenantId], [AccountId], [NoteId], [Direction]),
+	CONSTRAINT [FK_Entries_CreatedBy] FOREIGN KEY ([TenantId], [CreatedBy])		REFERENCES [dbo].[Users] ([TenantId], [Id]),
+	CONSTRAINT [FK_Entries_ModifiedBy] FOREIGN KEY ([TenantId], [ModifiedBy])	REFERENCES [dbo].[Users] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE INDEX [IX_Entries_PK] ON [dbo].[Entries] ([TenantId], [LineId], [EntryNumber]);

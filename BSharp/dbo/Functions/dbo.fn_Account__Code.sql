@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Account__Code]
-(
+﻿CREATE FUNCTION [dbo].[fn_Account__Code] (
 	@AccountId NVARCHAR(255)
 )
 RETURNS NVARCHAR(255)

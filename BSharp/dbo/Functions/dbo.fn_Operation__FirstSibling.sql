@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Operation__FirstSibling]
-(
+﻿CREATE FUNCTION [dbo].[fn_Operation__FirstSibling] (
 	@OperationId int
 )
 RETURNS INT
@@ -22,4 +21,4 @@ BEGIN
 			WHERE [Id] = @OperationId
 		)
 	) END;
-END
+END;

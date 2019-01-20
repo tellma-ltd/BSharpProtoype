@@ -18,6 +18,6 @@ BEGIN
 	END
 
 	RETURN @Result;
-END
+END;
 -- Source (N'LeaseIn', N'Acquisition', N'Production')
 --Purpose (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')

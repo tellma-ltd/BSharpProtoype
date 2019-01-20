@@ -1,5 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_EndDateTime__Frequency_Duration_StartDateTime]
-(
+﻿CREATE FUNCTION [dbo].[fn_EndDateTime__Frequency_Duration_StartDateTime] (
 	@Frequency		NVARCHAR (255),
 	@Duration		INT,
 	@StartDateTime	DATETIMEOFFSET (7)
