@@ -12,7 +12,7 @@ AS
 
 	SELECT @PermissionsResultJson = (
 		SELECT *, N'Unchanged' As [EntityState]
-		FROM [dbo].Permissions
+		FROM [dbo].[Permissions]
 		WHERE [RoleId] IN (
 			SELECT [Id]
 			FROM @Ids

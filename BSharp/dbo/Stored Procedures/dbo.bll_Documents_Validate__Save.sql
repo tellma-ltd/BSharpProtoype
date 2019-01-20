@@ -11,8 +11,8 @@ SET NOCOUNT ON;
 
 	-- (FE Check) If Resource = functional currency, the value must match the quantity
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + ']' As [Key], N'Error_TheAmount0DoesNotMatchTheValue' As [ErrorName],
 				E.[Amount] AS Argument1, E.[Value] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -40,8 +40,8 @@ SET NOCOUNT ON;
 	
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheAccount0IsInactive' As [ErrorName],
 				BE.[Name] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -52,8 +52,8 @@ SET NOCOUNT ON;
 
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNote0IsInactive' As [ErrorName],
 				E.[NoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -64,8 +64,8 @@ SET NOCOUNT ON;
 
 	-- Note Id is missing when required
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNoteIsRequired' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -76,8 +76,8 @@ SET NOCOUNT ON;
 
 	-- Invalid Note Id
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNote0Incorrect' As [ErrorName],
 				E.[NoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -89,8 +89,8 @@ SET NOCOUNT ON;
 
 	-- Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -102,8 +102,8 @@ SET NOCOUNT ON;
 
 		-- RelatedReference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedReference' As [Key], N'Error_TheRelatedReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -115,8 +115,8 @@ SET NOCOUNT ON;
 
 	-- RelatedAgent is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAgentId' As [Key], N'Error_TheRelatedAgentIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -128,8 +128,8 @@ SET NOCOUNT ON;
 	
 	-- RelatedResource is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedResourceId' As [Key], N'Error_TheRelatedResourceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -141,8 +141,8 @@ SET NOCOUNT ON;
 
 	-- RelatedAmount is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].[' + 
-				CAST(L.[Index] AS NVARCHAR(255)) + '].[' +
+	SELECT '[' + CAST(L.[DocumentIndex] AS NVARCHAR(255)) + '].Lines[' + 
+				CAST(L.[Index] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
@@ -152,5 +152,4 @@ SET NOCOUNT ON;
 	AND (AM.RelatedAmountLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	
-
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

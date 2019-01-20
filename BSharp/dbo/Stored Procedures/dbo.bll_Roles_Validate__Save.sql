@@ -8,6 +8,12 @@ SET NOCOUNT ON;
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
     INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
+    SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_0IsInactive' As [ErrorName], CAST([Id] As NVARCHAR(255)) As [Argument1]
+    FROM @Roles
+    WHERE Id IN (SELECT Id from [dbo].[Roles] WHERE IsActive = 0)
+	OPTION(HASH JOIN);
+
+    INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
     SELECT '[' + CAST([Id] AS NVARCHAR(255)) + '].Id' As [Key], N'Error_TheId0WasNotFound' As [ErrorName], CAST([Id] As NVARCHAR(255)) As [Argument1]
     FROM @Roles
     WHERE Id Is NOT NULL
@@ -82,12 +88,13 @@ SET NOCOUNT ON;
 
 	-- No inactive view
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(P.[RoleIndex] AS NVARCHAR(255)) + '].[' + 
+	SELECT '[' + CAST(P.[HeaderIndex] AS NVARCHAR(255)) + '].Permissions[' + 
 				CAST(P.[Index] AS NVARCHAR(255)) + '].ViewId' As [Key], N'Error_TheView0IsInactive' As [ErrorName],
 				P.[ViewId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Permissions P
-	JOIN [dbo].[Views] V ON P.[ViewId] = V.[Id]
-	WHERE (V.IsActive = 0)
+	WHERE P.ViewId NOT IN (
+		SELECT [Id] FROM dbo.[Views] WHERE IsActive = 1
+		)
 	AND (P.[EntityState] IN (N'Inserted', N'Updated'));
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

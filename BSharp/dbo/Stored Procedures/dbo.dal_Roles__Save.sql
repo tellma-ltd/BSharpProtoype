@@ -9,7 +9,7 @@ BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
 
-	DELETE FROM [dbo].Permissions
+	DELETE FROM [dbo].[Permissions]
 	WHERE [Id] IN (SELECT [Id] FROM @Permissions WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
@@ -50,7 +50,7 @@ BEGIN
 		USING (
 			SELECT L.[Index], L.[Id], II.[Id] AS [RoleId], [ViewId], [Level], [Criteria], [Memo]
 			FROM @Permissions L
-			JOIN @IndexedIds II ON L.RoleIndex = II.[Index]
+			JOIN @IndexedIds II ON L.[HeaderIndex] = II.[Index]
 			WHERE L.[EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON t.Id = s.Id
 		WHEN MATCHED THEN

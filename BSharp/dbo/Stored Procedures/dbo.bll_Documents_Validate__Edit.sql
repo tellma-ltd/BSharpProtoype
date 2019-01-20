@@ -24,7 +24,7 @@ SET NOCOUNT ON;
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Lines[' + CAST(L.[Id] AS NVARCHAR(255)) + '].[' +
+		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Lines[' + CAST(L.[Id] AS NVARCHAR(255)) + '].Entries[' +
 		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0Entry1TheAccount0IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, E.[EntryNumber] AS Argument2, A.[Name] AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
@@ -37,7 +37,7 @@ SET NOCOUNT ON;
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Lines[' + CAST(L.[Id] AS NVARCHAR(255)) + '].[' +
+		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Lines[' + CAST(L.[Id] AS NVARCHAR(255)) + '].Entries[' +
 		CAST(E.[Id] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheDocument0Entry1TheNote0IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, E.[EntryNumber] AS Argument2, N.[Name] AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
