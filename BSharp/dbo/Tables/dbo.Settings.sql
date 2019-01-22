@@ -8,4 +8,3 @@
 	[ModifiedBy]	NVARCHAR(450)		NOT NULL,
 	CONSTRAINT [PK_Settings] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Field] ASC)
 );
-

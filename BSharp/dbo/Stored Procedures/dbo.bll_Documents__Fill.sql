@@ -1,16 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
 	@Documents [dbo].[DocumentList] READONLY, 
 	@Lines [dbo].[LineList] READONLY, 
-	@Entries [dbo].[EntryList] READONLY,
+	@Entries [dbo].[SpecialEntryList] READONLY,
 	@WideLines [dbo].[WideLineList] READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
 	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
-DECLARE @DocumentsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @EntriesLocal [dbo].[EntryList],
+DECLARE @DocumentsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @EntriesLocal [dbo].[SpecialEntryList],
 		@WideLinesLocal [dbo].[WideLineList], @DocumentLineTypesLocal [dbo].[DocumentLineTypeList];
-
+/*
 BEGIN 
 	INSERT INTO @DocumentsLocal SELECT * FROM @Documents WHERE [EntityState] <> N'Deleted';
 	INSERT INTO @DocumentLineTypesLocal SELECT * FROM @DocumentLineTypes WHERE [EntityState] <> N'Deleted';
@@ -46,7 +46,7 @@ BEGIN
 	FROM @WideLines WHERE [EntityState] <> N'Deleted'
 	AND LineType IN (
 		SELECT LineType
-		FROM [dbo].[LineTypeCalculationsView] 
+		FROM [dbo].[LineTypeSpecifications] 
 		Group BY LineType
 		Having Count(*) > = 3
 		)
@@ -127,7 +127,7 @@ BEGIN
 		E.[RelatedAgentId] = CASE WHEN DLT.[RelatedAgentId] IS NOT NULL THEN DLT.[RelatedAgentId] ELSE E.[RelatedAgentId] END,
 		E.[RelatedResourceId] = CASE WHEN DLT.[RelatedResourceId] IS NOT NULL THEN DLT.[RelatedResourceId] ELSE E.[RelatedResourceId] END,
 		E.[RelatedAmount] = CASE WHEN DLT.[RelatedAmount] IS NOT NULL THEN DLT.[RelatedAmount] ELSE E.[RelatedAmount] END
-	FROM @EntriesLocal E 
+	FROM @EntriesLocal E
 	JOIN @LinesLocal L ON L.[Index] = E.LineIndex
 	JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
 	JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType]
@@ -200,15 +200,15 @@ BEGIN
 							END)
 		FROM @EntriesLocal E 
 		JOIN @LinesLocal L ON L.[Index] = E.LineIndex
-		JOIN dbo.LineTypeCalculationsView LC ON L.LineType = LC.LineType AND E.EntryNumber = LC.EntryNumber
+		JOIN dbo.LineTypeSpecifications LC ON L.LineType = LC.LineType AND E.EntryNumber = LC.EntryNumber
 		JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
 		JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType]
 	--select * from @EntriesLocalW;
 	END
 	--SELECT * FROM @DocumentsLocal; SELECT * FROM @LinesLocal; SELECT * FROM @EntriesLocal;
-
+	/*
 	BEGIN -- Fill entries using dynamic SQL
-		DECLARE @LineType NVARCHAR(255), @EntryNumber TINYINT, @Sql NVARCHAR(MAX), @EntriesTransit dbo.EntryList;
+		DECLARE @LineType NVARCHAR(255), @EntryNumber TINYINT, @Sql NVARCHAR(MAX), @EntriesTransit dbo.[SpecialEntryList];
 		SELECT @LineType = Min(LineType) FROM @DocumentLineTypesLocal;
 		WHILE @LineType IS NOT NULL
 		BEGIN
@@ -251,7 +251,7 @@ BEGIN
 			SET @LineType = (SELECT Min(LineType) FROM @DocumentLineTypesLocal WHERE LineType > @LineType);
 		END
 	END
-
+	*/
 	UPDATE E 
 	SET [Value] = [Amount]
 	FROM @EntriesLocal E
@@ -298,3 +298,4 @@ BEGIN
 	SELECT @EntriesResultJson = (SELECT * FROM @EntriesLocal FOR JSON PATH);
 	--PRINT @DocumentsResultJson;
 END
+*/

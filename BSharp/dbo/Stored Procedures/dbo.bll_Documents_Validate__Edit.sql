@@ -30,8 +30,8 @@ SET NOCOUNT ON;
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
 	JOIN dbo.Lines L ON D.[Id] = L.[DocumentId]
-	JOIN dbo.Entries E ON L.[Id] = E.[LineId]
-	JOIN dbo.Accounts A ON E.AccountId = A.Id
+	JOIN dbo.[SpecialEntries] E ON L.[Id] = E.[LineId]
+	JOIN dbo.[Accounts] A ON E.[AccountId] = A.Id
 	WHERE (A.IsActive = 0);
 
 	-- No inactive note
@@ -43,7 +43,7 @@ SET NOCOUNT ON;
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
 	JOIN dbo.Lines L ON D.[Id] = L.[DocumentId]
-	JOIN dbo.Entries E ON L.[Id] = E.[LineId]
+	JOIN dbo.[SpecialEntries] E ON L.[Id] = E.[LineId]
 	JOIN dbo.Notes N ON E.NoteId = N.Id
 	WHERE (N.IsActive = 0);
 

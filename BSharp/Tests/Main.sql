@@ -31,12 +31,13 @@ BEGIN TRY
 		:r .\04_Agents.sql
 		:r .\05_Places.sql
 		:r .\10_Documents.sql
-
-	SELECT @fromDate = '2017.02.01', @toDate = '2024.03.01'
-	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
-	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
-	SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
-	SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
+	--SELECT * FROM Documents;
+	--SELECT * FROM Entries;
+	SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
+	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+	--EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
+	--SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
+	--SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
 	--DECLARE @i int = 0;
 	--SELECT @fromDate = '2017.01.1'; SELECT @toDate = DATEADD(DAY, 90, @fromDate);
@@ -46,7 +47,7 @@ BEGIN TRY
 	--	SELECT @fromDate = DATEADD(DAY, 90, @fromDate), @toDate = DATEADD(DAY, 90, @toDate);
 	--	SET @i = @i + 1;
 	--END
-	--	SELECT * FROM dbo.[fi_AssetRegister]('2017.02.01', '2018.02.01');
+	--SELECT * FROM dbo.[fi_AssetRegister]('2017.02.01', '2018.02.01');
 	--SELECT @fromDate = '2017.01.01', @toDate = '2024.01.01';
 	--SELECT * FROM dbo.fi_AssetRegister(@fromDate, @toDate);
 	--SELECT * from dbo.fi_Account__Statement(N'BalancesWithBanks', @CBEETB, @ETB, @fromDate, @toDate) ORDER BY StartDateTime;

@@ -3,7 +3,7 @@
 	[DocumentIndex]		INT				NOT NULL,
 	[Id]				INT,
 	[DocumentId]		INT,
-	[LineType]			NVARCHAR(255)	NOT NULL DEFAULT (N'ManualJournalLine'),
+	[LineType]			NVARCHAR(255)	NOT NULL,
 	[BaseLineId]		INT,
 	[ScalingFactor]		FLOAT,
 	[Memo]				NVARCHAR (255),

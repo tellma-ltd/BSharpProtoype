@@ -19,4 +19,3 @@ CREATE INDEX [IX_AssignmentsHistory__AssigneeId] ON [dbo].[AssignmentsHistory]([
 GO
 CREATE INDEX [IX_AssignmentsHistory__AssignedBy] ON [dbo].[AssignmentsHistory]([TenantId] ASC, [AssignedBy] ASC);
 GO
-

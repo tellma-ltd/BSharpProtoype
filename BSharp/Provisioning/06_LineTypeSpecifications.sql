@@ -1,53 +1,240 @@
 ﻿DECLARE @LineTypeSpecifications TABLE (
-	[LineType]							NVARCHAR (255)	NOT NULL,
-	[EntryNumber]						TINYINT			NOT NULL,
-	[Definition]						NVARCHAR (255)	NOT NULL DEFAULT(N'Calculation'),
-	[OperationCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[OperationExpression]				NVARCHAR (MAX),
-	[AccountCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[AccountExpression]					NVARCHAR (MAX),
-	[CustodyCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[CustodyExpression]					NVARCHAR (MAX),
-	[ResourceCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[ResourceExpression]				NVARCHAR (MAX),
-	[DirectionCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[DirectionExpression]				NVARCHAR (MAX),
-	[AmountCalculationBase]				NVARCHAR (255)	DEFAULT(N'Input'),
-	[AmountExpression]					NVARCHAR (MAX),
-	[ValueCalculationBase]				NVARCHAR (255)	DEFAULT(N'Input'),
-	[ValueExpression]					NVARCHAR (MAX),
-	[NoteCalculationBase]				NVARCHAR (255)	DEFAULT(N'Input'),
-	[NoteExpression]					NVARCHAR (MAX),
-	[ReferenceCalculationBase]			NVARCHAR (255)	DEFAULT(N'Input'),
-	[ReferenceExpression]				NVARCHAR (MAX),
-	[RelatedReferenceCalculationBase]	NVARCHAR (255)	DEFAULT(N'Input'),
-	[RelatedReferenceExpression]		NVARCHAR (MAX),
-	[RelatedAgentCalculationBase]		NVARCHAR (255)	DEFAULT(N'Input'),
-	[RelatedAgentExpression]			NVARCHAR (MAX),
-	[RelatedResourceCalculationBase]	NVARCHAR (255)	DEFAULT(N'Input'),
-	[RelatedResourceExpression]			NVARCHAR (MAX),
-	[RelatedAmountCalculationBase]		NVARCHAR (255)	DEFAULT(N'Input'),
-	[RelatedAmountExpression]			NVARCHAR (MAX),
-	PRIMARY KEY CLUSTERED ([LineType] ASC, [EntryNumber] ASC, [Definition] ASC)
+	[LineType]					NVARCHAR (255),
+	[AppendSQL]					NVARCHAR (MAX) SPARSE,
+-- For Account, It might be better to use normalized version: Transaction Type, Resource Type, etc, and conclude the IFRS accordingly.
+	[Operation1Label]			NVARCHAR (255) SPARSE,
+	[Operation1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Account1Label]				NVARCHAR (255) SPARSE,
+	[Account1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Custody1Label]				NVARCHAR (255) SPARSE,
+	[Custody1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Resource1Label]			NVARCHAR (255) SPARSE,
+	[Resource1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Direction1Label]			NVARCHAR (255) SPARSE,
+	[Direction1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Amount1Label]				NVARCHAR (255) SPARSE,
+	[Amount1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Value1Label]				NVARCHAR (255) SPARSE,
+	[Value1FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Note1Label]				NVARCHAR (255) SPARSE,
+	[Note1FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Reference1Label]			NVARCHAR (255) SPARSE,
+	[Reference1FillSQL]			NVARCHAR (MAX) SPARSE,
+	[RelatedReference1Label]	NVARCHAR (255) SPARSE,
+	[RelatedReference1FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAgent1Label]		NVARCHAR (255) SPARSE,
+	[RelatedAgent1FillSQL]		NVARCHAR (MAX) SPARSE,
+	[RelatedResource1Label]		NVARCHAR (255) SPARSE,
+	[RelatedResource1FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAmount1Label]		NVARCHAR (255) SPARSE,
+	[RelatedAmount1FillSQL]		NVARCHAR (MAX) SPARSE,
+-- Entry 2
+	[Operation2Label]			NVARCHAR (255) SPARSE,
+	[Operation2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Account2Label]				NVARCHAR (255) SPARSE,
+	[Account2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Custody2Label]				NVARCHAR (255) SPARSE,
+	[Custody2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Resource2Label]			NVARCHAR (255) SPARSE,
+	[Resource2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Direction2Label]			NVARCHAR (255) SPARSE,
+	[Direction2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Amount2Label]				NVARCHAR (255) SPARSE,
+	[Amount2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Value2Label]				NVARCHAR (255) SPARSE,
+	[Value2FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Note2Label]				NVARCHAR (255) SPARSE,
+	[Note2FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Reference2Label]			NVARCHAR (255) SPARSE,
+	[Reference2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[RelatedReference2Label]	NVARCHAR (255) SPARSE,
+	[RelatedReference2FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAgent2Label]		NVARCHAR (255) SPARSE,
+	[RelatedAgent2FillSQL]		NVARCHAR (MAX) SPARSE,
+	[RelatedResource2Label]		NVARCHAR (255) SPARSE,
+	[RelatedResource2FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAmount2Label]		NVARCHAR (255) SPARSE,
+	[RelatedAmount2FillSQL]		NVARCHAR (MAX) SPARSE,
+-- Entry 3
+	[Operation3Label]			NVARCHAR (255) SPARSE,
+	[Operation3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Account3Label]				NVARCHAR (255) SPARSE,
+	[Account3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Custody3Label]				NVARCHAR (255) SPARSE,
+	[Custody3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Resource3Label]			NVARCHAR (255) SPARSE,
+	[Resource3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Direction3Label]			NVARCHAR (255) SPARSE,
+	[Direction3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Amount3Label]				NVARCHAR (255) SPARSE,
+	[Amount3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Value3Label]				NVARCHAR (255) SPARSE,
+	[Value3FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Note3Label]				NVARCHAR (255) SPARSE,
+	[Note3FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Reference3Label]			NVARCHAR (255) SPARSE,
+	[Reference3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[RelatedReference3Label]	NVARCHAR (255) SPARSE,
+	[RelatedReference3FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAgent3Label]		NVARCHAR (255) SPARSE,
+	[RelatedAgent3FillSQL]		NVARCHAR (MAX) SPARSE,
+	[RelatedResource3Label]		NVARCHAR (255) SPARSE,
+	[RelatedResource3FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAmount3Label]		NVARCHAR (255) SPARSE,
+	[RelatedAmount3FillSQL]		NVARCHAR (MAX) SPARSE,
+-- Entry 4
+	[Operation4Label]			NVARCHAR (255) SPARSE,
+	[Operation4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Account4Label]				NVARCHAR (255) SPARSE,
+	[Account4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Custody4Label]				NVARCHAR (255) SPARSE,
+	[Custody4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Resource4Label]			NVARCHAR (255) SPARSE,
+	[Resource4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Direction4Label]			NVARCHAR (255) SPARSE,
+	[Direction4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Amount4Label]				NVARCHAR (255) SPARSE,
+	[Amount4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[Value4Label]				NVARCHAR (255) SPARSE,
+	[Value4FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Note4Label]				NVARCHAR (255) SPARSE,
+	[Note4FillSQL]				NVARCHAR (MAX) SPARSE,
+	[Reference4Label]			NVARCHAR (255) SPARSE,
+	[Reference4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[RelatedReference4Label]	NVARCHAR (255) SPARSE,
+	[RelatedReference4FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAgent4Label]		NVARCHAR (255) SPARSE,
+	[RelatedAgent4FillSQL]		NVARCHAR (MAX) SPARSE,
+	[RelatedResource4Label]		NVARCHAR (255) SPARSE,
+	[RelatedResource4FillSQL]	NVARCHAR (MAX) SPARSE,
+	[RelatedAmount4Label]		NVARCHAR (255) SPARSE,
+	[RelatedAmount4FillSQL]		NVARCHAR (MAX) SPARSE,
+	PRIMARY KEY CLUSTERED ([LineType] ASC)
 );
-INSERT @LineTypeSpecifications (
-	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression], [NoteCalculationBase], [NoteExpression]) VALUES
-	(N'IssueOfEquity', 1,			N'Equal',				N'BalancesWithBanks',	N'Input',					NULL,				N'Equal',					N'+1',					N'Equal',			N'ProceedsFromIssuingShares'),
-	(N'IssueOfEquity', 2,			N'Equal',				N'IssuedCapital',		N'FromCode',				N'CMNSTCK',			N'Equal',					N'-1',					N'Equal',			N'IssueOfEquity');
+INSERT @LineTypeSpecifications ([LineType], --N'IssueOfEquity'
+	[Operation1Label],
+		[Account1FillSQL],
+	[Custody1Label],
+		[Resource1FillSQL],
+		[Direction1FillSQL],
+	[Amount1Label],
+	[Value1Label],
+		[Note1FillSQL],
+	[Reference1Label],
+		[Operation2FillSQL],
+		[Account2FillSQL],
+	[Custody2Label],
+		[Resource2FillSQL],
+		[Direction2FillSQL],
+	[Amount2Label],
+		[Value2FillSQL],
+		[Note2FillSQL]
+)
+VALUES(N'IssueOfEquity',
+-- Entry 1
+	N'Operation',
+		N'(
+		SELECT CASE (SELECT PlaceType FROM dbo.Custodies WHERE [Id] = [Custody1])
+					WHEN N''BankAccount'' THEN N''BalancesWithBanks''
+					WHEN N''CashSafe'' THEN N''CasnOnHand''			
+		)', 
+	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount, or Petty Cash
+		N'(SELECT ResourceId FROM dbo.Custodies WHERE Id = [Custody1]',
+		N'+1',
+	N'AmountDeposited',
+	N'EquivalentFunctional',
+		N'ProceedsFromIssuingShares',
+	N'Reference #',
+-- Entry 2
+		N'Operation1',
+		N'IssuedCapital',
+	N'Shareholder',
+		N'(SELECT Id FROM dbo.Resources WHERE [Code] = N''CMNSTCK'')',
+		N'-1', 
+	N'NumberOfShares',
+		N'Value1',
+		N'IssueOfEquity'
+);
 
--- Supplier, Invoice #, Invoice Amount, Amount Withheld,	WT Ref,	Amount Paid,	Check Ref
--- Custody 1, Ref 1		Amount 1,		Amount 2,			Ref 2,	Amount 3,		Ref 3
-INSERT @LineTypeSpecifications (
-	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression], [RelatedAmountCalculationBase], [RelatedAmountExpression], [RelatedAgentCalculationBase], [RelatedAgentExpression]) VALUES
-	(N'PaymentIssueToSupplier', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL,				N'Equal',						NULL,						N'Equal',						NULL),
-	(N'PaymentIssueToSupplier', 2,	N'Equal',	N'CurrentWithholdingTaxPayable',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			NULL,				N'Related',						N'1',						N'Related',						N'1'),
-	(N'PaymentIssueToSupplier', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',N'Equal',N'-1',		N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
-
-INSERT @LineTypeSpecifications (
-	[LineType],		[EntryNumber], [AccountCalculationBase], [AccountExpression], [ResourceCalculationBase], [ResourceExpression], [DirectionCalculationBase], [DirectionExpression],  [AmountCalculationBase], [AmountExpression], [NoteCalculationBase], [NoteExpression], [RelatedAmountCalculationBase], [RelatedAmountExpression], [RelatedAgentCalculationBase], [RelatedAgentExpression]) VALUES
-	(N'ForeignTransitPurchase', 1,  N'Equal', N'CurrentPayablesToTradeSuppliers',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'+1',					N'Input',				NULL,				N'Equal',			NULL,				N'Equal',						NULL,						N'Equal',						NULL),
-	(N'ForeignTransitPurchase', 2,	N'Equal',	N'CurrentWithholdingTaxPayable',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',	N'Equal',					N'-1',					N'Input',				NULL,				N'Equal',			NULL,				N'Related',						N'1',						N'Related',						N'1'),
-	(N'ForeignTransitPurchase', 3,	N'FromSQL',	N'dbo.f0_CashAccount__Custody_Resource(E.CustodyId, E.ResourceId)',	N'FromSQL', N'[dbo].fn_FunctionalCurrency()',N'Equal',N'-1',		N'Input',				NULL,				N'Equal',			N'PaymentsToSuppliersForGoodsAndServices',N'Equal',	NULL,						N'Equal',						N'1');
+INSERT @LineTypeSpecifications ([LineType],
+-- Entry 1
+	[Operation1Label],
+		[Account1FillSQL],
+	[Custody1Label],
+	[Resource1Label],
+		[Direction1FillSQL],
+	[Amount1Label],
+	[Value1Label],
+	[Reference1Label],
+-- Entry 2
+		[Operation2FillSQL],
+		[Account2FillSQL],
+		[Custody2FillSQL],
+		[Resource2FillSQL],
+		[Direction2FillSQL],
+	[Amount2Label],
+		[Value2FillSQL],
+	[Reference2Label],
+		[RelatedReference2FillSQL],
+		[RelatedAgent2FillSQL],
+		[RelatedAmount2FillSQL],
+-- Entry 3
+		[Operation3FillSQL],
+		[Account3FillSQL],
+	[Custody3Label],
+		[Resource3FillSQL],
+		[Direction3FillSQL],
+	[Amount3Label],
+	[Value3Label],
+	[Reference3Label],
+		[Note3FillSQL],
+		[RelatedAgent3FillSQL]
+)
+/*
+There are some flaws in the design below. Each WT should correspond to a given invoice.
+In the [Invoice] tab, we can add VAT.
+In the [WT] tab, we can refer to WT-subject invoices
+In the [payment] tab, we show supplier only, because the check can be against several invoices
+However, we are using this as a proof of concept of many SQL tricks
+*/
+VALUES( N'PaymentIssueToSupplier',
+-- Entry 1
+	N'Operation',
+		N'CurrentPayablesToTradeSuppliers',
+	N'Supplier',
+	N'InvoiceCurrency',
+		N'+1',
+	N'AmountPaid',
+	N'EquivalentFunctional',
+	N'InvoiceNumber',
+-- Entry 2
+		N'Operation1',
+		N'CurrentWithholdingTaxPayable',
+		N'(SELECT Id FROM dbo.Custodies WHERE [Name] = N''ERCA'')',
+		N'SELECT [Id] FROM dbo.Resources WHERE [Code] = (SELECT [Value] FROM dbo.Settings WHERE [Key] = ''FunctionalCurrencyCode'' )',
+		N'-1',	
+	N'WithheldAmount',
+		N'Amount2',
+	N'WithholdingReceiptNumber',
+		N'Reference1',
+		N'Custody1',
+		N'Amount1',
+-- Entry 3
+		N'Operation1',
+		N'(
+		SELECT CASE (SELECT PlaceType FROM dbo.Custodies WHERE [Id] = [Custody3])
+					WHEN N''BankAccount'' THEN N''BalancesWithBanks''
+					WHEN N''CashSafe'' THEN N''CasnOnHand''			
+		)',
+	N'PaidFromAccount',
+		N'(SELECT ResourceId FROM dbo.Custodies WHERE Id = [Custody3]',
+		N'-1',
+	N'AmountPaid',
+	N'EquivalentFunctional',
+	N'CheckNumberReceiptNumber',
+		N'PaymentsToSuppliersForGoodsAndServices',
+		N'Agent1'
+)
 
 	/*
 INSERT @LineTypeSpecifications (
@@ -106,78 +293,169 @@ INSERT @LineTypeSpecifications (
 MERGE [dbo].[LineTypeSpecifications] AS t
 USING @LineTypeSpecifications AS s
 ON s.[LineType] = t.[LineType] 
-AND t.[EntryNumber] = s.[EntryNumber] 
-AND t.[Definition] = s.[Definition]
-WHEN MATCHED AND
-(
-	t.[OperationCalculationBase]				<>	s.[OperationCalculationBase]				OR
-	ISNULL(t.[OperationExpression], -1)			<>	ISNULL(s.[OperationExpression], -1)			OR
-	t.[AccountCalculationBase]					<>	s.[AccountCalculationBase]					OR
-	ISNULL(t.[AccountExpression], -1)			<>	ISNULL(s.[AccountExpression], -1)			OR
-	t.[CustodyCalculationBase]					<>	s.[CustodyCalculationBase]					OR
-	ISNULL(t.[CustodyExpression], -1)			<>	ISNULL(s.[CustodyExpression], -1)			OR
-	t.[ResourceCalculationBase]					<>	s.[ResourceCalculationBase]					OR
-	ISNULL(t.[ResourceExpression], -1)			<>	ISNULL(s.[ResourceExpression], -1)			OR
-	t.[DirectionCalculationBase]				<>	s.[DirectionCalculationBase]				OR
-	ISNULL(t.[DirectionExpression], -1)			<>	ISNULL(s.[DirectionExpression], -1)			OR
-	t.[AmountCalculationBase]					<>	s.[AmountCalculationBase]					OR
-	ISNULL(t.[AmountExpression], -1)			<>	ISNULL(s.[AmountExpression], -1)			OR
-	t.[ValueCalculationBase]					<>	s.[ValueCalculationBase]					OR
-	ISNULL(t.[ValueExpression], -1)				<>	ISNULL(s.[ValueExpression], -1)				OR
-	t.[NoteCalculationBase]						<>	s.[NoteCalculationBase]						OR
-	ISNULL(t.[NoteExpression], -1)				<>	ISNULL(s.[NoteExpression], -1)				OR
-	t.[RelatedReferenceCalculationBase]			<>	s.[RelatedReferenceCalculationBase]			OR
-	ISNULL(t.[RelatedReferenceExpression], -1)	<>	ISNULL(s.[RelatedReferenceExpression], -1)	OR
-	t.[RelatedAgentCalculationBase]				<>	s.[RelatedAgentCalculationBase]				OR
-	ISNULL(t.[RelatedAgentExpression], -1)		<>	ISNULL(s.[RelatedAgentExpression], -1)		OR
-	t.[RelatedResourceCalculationBase]			<>	s.[RelatedResourceCalculationBase]			OR
-    ISNULL(t.[RelatedResourceExpression], -1)	<>	ISNULL(s.[RelatedResourceExpression], -1)	OR
-	t.[RelatedAmountCalculationBase]			<>	s.[RelatedAmountCalculationBase]			OR
-	ISNULL(t.[RelatedAmountExpression], -1)		<>	ISNULL(s.[RelatedAmountExpression], -1)
-) THEN
+WHEN MATCHED THEN
 UPDATE SET
-  t.[OperationExpression]				=	s.[OperationExpression],
-  t.[AccountExpression]					=	s.[AccountExpression],
-  t.[CustodyExpression]					=	s.[CustodyExpression],
-  t.[ResourceExpression]				=	s.[ResourceExpression],
-  t.[DirectionExpression]				=	s.[DirectionExpression],
-  t.[AmountExpression]					=	s.[AmountExpression],
-  t.[ValueExpression]					=	s.[ValueExpression],
-  t.[NoteExpression]					=	s.[NoteExpression],
-  t.[RelatedReferenceExpression]		=	s.[RelatedReferenceExpression],
-  t.[RelatedAgentExpression]			=	s.[RelatedAgentExpression],
-  t.[RelatedResourceExpression]			=	s.[RelatedResourceExpression],
-  t.[RelatedAmountExpression]			=	s.[RelatedAmountExpression],
+	t.[AppendSQL]					= s.[AppendSQL],
+	t.[Operation1Label]				= s.[Operation1Label],
+	t.[Operation1FillSQL]			= s.[Operation1FillSQL],
+	t.[Account1Label]				= s.[Account1Label],
+	t.[Account1FillSQL]				= s.[Account1FillSQL],
+	t.[Custody1Label]				= s.[Custody1Label],
+	t.[Custody1FillSQL]				= s.[Custody1FillSQL],
+	t.[Resource1Label]				= s.[Resource1Label],
+	t.[Resource1FillSQL]			= s.[Resource1FillSQL],
+	t.[Direction1Label]				= s.[Direction1Label],
+	t.[Direction1FillSQL]			= s.[Direction1FillSQL],
+	t.[Amount1Label]				= s.[Amount1Label],
+	t.[Amount1FillSQL]				= s.[Amount1FillSQL],
+	t.[Value1Label]					= s.[Value1Label],
+	t.[Value1FillSQL]				= s.[Value1FillSQL],
+	t.[Note1Label]					= s.[Note1Label],
+	t.[Note1FillSQL]				= s.[Note1FillSQL],
+	t.[Reference1Label]				= s.[Reference1Label],
+	t.[Reference1FillSQL]			= s.[Reference1FillSQL],
+	t.[RelatedReference1Label]		= s.[RelatedReference1Label],
+	t.[RelatedReference1FillSQL]	= s.[RelatedReference1FillSQL],
+	t.[RelatedAgent1Label]			= s.[RelatedAgent1Label],
+	t.[RelatedAgent1FillSQL]		= s.[RelatedAgent1FillSQL],
+	t.[RelatedResource1Label]		= s.[RelatedResource1Label],
+	t.[RelatedResource1FillSQL]		= s.[RelatedResource1FillSQL],
+	t.[RelatedAmount1Label]			= s.[RelatedAmount1Label],
+	t.[RelatedAmount1FillSQL]		= s.[RelatedAmount1FillSQL],
 
-  t.[OperationCalculationBase]			=	s.[OperationCalculationBase],
-  t.[AccountCalculationBase]			=	s.[AccountCalculationBase],
-  t.[CustodyCalculationBase]			=	s.[CustodyCalculationBase],
-  t.[ResourceCalculationBase]			=	s.[ResourceCalculationBase],
-  t.[DirectionCalculationBase]			=	s.[DirectionCalculationBase],
-  t.[AmountCalculationBase]				=	s.[AmountCalculationBase],
-  t.[ValueCalculationBase]				=	s.[ValueCalculationBase],
-  t.[NoteCalculationBase]				=	s.[NoteCalculationBase],
-  t.[RelatedReferenceCalculationBase]	=	s.[RelatedReferenceCalculationBase],
-  t.[RelatedAgentCalculationBase]		=	s.[RelatedAgentCalculationBase],
-  t.[RelatedResourceCalculationBase]	=	s.[RelatedResourceCalculationBase],
-  t.[RelatedAmountCalculationBase]		=	s.[RelatedAmountCalculationBase]
+	t.[Operation2Label]				= s.[Operation2Label],
+	t.[Operation2FillSQL]			= s.[Operation2FillSQL],
+	t.[Account2Label]				= s.[Account2Label],
+	t.[Account2FillSQL]				= s.[Account2FillSQL],
+	t.[Custody2Label]				= s.[Custody2Label],
+	t.[Custody2FillSQL]				= s.[Custody2FillSQL],
+	t.[Resource2Label]				= s.[Resource2Label],
+	t.[Resource2FillSQL]			= s.[Resource2FillSQL],
+	t.[Direction2Label]				= s.[Direction2Label],
+	t.[Direction2FillSQL]			= s.[Direction2FillSQL],
+	t.[Amount2Label]				= s.[Amount2Label],
+	t.[Amount2FillSQL]				= s.[Amount2FillSQL],
+	t.[Value2Label]					= s.[Value2Label],
+	t.[Value2FillSQL]				= s.[Value2FillSQL],
+	t.[Note2Label]					= s.[Note2Label],
+	t.[Note2FillSQL]				= s.[Note2FillSQL],
+	t.[Reference2Label]				= s.[Reference2Label],
+	t.[Reference2FillSQL]			= s.[Reference2FillSQL],
+	t.[RelatedReference2Label]		= s.[RelatedReference2Label],
+	t.[RelatedReference2FillSQL]	= s.[RelatedReference2FillSQL],
+	t.[RelatedAgent2Label]			= s.[RelatedAgent2Label],
+	t.[RelatedAgent2FillSQL]		= s.[RelatedAgent2FillSQL],
+	t.[RelatedResource2Label]		= s.[RelatedResource2Label],
+	t.[RelatedResource2FillSQL]		= s.[RelatedResource2FillSQL],
+	t.[RelatedAmount2Label]			= s.[RelatedAmount2Label],
+	t.[RelatedAmount2FillSQL]		= s.[RelatedAmount2FillSQL],
+
+	t.[Operation3Label]				= s.[Operation3Label],
+	t.[Operation3FillSQL]			= s.[Operation3FillSQL],
+	t.[Account3Label]				= s.[Account3Label],
+	t.[Account3FillSQL]				= s.[Account3FillSQL],
+	t.[Custody3Label]				= s.[Custody3Label],
+	t.[Custody3FillSQL]				= s.[Custody3FillSQL],
+	t.[Resource3Label]				= s.[Resource3Label],
+	t.[Resource3FillSQL]			= s.[Resource3FillSQL],
+	t.[Direction3Label]				= s.[Direction3Label],
+	t.[Direction3FillSQL]			= s.[Direction3FillSQL],
+	t.[Amount3Label]				= s.[Amount3Label],
+	t.[Amount3FillSQL]				= s.[Amount3FillSQL],
+	t.[Value3Label]					= s.[Value3Label],
+	t.[Value3FillSQL]				= s.[Value3FillSQL],
+	t.[Note3Label]					= s.[Note3Label],
+	t.[Note3FillSQL]				= s.[Note3FillSQL],
+	t.[Reference3Label]				= s.[Reference3Label],
+	t.[Reference3FillSQL]			= s.[Reference3FillSQL],
+	t.[RelatedReference3Label]		= s.[RelatedReference3Label],
+	t.[RelatedReference3FillSQL]	= s.[RelatedReference3FillSQL],
+	t.[RelatedAgent3Label]			= s.[RelatedAgent3Label],
+	t.[RelatedAgent3FillSQL]		= s.[RelatedAgent3FillSQL],
+	t.[RelatedResource3Label]		= s.[RelatedResource3Label],
+	t.[RelatedResource3FillSQL]		= s.[RelatedResource3FillSQL],
+	t.[RelatedAmount3Label]			= s.[RelatedAmount3Label],
+	t.[RelatedAmount3FillSQL]		= s.[RelatedAmount3FillSQL],
+
+	t.[Operation4Label]				= s.[Operation4Label],
+	t.[Operation4FillSQL]			= s.[Operation4FillSQL],
+	t.[Account4Label]				= s.[Account4Label],
+	t.[Account4FillSQL]				= s.[Account4FillSQL],
+	t.[Custody4Label]				= s.[Custody4Label],
+	t.[Custody4FillSQL]				= s.[Custody4FillSQL],
+	t.[Resource4Label]				= s.[Resource4Label],
+	t.[Resource4FillSQL]			= s.[Resource4FillSQL],
+	t.[Direction4Label]				= s.[Direction4Label],
+	t.[Direction4FillSQL]			= s.[Direction4FillSQL],
+	t.[Amount4Label]				= s.[Amount4Label],
+	t.[Amount4FillSQL]				= s.[Amount4FillSQL],
+	t.[Value4Label]					= s.[Value4Label],
+	t.[Value4FillSQL]				= s.[Value4FillSQL],
+	t.[Note4Label]					= s.[Note4Label],
+	t.[Note4FillSQL]				= s.[Note4FillSQL],
+	t.[Reference4Label]				= s.[Reference4Label],
+	t.[Reference4FillSQL]			= s.[Reference4FillSQL],
+	t.[RelatedReference4Label]		= s.[RelatedReference4Label],
+	t.[RelatedReference4FillSQL]	= s.[RelatedReference4FillSQL],
+	t.[RelatedAgent4Label]			= s.[RelatedAgent4Label],
+	t.[RelatedAgent4FillSQL]		= s.[RelatedAgent4FillSQL],
+	t.[RelatedResource4Label]		= s.[RelatedResource4Label],
+	t.[RelatedResource4FillSQL]		= s.[RelatedResource4FillSQL],
+	t.[RelatedAmount4Label]			= s.[RelatedAmount4Label],
+	t.[RelatedAmount4FillSQL]		= s.[RelatedAmount4FillSQL]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-INSERT ([TenantId], [LineType], [EntryNumber], [Definition],
-	[OperationExpression], [AccountExpression], [CustodyExpression], [ResourceExpression], 
-	[DirectionExpression], [AmountExpression], [ValueExpression], [NoteExpression], [RelatedReferenceExpression], 
-	[RelatedAgentExpression], [RelatedResourceExpression], [RelatedAmountExpression],
-	[OperationCalculationBase], [AccountCalculationBase], [CustodyCalculationBase], [ResourceCalculationBase], 
-	[DirectionCalculationBase], [AmountCalculationBase],  [ValueCalculationBase],	 [NoteCalculationBase], [RelatedReferenceCalculationBase], 
-	[RelatedAgentCalculationBase], [RelatedResourceCalculationBase], [RelatedAmountCalculationBase]
+INSERT ([TenantId], [LineType], [AppendSQL],
+	[Operation1Label], [Operation1FillSQL], [Account1Label], [Account1FillSQL], [Custody1Label],
+	[Custody1FillSQL], [Resource1Label], [Resource1FillSQL], [Direction1Label], [Direction1FillSQL],
+	[Amount1Label], [Amount1FillSQL], [Value1Label], [Value1FillSQL], [Note1Label], [Note1FillSQL],
+	[Reference1Label], [Reference1FillSQL], [RelatedReference1Label], [RelatedReference1FillSQL],
+	[RelatedAgent1Label], [RelatedAgent1FillSQL], [RelatedResource1Label], [RelatedResource1FillSQL],
+	[RelatedAmount1Label], [RelatedAmount1FillSQL],
+	[Operation2Label], [Operation2FillSQL], [Account2Label], [Account2FillSQL], [Custody2Label],
+	[Custody2FillSQL], [Resource2Label], [Resource2FillSQL], [Direction2Label], [Direction2FillSQL],
+	[Amount2Label], [Amount2FillSQL], [Value2Label], [Value2FillSQL], [Note2Label], [Note2FillSQL],
+	[Reference2Label], [Reference2FillSQL], [RelatedReference2Label], [RelatedReference2FillSQL],
+	[RelatedAgent2Label], [RelatedAgent2FillSQL], [RelatedResource2Label], [RelatedResource2FillSQL],
+	[RelatedAmount2Label], [RelatedAmount2FillSQL],
+	[Operation3Label], [Operation3FillSQL], [Account3Label], [Account3FillSQL], [Custody3Label],
+	[Custody3FillSQL], [Resource3Label], [Resource3FillSQL], [Direction3Label], [Direction3FillSQL],
+	[Amount3Label], [Amount3FillSQL], [Value3Label], [Value3FillSQL], [Note3Label], [Note3FillSQL],
+	[Reference3Label], [Reference3FillSQL], [RelatedReference3Label], [RelatedReference3FillSQL],
+	[RelatedAgent3Label], [RelatedAgent3FillSQL], [RelatedResource3Label], [RelatedResource3FillSQL],
+	[RelatedAmount3Label], [RelatedAmount3FillSQL],
+	[Operation4Label], [Operation4FillSQL], [Account4Label], [Account4FillSQL], [Custody4Label],
+	[Custody4FillSQL], [Resource4Label], [Resource4FillSQL], [Direction4Label], [Direction4FillSQL],
+	[Amount4Label], [Amount4FillSQL], [Value4Label], [Value4FillSQL], [Note4Label], [Note4FillSQL],
+	[Reference4Label], [Reference4FillSQL], [RelatedReference4Label], [RelatedReference4FillSQL],
+	[RelatedAgent4Label], [RelatedAgent4FillSQL], [RelatedResource4Label], [RelatedResource4FillSQL],
+	[RelatedAmount4Label], [RelatedAmount4FillSQL]
 	)
-VALUES(@TenantId, s.[LineType], s.[EntryNumber], s.[Definition],
-	s.[OperationExpression], s.[AccountExpression], s.[CustodyExpression], s.[ResourceExpression], 
-	s.[DirectionExpression], s.[AmountExpression],  s.[ValueExpression], s.[NoteExpression], s.[RelatedReferenceExpression], 
-	s.[RelatedAgentExpression], s.[RelatedResourceExpression], s.[RelatedAmountExpression],
-	s.[OperationCalculationBase], s.[AccountCalculationBase], s.[CustodyCalculationBase], s.[ResourceCalculationBase], 
-	s.[DirectionCalculationBase], s.[AmountCalculationBase],  s.[ValueCalculationBase],	 s.[NoteCalculationBase], s.[RelatedReferenceCalculationBase], 
-	s.[RelatedAgentCalculationBase], s.[RelatedResourceCalculationBase], s.[RelatedAmountCalculationBase]
-	);
+VALUES(@TenantId, s.[LineType], s.[AppendSQL],
+	s.[Operation1Label], s.[Operation1FillSQL], s.[Account1Label], s.[Account1FillSQL], s.[Custody1Label],
+	s.[Custody1FillSQL], s.[Resource1Label], s.[Resource1FillSQL], s.[Direction1Label], s.[Direction1FillSQL],
+	s.[Amount1Label], s.[Amount1FillSQL], s.[Value1Label], s.[Value1FillSQL], s.[Note1Label], s.[Note1FillSQL],
+	s.[Reference1Label], s.[Reference1FillSQL], s.[RelatedReference1Label], s.[RelatedReference1FillSQL],
+	s.[RelatedAgent1Label], s.[RelatedAgent1FillSQL], s.[RelatedResource1Label], s.[RelatedResource1FillSQL],
+	s.[RelatedAmount1Label], s.[RelatedAmount1FillSQL],
+	s.[Operation2Label], s.[Operation2FillSQL], s.[Account2Label], s.[Account2FillSQL], s.[Custody2Label],
+	s.[Custody2FillSQL], s.[Resource2Label], s.[Resource2FillSQL], s.[Direction2Label], s.[Direction2FillSQL],
+	s.[Amount2Label], s.[Amount2FillSQL], s.[Value2Label], s.[Value2FillSQL], s.[Note2Label], s.[Note2FillSQL],
+	s.[Reference2Label], s.[Reference2FillSQL], s.[RelatedReference2Label], s.[RelatedReference2FillSQL],
+	s.[RelatedAgent2Label], s.[RelatedAgent2FillSQL], s.[RelatedResource2Label], s.[RelatedResource2FillSQL],
+	s.[RelatedAmount2Label], s.[RelatedAmount2FillSQL],
+	s.[Operation3Label], s.[Operation3FillSQL], s.[Account3Label], s.[Account3FillSQL], s.[Custody3Label],
+	s.[Custody3FillSQL], s.[Resource3Label], s.[Resource3FillSQL], s.[Direction3Label], s.[Direction3FillSQL],
+	s.[Amount3Label], s.[Amount3FillSQL], s.[Value3Label], s.[Value3FillSQL], s.[Note3Label], s.[Note3FillSQL],
+	s.[Reference3Label], s.[Reference3FillSQL], s.[RelatedReference3Label], s.[RelatedReference3FillSQL],
+	s.[RelatedAgent3Label], s.[RelatedAgent3FillSQL], s.[RelatedResource3Label], s.[RelatedResource3FillSQL],
+	s.[RelatedAmount3Label], s.[RelatedAmount3FillSQL],
+	s.[Operation4Label], s.[Operation4FillSQL], s.[Account4Label], s.[Account4FillSQL], s.[Custody4Label],
+	s.[Custody4FillSQL], s.[Resource4Label], s.[Resource4FillSQL], s.[Direction4Label], s.[Direction4FillSQL],
+	s.[Amount4Label], s.[Amount4FillSQL], s.[Value4Label], s.[Value4FillSQL], s.[Note4Label], s.[Note4FillSQL],
+	s.[Reference4Label], s.[Reference4FillSQL], s.[RelatedReference4Label], s.[RelatedReference4FillSQL],
+	s.[RelatedAgent4Label], s.[RelatedAgent4FillSQL], s.[RelatedResource4Label], s.[RelatedResource4FillSQL],
+	s.[RelatedAmount4Label], s.[RelatedAmount4FillSQL]
+);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

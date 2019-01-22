@@ -4,33 +4,28 @@ INSERT INTO @DSave(
 @DIdx, N'ManualJournal',	'2017.01.01',		N'Capital investment',	@Common
 );
 
-INSERT INTO @DLTSave(
-	[DocumentIndex],	[LineType]) VALUES(
-	@DIdx,				N'ManualJournalLine'
-);
-
-SELECT @LIdx = ISNULL(MAX([Index]), -1) + 1 FROM @LSave;
-INSERT INTO @LSave (
-	[Index],	[DocumentIndex],	[LineType]) VALUES (
-	@LIdx,		@DIdx,				N'ManualJournalLine'
-); -- Issue of Equity
+UPDATE @DSave -- Set End Date Time
+SET [EndDateTime] = 
+	[dbo].[fn_EndDateTime__Frequency_Duration_StartDateTime]([Frequency], [Duration], [StartDateTime])
 
 SELECT @EIdx = ISNULL(MAX([Index]), -1) + 1 FROM @ESave;
 INSERT INTO @ESave (
-[Index],	[LineIndex],EntryNumber,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
-(@EIdx,		@LIdx,		1,N'BalancesWithBanks',		@CBEUSD,		@USD,			+1,		100000, NULL,		N'ProceedsFromIssuingShares'),
-(@EIdx + 1, @LIdx,		2,N'IssuedCapital',			@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
-(@EIdx + 2, @LIdx,		3,N'IssuedCapital',			@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
+[Index],	[DocumentIndex], [OperationId], AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
+(@EIdx,		@DIdx,			@Common, N'BalancesWithBanks',	@CBEUSD,		@USD,			+1,		100000, 4700000,	N'ProceedsFromIssuingShares'),
+(@EIdx + 1, @DIdx,			@Common, N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
+(@EIdx + 2, @DIdx,			@Common, N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
 
---SELECT * FROM @DSave; SELECT * FROM @LSave; SELECT * FROM @ESave;
+
+
 EXEC [dbo].[api_Documents__Save]
-	@Documents = @DSave, @DocumentLineTypes = @DLTSave, @WideLines = @WLSave,
-	@Lines = @LSave, @Entries = @ESave,
+	@Documents = @DSave,-- @DocumentLineTypes = @DLTSave, @WideLines = @WLSave, @Lines = @LSave, 
+	@Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@DocumentsResultJson = @DResultJson OUTPUT, @LinesResultJson = @LResultJson OUTPUT, @EntriesResultJson = @EResultJson OUTPUT
+	@DocumentsResultJson = @DResultJson OUTPUT, --@LinesResultJson = @LResultJson OUTPUT, 
+	@EntriesResultJson = @EResultJson OUTPUT;
 
 	DELETE FROM @DSave; DELETE FROM @DLTSave; DELETE FROM @WLSave; DELETE FROM @LSave; DELETE FROM @ESave;
-
+--SELECT * FROM dbo.Documents
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
 	Print 'Capital Investment (M): Save'
@@ -47,7 +42,7 @@ EXEC [dbo].[api_Documents__Post]
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ReturnEntities = 0,
  	@DocumentsResultJson = @DResultJson OUTPUT,
-	@LinesResultJson = @LResultJson OUTPUT,
+	--@LinesResultJson = @LResultJson OUTPUT,
 	@EntriesResultJson = @EResultJson OUTPUT;
 
 IF @ValidationErrorsJson IS NOT NULL 

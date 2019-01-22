@@ -11,7 +11,7 @@
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedBy]	NVARCHAR(450)		NOT NULL,
 	CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Permissions_Level] CHECK ([Level] IN (N'Read', N'Create', N'ReadAndCreate', N'Update', N'Sign')),
+	CONSTRAINT [CK_Permissions_Level] CHECK ([Level] IN (N'Read', N'Create', N'ReadCreate', N'Update', N'Sign')),
 	CONSTRAINT [FK_Permissions_Roles] FOREIGN KEY ([TenantId], [RoleId]) REFERENCES [dbo].[Roles] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_Permissions_CreatedBy] FOREIGN KEY ([TenantId], [CreatedBy]) REFERENCES [dbo].[Users] ([TenantId], [Id]),
 	CONSTRAINT [FK_Permissions_ModifiedBy] FOREIGN KEY ([TenantId], [ModifiedBy]) REFERENCES [dbo].[Users] ([TenantId], [Id])

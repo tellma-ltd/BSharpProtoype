@@ -18,8 +18,9 @@ DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U i
 		--:r .\14_SalesCycle.sql
 		--:r .\12_ManualMisc.sql
 SELECT @fromDate = '2017.01.01', @toDate = '2017.01.31'
-SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [LineId], [EntryId];
-EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
+--SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+--SELECT * FROM dbo.Documents;
+--EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
 
 /*
 INSERT INTO @D2Save(

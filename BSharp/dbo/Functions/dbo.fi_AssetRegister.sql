@@ -14,6 +14,6 @@ RETURN
 	JOIN [dbo].[Resources] RR ON R.ServiceOfId = RR.Id
 	JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id
 	JOIN dbo.[Notes] N ON J.NoteId = N.Id
-	JOIN dbo.Accounts_H AH ON J.AccountId = AH.C
+	JOIN dbo.[Accounts_H] AH ON J.[AccountId] = AH.C
 	WHERE AH.P IN (N'PropertyPlantAndEquipment')
 	GROUP BY RR.[Name], J.[NoteId], MU.[Name];

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
 	@Documents [dbo].[DocumentList] READONLY, 
-	@Lines [dbo].[LineList] READONLY, 
+--	@Lines [dbo].[LineList] READONLY, 
 	@Entries [dbo].[EntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -20,10 +20,10 @@ BEGIN
 	--SET Mode = N'Void'
 	--WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
 
-	DELETE FROM [dbo].Lines
-	WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
+	--DELETE FROM [dbo].Lines
+	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
 
-	DELETE FROM [dbo].Entries
+	DELETE FROM [dbo].[Entries]
 	WHERE [Id] IN (SELECT [Id] FROM @Entries WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
@@ -40,7 +40,7 @@ BEGIN
 			FROM @Documents 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
-		WHEN MATCHED 
+		WHEN MATCHED
 		THEN
 			UPDATE SET
 				t.[State]				= s.[State],
@@ -62,43 +62,36 @@ BEGIN
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
 
-	INSERT INTO @LinesIndexedIds([Index], [Id])
-	SELECT x.[Index], x.[Id]
-	FROM
-	(
-		MERGE INTO [dbo].[Lines] AS t
-		USING (
-			SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [BaseLineId], [ScalingFactor], [Memo]
-			FROM @Lines L
-			JOIN @IndexedIds II ON L.DocumentIndex = II.[Index]
-			WHERE L.[EntityState] IN (N'Inserted', N'Updated')
-		) AS s ON t.Id = s.Id
-		WHEN MATCHED THEN
-			UPDATE SET 
-				t.[BaseLineId]		= s.[BaseLineId], 
-				t.[ScalingFactor]	= s.[ScalingFactor],
-				t.[Memo]			= s.[Memo],
-				t.[ModifiedAt]		= @Now,
-				t.[ModifiedBy]		= @UserId
-		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId)
-		OUTPUT s.[Index], inserted.[Id]
-	) As x
+	--MERGE INTO [dbo].[Lines] AS t
+	--USING (
+	--	SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [BaseLineId], [ScalingFactor], [Memo]
+	--	FROM @Lines L
+	--	JOIN @IndexedIds II ON L.DocumentIndex = II.[Index]
+	--	WHERE L.[EntityState] IN (N'Inserted', N'Updated')
+	--) AS s ON t.Id = s.Id
+	--WHEN MATCHED THEN
+	--	UPDATE SET 
+	--		t.[BaseLineId]		= s.[BaseLineId], 
+	--		t.[ScalingFactor]	= s.[ScalingFactor],
+	--		t.[Memo]			= s.[Memo],
+	--		t.[ModifiedAt]		= @Now,
+	--		t.[ModifiedBy]		= @UserId
+	--WHEN NOT MATCHED THEN
+	--	INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+	--	VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
 
-	MERGE INTO [dbo].Entries AS t
+	MERGE INTO [dbo].[Entries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [LineId], E.[EntryNumber], E.[OperationId], E.[Reference],
+			E.[Id], II.[Id] AS [DocumentId], E.[OperationId], E.[Reference],
 			E.[AccountId], E.[CustodyId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
 			E.[RelatedReference], E.[RelatedAgentId], E.[RelatedResourceId], E.[RelatedAmount]
 		FROM @Entries E
-		JOIN @LinesIndexedIds II ON E.LineIndex = II.[Index]
+		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
 		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET 
-			t.[EntryNumber]			= s.[EntryNumber],
 			t.[OperationId]			= s.[OperationId],
 			t.[Reference]			= s.[Reference],
 			t.[AccountId]			= s.[AccountId],
@@ -115,11 +108,11 @@ BEGIN
 			t.[ModifiedAt]			= @Now,
 			t.[ModifiedBy]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [LineId], [EntryNumber], [OperationId], [Reference],
+		INSERT ([TenantId], [DocumentId], [OperationId], [Reference],
 				[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
 				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
 				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-		VALUES (@TenantId, s.[LineId], s.[EntryNumber], s.[OperationId], s.[Reference],
+		VALUES (@TenantId, s.[DocumentId], s.[OperationId], s.[Reference],
 				s.[AccountId], s.[CustodyId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
 				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],
 				@Now, @UserId, @Now, @UserId);

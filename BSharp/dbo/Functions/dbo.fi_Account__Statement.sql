@@ -30,6 +30,6 @@ RETURN
 		RelatedResourceId,
 		RelatedAmount
 	FROM [dbo].[fi_Journal](@fromDate, @toDate)
-	WHERE AccountId = @Account
+	WHERE [AccountId] = @Account
 	AND (@CustodyId = 0 OR CustodyId = @CustodyId)
 	AND (@ResourceId = 0 OR ResourceId = @ResourceId);

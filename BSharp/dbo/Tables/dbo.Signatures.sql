@@ -1,5 +1,4 @@
-﻿CREATE TABLE [dbo].[Signatures]
-(
+﻿CREATE TABLE [dbo].[Signatures] (
 	[TenantId]		INT,
 	[Id]			INT IDENTITY (1, 1),
 	[DocumentId]	INT					NOT NULL,

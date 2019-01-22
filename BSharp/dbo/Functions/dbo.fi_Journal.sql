@@ -8,16 +8,13 @@ RETURN
 		D.Id,
 		D.[DocumentType],
 		D.SerialNumber,
-		--D.ResponsibleAgentId,
-		--D.ForwardedToAgentId,
-		L.Id As [LineId],
+		D.AssigneeId,
 		CONVERT(NVARCHAR(255), 
 		(CASE WHEN @fromDate > D.StartDateTime THEN @fromDate ELSE D.StartDateTime END), 102) As StartDateTime,
 		CONVERT(NVARCHAR(255), 			
 		(CASE WHEN @toDate < D.EndDateTime THEN @toDate ELSE D.EndDateTime END), 102) As EndDateTime,
-		L.Memo,
+		E.Memo,
 		E.Id As EntryId,
-		E.EntryNumber,
 		E.OperationId,
 		E.Reference,
 		E.AccountId,
@@ -96,11 +93,9 @@ RETURN
 		E.RelatedResourceId,
 		E.RelatedAmount
 	FROM 
-		[dbo].Entries E
-		INNER JOIN [dbo].[Lines] L ON E.TenantId = L.TenantId AND E.LineId = L.Id
-		INNER JOIN [dbo].[Documents] D ON L.TenantId = D.TenantId AND L.DocumentId = D.Id
-		INNER JOIN [dbo].[Resources] R ON E.ResourceId = R.Id
+		[dbo].[Entries] E
+		INNER JOIN [dbo].[Documents] D ON E.DocumentId = D.Id
 	WHERE
-		D.Mode = N'Posted' AND 
-		D.State = N'Voucher' AND
+		D.Mode		= N'Posted' AND 
+		D.[State]	= N'Voucher' AND
 		D.StartDateTime < @toDate AND D.EndDateTime >= @fromDate;

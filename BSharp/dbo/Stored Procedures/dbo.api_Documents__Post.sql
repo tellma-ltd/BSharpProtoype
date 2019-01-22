@@ -3,7 +3,7 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
-	@LinesResultJson NVARCHAR(MAX) OUTPUT,
+--	@LinesResultJson NVARCHAR(MAX) OUTPUT,
 	@EntriesResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -45,7 +45,7 @@ BEGIN
 		EXEC [dbo].[dal_Documents__Select] 
 			@Ids = @Ids, 
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-			@LinesResultJson = @LinesResultJson OUTPUT,
+		--	@LinesResultJson = @LinesResultJson OUTPUT,
 			@EntriesResultJson = @EntriesResultJson OUTPUT;
 	END
 END;

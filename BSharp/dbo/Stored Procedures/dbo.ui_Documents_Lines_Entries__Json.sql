@@ -15,6 +15,7 @@ WITH (
 	[EndDateTime]			DATETIMEOFFSET (7) '$.EndDateTime',
 	[Mode]					NVARCHAR (255) '$.Mode',
 	[SerialNumber]			INT '$.SerialNumber',
+	[AssigneeId]			NVARCHAR(450) '$.AssigneeId',
 	[CreatedAt]				DATETIMEOFFSET(7) '$.CreatedAt',
 	[CreatedBy]				NVARCHAR(450) '$.CreatedBy',
 	[ModifiedAt]			DATETIMEOFFSET(7) '$.ModifiedAt',

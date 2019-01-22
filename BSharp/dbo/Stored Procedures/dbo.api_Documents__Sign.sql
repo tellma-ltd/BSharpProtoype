@@ -27,7 +27,7 @@ BEGIN
 		EXEC [dbo].[dal_Documents__Select] 
 			@Ids = @Ids, 
 			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-			@LinesResultJson = @LinesResultJson OUTPUT,
+		--	@LinesResultJson = @LinesResultJson OUTPUT,
 			@EntriesResultJson = @EntriesResultJson OUTPUT;
 	END
 END;
