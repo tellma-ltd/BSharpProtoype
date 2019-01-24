@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
 	@Documents [dbo].[DocumentList] READONLY, 
---	@Lines [dbo].[LineList] READONLY, 
+	@Lines [dbo].[LineList] READONLY, 
 	@Entries [dbo].[EntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -83,7 +83,7 @@ BEGIN
 	MERGE INTO [dbo].[Entries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [DocumentId], E.[OperationId], E.[Reference],
+			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[OperationId], E.[Reference],
 			E.[AccountId], E.[CustodyId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
 			E.[RelatedReference], E.[RelatedAgentId], E.[RelatedResourceId], E.[RelatedAmount]
 		FROM @Entries E
@@ -108,11 +108,11 @@ BEGIN
 			t.[ModifiedAt]			= @Now,
 			t.[ModifiedBy]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [DocumentId], [OperationId], [Reference],
+		INSERT ([TenantId], [DocumentId], [LineType], [OperationId], [Reference],
 				[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
 				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
 				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-		VALUES (@TenantId, s.[DocumentId], s.[OperationId], s.[Reference],
+		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[OperationId], s.[Reference],
 				s.[AccountId], s.[CustodyId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
 				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],
 				@Now, @UserId, @Now, @UserId);

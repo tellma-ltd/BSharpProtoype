@@ -5,7 +5,7 @@
 	DECLARE @DocumentId int = 0, @State NVARCHAR(255), @DocumentType NVARCHAR(255), @SerialNumber int, @Mode NVARCHAR(255), @ResponsibleAgent int;
 	DECLARE @LineNumber int = 0, @DocumentOffset int = 0;
 	DECLARE @EntryNumber int = 0, @Operation int, @Memo nvarchar(255), @Reference NVARCHAR(255), @Account nvarchar(255), @Custody int, @Resource int, @Direction smallint, @Amount money, @Value money, @Note nvarchar(255);
-	DECLARE @Documents DocumentList, @Lines LineList, @Entries EntryList, @WideLines WideLineList, @ValidationMessage nvarchar(1024);
+	DECLARE @Documents DocumentList, @Lines LineList, @Entries EntryList, @ValidationMessage nvarchar(1024);
 	
 	-- List of Concepts
 	DECLARE @EventDateTime datetimeoffset(7), @Supplier int, @Customer int, @Employee int, @Shareholder int, @Investment int, @Debtor int, @Creditor int;
@@ -57,7 +57,7 @@ BEGIN
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime);
 
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
 	INSERT INTO @WideLines(DocumentId, LineNumber, [DocumentType], ResponsibleAgentId, StartDateTime, EndDateTime, Operation1, Custody1, Amount1, Custody2, Reference2)
 	VALUES(@DocumentId, @LineNumber, @DocumentType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 
@@ -69,7 +69,7 @@ BEGIN
 	SELECT @ResponsibleAgent = @TizitaNigussie, @Supplier = @Lifan, @StartDatetime = '2018.01.03', @EndDatetime = DATEADD(D, 1, @StartDatetime), @Memo = N'Assets Purchase';
 
 -- Witholding tax: 
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006';
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @Supplier = @Lifan, @AmountWithheld = 610, @WithholdingNumber = N'0006';
 	SELECT @TaxableAmount = @AmountWithheld/0.02;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [DocumentType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, 
 		Operation1, Custody1, Amount1, Reference2, RelatedAmount2, RelatedReference2)
@@ -141,17 +141,17 @@ BEGIN
 	VALUES(@DocumentId, @LineNumber, @DocumentType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Department, @Attendance, @Employee);
 
 	SELECT @DocumentType = N'EmployeeIncomeTax';
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Employee = @MohamadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @Employee = @MohamadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [DocumentType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
 	VALUES(@DocumentId, @LineNumber, @DocumentType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Employee = @AhmadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @Employee = @AhmadAkra, @EmployeeTaxableIncome = 7000, @EmployeeIncomeTax = 1105;
 	INSERT INTO @WideLines(DocumentId, LineNumber, [DocumentType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody1, Amount1, RelatedAmount2)
 	VALUES(@DocumentId, @LineNumber, @DocumentType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @Employee, @EmployeeIncomeTax, @EmployeeTaxableIncome);
 /*
 --	SELECT @LineType = N'CashPaymentToEmployee';
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @Supplier = @Lifan, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @Supplier = @Lifan, @Payment = 34465, @Cashier = @TigistNegash, @CashReceiptNumber = N'7023'
 	INSERT INTO @WideLines(LineNumber, LineType, Operation1, Custody1, Amount1, Custody2, Reference2)
 	VALUES(		@LineNumber, @LineType, @Operation, @Supplier, @Payment, @Cashier, @CashReceiptNumber);
 */
@@ -163,7 +163,7 @@ BEGIN
 
 	SELECT @DocumentType = N'InventoryTransferOrder';
 -- Payment
-	SELECT @LineNumber = @LineNumber + 1, @Operation = @Common, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
+	SELECT @LineNumber = @LineNumber + 1, @Operation = @Unspecified, @IssuingWarehouse = @RawMaterialsWarehouse, @ReceivingWarehouse = @FinishedGoodsWarehouse, @Item = @TeddyBear, @Quantity = 10, @Value = 100, @EventDateTime = '2018.01.02'
 	INSERT INTO @WideLines(DocumentId, LineNumber, [DocumentType], ResponsibleAgentId, StartDateTime, EndDateTime, Memo, Operation1, Custody2, Custody1, Resource1, Amount1, Value1)
 	VALUES(@DocumentId, @LineNumber, @DocumentType, @ResponsibleAgent, @StartDateTime, @EndDateTime, @Memo, @Operation, @IssuingWarehouse, @ReceivingWarehouse, @Item, @Quantity, @Value);
 END

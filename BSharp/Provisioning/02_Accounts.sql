@@ -119,6 +119,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'121110', N'PropertyIntendedForSaleInOrdinaryCourseOfBusiness', N'Property intended for sale in ordinary course of business')
 ,(N'Regulatory', 1, N'121111', N'CurrentInventoriesInTransit', N'Current inventories in transit')
 ,(N'Regulatory', 1, N'121112', N'OtherInventories', N'Other current inventories')
+,(N'Extension', 1, N'1211121', N'UnassignedLabor', N'Unassigned labor')
 ,(N'Regulatory', 1, N'1212', N'TradeAndOtherCurrentReceivables', N'Trade and other current receivables')
 ,(N'Regulatory', 1, N'12121', N'CurrentTradeReceivables', N'Current trade receivables')
 ,(N'Extension', 1, N'121211', N'CurrentReceivablesFromTradeCustomers', N'Current trade customers receivables')

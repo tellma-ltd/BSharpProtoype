@@ -1,10 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents__Edit]
+﻿CREATE PROCEDURE [dbo].[api_Documents__Unpost]
 	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
-	@LinesResultJson NVARCHAR(MAX) OUTPUT,
-	@EntriesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
 	DECLARE @Ids [dbo].[IntegerList];
@@ -17,7 +15,7 @@ BEGIN
 		RETURN;
 
 	-- Validate, checking available signatures for transaction type
-	EXEC [dbo].[bll_Documents_Validate__Edit]
+	EXEC [dbo].[bll_Documents_Validate__Unpost]
 		@Documents = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
@@ -32,10 +30,6 @@ BEGIN
 		SELECT [Id] 
 		FROM @Documents;
 
-		EXEC [dbo].[dal_Documents__Select] 
-			@Ids = @Ids, 
-			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-			--@LinesResultJson = @LinesResultJson OUTPUT,
-			@EntriesResultJson = @EntriesResultJson OUTPUT;
+		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids, @ResultJson = @ResultJson OUTPUT;
 	END
 END;

@@ -1,6 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @OperationsDTO dbo.[OperationList];
-	DECLARE @Common int, @Existing int, @Expansion int, @ExecOffice int, @Sales int, @Production int;
+	DECLARE @Unspecified int, @Existing int, @Expansion int;
+
 END
 BEGIN -- Inserting
 	INSERT INTO @OperationsDTO
@@ -9,12 +10,7 @@ BEGIN -- Inserting
 		(N'Existin',			0),
 		(N'Fake',				0),
 		(N'Expansion',			0),
-		(N'WSI Common',			0),
-		(N'Executive Office',	4),
-		(N'HR Department',		4),
-		(N'Sales & Marketing',	4),
-		(N'Production',			4),
-		(N'MIS Department',		4);
+		(N'Unspecified',		0);
 
 	EXEC [dbo].[api_Operations__Save]
 		@Entities = @OperationsDTO,
@@ -90,9 +86,6 @@ IF @DebugOperations = 1
 	SELECT * FROM [dbo].[Operations];
 
 SELECT 
-	@Common = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'WSI Common'), 
+	@Unspecified = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Unspecified'), 
 	@Existing = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Existing'),
-	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion'),
-	@ExecOffice = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion'),
-	@Sales = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Sales & Marketing'),
-	@Production = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Production');
+	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion');

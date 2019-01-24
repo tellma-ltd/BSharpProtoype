@@ -23,9 +23,8 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 	IF (@ReturnEntities = 1)
 	BEGIN
 		INSERT INTO @Ids([Id])
-		SELECT [Id] 
-		FROM OpenJson(@IndexedIdsJson)
-		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+		SELECT [Id]
+		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 
 		EXEC [dbo].[dal_Agents__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;

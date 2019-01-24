@@ -2,9 +2,7 @@
 	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
-	@DocumentsResultJson NVARCHAR(MAX) OUTPUT,
---	@LinesResultJson NVARCHAR(MAX) OUTPUT,
-	@EntriesResultJson NVARCHAR(MAX) OUTPUT
+	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
 	DECLARE @Ids [dbo].[IntegerList];
@@ -42,10 +40,6 @@ BEGIN
 		SELECT [Id] 
 		FROM @Documents;
 
-		EXEC [dbo].[dal_Documents__Select] 
-			@Ids = @Ids, 
-			@DocumentsResultJson = @DocumentsResultJson OUTPUT,
-		--	@LinesResultJson = @LinesResultJson OUTPUT,
-			@EntriesResultJson = @EntriesResultJson OUTPUT;
+		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids, @ResultJson = @ResultJson OUTPUT;
 	END
 END;

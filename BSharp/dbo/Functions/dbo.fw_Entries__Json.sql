@@ -1,29 +1,31 @@
 ﻿CREATE FUNCTION [dbo].[fw_Entries__Json] (
-	@EntriesResultJson NVARCHAR(MAX)
+	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE
 AS
 RETURN
-SELECT *
-	FROM OpenJson(@EntriesResultJson)
-	WITH (
-		[Index]					INT '$.Index',
-		[LineIndex]				INT '$.LineIndex',
-		[Id]					INT '$.Id',
-		[LineId]				INT '$.LineId',
-		[EntryNumber]			INT '$.EntryNumber',
-		[OperationId]			INT '$.OperationId',
-		[Reference]				NVARCHAR (255) '$.Reference',
-		[AccountId]				NVARCHAR (255) '$.AccountId',
-		[CustodyId]				INT '$.CustodyId',
-		[ResourceId]			INT '$.ResourceId',
-		[Direction]				SMALLINT '$.Direction',
-		[Amount]				MONEY '$.Amount',
-		[Value]					VTYPE '$.Value',
-		[NoteId]				NVARCHAR (255) '$.NoteId',
-		[RelatedReference]		NVARCHAR (255) '$.RelatedReference',
-		[RelatedAgentId]		INT '$.RelatedAgentId',
-		[RelatedResourceId]		INT '$.RelatedResourceId',
-		[RelatedAmount]			MONEY '$.RelatedAmount',
-		[EntityState]			NVARCHAR(255) '$.EntityState'
-	);
+	SELECT c.*
+	FROM OPENJSON (@json) p
+		CROSS APPLY OpenJson(p.value, N'$.Entries') 
+		WITH (
+			[Index]					INT,
+			[DocumentIndex]			INT,
+			[Id]					INT,
+			[DocumentId]			INT,
+			[LineType]				NVARCHAR (255),
+			[OperationId]			INT,
+			[AccountId]				NVARCHAR (255),
+			[CustodyId]				INT,
+			[ResourceId]			INT,
+			[Direction]				SMALLINT,
+			[Amount]				MONEY,
+			[Value]					VTYPE,
+			[NoteId]				NVARCHAR (255),
+			[Memo]					NVARCHAR (255),
+			[Reference]				NVARCHAR (255),
+			[RelatedReference]		NVARCHAR (255),
+			[RelatedAgentId]		INT,
+			[RelatedResourceId]		INT,
+			[RelatedAmount]			MONEY,
+			[EntityState]			NVARCHAR(255)
+		) c;

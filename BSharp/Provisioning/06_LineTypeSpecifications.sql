@@ -133,13 +133,12 @@ INSERT @LineTypeSpecifications ([LineType], --N'IssueOfEquity'
 VALUES(N'IssueOfEquity',
 -- Entry 1
 	N'Operation',
+		N'BalancesWithBanks', 
+	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
 		N'(
-		SELECT CASE (SELECT PlaceType FROM dbo.Custodies WHERE [Id] = [Custody1])
-					WHEN N''BankAccount'' THEN N''BalancesWithBanks''
-					WHEN N''CashSafe'' THEN N''CasnOnHand''			
-		)', 
-	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount, or Petty Cash
-		N'(SELECT ResourceId FROM dbo.Custodies WHERE Id = [Custody1]',
+			SELECT Min(ResourceId) FROM dbo.CustodiesResources
+			WHERE CustodyId = [Custody1] And RelationType = N''BankAccount''
+		)',
 		N'+1',
 	N'AmountDeposited',
 	N'EquivalentFunctional',
@@ -149,15 +148,13 @@ VALUES(N'IssueOfEquity',
 		N'Operation1',
 		N'IssuedCapital',
 	N'Shareholder',
-		N'(SELECT Id FROM dbo.Resources WHERE [Code] = N''CMNSTCK'')',
+		N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
 		N'-1', 
 	N'NumberOfShares',
 		N'Value1',
 		N'IssueOfEquity'
 );
-
-INSERT @LineTypeSpecifications ([LineType],
--- Entry 1
+INSERT @LineTypeSpecifications ([LineType], --N'PaymentIssueToSupplier',
 	[Operation1Label],
 		[Account1FillSQL],
 	[Custody1Label],
@@ -235,16 +232,54 @@ VALUES( N'PaymentIssueToSupplier',
 		N'PaymentsToSuppliersForGoodsAndServices',
 		N'Agent1'
 )
+INSERT @LineTypeSpecifications ([LineType], --N'Overtime'
+	[Operation1Label],
+		[Account1FillSQL],
+	[Custody1Label],
+		[Resource1FillSQL],
+		[Direction1FillSQL],
+	[Amount1Label],
+		[Value1FillSQL],
+		[Reference1FillSQL],
+	[RelatedAgent1Label],
+	[RelatedResource1Label],
+		[AppendSQL]
+)
+/* Logic: We assume overtime agreement is in functional currency.
+Receipt
+Dr. Inventory	Dept		Resource:Labor. 
+Cr. Accrual		Employee	Resource:Overtime.
+Invoice
+Dr. Accrual 	Employee	Resource:Overtime.
+Cr. A/P			Employee	Money				Ref:YYYYMM
+Payment
+Dr. A/P			Employee	Resource:Invoice currency
+Cr. Cash		Bank account Resource:Currency
+*/
+VALUES(N'Overtime',
+	N'Operation',
+		N'UnassignedLabor',
+	N'Department', -- Where Custody Type = Dept
+		N'(SELECT [Id] FROM dbo.Resources WHERE SystemCode = N''Labor'')',
+		N'+1',
+	N'NumberOfHours',
+		N'(
+			SELECT Amount1 * [Rate] FROM dbo.CustodiesResources
+			WHERE CustodyId = Custody1 AND ResourceId = Resource1 And RelationType = N''Employee''
+		)',
+		N'Year(D.StartTime) * 100 + Month(D.StartTime)',
+	N'Employee',
+	N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
+		N'
+		INSERT INTO @EntriesLocal(Id, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, Value, Reference)
+		SELECT Id+1, OperationId, N''ShorttermEmployeeBenefitsAccruals'', RelatedAgentId, RelatedResourceId, +1, Amount, Value, Reference
+		FROM @EntriesLocal
+		'
+);
 
 	/*
 INSERT @LineTypeSpecifications (
 	[LineType], [EntryNumber], [Definition], [Operation], [Account], [Custody], [ResourceExpression], [Direction], [Amount], [Value], [Note], [RelatedReference], [RelatedAgent], [RelatedResource], [RelatedAmount]) VALUES	
-	(N'IssueOfEquity', 1, N'Label', NULL, NULL, N'Bank Account', NULL, NULL, N'Payment', NULL, NULL, NULL, NULL, NULL, NULL),
-	(N'IssueOfEquity', 2, N'Label', NULL, NULL, N'Customer',	NULL, NULL,		NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-	(N'PaymentIssueToSupplier', 1, N'Label', NULL, NULL, N'Supplier', N'Currency', NULL, N'Amount', NULL, NULL, NULL, NULL, NULL, NULL),
-	(N'PaymentIssueToSupplier', 1, N'Validation', NULL, N'''PurchaseContracts''', NULL, NULL, N'1', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(N'PaymentIssueToSupplier', 2, N'Label', NULL, NULL, N'Cash Custody', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(N'PaymentIssueToSupplier', 2, N'Validation', NULL, N'''CashOnHand''', NULL, NULL, N'-1', NULL, NULL, N'''PaymentsToSuppliersForGoodsAndServices''', NULL, NULL, NULL, NULL),
 	(N'PaymentReceiptFromCustomer', 1, N'Calculation', NULL, N'''CashOnHand''', NULL, N'[dbo].fn_FunctionalCurrency()', N'1', NULL, N'[dbo].Amount(1,@Entries)', N'''ReceiptsFromSalesOfGoodsAndRenderinfServices''', NULL, NULL, NULL, NULL),
 	(N'PaymentReceiptFromCustomer', 1, N'Label', NULL, NULL, N'Cash Custody', NULL, NULL, N'Payment', NULL, NULL, NULL, NULL, NULL, NULL),
 	(N'PaymentReceiptFromCustomer', 2, N'Calculation', NULL, N'''SalesContracts''', NULL, N'[dbo].fn_FunctionalCurrency()', N'-1', N'[dbo].Amount(1,@Entries)', N'[dbo].Amount(2,@Entries)', NULL, NULL, NULL, NULL, NULL),

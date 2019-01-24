@@ -82,7 +82,6 @@
     <Build Include="dbo\Tables\dbo.Accounts.sql" />
     <Build Include="dbo\Tables\dbo.Notes.sql" />
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
-    <Build Include="dbo\Tables\dbo.SpecialEntries.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
     <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
@@ -92,7 +91,6 @@
     <Build Include="dbo\Tables\dbo.Operations.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
     <Build Include="dbo\Views\dbo.IndividualsView.sql" />
-    <Build Include="dbo\Views\dbo.WideLinesView.sql" />
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
@@ -152,12 +150,9 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources_Validate__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
     <Build Include="dbo\User Defined Types\dbo.LineList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.SpecialEntryList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.WideLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_WideLines__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Mode__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Deactivate.sql" />
@@ -196,7 +191,7 @@
     <Build Include="dbo\Tables\dbo.LineTypes.sql" />
     <Build Include="dbo\Functions\dbo.fn_EndDateTime__StartDateTime_Frequency_Duration.sql" />
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Json.sql" />
-    <None Include="dbo\Stored Procedures\dbo.bll_Documents__Fill.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents__Fill.sql" />
     <Build Include="dbo\Functions\dbo.fw_Documents__Json.sql" />
     <Build Include="dbo\Functions\dbo.fw_Lines__Json.sql" />
     <Build Include="dbo\Functions\dbo.fw_Entries__Json.sql" />
@@ -221,8 +216,8 @@
     <Build Include="dbo\User Defined Types\dbo.UserList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Assign.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Edit.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Edit.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Unpost.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Unpost.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Sign.sql" />

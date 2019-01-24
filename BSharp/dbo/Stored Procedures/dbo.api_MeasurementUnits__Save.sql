@@ -23,8 +23,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 	BEGIN
 		INSERT INTO @Ids([Id])
 		SELECT [Id] 
-		FROM OpenJson(@IndexedIdsJson)
-		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 
 		EXEC [dbo].[dal_MeasurementUnits__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;

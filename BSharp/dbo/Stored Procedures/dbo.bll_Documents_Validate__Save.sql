@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Save]
 	@Documents [dbo].[DocumentList] READONLY,
-	--@WideLines [dbo]. [dbo].WideLineList READONLY,
+	@Lines [dbo].LineList READONLY,
 	@Entries [dbo].[EntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS

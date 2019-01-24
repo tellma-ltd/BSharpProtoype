@@ -1,18 +1,14 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @DSave [dbo].[DocumentList];
-	DECLARE @LSave [dbo].LineList, @WLSave [dbo].[WideLineList];
-	DECLARE @ESave [dbo].EntryList, @DLTSave [dbo].DocumentLineTypeList;
-
-	DECLARE @DResultJson NVARCHAR(MAX), @LResultJson NVARCHAR(MAX), @EResultJson NVARCHAR(MAX), @WLResultJson NVARCHAR(MAX);;
-
+	DECLARE @DSave [dbo].[DocumentList], @LSave [dbo].LineList, @ESave [dbo].EntryList, @DLTSave [dbo].DocumentLineTypeList;
+	DECLARE @ResultJson NVARCHAR(MAX);
 	DECLARE @Docs [dbo].[IndexedIdList], @DIdx INT, @LIdx INT, @WLIdx INT, @EIdx INT;
 END
 -- get acceptable document types; and user permissions and general settings;
 -- Journal Vouchers
 DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U int, @PU_3 int, @P2_3 int,
 		@d1 datetime = '2017.02.01', @d2 datetime = '2022.02.01', @dU datetime = '2018.02.01', @d3 datetime = '2023.02.01';
-		:r .\11M_Financing.sql
-		--:r .\11W_Financing.sql
+		--:r .\11M_Financing.sql
+		:r .\11W_Financing.sql
 		--:r .\40_PurchasingCycle.sql
 		--:r .\13_ProductionCycle.sql
 		--:r .\14_SalesCycle.sql
@@ -52,7 +48,7 @@ UPDATE @D2Save SET [StartDateTime] = '2018.01.02', [EntityState] = N'Updated'
 UPDATE @E2Save SET [EntityState] = N'Deleted' WHERE [Index] = 1;
 INSERT INTO @E2Save
 ([Id], [LineIndex], [LineId], EntryNumber, OperationId,		AccountId,			CustodyId,		ResourceId,	Direction, Amount, [Value],		NoteId,				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]) VALUES
-(NULL, 0,			1, 			4,			@Common, N'IssuedCapital',	@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',	NULL,				NULL,				NULL,				NULL,			N'Inserted');
+(NULL, 0,			1, 			4,			@Unspecified, N'IssuedCapital',	@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',	NULL,				NULL,				NULL,				NULL,			N'Inserted');
 	
 UPDATE @L2Save SET [EntityState] = N'Updated'
 WHERE [EntityState] = N'Unchanged'

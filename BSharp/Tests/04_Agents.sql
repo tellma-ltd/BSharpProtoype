@@ -6,8 +6,8 @@
 			@MesfinWolde int;
 	DECLARE @BananIT int, @WaliaSteel int, @Lifan int, @Sesay int, @ERCA int, @Paint int, @Plastic int, @CBE int, @AWB int,
 			@NIB int, @Regus int;
-	DECLARE @GeneralManager int, @ProductionManager int, @SalesManager int, @FinanceManager int, @HRManager int,
-			@PurchasingManager int;
+	DECLARE @ExecutiveOffice int, @Production int, @SalesAndMarketing int, @Finance int, @HR int,
+			@MaterialsAndPurchasing int;
 END
 BEGIN -- Insert individuals and organizations
 	INSERT INTO @AgentsDTO
@@ -38,12 +38,12 @@ BEGIN -- Insert individuals and organizations
 	(N'Organization', N'NIB',			0,		NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Regus',			0,		N'0008895353',		N'AA, Girgi, 22, New',		NULL,		NULL,	NULL),
 	
-	(N'Position', N'General Manager',	1,		NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Production Manager', 0,		NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Sales & Marketing Manager', 0,	NULL,					NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Finance Manager',	0,		NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Human Resources Manager', 0,NULL,						NULL,				NULL,		NULL,	NULL),
-	(N'Position', N'Materials & Purchasing Manager', 0,NULL,				NULL,				NULL,		NULL,	NULL);
+	(N'Organization', N'Executive Office',1,	NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Production Department',0,NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Sales & Marketing Department',0,NULL,				NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Finance Deparment',0,	NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Human Resources Department',0,NULL,					NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Materials & Purchasing Department',0,NULL,			NULL,				NULL,		NULL,	NULL);
 
 	EXEC [dbo].[api_Agents__Save]
 		@Entities = @AgentsDTO,
@@ -130,12 +130,12 @@ SELECT
 	@NIB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'NIB'),
 	@Regus = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Regus'),
 
-	@GeneralManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'General Manager'),
-	@ProductionManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Production Manager'),
-	@SalesManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sales & Marketing Manager'),
-	@FinanceManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finance Manager'),
-	@HRManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Human Resources Manager'),
-	@PurchasingManager = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Manager');
+	@ExecutiveOffice = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Executive Office'),
+	@Production = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Production Department'),
+	@SalesAndMarketing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sales & Marketing Department'),
+	@Finance = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finance Department'),
+	@HR = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Human Resources Department'),
+	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Department');
 
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].Users)

@@ -31,11 +31,10 @@ BEGIN TRY
 		:r .\04_Agents.sql
 		:r .\05_Places.sql
 		:r .\10_Documents.sql
-	--SELECT * FROM Documents;
-	--SELECT * FROM Entries;
-	SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
-	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
-	--EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
+
+	--SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
+	--SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+	EXEC rpt_TrialBalance @fromDate = '2017.01.01', @toDate = '2017.02.01', @ByCustody = 0, @ByResource = 0;
 	--SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
 	--SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
@@ -51,7 +50,7 @@ BEGIN TRY
 	--SELECT @fromDate = '2017.01.01', @toDate = '2024.01.01';
 	--SELECT * FROM dbo.fi_AssetRegister(@fromDate, @toDate);
 	--SELECT * from dbo.fi_Account__Statement(N'BalancesWithBanks', @CBEETB, @ETB, @fromDate, @toDate) ORDER BY StartDateTime;
-	--SELECT * from dbo.fi_Account__Statement(N'DistributionCosts', @SalesManager, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
+	--SELECT * from dbo.fi_Account__Statement(N'DistributionCosts', @SalesDepartment, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
 	--SELECT * FROM dbo.fi_ERCA__EmployeeIncomeTax('2018.02.01', '2018.03.01');
 	--SELECT * FROM dbo.fi_Paysheet(default, default, '2018.02', @Basic, @Transportation);
 	ROLLBACK;

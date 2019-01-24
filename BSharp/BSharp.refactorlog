@@ -1274,4 +1274,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[EntryList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="2a35b169-4a96-4ae7-9356-47e09162f7d0" ChangeDateTime="01/24/2019 18:15:29">
+    <Property Name="ElementName" Value="[dbo].[api_Documents__Edit]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_Documents__Unpost]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c3fc2519-6bc1-43b7-8ea5-5672d510fe1e" ChangeDateTime="01/24/2019 18:16:15">
+    <Property Name="ElementName" Value="[dbo].[bll_Documents_Validate__Edit]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_Validate__Unpost]" />
+  </Operation>
 </Operations>

@@ -16,7 +16,6 @@
 	[AccountId]			NVARCHAR (255),
 	[CustodyId]			INT,
 	[ResourceId]		INT,
-	[Direction]			SMALLINT,
 	[Amount]			MONEY,
 	[Value]				VTYPE,
 	[NoteId]			NVARCHAR (255),

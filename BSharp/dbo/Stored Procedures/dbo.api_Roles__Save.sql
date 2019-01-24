@@ -30,8 +30,7 @@ DECLARE @RolesLocalResultJson NVARCHAR(MAX), @PermissionsLocalResultJson NVARCHA
 	BEGIN
 		INSERT INTO @Ids([Id])
 		SELECT [Id] 
-		FROM OpenJson(@IndexedIdsJson)
-		WITH ([Index] INT '$.Index', [Id] INT '$.Id');
+		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 
 		EXEC [dbo].[dal_Roles__Select] 
 			@Ids = @Ids, 
