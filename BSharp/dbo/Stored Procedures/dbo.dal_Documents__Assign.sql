@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Assign]
 	@Documents [dbo].[IndexedIdList] READONLY,
-	@AssigneeId nvarchar(450)
+	@AssigneeId INT
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 	UPDATE dbo.Documents
 	SET

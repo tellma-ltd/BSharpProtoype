@@ -3,7 +3,7 @@
 	[Id]				INT IDENTITY (1, 1),
 	[DocumentId]		INT					NOT NULL,
 	[Action]			NVARCHAR(255)		NOT NULL CONSTRAINT [DF_DocumentActions_Action] DEFAULT (N'New'),
-	[ActionByUserId]	NVARCHAR (450)		NOT NULL DEFAULT SUSER_SNAME(),
+	[ActionByUserId]	INT		NOT NULL DEFAULT SUSER_SNAME(),
 	[ActionDateTime]	DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	CONSTRAINT [PK_DocumentActions] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_DocumentActions_Documents] FOREIGN KEY ([TenantId], [DocumentId]) REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,

@@ -6,6 +6,6 @@ RETURN
 	FROM [dbo].Notifications
 	WHERE RecipientId = (
 			SELECT [AgentId]
-			FROM dbo.Users 
-			WHERE [Id] = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'))
-		);
+			FROM dbo.LocalUsers 
+			WHERE [Id] = CONVERT(INT, SESSION_CONTEXT(N'UserId'))
+			);

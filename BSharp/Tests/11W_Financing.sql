@@ -5,23 +5,23 @@ INSERT INTO @DSave(
 );
 
 INSERT INTO @DLTSave(
-[DocumentIndex], [LineType]) VALUES
-(@DIdx,			N'IssueOfEquity');
+[DocumentIndex], [LineType], [CustodyId1], [ResourceId1]) VALUES
+(@DIdx,			N'IssueOfEquity', @CBEUSD, @USD);
 
 SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
-INSERT INTO @LSave ([LineIndex],
-[DocumentIndex], [LineType], [Custody2], [Amount2],	[Value2],	[Amount1],	[ResourceId1], [CustodyId1])   
-				-- Operation, Shareholder,	NumberOfShares, CapitalInvested, PaidInAmount, PaidInCurrency, PaidInAccount
+INSERT INTO @LSave ([Index],
+[DocumentIndex], [LineType], [CustodyId2], [Amount2],	[Value1],	[Amount1], [Reference1])   
+						-- Shareholder,	NumberOfShares, CapitalInvested, PaidInAmount
 VALUES
-(@LIdx + 1, @DIdx, N'IssueOfEquity',	@MohamadAkra,	1000,	2350000,	100000,		@USD,		@CBEUSD),
-(@LIdx + 2, @DIdx,	N'IssueOfEquity',	@AhmadAkra,		1000,	2350000,	100000,		@USD,		@CBEUSD);
+(@LIdx + 1, @DIdx, N'IssueOfEquity',	@MohamadAkra,	1000,	2350000,	100000, N'LT101'),
+(@LIdx + 2, @DIdx, N'IssueOfEquity',	@AhmadAkra,		1000,	2350000,	100000, N'LT101');
 
 EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave,
 	@Lines = @LSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultJson = @ResultJson OUTPUT;
-DELETE FROM @DSave; DELETE FROM @DLTSave;  DELETE FROM @LSave; DELETE FROM @ESave;
+DELETE FROM @DSave; DELETE FROM @DLTSave; DELETE FROM @LSave; DELETE FROM @ESave;
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN

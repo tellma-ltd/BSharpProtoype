@@ -91,9 +91,10 @@ SET NOCOUNT ON;
 				CAST(P.[Index] AS NVARCHAR(255)) + '].ViewId' As [Key], N'Error_TheView0IsInactive' As [ErrorName],
 				P.[ViewId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Permissions P
-	WHERE P.ViewId NOT IN (
-		SELECT [Id] FROM dbo.[Views] WHERE IsActive = 1
-		)
+	WHERE (
+		P.ViewId NOT IN (SELECT [Id] FROM dbo.[Views] WHERE IsActive = 1) OR 
+		P.ViewId = N'All'
+	)
 	AND (P.[EntityState] IN (N'Inserted', N'Updated'));
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

@@ -115,7 +115,7 @@ INSERT @LineTypeSpecifications ([LineType], --N'IssueOfEquity'
 	[Operation1Label],
 		[Account1FillSQL],
 	[Custody1Label],
-		[Resource1FillSQL],
+	[Resource1Label],
 		[Direction1FillSQL],
 	[Amount1Label],
 	[Value1Label],
@@ -133,26 +133,23 @@ INSERT @LineTypeSpecifications ([LineType], --N'IssueOfEquity'
 VALUES(N'IssueOfEquity',
 -- Entry 1
 	N'Operation',
-		N'BalancesWithBanks', 
+		N'N''BalancesWithBanks''', 
 	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
-		N'(
-			SELECT Min(ResourceId) FROM dbo.CustodiesResources
-			WHERE CustodyId = [Custody1] And RelationType = N''BankAccount''
-		)',
+	N'AmountCurrency',
 		N'+1',
 	N'AmountDeposited',
 	N'EquivalentFunctional',
-		N'ProceedsFromIssuingShares',
+		N'N''ProceedsFromIssuingShares''',
 	N'Reference #',
 -- Entry 2
-		N'Operation1',
-		N'IssuedCapital',
+		N'L.[OperationId1]',
+		N'N''IssuedCapital''',
 	N'Shareholder',
 		N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
 		N'-1', 
 	N'NumberOfShares',
-		N'Value1',
-		N'IssueOfEquity'
+		N'L.[Value1]',
+		N'N''IssueOfEquity'''
 );
 INSERT @LineTypeSpecifications ([LineType], --N'PaymentIssueToSupplier',
 	[Operation1Label],
@@ -258,22 +255,23 @@ Cr. Cash		Bank account Resource:Currency
 */
 VALUES(N'Overtime',
 	N'Operation',
-		N'UnassignedLabor',
+		N'N''UnassignedLabor''',
 	N'Department', -- Where Custody Type = Dept
-		N'(SELECT [Id] FROM dbo.Resources WHERE SystemCode = N''Labor'')',
+		N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 		N'+1',
 	N'NumberOfHours',
 		N'(
-			SELECT Amount1 * [Rate] FROM dbo.CustodiesResources
-			WHERE CustodyId = Custody1 AND ResourceId = Resource1 And RelationType = N''Employee''
+			SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
+			WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[RelatedResourceId1] And RelationType = N''Employee''
 		)',
-		N'Year(D.StartTime) * 100 + Month(D.StartTime)',
+		N'Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime])',
 	N'Employee',
 	N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
 		N'
-		INSERT INTO @EntriesLocal(Id, OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, Value, Reference)
-		SELECT Id+1, OperationId, N''ShorttermEmployeeBenefitsAccruals'', RelatedAgentId, RelatedResourceId, +1, Amount, Value, Reference
-		FROM @EntriesLocal
+		INSERT INTO @SmartEntriesLocal([Index], [DocumentIndex], [LineType], OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, Value, Reference)
+		SELECT [Index]+1, [DocumentIndex],  [LineType], OperationId, N''ShorttermEmployeeBenefitsAccruals'', RelatedAgentId, RelatedResourceId, -1, Amount, Value, Reference
+		FROM @SmartEntriesLocal
+		WHERE LineType = N''Overtime''
 		'
 );
 

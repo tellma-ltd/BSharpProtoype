@@ -6,7 +6,7 @@ SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
 	DELETE FROM [dbo].Resources
@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].[Resources] AS t
 		USING (
-			SELECT [Index], [Id], [MeasurementUnitId], [ResourceType], [Name], [Name2], [Code], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], 
+			SELECT [Index], [Id], [MeasurementUnitId], [ResourceType], [Name], [Name2], [Code], [SystemCode], [Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], 
 					[PartOfId], [InstanceOfId], [ServiceOfId]
 			FROM @Resources 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -42,8 +42,8 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedBy]				= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Name2], [Code], 	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],		[Lookup4], [PartOfId], [InstanceOfId], [ServiceOfId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
-			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
 

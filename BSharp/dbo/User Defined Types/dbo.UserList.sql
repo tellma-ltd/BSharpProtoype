@@ -1,5 +1,5 @@
 ﻿CREATE TYPE [dbo].[UserList] AS TABLE (
-	[Id]				NVARCHAR (450),
+	[Id]				INT,
 	[Name]				NVARCHAR (255)	NOT NULL,
 	[Name2]				NVARCHAR (255),
 	[PreferredLanguage] NCHAR(2)		NOT NULL DEFAULT (N'en'), 

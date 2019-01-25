@@ -2,7 +2,7 @@
 	[TenantId]		INT,
 	[Id]			INT IDENTITY (1, 1),
 	[DocumentId]	INT					NOT NULL,
-	[Signatory]		NVARCHAR(450)		NOT NULL,
+	[Signatory]		INT		NOT NULL,
 	[SignedAt]		DATETIMEOFFSET(7)	NOT NULL,
 	[UnsignedAt]	DATETIMEOFFSET(7)
 	CONSTRAINT [PK_Signatures] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),

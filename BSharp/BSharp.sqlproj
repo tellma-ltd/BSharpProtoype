@@ -76,7 +76,7 @@
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Custodies.sql" />
     <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />
-    <Build Include="dbo\Tables\dbo.Users.sql" />
+    <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
     <Build Include="dbo\Tables\dbo.Assignments.sql" />
     <Build Include="dbo\Tables\dbo.Lines.sql" />
     <Build Include="dbo\Tables\dbo.Accounts.sql" />
@@ -234,7 +234,6 @@
     <Build Include="dbo\Functions\dbo.fi_Document__Signatures.sql" />
     <Build Include="dbo\Tables\dbo.Roles.sql" />
     <Build Include="dbo\Tables\dbo.Permissions.sql" />
-    <Build Include="dbo\Tables\dbo.Workflows.sql" />
     <Build Include="dbo\Tables\dbo.Views.sql" />
     <Build Include="dbo\User Defined Types\dbo.RoleList.sql" />
     <Build Include="dbo\User Defined Types\dbo.PermissionList.sql" />

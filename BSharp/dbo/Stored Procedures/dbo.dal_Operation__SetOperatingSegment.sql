@@ -3,7 +3,7 @@
 AS
 	DECLARE @Id int, @Ids [dbo].[IntegerList], @NextIds [dbo].[IntegerList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId NVARCHAR(450) = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 	UPDATE dbo.Operations
 	SET

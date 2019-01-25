@@ -3,28 +3,30 @@
 
 	DECLARE @ETB int, @USD int, @CommonStock int;
 	DECLARE @Camry2018 int, @Cotton int, @TeddyBear int, @Car1 int, @Car2 int;
-	DECLARE @HOvertime int, @Basic int, @Transportation int, @Labor int, @Car1Svc int, @GOff int;
+	DECLARE @HOvertime int, @ROvertime int, @Basic int, @Transportation int, @Labor int, @Car1Svc int, @GOff int;
 END
 BEGIN -- Inserting
 	INSERT INTO @ResourcesDTO
-	([ResourceType],		[Name],					[Code],		[MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOfIndex], [InstanceOfIndex], [ServiceOfIndex]) VALUES
-	(N'Money',				N'ETB',					N'ETB',		@ETBUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'Money',				N'USD',					N'USD',		@USDUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'MotorVehicles',		N'Toyota Camry 2018',	NULL,		@pcsUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'SKD',				N'Toy. Cam. 18 - 101',	N'101',		@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
-	(N'SKD',				N'Toy. Cam. 18 - 102',	N'102',		@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
-	(N'SKD',				N'Fake',				N'199',		@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
-	(N'GeneralGoods',		N'Cotton',				NULL,		@KgUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'GeneralGoods',		N'Teddy bear',			NULL,		@pcsUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'Shares',				N'Common Stock',		N'CMNSTCK',	@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'Shares',				N'Premium Stock',		N'PRMMSTCK',@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'WagesAndSalaries',	N'Basic',				NULL,		@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'WagesAndSalaries',	N'Transportation',		NULL,		@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'WagesAndSalaries',	N'Holiday Overtime',	NULL,		@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'WagesAndSalaries',	N'Labor',				NULL,		@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'PPEServices',		N'Girgi Office',		N'Goff',	@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
-	(N'PPEServices',		N'Car 101 - Svc',		N'101D',	@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
-	(N'PPEServices',		N'Car 102 - Svc',		N'102D',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);
+	([ResourceType],		[Name],					[Code],		[SystemCode], [MeasurementUnitId],[Memo], [Lookup1], [Lookup2], [Lookup3], [Lookup4], [PartOfIndex], [InstanceOfIndex], [ServiceOfIndex]) VALUES
+	(N'Money',				N'ETB',					N'ETB',		N'Functional',	@ETBUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'Money',				N'USD',					N'USD',		NULL,			@USDUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'MotorVehicles',		N'Toyota Camry 2018',	NULL,		NULL,			@pcsUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'SKD',				N'Toy. Cam. 18 - 101',	N'101',		NULL,			@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
+	(N'SKD',				N'Toy. Cam. 18 - 102',	N'102',		NULL,			@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
+	(N'SKD',				N'Fake',				N'199',		NULL,			@eaUnit,			NULL,	N'Toyota',	N'Camry',	NULL,		NULL,	NULL,			2,					NULL),
+	(N'GeneralGoods',		N'Cotton',				NULL,		NULL,			@KgUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'GeneralGoods',		N'Teddy bear',			NULL,		NULL,			@pcsUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'Shares',				N'Common Stock',		N'CMNSTCK',	N'CMNSTCK',		@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'Shares',				N'Premium Stock',		N'PRMMSTCK',NULL,			@shareUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Basic',				NULL,		N'Basic',		@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Transportation',		NULL,		N'Transportation',@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Holiday Overtime',	NULL,		N'HolidayOvertime',@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Rest Overtime',		NULL,		N'RestOvertime',@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Labor (hourly)',		NULL,		N'LaborHourly',	@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Labor (dailyly)',		NULL,		N'LaborDaily',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'PPEServices',		N'Girgi Office',		N'Goff',	NULL,			@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
+	(N'PPEServices',		N'Car 101 - Svc',		N'101D',	NULL,			@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
+	(N'PPEServices',		N'Car 102 - Svc',		N'102D',	NULL,			@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);
 
 	EXEC [dbo].[api_Resources__Save]
 		@Entities = @ResourcesDTO,
@@ -90,7 +92,8 @@ SELECT
 	@Cotton = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Cotton'),
 	@TeddyBear = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Teddy bear'),
 	@CommonStock = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Common Stock'),
-	@HOvertime = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Holiday Overtime'),
+	@HOvertime = (SELECT [Id] FROM [dbo].[Resources] WHERE [SystemCode] = N'HolidayOvertime'),
+	@ROvertime = (SELECT [Id] FROM [dbo].[Resources] WHERE [SystemCode] = N'RestOvertime'),
 	@Basic = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Basic'),
 	@Transportation = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Transportation'),
 	@Labor = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Labor');

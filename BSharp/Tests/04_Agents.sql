@@ -137,9 +137,14 @@ SELECT
 	@HR = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Human Resources Department'),
 	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Department');
 
+INSERT INTO dbo.CustodiesResources(
+	[TenantId], [CustodyId], [RelationType], [ResourceId], [UnitCost], CreatedAt, CreatedBy, ModifiedAt, ModifiedBy) VALUES
+	(@TenantId, @MohamadAkra, N'Employee',	@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
+	(@TenantId, @AhmadAkra, N'Employee',	@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId);
+
 BEGIN -- Users
-	IF NOT EXISTS(SELECT * FROM [dbo].Users)
-	INSERT INTO [dbo].Users([TenantId], [Id], [Name], [AgentId]) VALUES
+	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
+	INSERT INTO [dbo].[LocalUsers]([TenantId], [Id], [Name], [AgentId]) VALUES
 	(@TenantId, N'system@banan-it.com', N'B#', NULL),
 	(@TenantId, N'mohamad.akra@banan-it.com', N'Mohamad Akra', @MohamadAkra),
 	(@TenantId, N'ahmad.akra@banan-it.com', N'Ahmad Akra', @AhmadAkra),

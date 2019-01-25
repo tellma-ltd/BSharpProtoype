@@ -5,4 +5,4 @@ RETURN
 	SELECT A.Comment, A.AssignedBy, A.AssignedAt, D.DocumentType, D.SerialNumber
 	FROM [dbo].Documents D
 	JOIN dbo.AssignmentsHistory A ON A.DocumentId = D.Id
-	WHERE A.AssigneeId = CONVERT(NVARCHAR(450), SESSION_CONTEXT(N'UserId'));
+	WHERE A.AssigneeId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));

@@ -32,6 +32,9 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
+	--SELECT * FROM @DocumentsLocal;
+	--SELECT * FROM @LinesLocal;
+	--SELECT * FROM @EntriesLocal;
 	-- Validate business rules (read from the table)
 
 	EXEC [dbo].[dal_Documents__Save]

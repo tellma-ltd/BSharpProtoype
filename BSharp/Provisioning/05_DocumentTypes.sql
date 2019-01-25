@@ -2,6 +2,8 @@
 INSERT @DocumentTypes ([Id]) VALUES
 	(N'ManualJournal'),
 	(N'CapitalInvestment'),
+	(N'Overtime'),
+
 	(N'PaymentIssueToSupplier'),
 	(N'PaymentReceiptFromCustomer'),
 	(N'InventoryTransfer'),
@@ -16,6 +18,8 @@ DECLARE @LineTypes TABLE([id] NVARCHAR(255) PRIMARY KEY)
 INSERT @LineTypes ([Id]) VALUES
 	(N'ManualJournalLine'),
 	(N'IssueOfEquity'),
+	(N'Overtime'),
+
 	(N'PaymentIssueToSupplier'),
 	(N'PurchaseWitholdingTax'),
 	(N'Labor'),

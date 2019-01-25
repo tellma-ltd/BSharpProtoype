@@ -1288,4 +1288,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_Documents_Validate__Unpost]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d43e3333-349c-499e-ac53-712fda1fb014" ChangeDateTime="01/25/2019 21:05:11">
+    <Property Name="ElementName" Value="[dbo].[Users]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[LocalUsers]" />
+  </Operation>
 </Operations>

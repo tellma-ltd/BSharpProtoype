@@ -8,6 +8,7 @@
 	[Source]				NVARCHAR (255), -- Lease In/Acquisition/Production
 	[Purpose]				NVARCHAR (255), -- Lease out/Sale/Production/SG&A
 	[Code]					NVARCHAR (255),
+	[SystemCode]			NVARCHAR (255),
 	[Memo]					NVARCHAR (2048),
 	[Lookup1]				NVARCHAR (255),
 	[Lookup2]				NVARCHAR (255),
