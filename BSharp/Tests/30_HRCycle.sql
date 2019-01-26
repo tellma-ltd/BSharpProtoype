@@ -10,7 +10,7 @@ INSERT INTO @DLTSave(
 
 SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 INSERT INTO @LSave ([Index],
-[DocumentIndex], [LineType], [Amount1], [RelatedAgentId1], [RelatedResourceId1])   
+[DocumentIndex], [LineType], [Amount1], [CustodyId2], [ResourceId2])   
 							-- Overtime Hours, Employee, Overtime type
 VALUES
 (@LIdx + 1, @DIdx, N'Overtime', 10,		@MohamadAkra,	@HOvertime),

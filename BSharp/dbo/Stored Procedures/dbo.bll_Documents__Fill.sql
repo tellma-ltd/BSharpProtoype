@@ -239,7 +239,7 @@ BEGIN	-- Smart Posting
 END
 --SELECT * FROM @DocumentLineTypesLocal;
 --SELECT * FROM @LinesLocal;
-IF @DEBUG = 2 SELECT * FROM @EntriesLocal;
+--SELECT * FROM @EntriesLocal;
 
 BEGIN -- Append the deleted ones
 	INSERT INTO @DocumentsLocal SELECT * FROM @Documents WHERE [EntityState] = N'Deleted';

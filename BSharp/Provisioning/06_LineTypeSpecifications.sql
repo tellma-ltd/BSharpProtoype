@@ -148,19 +148,18 @@ SET
 	[Amount1Label]			= N'NumberOfHours',
 		[Value1FillSQL]			= N'(
 									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									WHERE CustodyId = L.[CustodyId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
 									)',
 		[Reference1FillSQL]		= N'Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime])',
-	[RelatedAgent1Label]	= N'Employee',
 		[Operation2FillSQL]		= N'L.[OperationId1]',
 		[Account2FillSQL]		= N'N''ShorttermEmployeeBenefitsAccruals''',
-		[Custody2FillSQL]		= N'L.[RelatedAgentId1]',
+	[Custody2Label]			= N'Employee',
 	[Resource2Label]		 = N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
 		[Direction2FillSQL]		= N'-1',
 		[Amount2FillSQL]		= N'L.[Amount1]',
 		[Value2FillSQL]			= N'(
 									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									WHERE CustodyId = L.[CustodyId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
 									)',
 		[Reference2FillSQL]		= N'L.[Reference1]'
 WHERE [LineType] = @LineType;
