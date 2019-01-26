@@ -7,9 +7,9 @@
 	[ResourceId]		INT					NOT NULL,
 	[UnitCost]			MONEY				NOT NULL DEFAULT(1),				
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]			INT		NOT NULL,
+	[CreatedById]			INT		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]		INT		NOT NULL,
+	[ModifiedById]		INT		NOT NULL,
 	CONSTRAINT [PK_CustodiesResources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_CustodiesResources] CHECK ([RelationType] IN (
 		N'Employee',	-- Individual: Overtime hours (4 types), Labor hours 

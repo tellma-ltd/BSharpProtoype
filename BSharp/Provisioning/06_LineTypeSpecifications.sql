@@ -111,46 +111,73 @@
 	[RelatedAmount4FillSQL]		NVARCHAR (MAX) SPARSE,
 	PRIMARY KEY CLUSTERED ([LineType] ASC)
 );
-INSERT @LineTypeSpecifications ([LineType], --N'IssueOfEquity'
-	[Operation1Label],
-		[Account1FillSQL],
-	[Custody1Label],
-	[Resource1Label],
-		[Direction1FillSQL],
-	[Amount1Label],
-	[Value1Label],
-		[Note1FillSQL],
-	[Reference1Label],
-		[Operation2FillSQL],
-		[Account2FillSQL],
-	[Custody2Label],
-		[Resource2FillSQL],
-		[Direction2FillSQL],
-	[Amount2Label],
-		[Value2FillSQL],
-		[Note2FillSQL]
-)
-VALUES(N'IssueOfEquity',
--- Entry 1
-	N'Operation',
-		N'N''BalancesWithBanks''', 
-	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
-	N'AmountCurrency',
-		N'+1',
-	N'AmountDeposited',
-	N'EquivalentFunctional',
-		N'N''ProceedsFromIssuingShares''',
-	N'Reference #',
--- Entry 2
-		N'L.[OperationId1]',
-		N'N''IssuedCapital''',
-	N'Shareholder',
-		N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
-		N'-1', 
-	N'NumberOfShares',
-		N'L.[Value1]',
-		N'N''IssueOfEquity'''
-);
+DECLARE @LineType NVARCHAR(255);
+
+SET @LineType = N'IssueOfEquity';
+INSERT @LineTypeSpecifications ([LineType]) VALUES(@LineType)
+UPDATE @LineTypeSpecifications
+SET
+	[Operation1Label] = 	N'Operation',
+		[Account1FillSQL] = 		N'N''BalancesWithBanks''',
+	[Custody1Label] = N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
+	[Resource1Label] = N'AmountCurrency',
+		[Direction1FillSQL] = N'+1',
+	[Amount1Label] = N'AmountDeposited',
+	[Value1Label] = 	N'EquivalentFunctional',
+		[Note1FillSQL] = N'N''ProceedsFromIssuingShares''',
+	[Reference1Label] = N'Reference #',
+		[Operation2FillSQL] = N'L.[OperationId1]',
+		[Account2FillSQL] = N'N''IssuedCapital''',
+	[Custody2Label] = N'Shareholder',
+		[Resource2FillSQL] = N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
+		[Direction2FillSQL] = 	N'-1', 
+	[Amount2Label] = N'NumberOfShares',
+		[Value2FillSQL] = N'L.[Value1]',
+		[Note2FillSQL] = N'N''IssueOfEquity'''
+WHERE [LineType] = @LineType;
+
+SET @LineType = N'Overtime';
+INSERT @LineTypeSpecifications ([LineType]) VALUES(@LineType)
+UPDATE @LineTypeSpecifications
+SET
+	[Operation1Label]		= N'Operation',
+		[Account1FillSQL]		= N'N''UnassignedLabor''',
+	[Custody1Label]			= N'Department',
+		[Resource1FillSQL]		= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
+		[Direction1FillSQL]		= N'+1',
+	[Amount1Label]			= N'NumberOfHours',
+		[Value1FillSQL]			= N'(
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
+									WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									)',
+		[Reference1FillSQL]		= N'Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime])',
+	[RelatedAgent1Label]	= N'Employee',
+		[Operation2FillSQL]		= N'L.[OperationId1]',
+		[Account2FillSQL]		= N'N''ShorttermEmployeeBenefitsAccruals''',
+		[Custody2FillSQL]		= N'L.[RelatedAgentId1]',
+	[Resource2Label]		 = N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
+		[Direction2FillSQL]		= N'-1',
+		[Amount2FillSQL]		= N'L.[Amount1]',
+		[Value2FillSQL]			= N'(
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
+									WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									)',
+		[Reference2FillSQL]		= N'L.[Reference1]'
+WHERE [LineType] = @LineType;
+
+/* Logic: We assume overtime agreement is in functional currency.
+Receipt
+Dr. Inventory	Dept		Resource:Labor. 
+Cr. Accrual		Employee	Resource:Overtime.
+Invoice
+Dr. Accrual 	Employee	Resource:Overtime.
+Cr. A/P			Employee	Money				Ref:YYYYMM
+Payment
+Dr. A/P			Employee	Resource:Invoice currency
+Cr. Cash		Bank account Resource:Currency
+*/
+
+
 INSERT @LineTypeSpecifications ([LineType], --N'PaymentIssueToSupplier',
 	[Operation1Label],
 		[Account1FillSQL],
@@ -229,51 +256,8 @@ VALUES( N'PaymentIssueToSupplier',
 		N'PaymentsToSuppliersForGoodsAndServices',
 		N'Agent1'
 )
-INSERT @LineTypeSpecifications ([LineType], --N'Overtime'
-	[Operation1Label],
-		[Account1FillSQL],
-	[Custody1Label],
-		[Resource1FillSQL],
-		[Direction1FillSQL],
-	[Amount1Label],
-		[Value1FillSQL],
-		[Reference1FillSQL],
-	[RelatedAgent1Label],
-	[RelatedResource1Label],
-		[AppendSQL]
-)
-/* Logic: We assume overtime agreement is in functional currency.
-Receipt
-Dr. Inventory	Dept		Resource:Labor. 
-Cr. Accrual		Employee	Resource:Overtime.
-Invoice
-Dr. Accrual 	Employee	Resource:Overtime.
-Cr. A/P			Employee	Money				Ref:YYYYMM
-Payment
-Dr. A/P			Employee	Resource:Invoice currency
-Cr. Cash		Bank account Resource:Currency
-*/
-VALUES(N'Overtime',
-	N'Operation',
-		N'N''UnassignedLabor''',
-	N'Department', -- Where Custody Type = Dept
-		N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
-		N'+1',
-	N'NumberOfHours',
-		N'(
-			SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-			WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[RelatedResourceId1] And RelationType = N''Employee''
-		)',
-		N'Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime])',
-	N'Employee',
-	N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
-		N'
-		INSERT INTO @SmartEntriesLocal([Index], [DocumentIndex], [LineType], OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, Value, Reference)
-		SELECT [Index]+1, [DocumentIndex],  [LineType], OperationId, N''ShorttermEmployeeBenefitsAccruals'', RelatedAgentId, RelatedResourceId, -1, Amount, Value, Reference
-		FROM @SmartEntriesLocal
-		WHERE LineType = N''Overtime''
-		'
-);
+
+
 
 	/*
 INSERT @LineTypeSpecifications (

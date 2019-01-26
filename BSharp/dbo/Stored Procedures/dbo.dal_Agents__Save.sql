@@ -36,9 +36,9 @@ AS
 				t.[Gender]			= s.[Gender],
 
 				t.[ModifiedAt]		= @Now,
-				t.[ModifiedBy]		= @UserId
+				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [CustodyType], [AgentType], [Name], [Name2], [Code], [Address], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			INSERT ([TenantId], [CustodyType], [AgentType], [Name], [Name2], [Code], [Address], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 			VALUES (@TenantId, N'Agent',	s.[AgentType], s.[Name], s.[Name2], s.[Code], s.[Address], s.[BirthDateTime], s.[IsRelated], s.[TaxIdentificationNumber], s.[Title], s.[Gender], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;

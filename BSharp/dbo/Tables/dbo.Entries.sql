@@ -18,9 +18,9 @@
 	[RelatedResourceId]	INT,
 	[RelatedAmount]		MONEY,
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]			INT		NOT NULL,
+	[CreatedById]			INT		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]		INT		NOT NULL,
+	[ModifiedById]		INT		NOT NULL,
 	CONSTRAINT [PK_Entries] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Entries_Direction]	CHECK ([Direction] IN (-1, 1)),
 	CONSTRAINT [FK_Entries_Documents]	FOREIGN KEY ([TenantId], [DocumentId])	REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
@@ -31,8 +31,8 @@
 	CONSTRAINT [FK_Entries_Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_Notes]		FOREIGN KEY ([TenantId], [NoteId])		REFERENCES [dbo].[Notes] ([TenantId], [Id]),
 	CONSTRAINT [FK_Entries_AccountsNotes] FOREIGN KEY ([TenantId], [AccountId], [NoteId], [Direction]) REFERENCES [dbo].[AccountsNotes] ([TenantId], [AccountId], [NoteId], [Direction]),
-	CONSTRAINT [FK_Entries_CreatedBy]	FOREIGN KEY ([TenantId], [CreatedBy])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Entries_ModifiedBy]	FOREIGN KEY ([TenantId], [ModifiedBy])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Entries_CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Entries_ModifiedById]	FOREIGN KEY ([TenantId], [ModifiedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE INDEX [IX_Entries__DocumentId] ON [dbo].[Entries]([TenantId] ASC, [DocumentId] ASC);

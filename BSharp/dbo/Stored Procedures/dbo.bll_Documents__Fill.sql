@@ -5,6 +5,7 @@
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@ResultJson NVARCHAR(MAX) OUTPUT
 AS
+DECLARE @DEBUG int = 0;
 DECLARE @DocumentsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @DocumentLineTypesLocal [dbo].[DocumentLineTypeList],
 		@EntriesLocal [dbo].[EntryList], @SmartEntriesLocal [dbo].[EntryList], @Offset INT;
 BEGIN -- fill missing data from the inserted/updated
@@ -98,65 +99,105 @@ BEGIN -- Inherit from defaults
 	JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
 END
 
-IF 1=0
 BEGIN -- Fill lines from specifications
-	DECLARE @Sql NVARCHAR(4000), @AppendSQL NVARCHAR(4000), @LineType NVARCHAR(255);
+	DECLARE @Sql NVARCHAR(4000), @ParmDefinition NVARCHAR(255), @AppendSQL NVARCHAR(4000), @LineType NVARCHAR(255);
 	SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes;
 	WHILE @LineType IS NOT NULL
 	BEGIN
-		SET @SQL = N'
-		UPDATE L
-		SET 
-		' +	ISNULL('L.OperationId1 = ' + (SELECT Operation1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.AccountId1 = ' +	(SELECT Account1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.CustodyId1 = ' +	(SELECT Custody1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.ResourceId1 = ' +	(SELECT Resource1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Direction1 = ' +	(SELECT Direction1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Amount1 = ' +	(SELECT Amount1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Value1 = ' +	(SELECT Value1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.NoteId1 = ' +	(SELECT Note1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Reference1 = ' +	(SELECT Reference1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+		IF @DEBUG IN (0, 1)
+		BEGIN
+			SET @SQL = N'
+				DECLARE @LinesLocal [dbo].[LineList];
+				INSERT INTO @LinesLocal SELECT * FROM @Lines;
+				UPDATE L
+				SET 
+				' +	ISNULL('L.OperationId1 = ' + (SELECT Operation1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.AccountId1 = ' +	(SELECT Account1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.CustodyId1 = ' +	(SELECT Custody1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.ResourceId1 = ' +	(SELECT Resource1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Direction1 = ' +	(SELECT Direction1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Amount1 = ' +	(SELECT Amount1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Value1 = ' +	(SELECT Value1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.NoteId1 = ' +	(SELECT Note1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Reference1 = ' +	(SELECT Reference1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.OperationId2 = ' +	(SELECT Operation2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.AccountId2 = ' +	(SELECT Account2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.CustodyId2 = ' +	(SELECT Custody2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.ResourceId2 = ' +	(SELECT Resource2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Direction2 = ' +	(SELECT Direction2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Amount2 = ' +	(SELECT Amount2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Value2 = ' +	(SELECT Value2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.NoteId2 = ' +	(SELECT Note2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + ISNULL('L.Reference2 = ' +	(SELECT Reference2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+				', '') + 'L.[Index] = L.[Index]
+				FROM @LinesLocal L
+				JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
+				JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];
+				SELECT * FROM @LinesLocal
+			';
+			SELECT @AppendSQL = AppendSQL FROM dbo.LineTypeSpecifications WHERE LineType = @LineType;
 
-		', '') + ISNULL('L.OperationId2 = ' +	(SELECT Operation2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.AccountId2 = ' +	(SELECT Account2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.CustodyId2 = ' +	(SELECT Custody2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.ResourceId2 = ' +	(SELECT Resource2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Direction2 = ' +	(SELECT Direction2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Amount2 = ' +	(SELECT Amount2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Value2 = ' +	(SELECT Value2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.NoteId2 = ' +	(SELECT Note2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-		', '') + ISNULL('L.Reference2 = ' +	(SELECT Reference2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			IF @DEBUG = 0
+			BEGIN
+				DECLARE @LTemp LineList;
+				SET @ParmDefinition = N'@DocumentsLocal dbo.DocumentList READONLY, @DocumentLineTypesLocal dbo.DocumentLineTypeList READONLY, @Lines dbo.LineList READONLY';		
+				INSERT INTO @LTemp
+					EXEC sp_executesql @SQL, @ParmDefinition,
+						@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesLocal;
+				DELETE FROM @LinesLocal WHERE [LineType] = @LineType;
+				INSERT INTO @LinesLocal SELECT * FROM @LTemp;
+				EXEC sp_executesql @AppendSQL, @ParmDefinition,
+					@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesLocal;
+			END
+			ELSE BEGIN-- @DEBUG = 1
+				PRINT @SQL;
+				Print @AppendSQL;
+			END
+		END
+		ELSE BEGIN -- DEBUG = 2, use
+			IF @LineType = N'IssueOfEquity'
+			BEGIN
+				UPDATE L
+				SET 
+				L.AccountId1 = N'BalancesWithBanks',
+				L.Direction1 = +1,
+				L.NoteId1 = N'ProceedsFromIssuingShares',
+				L.OperationId2 = L.[OperationId1],
+				L.AccountId2 = N'IssuedCapital',
+				L.ResourceId2 = (SELECT Id FROM dbo.Resources WHERE [SystemCode] = N'CMNSTCK'),
+				L.Direction2 = -1,
+				L.Value2 = L.[Value1],
+				L.NoteId2 = N'IssueOfEquity',
+				L.[Index] = L.[Index]
+				FROM @LinesLocal L
+				JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
+				JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];			END
+			IF @LineType = N'Overtime'
+			BEGIN
+				UPDATE L
+				SET 
+				L.AccountId1 = N'UnassignedLabor',
+				L.ResourceId1 = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N'LaborHourly'),
+				L.Direction1 = +1,
+				L.Value1 = (
+					SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
+					WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[RelatedResourceId1] And RelationType = N'Employee'
+				),
+				L.Reference1 = Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime]),
+				L.[Index] = L.[Index]
+				FROM @LinesLocal L
+				JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
+				JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];
 
-		', '') + 'L.[Index] = L.[Index]
-		FROM @LinesLocal L
-		JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
-		JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];';
-		PRINT @SQL;
-		SELECT @AppendSQL = AppendSQL FROM dbo.LineTypeSpecifications WHERE LineType = @LineType;
-		Print @AppendSQL;
+				INSERT INTO @SmartEntriesLocal([Index], [DocumentIndex], [LineType], OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, Value, Reference)
+				SELECT [Index]+1, [DocumentIndex],  [LineType], OperationId, N'ShorttermEmployeeBenefitsAccruals', RelatedAgentId, RelatedResourceId, -1, Amount, Value, Reference
+				FROM @SmartEntriesLocal
+				WHERE LineType = N'Overtime'
+			END
+		END
 		SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes WHERE LineType > @LineType;
 	END
 END
-ELSE -- dynamically executed
-BEGIN
---		SELECT * FROM dbo.CustodiesResources WHERE RelationType = N'Employee'
-		UPDATE L
-		SET 
-		L.AccountId1 = N'UnassignedLabor',
-		L.ResourceId1 = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N'LaborHourly'),
-		L.Direction1 = +1,
-		L.Value1 = (
-		SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-		WHERE CustodyId = L.[RelatedAgentId1] AND ResourceId = L.[RelatedResourceId1] And RelationType = N'Employee'
-	),
-		L.Reference1 = Year(D.[StartDateTime]) * 100 + Month(D.[StartDateTime]),
-
-		L.[Index] = L.[Index]
-		FROM @LinesLocal L
-		JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
-		JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];
-END
-
 BEGIN	-- Smart Posting
 	INSERT @SmartEntriesLocal([Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
 		[OperationId], [AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Reference],
@@ -182,15 +223,9 @@ BEGIN	-- Smart Posting
 		[RelatedReference4], [RelatedAgentId4], [RelatedResourceId4], [RelatedAmount4], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction4] IS NOT NULL;
 	
-	-- Append SQL
 --	SELECT * FROM @SmartEntriesLocal;
-	INSERT INTO @SmartEntriesLocal([Index], [DocumentIndex], [LineType], OperationId, AccountId, CustodyId, ResourceId, Direction, Amount, [Value], Reference)
-	SELECT [Index]+1000, [DocumentIndex], [LineType], OperationId, N'ShorttermEmployeeBenefitsAccruals', RelatedAgentId, RelatedResourceId, -1, Amount, Value, Reference
-	FROM @SmartEntriesLocal
-	WHERE LineType = N'Overtime'
-
 	UPDATE @SmartEntriesLocal SET [Index] = [Index] + (SELECT ISNULL(MAX([Index]), 0) FROM @EntriesLocal);
-	--SELECT * FROM @SmartEntriesLocal;
+	IF @DEBUG = 2 SELECT * FROM @SmartEntriesLocal;
 	INSERT INTO @EntriesLocal([Index], [DocumentIndex], [Id], [DocumentId], [LineType],	[OperationId],
 		[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Memo],
 		[Reference], [RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState])
@@ -204,7 +239,7 @@ BEGIN	-- Smart Posting
 END
 --SELECT * FROM @DocumentLineTypesLocal;
 --SELECT * FROM @LinesLocal;
---SELECT * FROM @EntriesLocal;
+IF @DEBUG = 2 SELECT * FROM @EntriesLocal;
 
 BEGIN -- Append the deleted ones
 	INSERT INTO @DocumentsLocal SELECT * FROM @Documents WHERE [EntityState] = N'Deleted';

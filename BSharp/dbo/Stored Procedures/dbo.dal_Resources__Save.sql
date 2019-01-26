@@ -40,9 +40,9 @@ SET NOCOUNT ON;
 				t.[InstanceOfId]			= s.[InstanceOfId],
 				t.[ServiceOfId]				= s.[ServiceOfId],
 				t.[ModifiedAt]				= @Now,
-				t.[ModifiedBy]				= @UserId
+				t.[ModifiedById]				= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;

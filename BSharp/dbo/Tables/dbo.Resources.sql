@@ -19,9 +19,9 @@
 	[InstanceOfId]		INT, -- to allow contracts at higher level.
 	[ServiceOfId]		INT, -- to relate services to their assets.
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]			INT		NOT NULL,
+	[CreatedById]			INT		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]		INT		NOT NULL,
+	[ModifiedById]		INT		NOT NULL,
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),

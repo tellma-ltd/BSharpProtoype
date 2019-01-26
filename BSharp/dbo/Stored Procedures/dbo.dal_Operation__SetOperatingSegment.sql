@@ -9,7 +9,7 @@ AS
 	SET
 		[IsOperatingSegment] = 1,
 		[ModifiedAt] = @Now,
-		[ModifiedBy] = @UserId
+		[ModifiedById] = @UserId
 	WHERE [Id] = @OperationId
 	AND [IsOperatingSegment] = 0;
 
@@ -25,7 +25,7 @@ AS
 		SET
 			[IsOperatingSegment] = 0,
 			[ModifiedAt] = @Now,
-			[ModifiedBy] = @UserId
+			[ModifiedById] = @UserId
 		WHERE [Id] = @ParentId
 		AND [IsOperatingSegment] = 1;
 
@@ -45,7 +45,7 @@ AS
 		SET 
 			[IsOperatingSegment] = 0,
 			[ModifiedAt] = @Now,
-			[ModifiedBy] = @UserId
+			[ModifiedById] = @UserId
 		WHERE [IsOperatingSegment] = 1
 		AND Id IN (SELECT [Id] FROM @Ids)
 	

@@ -138,7 +138,7 @@ SELECT
 	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Department');
 
 INSERT INTO dbo.CustodiesResources(
-	[TenantId], [CustodyId], [RelationType], [ResourceId], [UnitCost], CreatedAt, CreatedBy, ModifiedAt, ModifiedBy) VALUES
+	[TenantId], [CustodyId], [RelationType], [ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
 	(@TenantId, @MohamadAkra, N'Employee',	@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
 	(@TenantId, @AhmadAkra, N'Employee',	@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId);
 

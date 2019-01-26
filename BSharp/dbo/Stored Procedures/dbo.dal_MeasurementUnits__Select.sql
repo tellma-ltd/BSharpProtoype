@@ -5,7 +5,7 @@ AS
 SELECT @ResultsJson = (
 	SELECT
 		[Id], [UnitType], [Name], [Name2], [Description], [UnitAmount], [BaseAmount], [IsActive], [Code], 
-		[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy], N'Unchanged' As [EntityState]
+		[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById], N'Unchanged' As [EntityState]
 	FROM [dbo].MeasurementUnits
 	WHERE [Id] IN (SELECT [Id] FROM @Ids)
 	FOR JSON PATH

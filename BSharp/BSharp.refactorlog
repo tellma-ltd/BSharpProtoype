@@ -1121,7 +1121,7 @@
     <Property Name="NewName" Value="[SignedAt]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="8c74e59a-248b-46a2-b54f-dbd49e9b80e7" ChangeDateTime="01/19/2019 13:45:01">
-    <Property Name="ElementName" Value="[dbo].[Signatures].[CreatedBy]" />
+    <Property Name="ElementName" Value="[dbo].[Signatures].[CreatedById]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[dbo].[Signatures]" />
     <Property Name="ParentElementType" Value="SqlTable" />
@@ -1294,5 +1294,12 @@
     <Property Name="ParentElementName" Value="[dbo]" />
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[LocalUsers]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cfc2cb7f-762c-4eca-9353-4bacadae8364" ChangeDateTime="01/26/2019 04:04:12">
+    <Property Name="ElementName" Value="[dbo].[Translations].[Culture]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Translations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CultureId]" />
   </Operation>
 </Operations>

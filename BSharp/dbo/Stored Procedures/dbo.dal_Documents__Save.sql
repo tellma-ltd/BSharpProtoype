@@ -49,11 +49,11 @@ BEGIN
 				t.[StartDateTime]		= s.[StartDateTime],
 				t.[EndDateTime]			= s.[EndDateTime],
 				t.[ModifiedAt]			= @Now,
-				t.[ModifiedBy]			= @UserId
+				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
 				[TenantId],[State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], [SerialNumber], 
-				[AssigneeId], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
+				[AssigneeId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
 			)
 			VALUES (
 				@TenantId, s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber], 
@@ -75,9 +75,9 @@ BEGIN
 	--		t.[ScalingFactor]	= s.[ScalingFactor],
 	--		t.[Memo]			= s.[Memo],
 	--		t.[ModifiedAt]		= @Now,
-	--		t.[ModifiedBy]		= @UserId
+	--		t.[ModifiedById]		= @UserId
 	--WHEN NOT MATCHED THEN
-	--	INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+	--	INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 	--	VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
 
 	MERGE INTO [dbo].[Entries] AS t
@@ -106,12 +106,12 @@ BEGIN
 			t.[RelatedResourceId]	= s.[RelatedResourceId],
 			t.[RelatedAmount]		= s.[RelatedAmount],
 			t.[ModifiedAt]			= @Now,
-			t.[ModifiedBy]			= @UserId
+			t.[ModifiedById]		= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [DocumentId], [LineType], [OperationId], [Reference],
 				[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
 				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
-				[CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[OperationId], s.[Reference],
 				s.[AccountId], s.[CustodyId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
 				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],

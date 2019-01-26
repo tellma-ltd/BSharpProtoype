@@ -10,8 +10,8 @@ AS
 		[Field] NVARCHAR (255) '$.Field',
 		[Value] NVARCHAR (255) '$.Value',
 		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
-		[CreatedBy] INT '$.CreatedBy',
+		[CreatedById] INT '$.CreatedById',
 		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',
-		[ModifiedBy] INT '$.ModifiedBy',
+		[ModifiedById] INT '$.ModifiedById',
 		[EntityState] NVARCHAR(255) '$.EntityState'
 	);

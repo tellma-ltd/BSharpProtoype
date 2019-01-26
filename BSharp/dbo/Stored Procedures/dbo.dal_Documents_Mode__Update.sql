@@ -11,7 +11,7 @@ BEGIN
 		[Mode] = @Mode,
 		[AssigneeId] = CASE WHEN @Mode = N'Draft' THEN @UserId ELSE NULL END,
 		ModifiedAt = @Now,
-		ModifiedBy = @UserId
+		ModifiedById = @UserId
 	WHERE [Id] IN (
 		SELECT [Id] FROM @Documents
 	)

@@ -15,4 +15,4 @@ AS
 			UPDATE SET 
 				t.[IsActive]	= @IsActive,
 				t.[ModifiedAt]	= @Now,
-				t.[ModifiedBy]	= @UserId;
+				t.[ModifiedById]	= @UserId;

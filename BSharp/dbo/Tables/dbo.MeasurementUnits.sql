@@ -10,9 +10,9 @@
 	[IsActive]		BIT					NOT NULL CONSTRAINT [DF_UnitsOfMeasure_IsActive] DEFAULT (1),
 	[Code]			NVARCHAR (255),
 	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]		INT		NOT NULL,
+	[CreatedById]		INT		NOT NULL,
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]	INT		NOT NULL,
+	[ModifiedById]	INT		NOT NULL,
 	CONSTRAINT [PK_UnitsOfMeasure] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_UnitsOfMeasure_UnitType] CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money'))
 );

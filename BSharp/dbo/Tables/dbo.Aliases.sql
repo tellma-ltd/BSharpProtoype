@@ -14,9 +14,9 @@
 	[RelatedResourceId]	INT,
 	[RelatedAmount]		MONEY,
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]			INT					NOT NULL,
+	[CreatedById]			INT					NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]		INT					NOT NULL,
+	[ModifiedById]		INT					NOT NULL,
 	CONSTRAINT [PK_Aliases] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_Aliases_Accounts] FOREIGN KEY ([TenantId], [AccountId]) REFERENCES [dbo].[Accounts] ([TenantId], [Id]) ON UPDATE CASCADE,
 );

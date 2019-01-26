@@ -10,7 +10,7 @@ BEGIN
 	SET
 		[AssigneeId] = @AssigneeId,
 		ModifiedAt = @Now,
-		ModifiedBy = @UserId
+		ModifiedById = @UserId
 	WHERE [Id] IN (
 		SELECT [Id] FROM @Documents
 	)

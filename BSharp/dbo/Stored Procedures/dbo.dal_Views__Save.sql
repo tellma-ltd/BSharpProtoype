@@ -21,10 +21,10 @@ BEGIN
 	--THEN
 	--	UPDATE SET
 	--		t.[ModifiedAt]	= @Now,
-	--		t.[ModifiedBy]	= @UserId
+	--		t.[ModifiedById]	= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT (
-			[TenantId], [Id], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
+			[TenantId], [Id], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
 		)
 		VALUES (
 			@TenantId, s.[Id], @Now,		@UserId,		@Now,		@UserId
@@ -43,8 +43,8 @@ BEGIN
 				t.[Criteria]	= s.[Criteria],
 				t.[Memo]		= s.[Memo],
 				t.[ModifiedAt]	= @Now,
-				t.[ModifiedBy]	= @UserId
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [ViewId], [Level],	[Criteria], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			INSERT ([TenantId], [ViewId], [Level],	[Criteria], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 			VALUES (@TenantId, s.[ViewId], s.[Level], s.[Criteria], s.[Memo], @Now,		@UserId,		@Now,		@UserId);
 END;

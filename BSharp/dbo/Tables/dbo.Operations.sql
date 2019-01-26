@@ -8,13 +8,13 @@
 	[ParentId]				INT,
 	[Code]					NVARCHAR (255),
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]				INT		NOT NULL,
+	[CreatedById]				INT		NOT NULL,
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]			INT		NOT NULL,
+	[ModifiedById]			INT		NOT NULL,
 	CONSTRAINT [PK_Operations] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_Operations_Operations] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[Operations] ([TenantId], [Id]),
-	CONSTRAINT [FK_Operations_CreatedBy] FOREIGN KEY ([TenantId], [CreatedBy]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Operations_ModifiedBy] FOREIGN KEY ([TenantId], [ModifiedBy]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Operations_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Operations_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name]

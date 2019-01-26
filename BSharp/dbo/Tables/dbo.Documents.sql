@@ -11,9 +11,9 @@
 	[SerialNumber]				INT,				-- auto generated
 	[AssigneeId]				INT,
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedBy]					INT		NOT NULL,
+	[CreatedById]					INT		NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedBy]				INT		NOT NULL,
+	[ModifiedById]				INT		NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC), -- Data/Demand/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
 	CONSTRAINT [CK_Documents_State] CHECK ([State] IN (N'Plan', N'Template', N'Demand', N'Voucher')),
 	CONSTRAINT [CK_Documents_Frequency] CHECK (
@@ -30,7 +30,7 @@
 	CONSTRAINT [FK_Documents_DocumentTypes] FOREIGN KEY ([TenantId], [DocumentType]) REFERENCES [dbo].[DocumentTypes] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_Mode] CHECK ([Mode] IN (N'Void', N'Draft', N'Posted')),
 	CONSTRAINT [FK_Documents_AssigneeId] FOREIGN KEY ([TenantId], [AssigneeId]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Documents_CreatedBy] FOREIGN KEY ([TenantId], [CreatedBy]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Documents_ModifiedBy] FOREIGN KEY ([TenantId], [ModifiedBy]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Documents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Documents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
  );
 GO

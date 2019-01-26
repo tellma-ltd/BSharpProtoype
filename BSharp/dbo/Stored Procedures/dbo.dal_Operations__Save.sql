@@ -30,9 +30,9 @@ SET NOCOUNT ON;
 				t.[ParentId]		= s.[ParentId],
 				t.[Code]			= s.[Code],
 				t.[ModifiedAt]		= @Now,
-				t.[ModifiedBy]		= @UserId
+				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [Name],		[Name2], [Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+			INSERT ([TenantId], [Name],		[Name2], [Code], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], @Now,			@UserId,	@Now,			@UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x

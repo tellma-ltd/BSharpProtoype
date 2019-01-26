@@ -31,10 +31,10 @@ BEGIN
 				t.[IsPublic]	= s.[IsPublic],
 				t.[Code]		= s.[Code],
 				t.[ModifiedAt]	= @Now,
-				t.[ModifiedBy]	= @UserId
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId], [Name], [Name2],	[IsPublic],		[Code], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy]
+				[TenantId], [Name], [Name2],	[IsPublic],		[Code], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
 			)
 			VALUES (
 				@TenantId, s.[Name], s.[Name2], s.[IsPublic], s.[Code], @Now,		@UserId,		@Now,		@UserId
@@ -57,9 +57,9 @@ BEGIN
 			t.[Criteria]	= s.[Criteria],
 			t.[Memo]		= s.[Memo],
 			t.[ModifiedAt]	= @Now,
-			t.[ModifiedBy]	= @UserId
+			t.[ModifiedById]	= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [RoleId],	[ViewId],	[Level],	[Criteria], [Memo], [CreatedAt], [CreatedBy], [ModifiedAt], [ModifiedBy])
+		INSERT ([TenantId], [RoleId],	[ViewId],	[Level],	[Criteria], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 		VALUES (@TenantId, s.[RoleId], s.[ViewId], s.[Level], s.[Criteria], s.[Memo], @Now,		@UserId,		@Now,		@UserId);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
