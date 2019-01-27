@@ -1,6 +1,6 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @DSave [dbo].[DocumentList], @LSave [dbo].LineList, @ESave [dbo].EntryList, @DLTSave [dbo].DocumentLineTypeList;
-	DECLARE @ResultJson NVARCHAR(MAX);
+	DECLARE @LineType nvarchar(255), @ResultJson NVARCHAR(MAX);
 	DECLARE @Docs [dbo].[IndexedIdList], @DIdx INT, @LIdx INT, @WLIdx INT, @EIdx INT;
 END
 -- get acceptable document types; and user permissions and general settings;
@@ -8,7 +8,7 @@ END
 DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U int, @PU_3 int, @P2_3 int,
 		@d1 datetime = '2017.02.01', @d2 datetime = '2022.02.01', @dU datetime = '2018.02.01', @d3 datetime = '2023.02.01';
 		--:r .\11M_Financing.sql
-		:r .\11W_Financing.sql
+		--:r .\11W_Financing.sql
 		:r .\30_HRCycle.sql
 		--:r .\40_PurchasingCycle.sql
 		--:r .\13_ProductionCycle.sql
@@ -23,12 +23,12 @@ SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
 /*
 INSERT INTO @D2Save(
 	[Id], [State], [DocumentType],	[Memo],[StartDateTime], [EndDateTime],
-	[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3],
+	[LinesCustodyId1], [LinesCustodyId2], [LinesCustodyId3], [LinesReference1], [LinesReference2], [LinesReference3],
 	[EntityState]
 )
 SELECT 
 	[Id], [State], [DocumentType], [Memo],[StartDateTime], [EndDateTime],
-	[LinesCustody1], [LinesCustody2], [LinesCustody3], [LinesReference1], [LinesReference2], [LinesReference3],
+	[LinesCustodyId1], [LinesCustodyId2], [LinesCustodyId3], [LinesReference1], [LinesReference2], [LinesReference3],
 	N'Unchanged' As [EntityState]
 FROM [dbo].[Documents] WHERE Memo Like N'Capital%'
 INSERT INTO @L2Save(

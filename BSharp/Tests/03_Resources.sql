@@ -3,7 +3,8 @@
 
 	DECLARE @ETB int, @USD int, @CommonStock int;
 	DECLARE @Camry2018 int, @Cotton int, @TeddyBear int, @Car1 int, @Car2 int;
-	DECLARE @HOvertime int, @ROvertime int, @Basic int, @Transportation int, @Labor int, @Car1Svc int, @GOff int;
+	DECLARE @HOvertime int, @ROvertime int, @Basic int, @Transportation int, 
+			@LaborHourly int, @LaborDaily int, @Car1Svc int, @GOff int;
 END
 BEGIN -- Inserting
 	INSERT INTO @ResourcesDTO
@@ -96,4 +97,5 @@ SELECT
 	@ROvertime = (SELECT [Id] FROM [dbo].[Resources] WHERE [SystemCode] = N'RestOvertime'),
 	@Basic = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Basic'),
 	@Transportation = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Transportation'),
-	@Labor = (SELECT [Id] FROM [dbo].[Resources] WHERE [Name] = N'Labor');
+	@LaborHourly = (SELECT [Id] FROM [dbo].[Resources] WHERE [SystemCode] = N'LaborHourly'),
+	@LaborDaily = (SELECT [Id] FROM [dbo].[Resources] WHERE [SystemCode] = N'LaborDaily');

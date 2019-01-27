@@ -199,7 +199,7 @@ INSERT INTO @Notes(NoteType, IsActive, Direction, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, 1, N'4310', N'OfficeSpaceExpense', N'Office space expense')
 ,(N'Regulatory', 1, 1, N'44', N'EmployeeBenefitsExpense', N'Employee benefits expense')
 ,(N'Regulatory', 1, 1, N'441', N'ShorttermEmployeeBenefitsExpense', N'Short-term employee benefits expense')
-,(N'Regulatory', 1, 1, N'4411', N'WagesAndSalaries', N'Wages and salaries')
+,(N'Regulatory', 1, 0, N'4411', N'WagesAndSalaries', N'Wages and salaries')
 ,(N'Regulatory', 1, 1, N'4412', N'SocialSecurityContributions', N'Social security contributions')
 ,(N'Regulatory', 1, 1, N'4413', N'OtherShorttermEmployeeBenefits', N'Other short-term employee benefits')
 ,(N'Regulatory', 1, 1, N'442', N'PostemploymentBenefitExpenseDefinedContributionPlans', N'Post-employment benefit expense, defined contribution plans')

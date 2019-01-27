@@ -2,7 +2,7 @@
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY (1, 1),
 	[State]						NVARCHAR (255)		NOT NULL DEFAULT (N'Voucher'), -- N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher'
-	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'ManualJournal'),
+	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'manual-journalsl'),
 	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'),
 	[Duration]					INT					NOT NULL DEFAULT (0),
 	[StartDateTime]				DATETIMEOFFSET (7)	NOT NULL DEFAULT (SYSDATETIMEOFFSET()),

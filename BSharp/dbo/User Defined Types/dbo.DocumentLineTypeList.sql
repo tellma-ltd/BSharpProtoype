@@ -1,6 +1,7 @@
 ﻿CREATE TYPE [dbo].[DocumentLineTypeList] AS TABLE (
 	[DocumentIndex]			INT,
 	[LineType]				NVARCHAR (255),
+	[SortKey]				TINYINT DEFAULT(1),
 	[BaseLineId]			INT,
 	[ScalingFactor]			FLOAT,
 	[Memo]					NVARCHAR(255),

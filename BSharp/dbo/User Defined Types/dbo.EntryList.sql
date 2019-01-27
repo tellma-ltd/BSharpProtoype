@@ -3,7 +3,7 @@
 	[DocumentIndex]		INT					NOT NULL,
 	[Id]				INT,
 	[DocumentId]		INT,
-	[LineType]			NVARCHAR (255)		NOT NULL DEFAULT(N'ManualJournalLine'),		
+	[LineType]			NVARCHAR (255)		NOT NULL DEFAULT(N'manual-journals'),		
 	[OperationId]		INT,
 	[AccountId]			NVARCHAR (255),
 	[CustodyId]			INT,

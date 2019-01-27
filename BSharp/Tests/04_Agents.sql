@@ -41,7 +41,7 @@ BEGIN -- Insert individuals and organizations
 	(N'Organization', N'Executive Office',1,	NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Production Department',0,NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Sales & Marketing Department',0,NULL,				NULL,				NULL,		NULL,	NULL),
-	(N'Organization', N'Finance Deparment',0,	NULL,						NULL,				NULL,		NULL,	NULL),
+	(N'Organization', N'Finance Department',0,	NULL,						NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Human Resources Department',0,NULL,					NULL,				NULL,		NULL,	NULL),
 	(N'Organization', N'Materials & Purchasing Department',0,NULL,			NULL,				NULL,		NULL,	NULL);
 
@@ -138,9 +138,11 @@ SELECT
 	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Department');
 
 INSERT INTO dbo.CustodiesResources(
-	[TenantId], [CustodyId], [RelationType], [ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
-	(@TenantId, @MohamadAkra, N'Employee',	@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
-	(@TenantId, @AhmadAkra, N'Employee',	@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId);
+	[TenantId], [CustodyId], [RelationType],	[ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
+	(@TenantId, @MohamadAkra, N'Employee',		@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
+	(@TenantId, @AhmadAkra, N'Employee',		@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId),
+	(@TenantId, @TizitaNigussie, N'Employee',	@ROvertime,		200,		@Now,		@UserId, @Now,		@UserId),
+	(@TenantId, @TizitaNigussie, N'Employee',	@LaborDaily,	250,		@Now,		@UserId, @Now,		@UserId);
 
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])

@@ -1,21 +1,46 @@
-﻿SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
-INSERT INTO @DSave(
-[Index], [DocumentType],	[StartDateTime],[Memo]	) VALUES (
-@DIdx, N'Overtime',			'2017.01.02',	N'Production Dept Overtime'
-);
+﻿BEGIN --================  OVERTIME =======================--
+	SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
+	INSERT INTO @DSave(
+	[Index], [DocumentType],	[StartDateTime],[Memo]) VALUES (
+	@DIdx, N'employees-overtime',		'2017.01.02',	N'Production Dept Overtime'
+	);
+	Set @LineType = N'employees-overtime';			--Salary period
+	INSERT INTO @DLTSave([DocumentIndex], [LineType], [Reference1]) VALUES
+						(@DIdx,				@LineType, N'201701');
+	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
+	INSERT INTO @LSave ([Index],--Operation,	O/T Hours,	Department,		Employee,	Overtime type
+	[DocumentIndex], [LineType], [OperationId1], [Amount1],	[CustodyId1], [CustodyId2],	[ResourceId2]) VALUES
+	(@LIdx + 1, @DIdx, @LineType, @Expansion,		10,		@Production, @MohamadAkra,	@HOvertime),
+	(@LIdx + 2, @DIdx, @LineType, @Expansion,		5,		@Production, @AhmadAkra,	@ROvertime),
+	(@LIdx + 3, @DIdx, @LineType, @Expansion,		40,		@Production, @TizitaNigussie,@ROvertime);
+END
+BEGIN --================  DEDUCTIONS =======================--
+	SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
+	INSERT INTO @DSave(
+	[Index], [DocumentType],	[StartDateTime],[Memo]) VALUES (
+	@DIdx, N'employees-deductions',		'2017.01.02',	N'Finance dept deductions'
+	);
+	Set @LineType = N'employees-unpaid-absences';			--Salary period
+	INSERT INTO @DLTSave([DocumentIndex], [LineType], [SortKey], [Reference1]) VALUES
+						(@DIdx,				@LineType,	1,			N'201701');
+	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
+	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,	Absence days,
+	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [Amount1]) VALUES
+	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, 10);
 
-INSERT INTO @DLTSave(
-[DocumentIndex], [LineType], [OperationId1], [CustodyId1]) VALUES
-(@DIdx,			N'Overtime',	@Expansion, @Production);
+	Set @LineType = N'employees-penalties';
+	INSERT INTO @DLTSave([DocumentIndex], [LineType], [SortKey], [Reference1]) VALUES
+						(@DIdx,				@LineType,	2,			N'201701');
+	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
+	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,		Currency, Amount,
+	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [ResourceId1], [Amount1], [Value1]) VALUES
+	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
+END;
 
-SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
-INSERT INTO @LSave ([Index],
-[DocumentIndex], [LineType], [Amount1], [CustodyId2], [ResourceId2])   
-							-- Overtime Hours, Employee, Overtime type
-VALUES
-(@LIdx + 1, @DIdx, N'Overtime', 10,		@MohamadAkra,	@HOvertime),
-(@LIdx + 2, @DIdx, N'Overtime', 5,		@AhmadAkra,		@ROvertime)
 
+--BEGIN --================  LEAVES =======================--
+
+--END;
 EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave,
 	@Lines = @LSave, @Entries = @ESave,

@@ -1302,4 +1302,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[CultureId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="454b8d4b-f420-4ff1-919e-1e41088937d4" ChangeDateTime="01/27/2019 16:24:49">
+    <Property Name="ElementName" Value="[dbo].[LineTypeSpecifications].[Operation1Label]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LineTypeSpecifications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OperationId1Label]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1d4f007b-4ac3-454c-91e8-403c8198dbc6" ChangeDateTime="01/27/2019 16:25:02">
+    <Property Name="ElementName" Value="[dbo].[LineTypeSpecifications].[Operation1FillSQL]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LineTypeSpecifications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OperationId1FillSQL]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="146187f4-1da5-495a-8bd3-eeabf394c9f0" ChangeDateTime="01/27/2019 16:25:14">
+    <Property Name="ElementName" Value="[dbo].[LineTypeSpecifications].[AccountId1Label]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LineTypeSpecifications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[AccountId1Label]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c76cdb44-808a-4958-bed2-55f382117dda" ChangeDateTime="01/27/2019 16:26:04">
+    <Property Name="ElementName" Value="[dbo].[LineTypeSpecifications].[AccountId1FillSQL]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LineTypeSpecifications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[AccountId1FillSQL]" />
+  </Operation>
 </Operations>

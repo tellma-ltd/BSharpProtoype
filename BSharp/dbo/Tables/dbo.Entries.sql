@@ -2,7 +2,7 @@
 	[TenantId]			INT,
 	[Id]				INT					IDENTITY (1, 1),
 	[DocumentId]		INT					NOT NULL,
-	[LineType]			NVARCHAR(255)		NOT NULL DEFAULT(N'ManualJournalLine'),
+	[LineType]			NVARCHAR(255)		NOT NULL DEFAULT(N'manual-journals'),
 	[OperationId]		INT					NOT NULL,
 	[AccountId]			NVARCHAR (255)		NOT NULL,
 	[CustodyId]			INT					NOT NULL,

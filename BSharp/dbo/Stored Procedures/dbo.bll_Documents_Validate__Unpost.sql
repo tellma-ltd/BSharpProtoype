@@ -24,7 +24,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccount1IsInactive' As [ErrorName],
+		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, A.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
@@ -36,7 +36,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheDocument0TheNote1IsInactive' As [ErrorName],
+		CAST(E.[Id] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheDocument0TheNoteId1IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, N.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
