@@ -24,7 +24,7 @@ BEGIN -- Inserting
 	(N'WagesAndSalaries',	N'Holiday Overtime',	NULL,		N'HolidayOvertime',@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Rest Overtime',		NULL,		N'RestOvertime',@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'WagesAndSalaries',	N'Labor (hourly)',		NULL,		N'LaborHourly',	@hrUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
-	(N'WagesAndSalaries',	N'Labor (dailyly)',		NULL,		N'LaborDaily',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
+	(N'WagesAndSalaries',	N'Labor (daily)',		NULL,		N'LaborDaily',	@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				NULL),
 	(N'PPEServices',		N'Girgi Office',		N'Goff',	NULL,			@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
 	(N'PPEServices',		N'Car 101 - Svc',		N'101D',	NULL,			@moUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				3),
 	(N'PPEServices',		N'Car 102 - Svc',		N'102D',	NULL,			@dayUnit,			NULL,	NULL,		NULL,		NULL,		NULL,	NULL,			NULL,				4);

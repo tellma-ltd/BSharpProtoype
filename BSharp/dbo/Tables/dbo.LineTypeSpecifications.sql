@@ -31,8 +31,8 @@
 	[RelatedAmount1Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount1FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 2
-	[Operation2Label]			NVARCHAR (255) SPARSE,
-	[Operation2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId2Label]			NVARCHAR (255) SPARSE,
+	[OperationId2FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId2Label]				NVARCHAR (255) SPARSE,
 	[AccountId2FillSQL]			NVARCHAR (MAX),
 	[CustodyId2Label]				NVARCHAR (255) SPARSE,
@@ -58,8 +58,8 @@
 	[RelatedAmount2Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount2FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 3
-	[Operation3Label]			NVARCHAR (255) SPARSE,
-	[Operation3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId3Label]			NVARCHAR (255) SPARSE,
+	[OperationId3FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId3Label]				NVARCHAR (255) SPARSE,
 	[AccountId3FillSQL]			NVARCHAR (MAX),
 	[CustodyId3Label]				NVARCHAR (255) SPARSE,
@@ -85,8 +85,8 @@
 	[RelatedAmount3Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount3FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 4
-	[Operation4Label]			NVARCHAR (255) SPARSE,
-	[Operation4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId4Label]			NVARCHAR (255) SPARSE,
+	[OperationId4FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId4Label]				NVARCHAR (255) SPARSE,
 	[AccountId4FillSQL]			NVARCHAR (MAX),
 	[CustodyId4Label]				NVARCHAR (255) SPARSE,

@@ -7,16 +7,16 @@ END
 -- Journal Vouchers
 DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U int, @PU_3 int, @P2_3 int,
 		@d1 datetime = '2017.02.01', @d2 datetime = '2022.02.01', @dU datetime = '2018.02.01', @d3 datetime = '2023.02.01';
-		--:r .\11M_Financing.sql
+		:r .\11M_Financing.sql
 		--:r .\11W_Financing.sql
-		:r .\30_HRCycle.sql
+		--:r .\30_HRCycle.sql
 		--:r .\40_PurchasingCycle.sql
 		--:r .\13_ProductionCycle.sql
 		--:r .\14_SalesCycle.sql
 		--:r .\12_ManualMisc.sql
 SELECT @fromDate = '2017.01.01', @toDate = '2017.01.31'
-SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
-	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1;
+--SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+--EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @PrintQuery=1;
 --SELECT * FROM dbo.Documents;
 --EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @ByCustody = 1, @ByResource = 1, @PrintQuery = 0;
 

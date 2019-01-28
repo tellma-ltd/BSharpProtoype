@@ -15,6 +15,7 @@ RETURN
 		(CASE WHEN @toDate < D.EndDateTime THEN @toDate ELSE D.EndDateTime END), 102) As EndDateTime,
 		E.Memo,
 		E.Id As EntryId,
+		E.LineType,
 		E.OperationId,
 		E.Reference,
 		E.AccountId,

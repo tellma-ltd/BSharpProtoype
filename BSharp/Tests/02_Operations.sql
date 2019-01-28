@@ -1,6 +1,6 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @OperationsDTO dbo.[OperationList];
-	DECLARE @Unspecified int, @Existing int, @Expansion int;
+	DECLARE @WSI int, @Unspecified int, @Existing int, @Expansion int;
 
 END
 BEGIN -- Inserting
@@ -85,7 +85,8 @@ EXEC api_Operation__SetOperatingSegment
 IF @DebugOperations = 1
 	SELECT * FROM [dbo].[Operations];
 
-SELECT 
+SELECT
+	@WSI = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Walia Steel Industry'),
 	@Unspecified = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Unspecified'), 
 	@Existing = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Existing'),
 	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion');

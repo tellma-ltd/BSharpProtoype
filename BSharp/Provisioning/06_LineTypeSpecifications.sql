@@ -29,8 +29,8 @@
 	[RelatedAmount1Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount1FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 2
-	[Operation2Label]			NVARCHAR (255) SPARSE,
-	[Operation2FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId2Label]			NVARCHAR (255) SPARSE,
+	[OperationId2FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId2Label]				NVARCHAR (255) SPARSE,
 	[AccountId2FillSQL]			NVARCHAR (MAX) SPARSE,
 	[CustodyId2Label]				NVARCHAR (255) SPARSE,
@@ -56,8 +56,8 @@
 	[RelatedAmount2Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount2FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 3
-	[Operation3Label]			NVARCHAR (255) SPARSE,
-	[Operation3FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId3Label]			NVARCHAR (255) SPARSE,
+	[OperationId3FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId3Label]				NVARCHAR (255) SPARSE,
 	[AccountId3FillSQL]			NVARCHAR (MAX) SPARSE,
 	[CustodyId3Label]				NVARCHAR (255) SPARSE,
@@ -83,8 +83,8 @@
 	[RelatedAmount3Label]		NVARCHAR (255) SPARSE,
 	[RelatedAmount3FillSQL]		NVARCHAR (MAX) SPARSE,
 -- Entry 4
-	[Operation4Label]			NVARCHAR (255) SPARSE,
-	[Operation4FillSQL]			NVARCHAR (MAX) SPARSE,
+	[OperationId4Label]			NVARCHAR (255) SPARSE,
+	[OperationId4FillSQL]			NVARCHAR (MAX) SPARSE,
 	[AccountId4Label]				NVARCHAR (255) SPARSE,
 	[AccountId4FillSQL]			NVARCHAR (MAX) SPARSE,
 	[CustodyId4Label]				NVARCHAR (255) SPARSE,
@@ -115,7 +115,7 @@ DECLARE @LineType NVARCHAR(255);
 /* RULES
 	FillSQL should NOT be based on other calculated columns.
 */
-SET @LineType = N'equity-issues';
+SET @LineType = N'equity-issues-foreign';
 INSERT @LineTypeSpecifications ([LineType]) VALUES(@LineType)
 UPDATE @LineTypeSpecifications
 SET
@@ -128,7 +128,7 @@ SET
 	[Value1Label]			= 	N'EquivalentFunctional',
 		[NoteId1FillSQL]		=		N'N''ProceedsFromIssuingShares''',
 	[Reference1Label]		=	N'Reference #',
-		[Operation2FillSQL] =		N'L.[OperationId1]',
+		[OperationId2FillSQL] =		N'L.[OperationId1]',
 		[AccountId2FillSQL]	=		N'N''IssuedCapital''',
 	[CustodyId2Label]			=	N'Shareholder',
 		[ResourceId2FillSQL]	=		N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
@@ -164,7 +164,7 @@ SET
 									WHERE CustodyId = L.[CustodyId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
 									)',
 	[Reference1Label]		= N'SalaryPeriod',
-		[Operation2FillSQL]		= N'L.[OperationId1]',
+		[OperationId2FillSQL]		= N'L.[OperationId1]',
 		[AccountId2FillSQL]		= N'N''ShorttermEmployeeBenefitsAccruals''',
 	[CustodyId2Label]			= N'Employee',
 	[ResourceId2Label]		 = N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
@@ -178,7 +178,7 @@ SET
 WHERE [LineType] = @LineType;
 -- Document Type: employees-deductions, either absences or penalties
 
-SET @LineType = N'employees-unpaid-absences'
+SET @LineType = N'et-employees-unpaid-absences'
 /* Logic:
 Dr. Accrual		Employee	Resource:Labor			500
 Cr. Inventory	Dept		Resource:Labor, absent days., 500
@@ -199,7 +199,7 @@ SET
 									And RelationType = N''Employee''
 									)',
 	[Reference1Label]		= N'SalaryPeriod',
-		[Operation2FillSQL]		= N'L.[OperationId1]',
+		[OperationId2FillSQL]	= N'L.[OperationId1]',
 		[AccountId2FillSQL]		= N'N''UnassignedLabor''',
 	[CustodyId2Label]			= N'Department',
 		[ResourceId2FillSQL]		 = N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
@@ -213,7 +213,7 @@ SET
 									)',
 		[Reference2FillSQL]		= N'L.[Reference1]'
 WHERE [LineType] = @LineType;
-SET @LineType = N'employees-penalties'
+SET @LineType = N'et-employees-penalties'
 /* Logic:
 Dr. Payable		Employee	Resource:currency,	Amount		500
 Cr. Wages		Dept		Resource:Currency, , 500
@@ -229,7 +229,7 @@ SET
 	[Amount1Label]			= N'Amount Deducted',
 	[Value1Label]			= N'Equiv. Functional',
 	[Reference1Label]		= N'SalaryPeriod',
-		[Operation2FillSQL]		= N'L.[OperationId1]',
+		[OperationId2FillSQL]		= N'L.[OperationId1]',
 		[AccountId2FillSQL]		= N'N''AdministrativeExpense''',
 	[CustodyId2Label]			= N'Department',
 		[ResourceId2FillSQL]		= N'L.[ResourceId1]',
@@ -239,7 +239,72 @@ SET
 		[NoteId2FillSQL]			= N'N''WagesAndSalaries''',
 		[Reference2FillSQL]		= N'L.[Reference1]'
 WHERE [LineType] = @LineType;
--- Document Type: Unpaid Leave, Paid Leave
+
+SET @LineType = N'et-employees-leaves-hourly-paid'
+/* Logic:
+Dr. AdminExpens	Employee	Resource:labor,	Amount: paid hours, value (from average cost?)
+	Cr. Inventory	Dept		Resource:Labor,	
+*/
+INSERT @LineTypeSpecifications ([LineType]) VALUES(@LineType)
+UPDATE @LineTypeSpecifications
+SET
+	[Operation1Label]		= N'Operation',
+		[AccountId1FillSQL]		= N'N''AdministrativeExpense''',
+	[CustodyId1Label]			= N'Employee',
+		[ResourceId1FillSQL]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
+		[Direction1FillSQL]		= N'+1',
+	[Amount1Label]			= N'Leave Hours',
+		[Value1FillSQL]			= N'(
+									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.CustodiesResources
+									WHERE CustodyId = L.[CustodyId1] 
+									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
+									And RelationType = N''Employee''
+									)',
+	[Reference1Label]		= N'SalaryPeriod',
+		[NoteId1FillSQL]		= N'N''WagesAndSalaries''',
+		[OperationId2FillSQL]	= N'L.[OperationId1]',
+		[AccountId2FillSQL]		= N'N''UnassignedLabor''',
+	[CustodyId2Label]		= N'Department', -- can be auto calculated.
+		[ResourceId2FillSQL]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
+		[Direction2FillSQL]		= N'-1',
+		[Amount2FillSQL]		= N'L.[Amount1]',
+		[Value2FillSQL]			= N'(
+									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.CustodiesResources
+									WHERE CustodyId = L.[CustodyId1] 
+									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
+									And RelationType = N''Employee''
+									)',
+		[Reference2FillSQL]		= N'L.[Reference1]'
+WHERE [LineType] = @LineType;
+
+SET @LineType = N'et-employees-leaves-hourly-unpaid'
+/* Logic:
+Dr. Accrual		Employee	Resource:Labor.	Ref:YYYYMM
+Cr. Inventory	Dept		Resource:Labor. 
+
+*/
+INSERT @LineTypeSpecifications ([LineType]) VALUES(@LineType)
+UPDATE @LineTypeSpecifications
+SET
+	[Operation1Label]		= N'Operation',
+		[AccountId1FillSQL]		= N'N''ShorttermEmployeeBenefitsAccruals''',
+	[CustodyId1Label]			= N'Employee',
+		[ResourceId1FillSQL]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
+		[Direction1FillSQL]		= N'+1',
+	[Amount1Label]			= N'Leave Hours',
+		[Value1FillSQL]			= N'L.[Amount1]',
+	[Reference1Label]		= N'SalaryPeriod',
+		[OperationId2FillSQL]	= N'L.[OperationId1]',
+		[AccountId2FillSQL]		= N'N''UnassignedLabor''',
+	[CustodyId2Label]		= N'Department', -- can be auto calculated.
+		[ResourceId2FillSQL]	= N'L.[ResourceId1]',
+		[Direction2FillSQL]		= N'-1',
+		[Amount2FillSQL]		= N'L.[Amount1]',
+		[Value2FillSQL]			= N'L.[Amount1]',
+		[Reference2FillSQL]		= N'L.[Reference1]'
+WHERE [LineType] = @LineType;
+
+--
 /*
 Dr. Employee Payable
 Cr. Wages (or revenues?)
@@ -263,7 +328,7 @@ INSERT @LineTypeSpecifications ([LineType], --N'PaymentIssueToSupplier',
 	[Value1Label],
 	[Reference1Label],
 -- Entry 2
-		[Operation2FillSQL],
+		[OperationId2FillSQL],
 		[AccountId2FillSQL],
 		[CustodyId2FillSQL],
 		[ResourceId2FillSQL],
@@ -275,7 +340,7 @@ INSERT @LineTypeSpecifications ([LineType], --N'PaymentIssueToSupplier',
 		[RelatedAgentId2FillSQL],
 		[RelatedAmount2FillSQL],
 -- Entry 3
-		[Operation3FillSQL],
+		[OperationId3FillSQL],
 		[AccountId3FillSQL],
 	[CustodyId3Label],
 		[ResourceId3FillSQL],
@@ -415,8 +480,8 @@ UPDATE SET
 	t.[RelatedAmount1Label]			= s.[RelatedAmount1Label],
 	t.[RelatedAmount1FillSQL]		= s.[RelatedAmount1FillSQL],
 
-	t.[Operation2Label]				= s.[Operation2Label],
-	t.[Operation2FillSQL]			= s.[Operation2FillSQL],
+	t.[OperationId2Label]				= s.[OperationId2Label],
+	t.[OperationId2FillSQL]			= s.[OperationId2FillSQL],
 	t.[AccountId2Label]				= s.[AccountId2Label],
 	t.[AccountId2FillSQL]				= s.[AccountId2FillSQL],
 	t.[CustodyId2Label]				= s.[CustodyId2Label],
@@ -442,8 +507,8 @@ UPDATE SET
 	t.[RelatedAmount2Label]			= s.[RelatedAmount2Label],
 	t.[RelatedAmount2FillSQL]		= s.[RelatedAmount2FillSQL],
 
-	t.[Operation3Label]				= s.[Operation3Label],
-	t.[Operation3FillSQL]			= s.[Operation3FillSQL],
+	t.[OperationId3Label]				= s.[OperationId3Label],
+	t.[OperationId3FillSQL]			= s.[OperationId3FillSQL],
 	t.[AccountId3Label]				= s.[AccountId3Label],
 	t.[AccountId3FillSQL]				= s.[AccountId3FillSQL],
 	t.[CustodyId3Label]				= s.[CustodyId3Label],
@@ -469,8 +534,8 @@ UPDATE SET
 	t.[RelatedAmount3Label]			= s.[RelatedAmount3Label],
 	t.[RelatedAmount3FillSQL]		= s.[RelatedAmount3FillSQL],
 
-	t.[Operation4Label]				= s.[Operation4Label],
-	t.[Operation4FillSQL]			= s.[Operation4FillSQL],
+	t.[OperationId4Label]				= s.[OperationId4Label],
+	t.[OperationId4FillSQL]			= s.[OperationId4FillSQL],
 	t.[AccountId4Label]				= s.[AccountId4Label],
 	t.[AccountId4FillSQL]				= s.[AccountId4FillSQL],
 	t.[CustodyId4Label]				= s.[CustodyId4Label],
@@ -505,19 +570,19 @@ INSERT ([TenantId], [LineType], [AppendSQL],
 	[Reference1Label], [Reference1FillSQL], [RelatedReference1Label], [RelatedReference1FillSQL],
 	[RelatedAgentId1Label], [RelatedAgentId1FillSQL], [RelatedResourceId1Label], [RelatedResourceId1FillSQL],
 	[RelatedAmount1Label], [RelatedAmount1FillSQL],
-	[Operation2Label], [Operation2FillSQL], [AccountId2Label], [AccountId2FillSQL], [CustodyId2Label],
+	[OperationId2Label], [OperationId2FillSQL], [AccountId2Label], [AccountId2FillSQL], [CustodyId2Label],
 	[CustodyId2FillSQL], [ResourceId2Label], [ResourceId2FillSQL], [Direction2Label], [Direction2FillSQL],
 	[Amount2Label], [Amount2FillSQL], [Value2Label], [Value2FillSQL], [NoteId2Label], [NoteId2FillSQL],
 	[Reference2Label], [Reference2FillSQL], [RelatedReference2Label], [RelatedReference2FillSQL],
 	[RelatedAgentId2Label], [RelatedAgentId2FillSQL], [RelatedResourceId2Label], [RelatedResourceId2FillSQL],
 	[RelatedAmount2Label], [RelatedAmount2FillSQL],
-	[Operation3Label], [Operation3FillSQL], [AccountId3Label], [AccountId3FillSQL], [CustodyId3Label],
+	[OperationId3Label], [OperationId3FillSQL], [AccountId3Label], [AccountId3FillSQL], [CustodyId3Label],
 	[CustodyId3FillSQL], [ResourceId3Label], [ResourceId3FillSQL], [Direction3Label], [Direction3FillSQL],
 	[Amount3Label], [Amount3FillSQL], [Value3Label], [Value3FillSQL], [NoteId3Label], [NoteId3FillSQL],
 	[Reference3Label], [Reference3FillSQL], [RelatedReference3Label], [RelatedReference3FillSQL],
 	[RelatedAgentId3Label], [RelatedAgentId3FillSQL], [RelatedResourceId3Label], [RelatedResourceId3FillSQL],
 	[RelatedAmount3Label], [RelatedAmount3FillSQL],
-	[Operation4Label], [Operation4FillSQL], [AccountId4Label], [AccountId4FillSQL], [CustodyId4Label],
+	[OperationId4Label], [OperationId4FillSQL], [AccountId4Label], [AccountId4FillSQL], [CustodyId4Label],
 	[CustodyId4FillSQL], [ResourceId4Label], [ResourceId4FillSQL], [Direction4Label], [Direction4FillSQL],
 	[Amount4Label], [Amount4FillSQL], [Value4Label], [Value4FillSQL], [NoteId4Label], [NoteId4FillSQL],
 	[Reference4Label], [Reference4FillSQL], [RelatedReference4Label], [RelatedReference4FillSQL],
@@ -531,19 +596,19 @@ VALUES(@TenantId, s.[LineType], s.[AppendSQL],
 	s.[Reference1Label], s.[Reference1FillSQL], s.[RelatedReference1Label], s.[RelatedReference1FillSQL],
 	s.[RelatedAgentId1Label], s.[RelatedAgentId1FillSQL], s.[RelatedResourceId1Label], s.[RelatedResourceId1FillSQL],
 	s.[RelatedAmount1Label], s.[RelatedAmount1FillSQL],
-	s.[Operation2Label], s.[Operation2FillSQL], s.[AccountId2Label], s.[AccountId2FillSQL], s.[CustodyId2Label],
+	s.[OperationId2Label], s.[OperationId2FillSQL], s.[AccountId2Label], s.[AccountId2FillSQL], s.[CustodyId2Label],
 	s.[CustodyId2FillSQL], s.[ResourceId2Label], s.[ResourceId2FillSQL], s.[Direction2Label], s.[Direction2FillSQL],
 	s.[Amount2Label], s.[Amount2FillSQL], s.[Value2Label], s.[Value2FillSQL], s.[NoteId2Label], s.[NoteId2FillSQL],
 	s.[Reference2Label], s.[Reference2FillSQL], s.[RelatedReference2Label], s.[RelatedReference2FillSQL],
 	s.[RelatedAgentId2Label], s.[RelatedAgentId2FillSQL], s.[RelatedResourceId2Label], s.[RelatedResourceId2FillSQL],
 	s.[RelatedAmount2Label], s.[RelatedAmount2FillSQL],
-	s.[Operation3Label], s.[Operation3FillSQL], s.[AccountId3Label], s.[AccountId3FillSQL], s.[CustodyId3Label],
+	s.[OperationId3Label], s.[OperationId3FillSQL], s.[AccountId3Label], s.[AccountId3FillSQL], s.[CustodyId3Label],
 	s.[CustodyId3FillSQL], s.[ResourceId3Label], s.[ResourceId3FillSQL], s.[Direction3Label], s.[Direction3FillSQL],
 	s.[Amount3Label], s.[Amount3FillSQL], s.[Value3Label], s.[Value3FillSQL], s.[NoteId3Label], s.[NoteId3FillSQL],
 	s.[Reference3Label], s.[Reference3FillSQL], s.[RelatedReference3Label], s.[RelatedReference3FillSQL],
 	s.[RelatedAgentId3Label], s.[RelatedAgentId3FillSQL], s.[RelatedResourceId3Label], s.[RelatedResourceId3FillSQL],
 	s.[RelatedAmount3Label], s.[RelatedAmount3FillSQL],
-	s.[Operation4Label], s.[Operation4FillSQL], s.[AccountId4Label], s.[AccountId4FillSQL], s.[CustodyId4Label],
+	s.[OperationId4Label], s.[OperationId4FillSQL], s.[AccountId4Label], s.[AccountId4FillSQL], s.[CustodyId4Label],
 	s.[CustodyId4FillSQL], s.[ResourceId4Label], s.[ResourceId4FillSQL], s.[Direction4Label], s.[Direction4FillSQL],
 	s.[Amount4Label], s.[Amount4FillSQL], s.[Value4Label], s.[Value4FillSQL], s.[NoteId4Label], s.[NoteId4FillSQL],
 	s.[Reference4Label], s.[Reference4FillSQL], s.[RelatedReference4Label], s.[RelatedReference4FillSQL],

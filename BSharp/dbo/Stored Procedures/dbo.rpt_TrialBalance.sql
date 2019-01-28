@@ -4,6 +4,7 @@ EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', 
 */	
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2020',
+	@ByOperation bit = 1,
 	@ByCustody bit = 1,
 	@ByResource bit = 1,
 	@ByNote bit = 1,
@@ -16,6 +17,9 @@ BEGIN
 		SET NOCOUNT ON;
 		SELECT
 			A.[Code], A.[Name] As Account,'
+	IF (@ByOperation = 1)
+		SET @Query = @Query + N'
+			O.[Name] As Operation,'
 	IF (@ByCustody = 1)
 		SET @Query = @Query + N'
 			C.[Name] As Custody,'
@@ -32,6 +36,7 @@ BEGIN
 		FROM 
 		(
 			SELECT AccountId, '
+	IF (@ByOperation = 1) SET @Query = @Query + N'OperationId, '
 	IF (@ByCustody = 1) SET @Query = @Query + N'CustodyId, '
 	IF (@ByResource = 1) SET @Query = @Query + N'ResourceId, '
 	IF (@ByNote = 1) SET @Query = @Query + N'NoteId, '
@@ -40,6 +45,7 @@ BEGIN
 			CAST(SUM([Direction] * [Value]) AS money) AS NET
 			FROM [dbo].[fi_Journal](@fromDate, @toDate) E
 			GROUP BY AccountId'
+	IF (@ByOperation = 1) SET @Query = @Query + N', OperationId'
 	IF (@ByCustody = 1) SET @Query = @Query + N', CustodyId'
 	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'
 	IF (@ByNote = 1) SET @Query = @Query + N', NoteId'
@@ -47,6 +53,8 @@ BEGIN
 			HAVING SUM([Direction] * [Value]) <> 0
 		) T 
 		JOIN [dbo].Accounts A ON T.AccountId = A.Id'
+	IF (@ByOperation = 1) SET @Query = @Query + N'
+		JOIN [dbo].[Operations] O ON T.OperationId = O.Id'
 	IF (@ByCustody = 1) SET @Query = @Query + N'
 		JOIN [dbo].[Custodies] C ON T.CustodyId = C.Id'
 	IF (@ByResource = 1) SET @Query = @Query + N'

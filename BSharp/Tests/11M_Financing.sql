@@ -1,15 +1,15 @@
 ﻿SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
 INSERT INTO @DSave(
-[Index], [DocumentType],	[StartDateTime],	[Memo],					[OperationId]) VALUES (
-@DIdx, N'manual-journals',	'2017.01.01',		N'Capital investment',	@Unspecified
+[Index], [DocumentType],	[StartDateTime],	[Memo]) VALUES (
+@DIdx, N'manual-journals',	'2017.01.01',		N'Capital investment'
 );
 
 SELECT @EIdx = ISNULL(MAX([Index]), -1) + 1 FROM @ESave;
 INSERT INTO @ESave (
-[Index],	[DocumentIndex], AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
-(@EIdx,		@DIdx,	N'BalancesWithBanks',	@CBEUSD,		@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares'),
-(@EIdx + 1, @DIdx,	N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
-(@EIdx + 2, @DIdx,	N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
+[Index],	[DocumentIndex], [OperationId], AccountId,			CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
+(@EIdx,		@DIdx,				@WSI,	N'BalancesWithBanks',	@CBEUSD,		@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares'),
+(@EIdx + 1, @DIdx,				@WSI,	N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
+(@EIdx + 2, @DIdx,				@WSI,	N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
 
 EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @Entries = @ESave,

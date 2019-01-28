@@ -1,9 +1,9 @@
 ﻿DECLARE @DocumentTypes TABLE([id] NVARCHAR(255) PRIMARY KEY, [Description] NVARCHAR(255), [Description2] NVARCHAR(255))
 INSERT @DocumentTypes ([Id]) VALUES
 	(N'manual-journals'),
-	(N'capital-investments'),	--	(N'equity-issues'),
+	(N'equity-issues'),	--	(N'equity-issues-foreign'),
 	(N'employees-overtime'),	--	(N'employees-overtime'),
-	(N'employees-deductions'),	--	(N'employees-unpaid-absences'),(N'employees-penalties'), (N'employees-loans-dues');
+	(N'employees-deductions'),	--	(N'et-employees-unpaid-absences'),(N'et-employees-penalties'), (N'employees-loans-dues');
 	(N'employees-leaves-hourly'),
 	(N'employees-leaves-daily'),
 	(N'salaries'),				--	(N'salaries')
@@ -22,14 +22,16 @@ INSERT @DocumentTypes ([Id]) VALUES
 DECLARE @LineTypes TABLE([id] NVARCHAR(255) PRIMARY KEY, [Description] NVARCHAR(255), [Description2] NVARCHAR(255))
 INSERT @LineTypes ([Id]) VALUES
 	(N'manual-journals'),
-	(N'equity-issues'),
+	(N'equity-issues-foreign'),
+	(N'equity-issues-local'),
 	(N'employees-overtime'),
-	(N'employees-unpaid-absences'),
-	(N'employees-penalties'),
-	(N'employees-leaves-hourly-paid'),
-	(N'employees-leaves-daily-paid'),
-	(N'employees-leaves-daily-semipaid'),
-	(N'employees-leaves-daily-unpaid'),
+	(N'et-employees-unpaid-absences'),
+	(N'et-employees-penalties'),
+	(N'et-employees-leaves-hourly-paid'),
+	(N'et-employees-leaves-hourly-unpaid'),
+	(N'et-employees-leaves-daily-paid'),
+	(N'et-employees-leaves-daily-semipaid'),
+	(N'et-employees-leaves-daily-unpaid'),
 
 	(N'PaymentIssueToSupplier'),
 	(N'PurchaseWitholdingTax'),

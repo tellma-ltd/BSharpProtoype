@@ -16,6 +16,7 @@ BEGIN -- reset Identities
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
 	EXEC sp_set_session_context 'TenantId', 106;
+	EXEC sp_set_session_context 'Debug', 0;
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @UserId int;
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
@@ -40,10 +41,10 @@ BEGIN TRY
 		:r .\04_Agents.sql
 		:r .\05_Places.sql
 		:r .\10_Documents.sql
-		select * from entries;
-	--SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
-	--SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
-
+	--	select * from entries;
+	SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
+	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate;
 	--SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
 	--SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;
