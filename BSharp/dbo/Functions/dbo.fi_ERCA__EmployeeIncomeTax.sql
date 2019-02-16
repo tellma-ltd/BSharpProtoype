@@ -9,9 +9,8 @@ RETURN
 		C.TaxIdentificationNumber As [Employee TIN],
 		C.[Name] As [Employee Full Name],
 		S.RelatedAmount As [Taxable Income], 
-		S.Amount As [Tax Withheld],
-		S.Reference AS [Salary Period]
+		S.[Value] As [Tax Withheld]
 	FROM [dbo].[fi_Account__Statement](N'CurrentEmployeeIncomeTaxPayable' , default, default, @fromDate, @toDate) S
-	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	WHERE C.CustodyType = N'Agent'
+	JOIN [dbo].[Agents] C ON S.[RelatedAgentId] = C.Id
+	WHERE C.[RelationType] = N'Agent'
 	AND S.Direction = -1;

@@ -15,6 +15,9 @@ DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U i
 		--:r .\14_SalesCycle.sql
 		--:r .\12_ManualMisc.sql
 SELECT @fromDate = '2017.01.01', @toDate = '2017.01.31'
+select operationId, [AgentId], sum(amount) from entries
+group by rollup(operationId, [AgentId])
+order by operationId, [AgentId]
 --SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
 --EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate, @PrintQuery=1;
 --SELECT * FROM dbo.Documents;
@@ -50,7 +53,7 @@ UPDATE @D2Save SET [StartDateTime] = '2018.01.02', [EntityState] = N'Updated'
 UPDATE @E2Save SET [EntityState] = N'Deleted' WHERE [Index] = 1;
 INSERT INTO @E2Save
 ([Id], [LineIndex], [LineId], EntryNumber, OperationId,		AccountId,			CustodyId,		ResourceId,	Direction, Amount, [Value],		NoteId,				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]) VALUES
-(NULL, 0,			1, 			4,			@Unspecified, N'IssuedCapital',	@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',	NULL,				NULL,				NULL,				NULL,			N'Inserted');
+(NULL, 0,			1, 			4,			@WSI, N'IssuedCapital',	@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity',	NULL,				NULL,				NULL,				NULL,			N'Inserted');
 	
 UPDATE @L2Save SET [EntityState] = N'Updated'
 WHERE [EntityState] = N'Unchanged'

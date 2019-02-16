@@ -25,11 +25,11 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Entries[' +
 		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, A.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
-	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
+	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
 	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
-	JOIN dbo.[Accounts] A ON E.[AccountId] = A.Id
+	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE (A.IsActive = 0);
 
 	-- No inactive note

@@ -4,25 +4,26 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-
+/*
 	-- If the state is already as desired, ignore
-	IF @IsActive = (SELECT IsActive FROM [dbo].[Accounts] WHERE [Id]= @Account)
+	IF @IsActive = (SELECT IsActive FROM [dbo].[IFRSConcepts] WHERE [Id]= @Account)
 		RETURN;
 
 	-- Not sure about this business rule: all related leaves should have zero balance
 	IF @IsActive = 0
 	BEGIN
 		-- deactivate all active descendants
-		UPDATE [dbo].[Accounts]
+		UPDATE [dbo].[IFRSConcepts]
 		SET IsActive = @IsActive
 		WHERE Code Like (
-			SELECT Code FROM [dbo].[Accounts] WHERE [Id]= @Account) + N'%' 
+			SELECT Code FROM [dbo].[IFRSConcepts] WHERE [Id]= @Account) + N'%' 
 			AND IsActive = 1
 	END
 
 	IF @IsActive = 1 -- activate all inactive acendants
-		UPDATE [dbo].[Accounts]
+		UPDATE [dbo].[IFRSConcepts]
 		SET IsActive = @IsActive
-		WHERE Code + '%' Like (SELECT Code FROM [dbo].[Accounts] WHERE [Id]= @Account)
+		WHERE Code + '%' Like (SELECT Code FROM [dbo].[IFRSConcepts] WHERE [Id]= @Account)
 		AND IsActive = 0;
+		*/
 END;

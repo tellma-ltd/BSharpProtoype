@@ -100,45 +100,53 @@ BEGIN -- Inherit from defaults
 END
 
 BEGIN -- Fill lines from specifications
-	DECLARE @Sql NVARCHAR(4000), @ParmDefinition NVARCHAR(255), @AppendSQL NVARCHAR(4000), @LineType NVARCHAR(255);
+	-- copy the directions as is...
+	UPDATE L
+	SET
+		L.Direction1 = LTS.Direction1,
+		L.Direction2 = LTS.Direction2,
+		L.Direction3 = LTS.Direction3,
+		L.Direction4 = LTS.Direction4
+	FROM @LinesLocal L
+	JOIN dbo.LineTypeSpecifications LTS ON L.LineType = LTS.LineType;
+
+	DECLARE @Sql NVARCHAR(4000), @ParmDefinition NVARCHAR(255), @AppendSql NVARCHAR(4000), @LineType NVARCHAR(255);
 	SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes;
 	WHILE @LineType IS NOT NULL
 	BEGIN
-		SET @SQL = N'
+		SET @Sql = N'
 			DECLARE @LinesLocal [dbo].[LineList];
 			INSERT INTO @LinesLocal SELECT * FROM @Lines;
 			UPDATE L
 			SET 
-			' +	ISNULL('L.OperationId1 = ' + (SELECT [OperationId1FillSQL] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.AccountId1 = ' +	(SELECT [AccountId1FillSQL] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.CustodyId1 = ' +	(SELECT CustodyId1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.ResourceId1 = ' +	(SELECT ResourceId1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Direction1 = ' +	(SELECT Direction1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Amount1 = ' +	(SELECT Amount1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Value1 = ' +	(SELECT Value1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.NoteId1 = ' +	(SELECT NoteId1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Reference1 = ' +	(SELECT Reference1FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.OperationId2 = ' +	(SELECT OperationId2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.AccountId2 = ' +	(SELECT AccountId2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.CustodyId2 = ' +	(SELECT CustodyId2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.ResourceId2 = ' +	(SELECT ResourceId2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Direction2 = ' +	(SELECT Direction2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Amount2 = ' +	(SELECT Amount2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Value2 = ' +	(SELECT Value2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.NoteId2 = ' +	(SELECT NoteId2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.Reference2 = ' +	(SELECT Reference2FillSQL FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			' +	ISNULL('L.OperationId1 = ' + (SELECT [OperationId1FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.AccountId1 = ' +	(SELECT [AccountId1FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.CustodyId1 = ' +	(SELECT CustodyId1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.ResourceId1 = ' +	(SELECT ResourceId1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Amount1 = ' +	(SELECT Amount1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Value1 = ' +	(SELECT Value1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.NoteId1 = ' +	(SELECT NoteId1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Reference1 = ' +	(SELECT Reference1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.OperationId2 = ' +	(SELECT OperationId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.AccountId2 = ' +	(SELECT AccountId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.CustodyId2 = ' +	(SELECT CustodyId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.ResourceId2 = ' +	(SELECT ResourceId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Amount2 = ' +	(SELECT Amount2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Value2 = ' +	(SELECT Value2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.NoteId2 = ' +	(SELECT NoteId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.Reference2 = ' +	(SELECT Reference2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + 'L.[Index] = L.[Index]
 			FROM @LinesLocal L
 			JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
 			JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];
 			SELECT * FROM @LinesLocal;
 		';
-		SELECT @AppendSQL = AppendSQL FROM dbo.LineTypeSpecifications WHERE LineType = @LineType;
+		SELECT @AppendSql = AppendSql FROM dbo.LineTypeSpecifications WHERE LineType = @LineType;
 
 		IF @DEBUG = 1
 		BEGIN
-			PRINT @SQL;
-			Print @AppendSQL;
+			PRINT @Sql;
+			Print @AppendSql;
 		END;
 
 		DECLARE @LinesInput LineList;
@@ -148,10 +156,10 @@ BEGIN -- Fill lines from specifications
 				
 		DELETE FROM @LinesLocal WHERE LineType = @LineType;
 		INSERT INTO @LinesLocal -- would be nice if we can use merge instead.
-			EXEC sp_executesql @SQL, @ParmDefinition,
+			EXEC sp_executeSql @Sql, @ParmDefinition,
 				@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesInput;
 
-		EXEC sp_executesql @AppendSQL, @ParmDefinition,
+		EXEC sp_executeSql @AppendSql, @ParmDefinition,
 			@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesLocal;
 
 		SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes WHERE LineType > @LineType;
@@ -197,6 +205,7 @@ BEGIN	-- Smart Posting
 	GROUP BY S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType], S.[OperationId],
 		S.[AccountId], S.[CustodyId], S.[ResourceId], S.[Direction], S.[NoteId], S.[Memo],
 		S.[Reference], S.[RelatedReference], S.[RelatedAgentId], S.[RelatedResourceId], S.[RelatedAmount], DLT.[SortKey]
+	HAVING(SUM(S.[Amount]) > 0 OR SUM(S.[Value]) > 0)
 END
 
 IF @DEBUG = 1

@@ -69,6 +69,6 @@ BEGIN
 	ELSE BEGIN
 		DECLARE @ParmDefinition nvarchar(500);
 		SET @ParmDefinition = N'@fromDate Datetime, @toDate Datetime';
-		EXEC sp_executesql @Query, @ParmDefinition, @fromDate = @fromDate, @toDate = @toDate
+		EXEC sp_executeSql @Query, @ParmDefinition, @fromDate = @fromDate, @toDate = @toDate
 	END
 END

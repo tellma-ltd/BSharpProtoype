@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Reconciliation] (
 	[TenantId]		INT,
-	[Id]			INT					IDENTITY (1, 1),
+	[Id]			INT					IDENTITY,
 	[EntryId1]		INT					NOT NULL,
 	[EntryId2]		INT					NOT NULL,
 	[Amount]		MONEY				NOT NULL,

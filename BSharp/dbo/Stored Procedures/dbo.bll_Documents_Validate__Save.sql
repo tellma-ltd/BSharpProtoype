@@ -37,13 +37,15 @@ SET NOCOUNT ON;
 	
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR(255)) + '].Entries[' +
-				CAST(E.[Index] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheAccount0IsInactive' As [ErrorName],
-				BE.[Name] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Entries E
-	JOIN [dbo].[Accounts] BE ON E.[NoteId] = BE.[Id]
-	WHERE (BE.IsActive = 0)
-	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Entries[' +
+		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
+		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Documents FE
+	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
+	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
+	WHERE (A.IsActive = 0);
 
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 

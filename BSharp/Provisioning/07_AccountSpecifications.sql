@@ -1,8 +1,8 @@
 ﻿DECLARE @AccountSpecifications AS TABLE (
 	[AccountId]				NVARCHAR (255),
 	[Direction]				SMALLINT,
-	[CustodyLabel]			NVARCHAR (255),
-	[CustodyFilter]			NVARCHAR (255),
+	[CustodyLabel]			NVARCHAR (255), -- Needed when hovering over the column.
+	[CustodyFilter]			NVARCHAR (255), -- JS code, affecting the 
 	[ResourceLabel]			NVARCHAR (255),
 	[ResourceFilter]		NVARCHAR (255),
 	[AmountLabel]			NVARCHAR (255),
@@ -16,9 +16,10 @@
 	PRIMARY KEY NONCLUSTERED ([AccountId], [Direction])
 );
 INSERT INTO @AccountSpecifications(
-[AccountId],				[Direction], [CustodyLabel], [CustodyFilter], [ResourceLabel], [ResourceFilter], [AmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel]) VALUES
-(N'CurrentWithholdingTaxPayable', -1,		NULL,			NULL,			NULL,				NULL,			NULL,			N'WT Form #',		NULL,					N'Withholdee',				NULL,					NULL,					NULL,			N'Invoice Amount'),
-(N'CurrentValueAddedTaxReceivables',+1,		NULL,			NULL,			NULL,				NULL,			NULL,			N'Invoice #',		NULL,					N'Customer',				NULL,					NULL,					NULL,			N'Invoice Amount');
+[AccountId],				[Direction], [CustodyLabel], [CustodyFilter],				[ResourceLabel], [ResourceFilter],				[AmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel]) VALUES
+(N'BalancesWithBanks',			+1,		N'BankAccount',	N'CustodyType = N''BankAccount''', N'Currency',	N'ResourceType = N''Currency''', N'Deposit',	N'DepositSlipReference', N'CheckReference', N'Depositer',		NULL,					NULL,					NULL,					NULL),
+(N'CurrentWithholdingTaxPayable', -1,		NULL,		N'SystemCode = N''TaxAgent''',	N'Currency',	N'SystemCode = N''Functional''', N'AmountWithheld',	N'WT Form #',	NULL,					N'Withholdee',		NULL,					NULL,					NULL,			N'Invoice Amount'),
+(N'CurrentValueAddedTaxReceivables',+1,		NULL,		N'SystemCode = N''TaxAgent''',		NULL,		N'SystemCode = N''Functional''',	NULL,		N'Invoice #',		NULL,					N'Customer',		NULL,					NULL,					NULL,			N'Invoice Amount');
 
 MERGE [dbo].AccountSpecifications AS t
 USING @AccountSpecifications AS s

@@ -55,19 +55,19 @@ SELECT @VRU_3 = (420000 - @P1_U * @VR1_2)/@PU_3;
 INSERT INTO @ESave -- Purchases and Rentals
 ([LineIndex],EntryNumber,OperationId,AccountId,		CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId,							[Reference],	[RelatedReference], [RelatedAgentId], [RelatedAmount]) VALUES
 -- Exchange of $50000
-(	1,	1,	@Unspecified,	N'BalancesWithBanks',		@CBEETB,		@ETB,			+1,		1175000, NULL,		N'InternalCashTransfer',		NULL,			NULL,				NULL,					NULL),
-(	1,	2,	@Unspecified,	N'BalancesWithBanks',		@CBEUSD,		@USD,			-1,		50000,	1175000,	N'InternalCashTransfer',		NULL,			NULL,				NULL,					NULL),
+(	1,	1,	@WSI,	N'BalancesWithBanks',		@CBEETB,		@ETB,			+1,		1175000, NULL,		N'InternalCashTransfer',		NULL,			NULL,				NULL,					NULL),
+(	1,	2,	@WSI,	N'BalancesWithBanks',		@CBEUSD,		@USD,			-1,		50000,	1175000,	N'InternalCashTransfer',		NULL,			NULL,				NULL,					NULL),
 -- Vehicles receipt on account
-(	2,	1,	@Unspecified,	N'OtherInventories',		@MiscWarehouse,	@Camry2018,		+1,		2,		600000,		NULL,							NULL,			NULL,				NULL,					NULL),
-(	2,	2,	@Unspecified,	N'GoodsAndServicesReceivedFromSupplierButNotBilled',@Lifan,@Camry2018,-1,2,	600000,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	2,	1,	@WSI,	N'OtherInventories',		@MiscWarehouse,	@Camry2018,		+1,		2,		600000,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	2,	2,	@WSI,	N'GoodsAndServicesReceivedFromSupplierButNotBilled',@Lifan,@Camry2018,-1,2,	600000,		NULL,							NULL,			NULL,				NULL,					NULL),
 -- Invoice for vehicles
-(	3,	1,	@Unspecified,	N'GoodsAndServicesReceivedFromSupplierButNotBilled',@Lifan,@Camry2018,+1,2,	600000,		NULL,							NULL,			NULL,				NULL,					NULL),
-(	3,	2,	@Unspecified,	N'CurrentValueAddedTaxReceivables',@ERCA,	@ETB,			+1,		90000,	NULL,		NULL,							N'INV-YM01',	N'FS0987',			@Lifan,					600000),
-(	3,	3,	@Unspecified,	N'CurrentPayablesForPurchaseOfNoncurrentAssets',@Lifan,@ETB,-1,		690000,	NULL,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	3,	1,	@WSI,	N'GoodsAndServicesReceivedFromSupplierButNotBilled',@Lifan,@Camry2018,+1,2,	600000,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	3,	2,	@WSI,	N'CurrentValueAddedTaxReceivables',@ERCA,	@ETB,			+1,		90000,	NULL,		NULL,							N'INV-YM01',	N'FS0987',			@Lifan,					600000),
+(	3,	3,	@WSI,	N'CurrentPayablesForPurchaseOfNoncurrentAssets',@Lifan,@ETB,-1,		690000,	NULL,		NULL,							NULL,			NULL,				NULL,					NULL),
 -- Vehicles Invoice payment
-(	4,	1,	@Unspecified,	N'CurrentPayablesForPurchaseOfNoncurrentAssets',@Lifan,@ETB,+1,		690000,	NULL,		NULL,							NULL,			NULL,				NULL,					NULL),
-(	4,	2,	@Unspecified,	N'CurrentWithholdingTaxPayable',@ERCA,		@ETB,			-1,		12000,	NULL,		NULL,							N'WT0901',		NULL,				@Lifan,					600000),
-(	4,	3,	@Unspecified,	N'BalancesWithBanks',		@CBEETB,		@ETB,			-1,		678000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',N'Ck002',NULL,NULL,		NULL),
+(	4,	1,	@WSI,	N'CurrentPayablesForPurchaseOfNoncurrentAssets',@Lifan,@ETB,+1,		690000,	NULL,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	4,	2,	@WSI,	N'CurrentWithholdingTaxPayable',@ERCA,		@ETB,			-1,		12000,	NULL,		NULL,							N'WT0901',		NULL,				@Lifan,					600000),
+(	4,	3,	@WSI,	N'BalancesWithBanks',		@CBEETB,		@ETB,			-1,		678000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',N'Ck002',NULL,NULL,		NULL),
 -- Invoice for rental
 (	5,	1,	@Sales,		N'RentAccrualClassifiedAsCurrent',@Regus,	@Goff,			+1,		6,		24000,		NULL,							NULL,			NULL,				NULL,					NULL),
 (	5,	2,	@Sales,		N'CurrentValueAddedTaxReceivables',@ERCA,	@ETB,			+1,		3600,	NULL,		NULL,							N'INV-YM02',	N'FS10117',			@Regus,					12000),
@@ -78,7 +78,7 @@ INSERT INTO @ESave -- Purchases and Rentals
 (	6,	3,	@Sales,		N'BalancesWithBanks',		@CBEETB,		@ETB,			-1,		27120,	NULL,		N'PaymentsToSuppliersForGoodsAndServices',N'Ck003',	NULL,			NULL,					NULL),
 -- Vehicles Put in use
 (	7,	1,	@ExecOffice,N'MotorVehicles',			@ExecutiveOffice,@Car1Svc,		+1,		@P1_2,	300000,		N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment',NULL,NULL,NULL,	NULL),
-(	7,	2,	@Unspecified,	N'OtherInventories',		@MiscWarehouse,	@Camry2018,		-1,		1,		300000,		NULL,							NULL,			NULL,				NULL,					NULL),
+(	7,	2,	@WSI,	N'OtherInventories',		@MiscWarehouse,	@Camry2018,		-1,		1,		300000,		NULL,							NULL,			NULL,				NULL,					NULL),
 -- Vehicles Depreciation
 (	8,	1,	@ExecOffice,N'AdministrativeExpense',	@ExecutiveOffice,@Car1Svc,		+1,		+1,		@VR1_2,		N'DepreciationExpense',			NULL,			NULL,				NULL,					NULL),
 (	8,	2,	@ExecOffice,N'MotorVehicles',			@ExecutiveOffice,@Car1Svc,		-1,		+1,		@VR1_2,		N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,					NULL),
@@ -87,7 +87,7 @@ INSERT INTO @ESave -- Purchases and Rentals
 (	9,	2,	@Sales,		N'RentAccrualClassifiedAsCurrent',@Regus,	@Goff,			-1,		+1,		4000,		NULL,							NULL,			NULL,				NULL,					NULL),
 -- Vehicle 1 Reinforcement
 (	10,	1,	@ExecOffice,N'MotorVehicles',			@ExecutiveOffice,@Car1Svc,		+1,		@P2_3,	120000,		N'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment',NULL,NULL,NULL,	NULL),
-(	10,	2,	@Unspecified,	N'BalancesWithBanks',		@CBEETB,		@ETB,			-1,		120000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',N'Ck001',NULL,NULL,	NULL),
+(	10,	2,	@WSI,	N'BalancesWithBanks',		@CBEETB,		@ETB,			-1,		120000,	NULL,		N'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',N'Ck001',NULL,NULL,	NULL),
 -- Reverse Depreciation
 (	11,	1,	@ExecOffice,N'AdministrativeExpense',	@ExecutiveOffice,@Car1Svc,		+1,		-1,		-@VR1_2,	N'DepreciationExpense',			NULL,			NULL,				NULL,					NULL),
 (	11,	2,	@ExecOffice,N'MotorVehicles',			@ExecutiveOffice,@Car1Svc,		-1,		-1,		-@VR1_2,	N'DepreciationPropertyPlantAndEquipment',NULL,	NULL,				NULL,					NULL),

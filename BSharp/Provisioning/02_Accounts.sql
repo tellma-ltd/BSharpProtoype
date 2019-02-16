@@ -143,6 +143,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'12127', N'OtherCurrentReceivables', N'Other current receivables')
 ,(N'Extension', 1, N'121271', N'GoodsAndServicesBilledBySupplierButNotReceived', N'Goods and services billed by supplier but not received')
 ,(N'Extension', 1, N'121272', N'LeaseInBilledByLessorButNotReceived', N'Lease in billed by lessor but not received')
+,(N'Extension', 1, N'121273', N'CurrentReceivablesFromEmployeesLoans', N'Current receviable from employees loans')
 ,(N'Regulatory', 1, N'1213', N'CurrentTaxAssetsCurrent', N'Current tax assets, current')
 ,(N'Extension', 1, N'12131', N'CurrentWithholdingTaxReceivables', N'Current withholding tax receivables')
 ,(N'Regulatory', 1, N'1214', N'CurrentBiologicalAssets', N'Current biological assets')
@@ -277,6 +278,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Extension', 1, N'321254', N'CurrentEmployeeIncomeTaxPayable', N'Current employee income tax payable')
 ,(N'Extension', 1, N'321255', N'CurrentSocialSecurityTaxPayable', N'Current social security tax payable')
 ,(N'Extension', 1, N'321256', N'CurrentZakatPayable', N'Current social security tax payable')
+,(N'Extension', 1, N'321257', N'CurrentDividendsTaxPayable', N'Current dividends tax payable')
 ,(N'Regulatory', 1, N'32126', N'CurrentRetentionPayables', N'Current retention payables')
 ,(N'Regulatory', 1, N'32127', N'OtherCurrentPayables', N'Other current payables')
 ,(N'Extension', 1, N'321271', N'GoodsAndServicesBilledToCustomerButNotDelivered', N'Goods and services billed to customer but not delivered')
@@ -387,7 +389,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'5272', N'ReclassificationAdjustmentsOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeNetOfTax', N'Reclassification adjustments on financial assets measured at fair value through other comprehensive income, net of tax')
 ,(N'Regulatory', 1, N'5273', N'AmountsRemovedFromEquityAndAdjustedAgainstFairValueOfFinancialAssetsOnReclassificationOutOfFairValueThroughOtherComprehensiveIncomeMeasurementCategoryNetOfTax', N'Amounts removed from equity and adjusted against fair value of financial assets on reclassification out of fair value through other comprehensive income measurement category, net of tax')
 ,(N'Regulatory', 1, N'528', N'ShareOfOtherComprehensiveIncomeOfAssociatesAndJointVenturesAccountedForUsingEquityMethodThatWillBeReclassifiedToProfitOrLossNetOfTax', N'Share of other comprehensive income of associates and joint ventures accounted for using equity method that will be reclassified to profit or loss, net of tax');
-MERGE [dbo].[Accounts] AS t
+MERGE [dbo].[IFRSConcepts] AS t
 USING @Accounts AS s
 ON s.Code = t.Code
 WHEN MATCHED AND
@@ -400,16 +402,16 @@ WHEN MATCHED AND
   t.[IsExtensible]			<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-  t.[Name]					=	s.[Name], 
-  t.[Code]					=	s.[Code],
+  t.[IFRSConceptId]					=	s.[Name], 
+  t.[IFRSConceptNode]					=	s.[Code],
   t.[IsActive]				=	s.[IsActive],
-  t.[AccountType]			=	s.[AccountType], 
+  t.[IFRSConceptType]			=	s.[AccountType], 
 --  t.[AccountSpecification]	=	s.[AccountSpecification],
   t.[IsExtensible]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[Id], [Name], [Code], [IsActive], [AccountType],-- [AccountSpecification],
+    INSERT ([TenantId],	[IFRSConceptNode], [IFRSConceptId], [IFRSConceptNode], [IsActive], [IFRSConceptType],-- [AccountSpecification],
 			[IsExtensible])
     VALUES (@TenantId, 	s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);

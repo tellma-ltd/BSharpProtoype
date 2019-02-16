@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Agents__Save]
-	@Entities [AgentList] READONLY,
+	@Entities [EmployeeList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -8,16 +8,16 @@ AS
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
-	DELETE FROM [dbo].[Custodies]
+	DELETE FROM [dbo].[Agents]
 	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].[Custodies] AS t
+		MERGE INTO [dbo].[Agents] AS t
 		USING (
-			SELECT [Index], [Id], [AgentType], [Name], [Name2], [Code], [Address], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender]
+			SELECT [Index], [Id], [PersonType], [Name], [Name2], [Code], [SystemCode], [Address], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -27,7 +27,7 @@ AS
 				t.[Name]			= s.[Name],
 				t.[Name2]			= s.[Name2],
 				t.[Code]			= s.[Code],
-				t.[Address]			= s.[Address],
+
 				t.[BirthDateTime]	= s.[BirthDateTime],
 
 				t.[IsRelated]		= s.[IsRelated],
@@ -36,10 +36,10 @@ AS
 				t.[Gender]			= s.[Gender],
 
 				t.[ModifiedAt]		= @Now,
-				t.[ModifiedById]		= @UserId
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [CustodyType], [AgentType], [Name], [Name2], [Code], [Address], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, N'Agent',	s.[AgentType], s.[Name], s.[Name2], s.[Code], s.[Address], s.[BirthDateTime], s.[IsRelated], s.[TaxIdentificationNumber], s.[Title], s.[Gender], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [RelationType], [PersonType], [Name], [Name2], [Code], [SystemCode], [BirthDateTime], [IsRelated], [TaxIdentificationNumber], [Title], [Gender], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			VALUES (@TenantId, N'Agent',	s.[PersonType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[BirthDateTime], s.[IsRelated], s.[TaxIdentificationNumber], s.[Title], s.[Gender], @Now, @UserId, @Now, @UserId)
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
 	

@@ -1,7 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[fi_Paysheet] (
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100',
-	@Reference nvarchar(255) = NULL,
 	@BasicSalaryResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Basic')
 	@TransportationAllowanceResourceId int -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
 )
@@ -42,7 +41,7 @@ RETURN
 			THEN S.Direction * S.[Value] Else 0 
 			END) AS [Pension Contribution 11%]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) S
-	JOIN [dbo].[Custodies] C ON S.RelatedAgentId = C.Id
-	WHERE (@Reference IS NULL OR S.Reference = @Reference)
-	AND C.CustodyType = N'Agent'
+	JOIN [dbo].[Accounts] A ON S.AccountId = A.Id
+	JOIN [dbo].[Agents] C ON S.[RelatedAgentId] = C.Id
+	WHERE C.[RelationType] = N'employee'
 	GROUP BY C.TaxIdentificationNumber, C.[Name];

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Lines] (
 	[TenantId]		INT,
-	[Id]			INT IDENTITY (1, 1),
+	[Id]			INT IDENTITY,
 	[DocumentId]	INT					NOT NULL,
 	[Assertion]		SMALLINT			NOT NULL CONSTRAINT [DF_Lines_Assertion] DEFAULT(1), -- (-1) for negation.
 	[LineType]		NVARCHAR(255)		NOT NULL,
@@ -13,11 +13,11 @@
 	[ScalingFactor]	FLOAT, -- Qty sold for Price list, Qty produced for BOM, throughput rate for oil well.
 	[Memo]			NVARCHAR(255),
 
+	[Direction1]			SMALLINT,
 	[OperationId1]			INT,
 	[AccountId1]			NVARCHAR (255),
 	[CustodyId1]			INT,
 	[ResourceId1]			INT,
-	[Direction1]			SMALLINT,
 	[Amount1]				MONEY,
 	[Value1]				VTYPE,
 	[NoteId1]				NVARCHAR (255),
@@ -27,11 +27,11 @@
 	[RelatedResourceId1]	INT,
 	[RelatedAmount1]		MONEY,
 
+	[Direction2]			SMALLINT,
 	[OperationId2]			INT,
 	[AccountId2]			NVARCHAR (255),
 	[CustodyId2]			INT,
 	[ResourceId2]			INT,
-	[Direction2]			SMALLINT,
 	[Amount2]				MONEY,
 	[Value2]				VTYPE,
 	[NoteId2]				NVARCHAR (255),
@@ -41,11 +41,11 @@
 	[RelatedResourceId2]	INT,
 	[RelatedAmount2]		MONEY,
 
+	[Direction3]			SMALLINT,
 	[OperationId3]			INT,
 	[AccountId3]			NVARCHAR (255),
 	[CustodyId3]			INT,
 	[ResourceId3]			INT,
-	[Direction3]			SMALLINT,
 	[Amount3]				MONEY,
 	[Value3]				VTYPE,
 	[NoteId3]				NVARCHAR (255),
@@ -55,11 +55,11 @@
 	[RelatedResourceId3]	INT,
 	[RelatedAmount3]		MONEY,
 
+	[Direction4]			SMALLINT,
 	[OperationId4]			INT,
 	[AccountId4]			NVARCHAR (255),
 	[CustodyId4]			INT,
 	[ResourceId4]			INT,
-	[Direction4]			SMALLINT,
 	[Amount4]				MONEY,
 	[Value4]				VTYPE,
 	[NoteId4]				NVARCHAR (255),

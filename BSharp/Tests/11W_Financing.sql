@@ -1,7 +1,7 @@
 ﻿SELECT @DIdx = ISNULL(MAX([Index]), -1) + 1 FROM @DSave;
 INSERT INTO @DSave(
 [Index], [DocumentType],	[StartDateTime],[Memo],					[OperationId]) VALUES (
-@DIdx, N'equity-issues','2017.01.01',	N'Capital investment',	@Unspecified
+@DIdx, N'equity-issues','2017.01.01',	N'Capital investment',	@WSI
 );
 Set @LineType = N'equity-issues-foreign';
 INSERT INTO @DLTSave([DocumentIndex], [LineType]) VALUES

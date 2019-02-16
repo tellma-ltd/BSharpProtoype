@@ -1,16 +1,61 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @OperationsDTO dbo.[OperationList];
-	DECLARE @WSI int, @Unspecified int, @Existing int, @Expansion int;
+	DECLARE @WSI int, @Existing int, @Expansion int;
 
 END
 BEGIN -- Inserting
+/*
+WSI
+	Administration
+		Board
+		Executive Office
+		HR & General Services
+		Finance
+		Material management
+		Quality and Safety
+		Technical
+		MIS
+	Sales and Marketing
+		Oromia
+		Bole
+	Production
+		Existing
+		Expansion
+	Other Operations
+		T/Haymanot
+		Global Building
+		Coffee processing	
+		Kersa
+		Walia Water Bottling
+*/
 	INSERT INTO @OperationsDTO
 		([Name],				[ParentIndex]) Values
-		(N'Walia Steel Industry', NULL),
-		(N'Existin',			0),
-		(N'Fake',				0),
-		(N'Expansion',			0),
-		(N'Unspecified',		0);
+		(N'Walia Steel Industry', NULL), -- 0
+			(N'Administration', 0), -- 1
+				(N'Board', 1),
+				(N'Executive Office', 1),
+				(N'HR & General Services', 1),
+				(N'Finance', 1),
+				(N'Material management', 1),
+				(N'Quality and Safety', 1),
+				(N'Technical', 1),
+				(N'MIS', 1), -- 9
+			(N'Sales and Marketing', 0), -- 10	
+				(N'Sales and Marketing Overhead', 10),			
+				(N'Oromia', 10),
+				(N'Bole', 10),
+			(N'Production', 0), -- 14
+				(N'Production Overhead', 14),		
+				(N'Existin', 14),
+				(N'Expansion', 14),
+			(N'Other Operations', 0), -- 18
+				(N'T/Haymanot', 18),
+				(N'Global Building', 18),
+				(N'Coffee processing', 18),
+				(N'Kersa', 18),
+				(N'Fake', 18),
+				(N'Walia Water Bottling', 18),
+		(N'New Kersa', NULL);
 
 	EXEC [dbo].[api_Operations__Save]
 		@Entities = @OperationsDTO,
@@ -29,10 +74,10 @@ END
 BEGIN
 	DELETE FROM @OperationsDTO;
 	INSERT INTO @OperationsDTO (
-		[Id], [Name], [Code], [ParentId], [EntityState]
+		[Id], [Name], [ParentId], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId], [EntityState]
 	)
 	SELECT
-		[Id], [Name], [Code], [ParentId], N'Unchanged'
+		[Id], [Name], [ParentId], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId], N'Unchanged'
 	FROM [dbo].Operations
 	WHERE [Name] IN (N'Existin', N'Fake');
 
@@ -60,33 +105,28 @@ BEGIN
 	IF @DebugOperations = 1
 		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 END
-	--SELECT * FROM [dbo].[Operations];
-EXEC api_Operation__SetOperatingSegment
-	@OperationId = 2,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT;
-	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
-	--SELECT * FROM [dbo].[Operations];
-EXEC api_Operation__SetOperatingSegment
-	@OperationId = 1,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT;
-	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
-	--SELECT * FROM [dbo].[Operations];
-EXEC api_Operation__SetOperatingSegment
-	@OperationId = 2,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT;
-	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
-	--SELECT * FROM [dbo].[Operations];
-IF @DebugOperations = 1
-	SELECT * FROM [dbo].[Operations];
-
 SELECT
 	@WSI = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Walia Steel Industry'),
-	@Unspecified = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Unspecified'), 
 	@Existing = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Existing'),
 	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion');
+	
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = @WSI,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = @Existing,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+
+EXEC api_Operation__SetOperatingSegment
+	@OperationId = @WSI,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@ResultsJson = @ResultsJson OUTPUT;
+	IF @DebugOperations = 1
+		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);

@@ -7,7 +7,7 @@
 	[ProfilePhoto]		VARBINARY (MAX),
 	[AgentId]			INT,
 	CONSTRAINT [PK_LocalUsers] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [FK_LocalUsers_Agents] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id]) ON UPDATE CASCADE,
+	CONSTRAINT [FK_LocalUsers_Agents] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]) ON UPDATE CASCADE,
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__Name]

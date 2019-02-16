@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[AssignmentsHistory] (
 	[TenantId]		INT,
-	[Id]			INT					IDENTITY (1, 1),
+	[Id]			INT					IDENTITY,
 	[DocumentId]	INT NOT NULL,
 	[AssigneeId]	INT	NOT NULL,
 	[Comment]		NVARCHAR (1024),

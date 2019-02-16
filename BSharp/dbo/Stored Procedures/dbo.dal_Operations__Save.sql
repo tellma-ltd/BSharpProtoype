@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].Operations AS t
 		USING (
-			SELECT [Index], [Id], [Code], [Name], [Name2], [ParentId]
+			SELECT [Index], [Id], [Code], [Name], [Name2], [ParentId], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
@@ -29,11 +29,15 @@ SET NOCOUNT ON;
 				t.[Name2]			= s.[Name2],
 				t.[ParentId]		= s.[ParentId],
 				t.[Code]			= s.[Code],
+				t.[ProductCategoryId] = s.[ProductCategoryId],
+				t.[GeographicRegionId] = s.[GeographicRegionId],
+				t.[CustomerSegmentId] = s.[CustomerSegmentId],
+				t.[FunctionId] = s.[FunctionId],
 				t.[ModifiedAt]		= @Now,
-				t.[ModifiedById]		= @UserId
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [Name],		[Name2], [Code], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], @Now,			@UserId,	@Now,			@UserId)
+			INSERT ([TenantId], [Name],		[Name2], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], s.[ProductCategoryId], s.[GeographicRegionId], s.[CustomerSegmentId], s.[FunctionId],  @Now,			@UserId,	@Now,			@UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

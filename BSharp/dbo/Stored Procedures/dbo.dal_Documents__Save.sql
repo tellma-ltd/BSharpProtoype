@@ -95,7 +95,7 @@ BEGIN
 			t.[OperationId]			= s.[OperationId],
 			t.[Reference]			= s.[Reference],
 			t.[AccountId]			= s.[AccountId],
-			t.[CustodyId]			= s.[CustodyId],
+			t.[AgentId]			= s.[CustodyId],
 			t.[ResourceId]			= s.[ResourceId],
 			t.[Direction]			= s.[Direction],
 			t.[Amount]				= s.[Amount],
@@ -109,7 +109,7 @@ BEGIN
 			t.[ModifiedById]		= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [DocumentId], [LineType], [OperationId], [Reference],
-				[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
+				[AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
 				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
 				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[OperationId], s.[Reference],

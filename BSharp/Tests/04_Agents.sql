@@ -65,8 +65,8 @@ DELETE FROM @AgentsDTO;
 INSERT INTO @AgentsDTO (
 	[Id], [AgentType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
-	[Id], [AgentType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
-FROM [dbo].[Custodies]
+	[Id], [PersonType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
+FROM [dbo].[Agents]
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 
 -- Updating MA TIN
@@ -102,40 +102,40 @@ WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 		SELECT * FROM [dbo].[fr_Agents__Json](@ResultsJson);
 
 	IF @DebugAgents = 1
-		SELECT * FROM [dbo].[Custodies];
+		SELECT * FROM [dbo].[Agents];
 
 SELECT 
-	@MohamadAkra = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mohamad Akra'), 
-	@AhmadAkra = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ahmad Akra'), 
-	@BadegeKebede = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Badege Kebede'), 
-	@TizitaNigussie = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tizita Nigussie'), 
-	@Ashenafi = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ashenafi Fantahun'), 
-	@YisakTegene = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yisak Tegene'), 
-	@ZewdineshHora = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Zewdinesh Hora'), 
-	@TigistNegash = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tigist Negash'), 
-	@RomanZenebe = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Roman Zenebe'), 
-	@Mestawet = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mestawet G/Egziyabhare'), 
-	@AyelechHora = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ayelech Hora'), 
-	@YigezuLegesse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yigezu Legesse'), 
-	@MesfinWolde = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Mesfin Wolde'),
-	@BananIT = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Banan Information technologies, plc'),
-	@WaliaSteel = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Walia Steel Industry, plc'),
-	@Lifan = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Yangfan Motors, PLC'),
-	@Sesay = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sisay Tesfaye, PLC'),
-	@ERCA = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Ethiopian Revenues and Customs Authority'),
-	@Paint = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Best Paint Industry'),
-	@Plastic = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Best Plastic Industry'),
-	@CBE = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Commercial Bank of Ethiopia'),
-	@AWB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Awash Bank'),
-	@NIB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'NIB'),
-	@Regus = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Regus'),
+	@MohamadAkra = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Mohamad Akra'), 
+	@AhmadAkra = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Ahmad Akra'), 
+	@BadegeKebede = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Badege Kebede'), 
+	@TizitaNigussie = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Tizita Nigussie'), 
+	@Ashenafi = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Ashenafi Fantahun'), 
+	@YisakTegene = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Yisak Tegene'), 
+	@ZewdineshHora = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Zewdinesh Hora'), 
+	@TigistNegash = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Tigist Negash'), 
+	@RomanZenebe = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Roman Zenebe'), 
+	@Mestawet = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Mestawet G/Egziyabhare'), 
+	@AyelechHora = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Ayelech Hora'), 
+	@YigezuLegesse = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Yigezu Legesse'), 
+	@MesfinWolde = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Mesfin Wolde'),
+	@BananIT = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Banan Information technologies, plc'),
+	@WaliaSteel = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Walia Steel Industry, plc'),
+	@Lifan = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Yangfan Motors, PLC'),
+	@Sesay = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Sisay Tesfaye, PLC'),
+	@ERCA = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Ethiopian Revenues and Customs Authority'),
+	@Paint = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Best Paint Industry'),
+	@Plastic = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Best Plastic Industry'),
+	@CBE = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Commercial Bank of Ethiopia'),
+	@AWB = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Awash Bank'),
+	@NIB = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'NIB'),
+	@Regus = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Regus'),
 
-	@ExecutiveOffice = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Executive Office'),
-	@Production = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Production Department'),
-	@SalesAndMarketing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Sales & Marketing Department'),
-	@Finance = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finance Department'),
-	@HR = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Human Resources Department'),
-	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Materials & Purchasing Department');
+	@ExecutiveOffice = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Executive Office'),
+	@Production = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Production Department'),
+	@SalesAndMarketing = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Sales & Marketing Department'),
+	@Finance = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Finance Department'),
+	@HR = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Human Resources Department'),
+	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Materials & Purchasing Department');
 
 INSERT INTO dbo.CustodiesResources(
 	[TenantId], [CustodyId], [RelationType],	[ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES

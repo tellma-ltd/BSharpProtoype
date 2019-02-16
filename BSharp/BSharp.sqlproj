@@ -74,12 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Documents.sql" />
-    <Build Include="dbo\Tables\dbo.Custodies.sql" />
+    <Build Include="dbo\Tables\dbo.Agents.sql" />
     <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
     <Build Include="dbo\Tables\dbo.Assignments.sql" />
     <Build Include="dbo\Tables\dbo.Lines.sql" />
-    <Build Include="dbo\Tables\dbo.Accounts.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSConcepts.sql" />
     <Build Include="dbo\Tables\dbo.Notes.sql" />
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
@@ -108,7 +108,7 @@
     <Build Include="dbo\User Defined Types\dbo.ValidationErrorList.sql" />
     <Build Include="Security\api.sql" />
     <Build Include="Security\dal.sql" />
-    <Build Include="dbo\User Defined Types\dbo.AgentList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.EmployeeList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
     <Build Include="dbo\User Defined Types\dbo.PlaceList.sql" />
@@ -184,7 +184,7 @@
     <None Include="Provisioning\04_AccountsNotes.sql" />
     <None Include="Provisioning\01_MeasurementUnits.sql" />
     <None Include="Provisioning\03_Notes.sql" />
-    <PostDeploy Include="Provisioning\00_Main.sql" />
+    <None Include="Provisioning\00_Main.sql" />
     <None Include="Provisioning\06_LineTypeSpecifications.sql" />
     <None Include="Provisioning\05_DocumentTypes.sql" />
     <Build Include="Security\bll.sql" />
@@ -211,7 +211,6 @@
     <Build Include="dbo\Functions\dbo.fi_ERCA__VAT_Sales.sql" />
     <Build Include="dbo\User Defined Types\dbo.AccountList.sql" />
     <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
-    <Build Include="dbo\Functions\dbo.f0_CashAccount__Custody_Resource.sql" />
     <Build Include="dbo\Functions\dbo.fn_User__Language.sql" />
     <Build Include="dbo\User Defined Types\dbo.UserList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Assign.sql" />
@@ -253,10 +252,10 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Views__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Views__Save.sql" />
     <Build Include="dbo\Tables\dbo.Entries.sql" />
-    <Build Include="dbo\Tables\dbo.Aliases.sql" />
     <Build Include="dbo\User Defined Types\dbo.EntryList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Select.sql" />
     <Build Include="dbo\Tables\dbo.RoleMemberships.sql" />
+    <Build Include="dbo\Tables\dbo.Accounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -266,11 +265,11 @@
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="BSharp.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Tests\11M_Financing.sql" />
     <None Include="Tests\12_ManualMisc.sql" />
     <None Include="Provisioning\07_AccountSpecifications.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="BSharp.refactorlog" />
   </ItemGroup>
 </Project>

@@ -28,7 +28,7 @@ BEGIN --================  DEDUCTIONS =======================--
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,	Absence days,
 	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [Amount1]) VALUES
-	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, 10);
+	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, 10);
 
 	Set @LineType = N'et-employees-penalties';
 	INSERT INTO @DLTSave([DocumentIndex], [LineType], [SortKey], [Reference1]) VALUES
@@ -36,7 +36,7 @@ BEGIN --================  DEDUCTIONS =======================--
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,		Currency, Amount,
 	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [ResourceId1], [Amount1], [Value1]) VALUES
-	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
+	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
 END;
 IF (1=1)
 BEGIN --================  LEAVES =======================--
@@ -51,7 +51,7 @@ BEGIN --================  LEAVES =======================--
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,	Absence days,
 	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [Amount1]) VALUES
-	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, 10);
+	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, 10);
 
 	Set @LineType = N'et-employees-leaves-hourly-unpaid';
 	INSERT INTO @DLTSave([DocumentIndex], [LineType], [SortKey], [Reference1]) VALUES
@@ -59,7 +59,7 @@ BEGIN --================  LEAVES =======================--
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,		Currency, Amount,
 	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [ResourceId1], [Amount1], [Value1]) VALUES
-	(@LIdx + 1, @DIdx, @LineType, @Unspecified, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
+	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
 END;
 EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave,

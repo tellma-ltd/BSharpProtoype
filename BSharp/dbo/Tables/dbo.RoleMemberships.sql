@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[RoleMemberships] (
 	[TenantId]			INT,
-	[Id]				INT				IDENTITY (1, 1),
+	[Id]				INT				IDENTITY,
 	[Userid]			INT				NOT NULL,
 	[RoleId]			INT				NOT NULL,
 	[Memo]				NVARCHAR(255),

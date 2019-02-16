@@ -5,7 +5,7 @@ AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-	MERGE INTO [dbo].[Custodies] AS t
+	MERGE INTO [dbo].[Agents] AS t
 		USING (
 			SELECT [Id]
 			FROM @Ids 

@@ -3,7 +3,7 @@ BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Operations])			DBCC CHECKIDENT ('[dbo].[Operations]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Custodies])			DBCC CHECKIDENT ('[dbo].[Custodies]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Custodies]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Entries])			DBCC CHECKIDENT ('[dbo].[Entries]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Lines])				DBCC CHECKIDENT ('[dbo].[Lines]', RESEED, 0) WITH NO_INFOMSGS;
@@ -11,7 +11,7 @@ BEGIN -- reset Identities
 
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
 	DECLARE @DebugSettings bit = 0, @DebugMeasurementUnits bit = 0;
-	DECLARE @DebugOperations bit = 0, @DebugResources bit = 0;
+	DECLARE @DebugOperations bit = 1, @DebugResources bit = 0;
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
@@ -37,14 +37,14 @@ BEGIN TRY
 		:r .\00_Settings.sql
 		:r .\01_MeasurementUnits.sql
 		:r .\02_Operations.sql
-		:r .\03_Resources.sql
-		:r .\04_Agents.sql
-		:r .\05_Places.sql
-		:r .\10_Documents.sql
+		--:r .\03_Resources.sql
+		--:r .\04_Agents.sql
+		--:r .\05_Places.sql
+		--:r .\10_Documents.sql
 	--	select * from entries;
-	SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
-	SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
-	EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate;
+	--SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'
+	--SELECT * from dbo.[fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];
+	--EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate;
 	--SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
 	--SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
 	--EXEC rpt_IFRS @fromDate = @fromDate, @toDate = @toDate;

@@ -3,15 +3,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	DECLARE @Code nvarchar(255);
-
-	SELECT @Code = min(Code) FROM [dbo].[Accounts];
+/*
+	SELECT @Code = min(Code) FROM [dbo].[IFRSConcepts];
 	WHILE @Code IS NOT NULL
 	BEGIN
-		IF EXISTS(SELECT * FROM [dbo].[Accounts] WHERE Code Like @Code + '%' AND Code <> @Code AND AccountType IN  (N'Regulatory', N'Correction'))
-			UPDATE [dbo].[Accounts] SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
+		IF EXISTS(SELECT * FROM [dbo].[IFRSConcepts] WHERE Code Like @Code + '%' AND Code <> @Code AND [ConceptType] IN  (N'Regulatory', N'Correction'))
+			UPDATE [dbo].[IFRSConcepts] SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
 		ELSE
-			UPDATE [dbo].[Accounts] SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
-		SELECT @Code = min(Code) FROM [dbo].[Accounts] WHERE Code > @Code;
+			UPDATE [dbo].[IFRSConcepts] SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
+		SELECT @Code = min(Code) FROM [dbo].[IFRSConcepts] WHERE Code > @Code;
 	END;
 
 	SELECT @Code = min(Code) FROM [dbo].Notes;
@@ -78,4 +78,5 @@ BEGIN
 	SET [AccountSpecification] = N'Basic' -- Place
 	WHERE [AccountSpecification] IS NULL
 	*/
+*/
 END

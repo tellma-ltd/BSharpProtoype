@@ -4,7 +4,7 @@
 AS
 SELECT @ResultsJson =	(
 	SELECT
-		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId], 
+		[Id], [Name], [IsOperatingSegment], [IsActive], [Code], [ParentId],  [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId],
 		[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById], N'Unchanged' As [EntityState]
 	FROM [dbo].Operations
 	WHERE [Id] IN (SELECT [Id] FROM @Ids)

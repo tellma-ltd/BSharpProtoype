@@ -37,7 +37,7 @@ BEGIN -- Updating RM Warehouse address
 	)
 	SELECT
 		[Id], [PlaceType], [Name], [Code], [Address], [BirthDateTime], N'Unchanged', [CustodianId]
-	FROM [dbo].[Custodies]
+	FROM [dbo].[Agents]
 	WHERE [Name] IN (N'Raw Materials Warehouse', N'Fake Warehouse');
 
 	UPDATE @PlacesDTO
@@ -79,16 +79,16 @@ BEGIN -- Updating RM Warehouse address
 END
 
 IF @DebugPlaces = 1
-	SELECT * FROM [dbo].[Custodies];
+	SELECT * FROM [dbo].[Agents];
 
 SELECT
-	@System = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'System'), 
-	@RawMaterialsWarehouse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Raw Materials Warehouse'), 
-	@FinishedGoodsWarehouse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Finished Goods Warehouse'),
-	@MiscWarehouse = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Misc Warehouse'),
-	@CBEUSD = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'CBE - USD'),
-	@CBEETB = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'CBE - ETB'),
-	@TigistSafe = (SELECT [Id] FROM [dbo].[Custodies] WHERE [Name] = N'Tigist - Safe');
+	@System = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'System'), 
+	@RawMaterialsWarehouse = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Raw Materials Warehouse'), 
+	@FinishedGoodsWarehouse = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Finished Goods Warehouse'),
+	@MiscWarehouse = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Misc Warehouse'),
+	@CBEUSD = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'CBE - USD'),
+	@CBEETB = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'CBE - ETB'),
+	@TigistSafe = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Tigist - Safe');
 
 	INSERT INTO dbo.CustodiesResources([TenantId], [CustodyId],	[RelationType],	[ResourceId], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
 	(@TenantId, @CBEETB, N'BankAccount', @ETB, @Now, @UserId, @Now, @UserId),

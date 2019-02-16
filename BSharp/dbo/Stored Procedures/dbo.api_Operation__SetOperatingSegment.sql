@@ -22,11 +22,12 @@ DECLARE @Id int, @Ids [dbo].[IntegerList];
 			@OperationId = @Id;
 
 	IF (@ReturnEntities = 1)
-	BEGIN
+	BEGIN	
 		INSERT INTO @Ids([Id])
 		SELECT [Id] FROM dbo.Operations;
 
-		EXEC [dbo].[dal_Operations__Select] 
+		EXEC [dbo].[dal_Operations__Select]
+			@Ids = @Ids,
 			@ResultsJson = @ResultsJson OUTPUT;
 	END
 END;	

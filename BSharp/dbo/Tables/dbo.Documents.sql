@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Documents] (
 	[TenantId]					INT,
-	[Id]						INT					IDENTITY (1, 1),
+	[Id]						INT					IDENTITY,
 	[State]						NVARCHAR (255)		NOT NULL DEFAULT (N'Voucher'), -- N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher'
 	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'manual-journalsl'),
 	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'),

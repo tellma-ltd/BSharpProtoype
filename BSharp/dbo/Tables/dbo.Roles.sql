@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Roles]  (
 	[TenantId]					INT,
-	[Id]						INT					IDENTITY (1, 1),
+	[Id]						INT					IDENTITY,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[IsPublic]					BIT					NOT NULL CONSTRAINT [DF_Roles_IsPublic] DEFAULT (0),		

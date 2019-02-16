@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[DocumentActions] (
 	[TenantId]			INT,
-	[Id]				INT IDENTITY (1, 1),
+	[Id]				INT IDENTITY,
 	[DocumentId]		INT					NOT NULL,
 	[Action]			NVARCHAR(255)		NOT NULL CONSTRAINT [DF_DocumentActions_Action] DEFAULT (N'New'),
 	[ActionByUserId]	INT		NOT NULL DEFAULT SUSER_SNAME(),

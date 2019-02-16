@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[CustodiesResources]
 (
 	[TenantId]			INT,
-	[Id]				INT					IDENTITY (1, 1),
+	[Id]				INT					IDENTITY,
 	[CustodyId]			INT					NOT NULL,
 	[RelationType]		NVARCHAR(255)		NOT NULL,
 	[ResourceId]		INT					NOT NULL,
@@ -28,7 +28,7 @@
 		N'Farm',		-- Limited Access, Public Access
 		N'ProductionPoint'-- Limited Access
 		)),
-	CONSTRAINT [FK_CustodiesResources_Custodies] FOREIGN KEY ([TenantId], [CustodyId]) REFERENCES [dbo].[Custodies] ([TenantId], [Id])ON DELETE CASCADE,
+	CONSTRAINT [FK_CustodiesResources_Custodies] FOREIGN KEY ([TenantId], [CustodyId]) REFERENCES [dbo].[Agents] ([TenantId], [Id])ON DELETE CASCADE,
 	CONSTRAINT [FK_CustodiesResources_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id])ON DELETE CASCADE
 );
 GO

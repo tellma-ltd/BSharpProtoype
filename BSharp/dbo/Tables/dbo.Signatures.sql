@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Signatures] (
 	[TenantId]		INT,
-	[Id]			INT IDENTITY (1, 1),
+	[Id]			INT IDENTITY,
 	[DocumentId]	INT					NOT NULL,
 	[Signatory]		INT		NOT NULL,
 	[SignedAt]		DATETIMEOFFSET(7)	NOT NULL,
