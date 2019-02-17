@@ -94,7 +94,6 @@
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
-    <Build Include="dbo\Functions\dbo.fn_Resource__UnitOfMeasure.sql" />
     <Build Include="dbo\Functions\dbo.fi_Account__Statement.sql" />
     <Build Include="dbo\Functions\dbo.fi_Journal.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Save.sql" />
@@ -111,28 +110,21 @@
     <Build Include="dbo\User Defined Types\dbo.EmployeeList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.PlaceList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Places__Save.sql" />
     <Build Include="dbo\Tables\dbo.Translations.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
     <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
-    <Build Include="dbo\Functions\dbo.fn_UOM_Code__Id.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Agents_Validate__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Places_Validate__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Places__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Employees__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Employees_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Places__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Agents__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Employees__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Custodies__Activate.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Places__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
@@ -156,7 +148,6 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Mode__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Deactivate.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Places__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Functions\dbo.fn_Operation__FirstSibling.sql" />
@@ -201,7 +192,6 @@
     <Build Include="dbo\Functions\dbo.fr_Operations__Json.sql" />
     <Build Include="dbo\Functions\dbo.fr_Resources__Json.sql" />
     <Build Include="dbo\Functions\dbo.fr_Agents__Json.sql" />
-    <Build Include="dbo\Functions\dbo.fr_Places__Json.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Deactivate.sql" />
     <Build Include="dbo\Functions\dbo.fi_AssetRegister.sql" />
     <Build Include="dbo\Functions\dbo.fi_ERCA__EmployeeIncomeTax.sql" />
@@ -256,6 +246,15 @@
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Select.sql" />
     <Build Include="dbo\Tables\dbo.RoleMemberships.sql" />
     <Build Include="dbo\Tables\dbo.Accounts.sql" />
+    <Build Include="dbo\Functions\dbo.fi_WSI_RawMaterials.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_RawMaterials.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_RM_FastMovement.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_MerchandiseInTransit.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoodsResourceBased.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoods_AccountBased.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_LocalPurchase.sql" />
+    <Build Include="dbo\Views\dbo.NormalizedVouchersView.sql" />
+    <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

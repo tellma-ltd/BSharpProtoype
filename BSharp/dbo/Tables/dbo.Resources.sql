@@ -1,11 +1,17 @@
 ﻿CREATE TABLE [dbo].[Resources] (
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
-	[MeasurementUnitId]			INT					NOT NULL,
 	[ResourceType]				NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
+	[CurrencyId]				INT,
+	[MassUnitId]				INT,
+	[VolumeUnitId]				INT,
+	[CountUnitId]				INT,
+	[ServiceTimeUnitId]			INT,
+	[ServiceCountUnitId]		INT,
+	[ServiceDistanceUnitId]		INT,
 	[Source]					NVARCHAR (255), -- Lease In/Acquisition/Production
 	[Purpose]					NVARCHAR (255), -- Lease out/Sale/Production/SG&A
 	[Code]						NVARCHAR (255),
@@ -32,7 +38,7 @@
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
-	CONSTRAINT [FK_Resources_MeasurementUnit] FOREIGN KEY ([TenantId], [MeasurementUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
+	CONSTRAINT [FK_Resources_MeasurementUnit] FOREIGN KEY ([TenantId], [MassUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
 	CONSTRAINT [FK_Resources_Resources_PartOfId] FOREIGN KEY ([TenantId], [PartOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 	CONSTRAINT [FK_Resources_Resources_InstanceOfId] FOREIGN KEY ([TenantId], [InstanceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 	CONSTRAINT [FK_Resources_Resources_ServiceOfId] FOREIGN KEY ([TenantId], [ServiceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,

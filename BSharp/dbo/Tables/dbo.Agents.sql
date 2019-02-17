@@ -10,8 +10,8 @@
 
 --	Agents specific
 	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
-	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsRelated]					BIT					NOT NULL DEFAULT (0),
+	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,
 	[Citizenship]				NCHAR(2),
 	[Facebook]					NVARCHAR (255),				
@@ -63,30 +63,28 @@
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
-	CONSTRAINT [PK_Custodies] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Custodies_CustodyType] CHECK ([RelationType] IN (
-		N'employee', N'supplier', N'customer', N'general', -- agents
-		N'cash-on-hand', N'balances-with-bank', N'sales-contract', N'purchase-contract', N'employee-loan', N'borrowing', N'storage-location' -- agents subaccounts
-		)),
+	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [CK_Agents_RelationType] CHECK (
+		[RelationType] IN (N'employee', N'supplier', N'customer', N'general')
+		),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
-	CONSTRAINT [FK_Places_Agents] FOREIGN KEY ([TenantId], [CustodianId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]),
-	CONSTRAINT [FK_Custodies_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Custodies_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Agents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Agents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
-CREATE UNIQUE INDEX [IX_Custodies__Id_CustodyType]
+CREATE UNIQUE INDEX [IX_Agents__Id_CustodyType]
   ON [dbo].[Agents]([TenantId] ASC, [Id] ASC, [RelationType] ASC);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Name]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name]
   ON [dbo].[Agents]([TenantId] ASC, [Name] ASC);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Name2]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name2]
   ON [dbo].[Agents]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__Code]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Code]
   ON [dbo].[Agents]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Custodies__SystemCode]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__SystemCode]
   ON [dbo].[Agents]([TenantId] ASC, [Code] ASC) WHERE [SystemCode] IS NOT NULL;
  GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Id_AgentType]

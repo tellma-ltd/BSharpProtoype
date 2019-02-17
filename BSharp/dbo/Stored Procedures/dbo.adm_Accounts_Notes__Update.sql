@@ -38,11 +38,11 @@ BEGIN
 		(A.Code Like N'' AND N.Code Like N'')
 	)
 
-	UPDATE [dbo].Accounts -- Agent/Place
+	UPDATE [dbo].Accounts -- Agent
 	SET [AccountSpecification] = N'PropertyPlantAndEquipment'
 	WHERE Code Like '1101%' AND IsExtensible = 1
 
-	UPDATE [dbo].Accounts -- Place
+	UPDATE [dbo].Accounts -- 
 	SET [AccountSpecification] = N'InvestmentProperty'
 	WHERE Code Like '1102%' AND IsExtensible = 1
 

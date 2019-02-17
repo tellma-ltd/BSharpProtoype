@@ -30,7 +30,7 @@ SET NOCOUNT ON;
 				t.[Name]					= s.[Name],
 				t.[Name2]					= s.[Name2],
 				t.[Code]					= s.[Code],
-				t.[MeasurementUnitId]		= s.[MeasurementUnitId],
+				t.[MassUnitId]		= s.[MeasurementUnitId],
 				t.[Memo]					= s.[Memo],       
 				t.[Lookup1]					= s.[Lookup1],
 				t.[Lookup2]					= s.[Lookup2],
@@ -42,7 +42,7 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedById]			= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [MeasurementUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			INSERT ([TenantId], [MassUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;

@@ -6,14 +6,15 @@ RETURNS TABLE
 AS
 RETURN
 	SELECT
-		C.[Name] As [Customer],
-		C.TaxIdentificationNumber As [TIN],
-		S.Reference As [Invoice #], S.RelatedReference As [Cash M/C #],
-		SUM(S.[Value]) AS VAT,
-		SUM(S.RelatedAmount) AS TaxableAmount,
-		S.StartDateTime As [Invoice Date]
-	FROM [dbo].[fi_Account__Statement](N'CurrentValueAddedTaxPayables', 0, 0, @fromDate, @toDate) S
-	JOIN [dbo].[Agents] C ON S.[RelatedAgentId] = C.Id
-	WHERE C.[RelationType] = N'customer'
-	AND S.Direction = -1
-	GROUP BY C.[Name], C.TaxIdentificationNumber, S.Reference, S.RelatedReference, S.StartDateTime;
+		A.[Name] As [Customer], 
+		A.TaxIdentificationNumber As TIN, 
+		J.Reference As [Invoice #], J.RelatedReference As [Cash M/C #],
+		SUM(J.[MoneyAmount]) AS VAT,
+		SUM(J.[RelatedAmount]) AS [Taxable Amount],
+		J.DocumentDateTime As [Invoice Date]
+	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
+	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
+	WHERE J.IFRSConceptID = N'CurrentValueAddedTaxPayables'
+	-- No IFRS?: J.AccountType = N'CurrentValueAddedTaxPayables'
+	AND J.Direction = -1
+	GROUP BY A.[Name], A.TaxIdentificationNumber, J.Reference, J.RelatedReference, J.DocumentDateTime;

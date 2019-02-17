@@ -24,7 +24,7 @@ BEGIN -- Inherit from defaults
 	SET
 		E.[OperationId] = CASE WHEN D.[OperationId] IS NOT NULL THEN D.[OperationId] ELSE E.[OperationId] END,
 		E.[AccountId] = CASE WHEN D.[AccountId] IS NOT NULL THEN D.[AccountId] ELSE E.[AccountId] END,
-		E.[CustodyId] = CASE WHEN D.[CustodyId] IS NOT NULL THEN D.[CustodyId] ELSE E.[CustodyId] END,
+		E.[AgentId] = CASE WHEN D.[AgentId] IS NOT NULL THEN D.[AgentId] ELSE E.[AgentId] END,
 		E.[ResourceId] = CASE WHEN D.[ResourceId] IS NOT NULL THEN D.[ResourceId] ELSE E.[ResourceId] END,
 		E.[Amount] = CASE WHEN D.[Amount] IS NOT NULL THEN D.[Amount] ELSE E.[Amount] END,
 		E.[Value] = CASE WHEN D.[Value] IS NOT NULL THEN D.[Value] ELSE E.[Value] END,
@@ -45,7 +45,7 @@ BEGIN -- Inherit from defaults
 
 		L.[OperationId1] = COALESCE(D.[OperationId], DLT.[OperationId1], L.[OperationId1]),
 		L.[AccountId1] = COALESCE(D.[AccountId], DLT.[AccountId1], L.[AccountId1]),
-		L.[CustodyId1] = COALESCE(D.[CustodyId], DLT.[CustodyId1], L.[CustodyId1]),
+		L.[AgentId1] = COALESCE(D.[AgentId], DLT.[AgentId1], L.[AgentId1]),
 		L.[ResourceId1] = COALESCE(D.[ResourceId], DLT.[ResourceId1], L.[ResourceId1]),
 		L.[Amount1] = COALESCE(D.[Amount], DLT.[Amount1], L.[Amount1]),
 		L.[Value1] = COALESCE(D.[Value], DLT.[Value1], L.[Value1]),
@@ -58,7 +58,7 @@ BEGIN -- Inherit from defaults
 
 		L.[OperationId2] = COALESCE(D.[OperationId], DLT.[OperationId2], L.[OperationId2]),
 		L.[AccountId2] = COALESCE(D.[AccountId], DLT.[AccountId2], L.[AccountId2]),
-		L.[CustodyId2] = COALESCE(D.[CustodyId], DLT.[CustodyId2], L.[CustodyId2]),
+		L.[AgentId2] = COALESCE(D.[AgentId], DLT.[AgentId2], L.[AgentId2]),
 		L.[ResourceId2] = COALESCE(D.[ResourceId], DLT.[ResourceId2], L.[ResourceId2]),
 		L.[Amount2] = COALESCE(D.[Amount], DLT.[Amount2], L.[Amount2]),
 		L.[Value2] = COALESCE(D.[Value], DLT.[Value2], L.[Value2]),
@@ -71,7 +71,7 @@ BEGIN -- Inherit from defaults
 
 		L.[OperationId3] = COALESCE(D.[OperationId], DLT.[OperationId3], L.[OperationId3]),
 		L.[AccountId3] = COALESCE(D.[AccountId], DLT.[AccountId3], L.[AccountId3]),
-		L.[CustodyId3] = COALESCE(D.[CustodyId], DLT.[CustodyId3], L.[CustodyId3]),
+		L.[AgentId3] = COALESCE(D.[AgentId], DLT.[AgentId3], L.[AgentId3]),
 		L.[ResourceId3] = COALESCE(D.[ResourceId], DLT.[ResourceId3], L.[ResourceId3]),
 		L.[Amount3] = COALESCE(D.[Amount], DLT.[Amount3], L.[Amount3]),
 		L.[Value3] = COALESCE(D.[Value], DLT.[Value3], L.[Value3]),
@@ -84,7 +84,7 @@ BEGIN -- Inherit from defaults
 		
 		L.[OperationId4] = COALESCE(D.[OperationId], DLT.[OperationId4], L.[OperationId4]),
 		L.[AccountId4] = COALESCE(D.[AccountId], DLT.[AccountId4], L.[AccountId4]),
-		L.[CustodyId4] = COALESCE(D.[CustodyId], DLT.[CustodyId4], L.[CustodyId4]),
+		L.[AgentId4] = COALESCE(D.[AgentId], DLT.[AgentId4], L.[AgentId4]),
 		L.[ResourceId4] = COALESCE(D.[ResourceId], DLT.[ResourceId4], L.[ResourceId4]),
 		L.[Amount4] = COALESCE(D.[Amount], DLT.[Amount4], L.[Amount4]),
 		L.[Value4] = COALESCE(D.[Value], DLT.[Value4], L.[Value4]),
@@ -121,7 +121,7 @@ BEGIN -- Fill lines from specifications
 			SET 
 			' +	ISNULL('L.OperationId1 = ' + (SELECT [OperationId1FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.AccountId1 = ' +	(SELECT [AccountId1FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.CustodyId1 = ' +	(SELECT CustodyId1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.AgentId1 = ' +	(SELECT [AgentId1FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.ResourceId1 = ' +	(SELECT ResourceId1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.Amount1 = ' +	(SELECT Amount1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.Value1 = ' +	(SELECT Value1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
@@ -129,7 +129,7 @@ BEGIN -- Fill lines from specifications
 			', '') + ISNULL('L.Reference1 = ' +	(SELECT Reference1FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.OperationId2 = ' +	(SELECT OperationId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.AccountId2 = ' +	(SELECT AccountId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
-			', '') + ISNULL('L.CustodyId2 = ' +	(SELECT CustodyId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
+			', '') + ISNULL('L.AgentId2 = ' +	(SELECT [AgentId2FillSql] FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.ResourceId2 = ' +	(SELECT ResourceId2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.Amount2 = ' +	(SELECT Amount2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + ISNULL('L.Value2 = ' +	(SELECT Value2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
@@ -167,26 +167,26 @@ BEGIN -- Fill lines from specifications
 END
 BEGIN	-- Smart Posting
 	INSERT @SmartEntriesLocal([Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId], [AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Reference],
+		[OperationId], [AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Reference],
 		[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]
 	) -- assuming a line will not capture more than 100 entries (currently it only captures 4)
 	SELECT 100 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId1], [AccountId1], [CustodyId1], [ResourceId1], [Direction1], [Amount1], [Value1], [NoteId1], [Reference1], 
+		[OperationId1], [AccountId1], [AgentId1], [ResourceId1], [Direction1], [Amount1], [Value1], [NoteId1], [Reference1], 
 		[RelatedReference1], [RelatedAgentId1], [RelatedResourceId1], [RelatedAmount1], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction1] IS NOT NULL
 	UNION
 	SELECT 200 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId2], [AccountId2], [CustodyId2], [ResourceId2], [Direction2], [Amount2], [Value2], [NoteId2], [Reference2], 
+		[OperationId2], [AccountId2], [AgentId2], [ResourceId2], [Direction2], [Amount2], [Value2], [NoteId2], [Reference2], 
 		[RelatedReference2], [RelatedAgentId2], [RelatedResourceId2], [RelatedAmount2], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction2] IS NOT NULL
 	UNION
 	SELECT 300 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId3], [AccountId3], [CustodyId3], [ResourceId3], [Direction3], [Amount3], [Value3], [NoteId3], [Reference3], 
+		[OperationId3], [AccountId3], [AgentId3], [ResourceId3], [Direction3], [Amount3], [Value3], [NoteId3], [Reference3], 
 		[RelatedReference3], [RelatedAgentId3], [RelatedResourceId3], [RelatedAmount3], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction3] IS NOT NULL
 	UNION
 	SELECT 400 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId4], [AccountId4], [CustodyId4], [ResourceId4], [Direction4], [Amount4], [Value4], [NoteId4], [Reference4], 
+		[OperationId4], [AccountId4], [AgentId4], [ResourceId4], [Direction4], [Amount4], [Value4], [NoteId4], [Reference4], 
 		[RelatedReference4], [RelatedAgentId4], [RelatedResourceId4], [RelatedAmount4], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction4] IS NOT NULL;
 	
@@ -194,16 +194,16 @@ BEGIN	-- Smart Posting
 	UPDATE @SmartEntriesLocal SET [Index] = [Index] + (SELECT ISNULL(MAX([Index]), 0) FROM @EntriesLocal);
 	IF @DEBUG = 2 SELECT * FROM @SmartEntriesLocal;
 	INSERT INTO @EntriesLocal([Index], [DocumentIndex], [Id], [DocumentId], [LineType],	[OperationId],
-		[AccountId], [CustodyId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Memo],
+		[AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Memo],
 		[Reference], [RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState])
 		-- I used the sort key in order to make the entries grouped together in the same order as the DLT.
 	SELECT ROW_NUMBER() OVER(ORDER BY S.[DocumentIndex] ASC, DLT.[SortKey] ASC, S.[Direction] DESC), S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType],	S.[OperationId],
-		S.[AccountId], S.[CustodyId], S.[ResourceId], S.[Direction], SUM(S.[Amount]), SUM(S.[Value]), S.[NoteId], S.[Memo],
+		S.[AccountId], S.[AgentId], S.[ResourceId], S.[Direction], SUM(S.[Amount]), SUM(S.[Value]), S.[NoteId], S.[Memo],
 		S.[Reference], S.[RelatedReference], S.[RelatedAgentId], S.[RelatedResourceId], S.[RelatedAmount], N'Inserted' AS [EntityState]
 	FROM @SmartEntriesLocal S
 	JOIN @DocumentLineTypesLocal DLT ON S.[DocumentIndex] = DLT.[DocumentIndex] AND S.[LineType] = DLT.[LineType]
 	GROUP BY S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType], S.[OperationId],
-		S.[AccountId], S.[CustodyId], S.[ResourceId], S.[Direction], S.[NoteId], S.[Memo],
+		S.[AccountId], S.[AgentId], S.[ResourceId], S.[Direction], S.[NoteId], S.[Memo],
 		S.[Reference], S.[RelatedReference], S.[RelatedAgentId], S.[RelatedResourceId], S.[RelatedAmount], DLT.[SortKey]
 	HAVING(SUM(S.[Amount]) > 0 OR SUM(S.[Value]) > 0)
 END

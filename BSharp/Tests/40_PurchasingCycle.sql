@@ -12,7 +12,7 @@ SELECT @WLIdx = ISNULL(MAX([Index]), -1) FROM @LSave
 SELECT @WLIdx = @WLIdx + ISNULL(MAX([LineIndex]), -1) FROM @WLSave;
 ;
 INSERT INTO @WLSave ([LineIndex],
-[DocumentIndex], [LineType], [CustodyId1], [Reference1], [Amount1], [Amount2], [Reference2], [Amount3], [Reference3], [CustodyId3], [CustodyId2])   
+[DocumentIndex], [LineType], [AgentId1], [Reference1], [Amount1], [Amount2], [Reference2], [Amount3], [Reference3], [AgentId3], [AgentId2])   
 			-- Supplier, Invoice #, Invoice Amount, Amount Withheld,	WT Ref,	Amount Paid,	Check Ref, Paid From, WT Entity
 			-- Custody 1, Ref 1		Amount 1,		Amount 2,			Ref 2,	Amount 3,		Ref 3, Custody 3
 VALUES

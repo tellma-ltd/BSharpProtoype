@@ -15,8 +15,8 @@
 
 	[Direction1]			SMALLINT,
 	[OperationId1]			INT,
-	[AccountId1]			NVARCHAR (255),
-	[CustodyId1]			INT,
+	[AccountId1]			INT,
+	[AgentId1]				INT,
 	[ResourceId1]			INT,
 	[Amount1]				MONEY,
 	[Value1]				VTYPE,
@@ -29,8 +29,8 @@
 
 	[Direction2]			SMALLINT,
 	[OperationId2]			INT,
-	[AccountId2]			NVARCHAR (255),
-	[CustodyId2]			INT,
+	[AccountId2]			INT,
+	[AgentId2]				INT,
 	[ResourceId2]			INT,
 	[Amount2]				MONEY,
 	[Value2]				VTYPE,
@@ -43,8 +43,8 @@
 
 	[Direction3]			SMALLINT,
 	[OperationId3]			INT,
-	[AccountId3]			NVARCHAR (255),
-	[CustodyId3]			INT,
+	[AccountId3]			INT,
+	[AgentId3]			INT,
 	[ResourceId3]			INT,
 	[Amount3]				MONEY,
 	[Value3]				VTYPE,
@@ -57,8 +57,8 @@
 
 	[Direction4]			SMALLINT,
 	[OperationId4]			INT,
-	[AccountId4]			NVARCHAR (255),
-	[CustodyId4]			INT,
+	[AccountId4]			INT,
+	[AgentId4]				INT,
 	[ResourceId4]			INT,
 	[Amount4]				MONEY,
 	[Value4]				VTYPE,

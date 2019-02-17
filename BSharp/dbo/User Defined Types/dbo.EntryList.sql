@@ -6,7 +6,7 @@
 	[LineType]			NVARCHAR (255)		NOT NULL DEFAULT(N'manual-journals'),		
 	[OperationId]		INT,
 	[AccountId]			NVARCHAR (255),
-	[CustodyId]			INT,
+	[AgentId]			INT,
 	[ResourceId]		INT,
 	[Direction]			SMALLINT			NOT NULL,
 	[Amount]			MONEY,

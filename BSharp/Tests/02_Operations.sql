@@ -6,21 +6,31 @@ END
 BEGIN -- Inserting
 /*
 WSI
+	WSI - General
 	Administration
+		Administration - General
 		Board
 		Executive Office
 		HR & General Services
 		Finance
 		Material management
 		Quality and Safety
-		Technical
 		MIS
 	Sales and Marketing
-		Oromia
-		Bole
+		S&M - general
+		S&M - Oromia - general
+		S&M - Oromia - T/Haymanot
+		S&M - Bole - general
+		S&M - existing
+		S&M - expansion
 	Production
-		Existing
-		Expansion
+		Production - General
+		Production - existing
+		Production - expansion
+	Technical
+		Technical - general
+		Technical - existing
+		Technical - expansion
 	Other Operations
 		T/Haymanot
 		Global Building

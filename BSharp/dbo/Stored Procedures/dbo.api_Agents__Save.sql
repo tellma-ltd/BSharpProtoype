@@ -9,14 +9,14 @@ SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 
 -- Validate
-	EXEC [dbo].[bll_Agents_Validate__Save]
+	EXEC [dbo].[bll_Employees_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Agents__Save]
+	EXEC [dbo].[dal_Employees__Save]
 		@Entities = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 

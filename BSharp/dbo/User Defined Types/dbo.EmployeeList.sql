@@ -27,7 +27,7 @@
 	[RegionId]					INT,
 	[ResidentialAddress]		NVARCHAR (1024),
 	[Title]						NVARCHAR (255),
---	Potnetiall apply to Employees
+--	Potentially apply to Employees
 	[JobTitle]					NVARCHAR (255),
 	[EmployeeSince]				DATETIMEOFFSET (7),				
 /*	[BasicSalary]				MONEY,

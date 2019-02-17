@@ -1,8 +1,8 @@
-﻿CREATE TABLE [dbo].[CustodiesResources]
+﻿CREATE TABLE [dbo].[AgentsResources]
 (
 	[TenantId]			INT,
 	[Id]				INT					IDENTITY,
-	[CustodyId]			INT					NOT NULL,
+	[AgentId]			INT					NOT NULL,
 	[RelationType]		NVARCHAR(255)		NOT NULL,
 	[ResourceId]		INT					NOT NULL,
 	[UnitCost]			MONEY				NOT NULL DEFAULT(1),				
@@ -10,8 +10,8 @@
 	[CreatedById]			INT		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]		INT		NOT NULL,
-	CONSTRAINT [PK_CustodiesResources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_CustodiesResources] CHECK ([RelationType] IN (
+	CONSTRAINT [PK_AgentsResources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [CK_AgentsResources] CHECK ([RelationType] IN (
 		N'Employee',	-- Individual: Overtime hours (4 types), Labor hours 
 		N'Employer',	-- Organization: N/A
 		N'Supplier',	-- Organization: Raw Materials, Trade Merchandise, PPE
@@ -28,9 +28,9 @@
 		N'Farm',		-- Limited Access, Public Access
 		N'ProductionPoint'-- Limited Access
 		)),
-	CONSTRAINT [FK_CustodiesResources_Custodies] FOREIGN KEY ([TenantId], [CustodyId]) REFERENCES [dbo].[Agents] ([TenantId], [Id])ON DELETE CASCADE,
-	CONSTRAINT [FK_CustodiesResources_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id])ON DELETE CASCADE
+	CONSTRAINT [FK_AgentsResources_Agents] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Agents] ([TenantId], [Id])ON DELETE CASCADE,
+	CONSTRAINT [FK_AgentsResources_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id])ON DELETE CASCADE
 );
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_CustodiesResources__CustodyId_RelationType_ResourceId]
-  ON [dbo].[CustodiesResources]([TenantId] ASC, [CustodyId] ASC, [RelationType] ASC, [ResourceId] ASC);
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AgentsResources__AgentId_RelationType_ResourceId]
+  ON [dbo].[AgentsResources]([TenantId] ASC, [AgentId] ASC, [RelationType] ASC, [ResourceId] ASC);

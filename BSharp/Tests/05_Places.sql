@@ -90,6 +90,6 @@ SELECT
 	@CBEETB = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'CBE - ETB'),
 	@TigistSafe = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Tigist - Safe');
 
-	INSERT INTO dbo.CustodiesResources([TenantId], [CustodyId],	[RelationType],	[ResourceId], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
+	INSERT INTO dbo.AgentsResources([TenantId], [AgentId],	[RelationType],	[ResourceId], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
 	(@TenantId, @CBEETB, N'BankAccount', @ETB, @Now, @UserId, @Now, @UserId),
 	(@TenantId, @CBEUSD, N'BankAccount', @USD, @Now, @UserId, @Now, @UserId);

@@ -6,9 +6,11 @@ BEGIN
 
 	SELECT @Result = R.Id
 	FROM [dbo].Resources R
-	JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id
-	WHERE R.ResourceType = N'Money'
-	AND MU.[Code] = [dbo].fn_Settings(N'FunctionalCurrencyCode');
+	WHERE SystemCode = N'FunctionalCurrency'
 
+/*	
+	SELECT @Result = FunctionalCurrencyId
+	FROM dbo.Settings
+*/
 	RETURN @Result;
 END;

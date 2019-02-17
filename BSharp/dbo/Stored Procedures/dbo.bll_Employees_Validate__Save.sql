@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[bll_Agents_Validate__Save]
+﻿CREATE PROCEDURE [dbo].[bll_Employees_Validate__Save]
 	@Entities [EmployeeList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS

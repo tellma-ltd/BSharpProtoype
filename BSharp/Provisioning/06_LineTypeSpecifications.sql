@@ -8,12 +8,12 @@
 	[AccountId1Label]			NVARCHAR (255),
 	[AccountId1FillSql]			NVARCHAR (MAX),
 
-	[CustodyId1Label]			NVARCHAR (255),
-	[CustodyId1DefaultJs]		NVARCHAR (MAX), -- Default has two parts: columns affecting it, and value. 
+	[AgentId1Label]			NVARCHAR (255),
+	[AgentId1DefaultJs]		NVARCHAR (MAX), -- Default has two parts: columns affecting it, and value. 
 	[
-	[CustodyId1Filter]			NVARCHAR (MAX), -- The simplified user filter for the UI picker
-	[CustodyId1ValidateSql]		NVARCHAR (MAX), -- The detailed data validation logic, verifid in the BE
-	[CustodyId1FillSql]			NVARCHAR (MAX),
+	[AgentId1Filter]			NVARCHAR (MAX), -- The simplified user filter for the UI picker
+	[AgentId1ValidateSql]		NVARCHAR (MAX), -- The detailed data validation logic, verifid in the BE
+	[AgentId1FillSql]			NVARCHAR (MAX),
 	
 	[ResourceId1Label]			NVARCHAR (255),
 	[ResourceId1FillSql]		NVARCHAR (MAX),
@@ -39,8 +39,8 @@
 	[OperationId2FillSql]		NVARCHAR (MAX),
 	[AccountId2Label]			NVARCHAR (255),
 	[AccountId2FillSql]			NVARCHAR (MAX),
-	[CustodyId2Label]			NVARCHAR (255),
-	[CustodyId2FillSql]			NVARCHAR (MAX),
+	[AgentId2Label]			NVARCHAR (255),
+	[AgentId2FillSql]			NVARCHAR (MAX),
 	[ResourceId2Label]			NVARCHAR (255),
 	[ResourceId2FillSql]		NVARCHAR (MAX),
 	[Amount2Label]				NVARCHAR (255),
@@ -65,8 +65,8 @@
 	[OperationId3FillSql]		NVARCHAR (MAX),
 	[AccountId3Label]			NVARCHAR (255),
 	[AccountId3FillSql]			NVARCHAR (MAX),
-	[CustodyId3Label]			NVARCHAR (255),
-	[CustodyId3FillSql]			NVARCHAR (MAX),
+	[AgentId3Label]			NVARCHAR (255),
+	[AgentId3FillSql]			NVARCHAR (MAX),
 	[ResourceId3Label]			NVARCHAR (255),
 	[ResourceId3FillSql]		NVARCHAR (MAX),
 	[Amount3Label]				NVARCHAR (255),
@@ -91,8 +91,8 @@
 	[OperationId4FillSql]		NVARCHAR (MAX),
 	[AccountId4Label]			NVARCHAR (255),
 	[AccountId4FillSql]			NVARCHAR (MAX),
-	[CustodyId4Label]			NVARCHAR (255),
-	[CustodyId4FillSql]			NVARCHAR (MAX),
+	[AgentId4Label]			NVARCHAR (255),
+	[AgentId4FillSql]			NVARCHAR (MAX),
 	[ResourceId4Label]			NVARCHAR (255),
 	[ResourceId4FillSql]		NVARCHAR (MAX),
 	[Amount4Label]				NVARCHAR (255),
@@ -125,7 +125,7 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= 	N'Operation',
 		[AccountId1FillSql]	= 		N'N''BalancesWithBanks''',
-	--[CustodyId1Label]			=	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
+	--[AgentId1Label]			=	N'DepositedInAccount', -- Allowed Custody Type: CashSafe or BankAccount
 	--[ResourceId1Label]		=	N'AmountCurrency',
 	--[Amount1Label]			=	N'AmountDeposited',
 	--[Value1Label]			= 	N'EquivalentFunctional',
@@ -135,7 +135,7 @@ SET
 		[Direction2]		=	-1,
 		[OperationId2FillSql] =		N'L.[OperationId1]',
 		[AccountId2FillSql]	=		N'N''IssuedCapital''',
-	--[CustodyId2Label]			=	N'Shareholder',
+	--[AgentId2Label]			=	N'Shareholder',
 		[ResourceId2FillSql]	=		N'(SELECT Id FROM dbo.Resources WHERE [SystemCode] = N''CMNSTCK'')',
 	--[Amount2Label]			=	N'NumberOfShares',
 		[Value2FillSql]		=		N'L.[Value1]',
@@ -160,23 +160,23 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= N'Operation',
 		[AccountId1FillSql]		= N'N''UnassignedLabor''',
-	--[CustodyId1Label]			= N'Department',
+	--[AgentId1Label]			= N'Department',
 		[ResourceId1FillSql]		= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 	--[Amount1Label]			= N'NumberOfHours',
 		[Value1FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
 									)',
 	--[Reference1Label]		= N'SalaryPeriod',
 		[OperationId2FillSql]		= N'L.[OperationId1]',
 		[AccountId2FillSql]		= N'N''ShorttermEmployeeBenefitsAccruals''',
-	--[CustodyId2Label]			= N'Employee',
+	--[AgentId2Label]			= N'Employee',
 	--[ResourceId2Label]		 = N'OvertimeType', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
 		[Direction2]		=	-1,		
 		[Amount2FillSql]		= N'L.[Amount1]',
 		[Value2FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId2] AND ResourceId = L.[ResourceId2] And RelationType = N''Employee''
 									)',
 		[Reference2FillSql]		= N'L.[Reference1]'
 WHERE [LineType] = @LineType;
@@ -193,12 +193,12 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= N'Operation',
 		[AccountId1FillSql]		= N'N''ShorttermEmployeeBenefitsAccruals''',
-	--[CustodyId1Label]			= N'Employee',
+	--[AgentId1Label]			= N'Employee',
 		[ResourceId1FillSql]		= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')', -- WHERE SystemCode IN (N''DayOvertime'', N''NightOvertime'', N''RestOvertime'', N''HolidayOvertime'')
 	--[Amount1Label]			= N'NumberOfDays',
 		[Value1FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId1] 
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId1] 
 									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
 									And RelationType = N''Employee''
 									)',
@@ -207,12 +207,12 @@ SET
 		[Direction2]		=	-1,		
 		[OperationId2FillSql]	= N'L.[OperationId1]',
 		[AccountId2FillSql]		= N'N''UnassignedLabor''',
-	--[CustodyId2Label]			= N'Department',
+	--[AgentId2Label]			= N'Department',
 		[ResourceId2FillSql]		 = N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 		[Amount2FillSql]		= N'L.[Amount1] * 8',
 		[Value2FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost] FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId1] 
+									SELECT L.[Amount1] * [UnitCost] FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId1] 
 									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
 									And RelationType = N''Employee''
 									)',
@@ -229,7 +229,7 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= N'Operation',
 		[AccountId1FillSql]		= N'N''CurrentPayablesToEmployees''',
-	--[CustodyId1Label]			= N'Employee',
+	--[AgentId1Label]			= N'Employee',
 	--[ResourceId1Label]		= N'Currency',
 	--[Amount1Label]			= N'Amount Deducted',
 	--[Value1Label]			= N'Equiv. Functional',
@@ -238,7 +238,7 @@ SET
 		[Direction2]		=	-1,		
 		[OperationId2FillSql]		= N'L.[OperationId1]',
 		[AccountId2FillSql]		= N'N''AdministrativeExpense''',
-	--[CustodyId2Label]			= N'Department',
+	--[AgentId2Label]			= N'Department',
 		[ResourceId2FillSql]		= N'L.[ResourceId1]',
 		[Amount2FillSql]		= N'L.[Amount1]',
 		[Value2FillSql]			= N'L.[Value1]',
@@ -257,12 +257,12 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= N'Operation',
 		[AccountId1FillSql]		= N'N''AdministrativeExpense''',
-	--[CustodyId1Label]			= N'Employee',
+	--[AgentId1Label]			= N'Employee',
 		[ResourceId1FillSql]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 	--[Amount1Label]			= N'Leave Hours',
 		[Value1FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId1] 
+									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId1] 
 									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
 									And RelationType = N''Employee''
 									)',
@@ -272,12 +272,12 @@ SET
 		[Direction2]		=	-1,		
 		[OperationId2FillSql]	= N'L.[OperationId1]',
 		[AccountId2FillSql]		= N'N''UnassignedLabor''',
-	--[CustodyId2Label]		= N'Department', -- can be auto calculated.
+	--[AgentId2Label]		= N'Department', -- can be auto calculated.
 		[ResourceId2FillSql]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 		[Amount2FillSql]		= N'L.[Amount1]',
 		[Value2FillSql]			= N'(
-									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.CustodiesResources
-									WHERE CustodyId = L.[CustodyId1] 
+									SELECT L.[Amount1] * [UnitCost]/8 FROM dbo.AgentsResources
+									WHERE AgentId = L.[AgentId1] 
 									AND ResourceId = (SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborDaily'')
 									And RelationType = N''Employee''
 									)',
@@ -296,7 +296,7 @@ SET
 		[Direction1]		=	+1,
 	--[OperationId1Label]		= N'Operation',
 		[AccountId1FillSql]		= N'N''ShorttermEmployeeBenefitsAccruals''',
-	--[CustodyId1Label]			= N'Employee',
+	--[AgentId1Label]			= N'Employee',
 		[ResourceId1FillSql]	= N'(SELECT [Id] FROM dbo.Resources WHERE [SystemCode] = N''LaborHourly'')',
 	--[Amount1Label]			= N'Leave Hours',
 		[Value1FillSql]			= N'L.[Amount1]',
@@ -305,7 +305,7 @@ SET
 		[Direction2]		=	-1,	
 		[OperationId2FillSql]	= N'L.[OperationId1]',
 		[AccountId2FillSql]		= N'N''UnassignedLabor''',
-	--[CustodyId2Label]		= N'Department', -- can be auto calculated.
+	--[AgentId2Label]		= N'Department', -- can be auto calculated.
 		[ResourceId2FillSql]	= N'L.[ResourceId1]',
 		[Amount2FillSql]		= N'L.[Amount1]',
 		[Value2FillSql]			= N'L.[Amount1]',
@@ -385,8 +385,8 @@ UPDATE SET
 	t.[OperationId1FillSql]			= s.[OperationId1FillSql],
 	t.[Account1IsVisible]				= s.[AccountId1Label],
 	t.[AccountId1FillSql]				= s.[AccountId1FillSql],
-	t.[Custody1IsVisible]				= s.[CustodyId1Label],
-	t.[CustodyId1FillSql]				= s.[CustodyId1FillSql],
+	t.[Agent1IsVisible]				= s.[AgentId1Label],
+	t.[AgentId1FillSql]				= s.[AgentId1FillSql],
 	t.[Resource1IsVisible]				= s.[ResourceId1Label],
 	t.[ResourceId1FillSql]			= s.[ResourceId1FillSql],
 	t.[Amount1IsVisible]				= s.[Amount1Label],
@@ -411,8 +411,8 @@ UPDATE SET
 	t.[OperationId2FillSql]			= s.[OperationId2FillSql],
 	t.[AccountId2Label]				= s.[AccountId2Label],
 	t.[AccountId2FillSql]				= s.[AccountId2FillSql],
-	t.[CustodyId2Label]				= s.[CustodyId2Label],
-	t.[CustodyId2FillSql]				= s.[CustodyId2FillSql],
+	t.[AgentId2Label]				= s.[AgentId2Label],
+	t.[AgentId2FillSql]				= s.[AgentId2FillSql],
 	t.[ResourceId2Label]				= s.[ResourceId2Label],
 	t.[ResourceId2FillSql]			= s.[ResourceId2FillSql],
 	t.[Amount2Label]				= s.[Amount2Label],
@@ -437,8 +437,8 @@ UPDATE SET
 	t.[OperationId3FillSql]			= s.[OperationId3FillSql],
 	t.[AccountId3Label]				= s.[AccountId3Label],
 	t.[AccountId3FillSql]				= s.[AccountId3FillSql],
-	t.[CustodyId3Label]				= s.[CustodyId3Label],
-	t.[CustodyId3FillSql]				= s.[CustodyId3FillSql],
+	t.[AgentId3Label]				= s.[AgentId3Label],
+	t.[AgentId3FillSql]				= s.[AgentId3FillSql],
 	t.[ResourceId3Label]				= s.[ResourceId3Label],
 	t.[ResourceId3FillSql]			= s.[ResourceId3FillSql],
 	t.[Amount3Label]				= s.[Amount3Label],
@@ -463,8 +463,8 @@ UPDATE SET
 	t.[OperationId4FillSql]			= s.[OperationId4FillSql],
 	t.[AccountId4Label]				= s.[AccountId4Label],
 	t.[AccountId4FillSql]				= s.[AccountId4FillSql],
-	t.[CustodyId4Label]				= s.[CustodyId4Label],
-	t.[CustodyId4FillSql]				= s.[CustodyId4FillSql],
+	t.[AgentId4Label]				= s.[AgentId4Label],
+	t.[AgentId4FillSql]				= s.[AgentId4FillSql],
 	t.[ResourceId4Label]				= s.[ResourceId4Label],
 	t.[ResourceId4FillSql]			= s.[ResourceId4FillSql],
 	t.[Amount4Label]				= s.[Amount4Label],
@@ -488,25 +488,25 @@ WHEN NOT MATCHED BY SOURCE THEN
 WHEN NOT MATCHED BY TARGET THEN
 INSERT ([TenantId], [LineType], [AppendSql],
 	[Direction1], [Operation1IsVisible], [OperationId1FillSql], [Account1IsVisible], [AccountId1FillSql],
-	[Custody1IsVisible], [CustodyId1FillSql], [Resource1IsVisible], [ResourceId1FillSql],
+	[Agent1IsVisible], [AgentId1FillSql], [Resource1IsVisible], [ResourceId1FillSql],
 	[Amount1IsVisible], [Amount1FillSql], [Value1IsVisible], [Value1FillSql], [Note1IsVisible], [NoteId1FillSql],
 	[Reference1IsVisible], [Reference1FillSql], [RelatedReference1IsVisible], [RelatedReference1FillSql],
 	[RelatedAgent1IsVisible], [RelatedAgentId1FillSql], [RelatedResource1IsVisible], [RelatedResourceId1FillSql],
 	[RelatedAmount1IsVisible], [RelatedAmount1FillSql],
 	[Direction2], [OperationId2Label], [OperationId2FillSql], [AccountId2Label], [AccountId2FillSql], 
-	[CustodyId2Label], [CustodyId2FillSql], [ResourceId2Label], [ResourceId2FillSql],
+	[AgentId2Label], [AgentId2FillSql], [ResourceId2Label], [ResourceId2FillSql],
 	[Amount2Label], [Amount2FillSql], [Value2Label], [Value2FillSql], [NoteId2Label], [NoteId2FillSql],
 	[Reference2Label], [Reference2FillSql], [RelatedReference2Label], [RelatedReference2FillSql],
 	[RelatedAgentId2Label], [RelatedAgentId2FillSql], [RelatedResourceId2Label], [RelatedResourceId2FillSql],
 	[RelatedAmount2Label], [RelatedAmount2FillSql],
 	[Direction3], [OperationId3Label], [OperationId3FillSql], [AccountId3Label], [AccountId3FillSql], 
-	[CustodyId3Label], [CustodyId3FillSql], [ResourceId3Label], [ResourceId3FillSql],
+	[AgentId3Label], [AgentId3FillSql], [ResourceId3Label], [ResourceId3FillSql],
 	[Amount3Label], [Amount3FillSql], [Value3Label], [Value3FillSql], [NoteId3Label], [NoteId3FillSql],
 	[Reference3Label], [Reference3FillSql], [RelatedReference3Label], [RelatedReference3FillSql],
 	[RelatedAgentId3Label], [RelatedAgentId3FillSql], [RelatedResourceId3Label], [RelatedResourceId3FillSql],
 	[RelatedAmount3Label], [RelatedAmount3FillSql],
 	[Direction4], [OperationId4Label], [OperationId4FillSql], [AccountId4Label], [AccountId4FillSql], 
-	[CustodyId4Label], [CustodyId4FillSql], [ResourceId4Label], [ResourceId4FillSql],
+	[AgentId4Label], [AgentId4FillSql], [ResourceId4Label], [ResourceId4FillSql],
 	[Amount4Label], [Amount4FillSql], [Value4Label], [Value4FillSql], [NoteId4Label], [NoteId4FillSql],
 	[Reference4Label], [Reference4FillSql], [RelatedReference4Label], [RelatedReference4FillSql],
 	[RelatedAgentId4Label], [RelatedAgentId4FillSql], [RelatedResourceId4Label], [RelatedResourceId4FillSql],
@@ -514,25 +514,25 @@ INSERT ([TenantId], [LineType], [AppendSql],
 	)
 VALUES(@TenantId, s.[LineType], s.[AppendSql],
 	s.[Direction1], s.[OperationId1Label], s.[OperationId1FillSql], s.[AccountId1Label], s.[AccountId1FillSql],
-	s.[CustodyId1Label], s.[CustodyId1FillSql], s.[ResourceId1Label], s.[ResourceId1FillSql],
+	s.[AgentId1Label], s.[AgentId1FillSql], s.[ResourceId1Label], s.[ResourceId1FillSql],
 	s.[Amount1Label], s.[Amount1FillSql], s.[Value1Label], s.[Value1FillSql], s.[NoteId1Label], s.[NoteId1FillSql],
 	s.[Reference1Label], s.[Reference1FillSql], s.[RelatedReference1Label], s.[RelatedReference1FillSql],
 	s.[RelatedAgentId1Label], s.[RelatedAgentId1FillSql], s.[RelatedResourceId1Label], s.[RelatedResourceId1FillSql],
 	s.[RelatedAmount1Label], s.[RelatedAmount1FillSql],
 	s.[Direction2], s.[OperationId2Label], s.[OperationId2FillSql], s.[AccountId2Label], s.[AccountId2FillSql],
-	s.[CustodyId2Label], s.[CustodyId2FillSql], s.[ResourceId2Label], s.[ResourceId2FillSql],
+	s.[AgentId2Label], s.[AgentId2FillSql], s.[ResourceId2Label], s.[ResourceId2FillSql],
 	s.[Amount2Label], s.[Amount2FillSql], s.[Value2Label], s.[Value2FillSql], s.[NoteId2Label], s.[NoteId2FillSql],
 	s.[Reference2Label], s.[Reference2FillSql], s.[RelatedReference2Label], s.[RelatedReference2FillSql],
 	s.[RelatedAgentId2Label], s.[RelatedAgentId2FillSql], s.[RelatedResourceId2Label], s.[RelatedResourceId2FillSql],
 	s.[RelatedAmount2Label], s.[RelatedAmount2FillSql],
 	s.[Direction3], s.[OperationId3Label], s.[OperationId3FillSql], s.[AccountId3Label], s.[AccountId3FillSql],
-	s.[CustodyId3Label], s.[CustodyId3FillSql], s.[ResourceId3Label], s.[ResourceId3FillSql],
+	s.[AgentId3Label], s.[AgentId3FillSql], s.[ResourceId3Label], s.[ResourceId3FillSql],
 	s.[Amount3Label], s.[Amount3FillSql], s.[Value3Label], s.[Value3FillSql], s.[NoteId3Label], s.[NoteId3FillSql],
 	s.[Reference3Label], s.[Reference3FillSql], s.[RelatedReference3Label], s.[RelatedReference3FillSql],
 	s.[RelatedAgentId3Label], s.[RelatedAgentId3FillSql], s.[RelatedResourceId3Label], s.[RelatedResourceId3FillSql],
 	s.[RelatedAmount3Label], s.[RelatedAmount3FillSql],
 	s.[Direction4], s.[OperationId4Label], s.[OperationId4FillSql], s.[AccountId4Label], s.[AccountId4FillSql],
-	s.[CustodyId4Label], s.[CustodyId4FillSql], s.[ResourceId4Label], s.[ResourceId4FillSql],
+	s.[AgentId4Label], s.[AgentId4FillSql], s.[ResourceId4Label], s.[ResourceId4FillSql],
 	s.[Amount4Label], s.[Amount4FillSql], s.[Value4Label], s.[Value4FillSql], s.[NoteId4Label], s.[NoteId4FillSql],
 	s.[Reference4Label], s.[Reference4FillSql], s.[RelatedReference4Label], s.[RelatedReference4FillSql],
 	s.[RelatedAgentId4Label], s.[RelatedAgentId4FillSql], s.[RelatedResourceId4Label], s.[RelatedResourceId4FillSql],

@@ -3,7 +3,7 @@ BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Operations])			DBCC CHECKIDENT ('[dbo].[Operations]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Custodies]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Entries])			DBCC CHECKIDENT ('[dbo].[Entries]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Lines])				DBCC CHECKIDENT ('[dbo].[Lines]', RESEED, 0) WITH NO_INFOMSGS;

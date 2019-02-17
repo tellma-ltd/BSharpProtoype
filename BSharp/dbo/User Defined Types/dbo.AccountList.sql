@@ -9,7 +9,7 @@
 	[Name2]				NVARCHAR (255),
 	[IFRSConceptId]		NVARCHAR (255),
 	[OperationId]		INT,
-	[CustodyId]			INT,
+	[AgentId]			INT,
 	[Reference]			NVARCHAR (255)	DEFAULT(N''),
 	[ResourceId]		INT,
 	[ParentIndex]		INT,

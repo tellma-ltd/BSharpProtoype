@@ -4,109 +4,283 @@
 ) RETURNS TABLE
 AS
 RETURN
+	WITH
+	IntegerList AS ( -- can be defined recursively, or simply read from a table
+		SELECT 0 As I UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION
+		SELECT 5 As I UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+	)
 	SELECT
-		D.Id,
-		D.[DocumentType],
-		D.SerialNumber,
-		D.AssigneeId,
-		CONVERT(NVARCHAR(255), 
-		(CASE WHEN @fromDate > D.StartDateTime THEN @fromDate ELSE D.StartDateTime END), 102) As StartDateTime,
-		CONVERT(NVARCHAR(255), 			
-		(CASE WHEN @toDate < D.EndDateTime THEN @toDate ELSE D.EndDateTime END), 102) As EndDateTime,
-		E.Id As EntryId,
-		E.LineType,
-		E.Direction,
-		E.AccountId,
-		E.OperationId,
-		E.[AgentId],
-		E.ResourceId,
-		E.[Mass],
-		E.[Volume],
-		E.[Count],
-		E.[Usage],
-		E.[FCY],
-		E.[Value],
-		E.[NoteId],
-		E.[Reference],
-		E.[Memo],
-		E.[ExpectedClosingDate],
-		E.[RelatedResourceId],
-		E.[RelatedReference],
-		E.[RelatedAgentId],
-		E.[RelatedAmount]
-		/*
-		CASE 
-			WHEN D.Frequency = N'OneTime' THEN E.[Amount]
-			WHEN D.Frequency = N'Daily'
-			THEN
-				DATEDIFF(DAY,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Amount]
-			WHEN D.Frequency = N'Weekly'
-			THEN
-				DATEDIFF(WEEK,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Amount]
-			WHEN D.Frequency = N'Monthly'
-			THEN
-				DATEDIFF(MONTH,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Amount]
-			WHEN D.Frequency = N'Quarterly'
-			THEN
-				DATEDIFF(QUARTER,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Amount]
-			WHEN D.Frequency = N'Yearly'
-			THEN
-				DATEDIFF(YEAR,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Amount]
-		END AS [Amount],
-		CASE 
-			WHEN D.Frequency = N'OneTime' THEN E.[Value]
-			WHEN D.Frequency = N'Daily'
-			THEN
-				DATEDIFF(DAY,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Value]
-			WHEN D.Frequency = N'Weekly'
-			THEN
-				DATEDIFF(WEEK,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Value]
-			WHEN D.Frequency = N'Monthly'
-			THEN
-				DATEDIFF(MONTH,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Value]
-			WHEN D.Frequency = N'Quarterly'
-			THEN
-				DATEDIFF(QUARTER,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Value]
-			WHEN D.Frequency = N'Yearly'
-			THEN
-				DATEDIFF(YEAR,
-					(SELECT MAX(startDT)	FROM (VALUES (D.StartDateTime), (@fromDate)) As StartTimes(startDT)),
-					(SELECT MIN(endDT)		FROM (VALUES (D.EndDateTime),	(@toDate))	As EndTimes(endDT))
-				) * E.[Value]
-		END AS [Value],
-		*/
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView]
+	WHERE Frequency		= N'OneTime'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR StartDateTime < @toDate)
 
-	FROM 
-		[dbo].[Entries] E
-		INNER JOIN [dbo].[Documents] D ON E.DocumentId = D.Id
-	WHERE
-		D.Mode		= N'Posted' AND 
-		D.[State]	= N'Voucher' AND
-		D.StartDateTime < @toDate AND D.EndDateTime >= @fromDate;
+	UNION ALL
+	SELECT 
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView] 
+	CROSS JOIN IntegerList IL
+	WHERE Frequency		= N'Daily'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR DATEADD(DAY, IL.I, [StartDateTime]) < @toDate)
+	AND ([EndDateTime] IS NULL OR DATEADD(DAY, IL.I, [StartDateTime]) < [EndDateTime])
+	
+	UNION ALL
+	SELECT 
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView] 
+	CROSS JOIN IntegerList IL
+	WHERE Frequency		= N'Weekly'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR DATEADD(WEEK, IL.I, [StartDateTime]) < @toDate)
+	AND ([EndDateTime] IS NULL OR DATEADD(WEEK, IL.I, [StartDateTime]) < [EndDateTime])
+
+	UNION ALL
+	SELECT 
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView] 
+	CROSS JOIN IntegerList IL
+	WHERE Frequency		= N'Monthly'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR DATEADD(MONTH, IL.I, [StartDateTime]) < @toDate)
+	AND ([EndDateTime] IS NULL OR DATEADD(MONTH, IL.I, [StartDateTime]) < [EndDateTime])
+	
+	UNION ALL
+	SELECT 
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView] 
+	CROSS JOIN IntegerList IL
+	WHERE Frequency		= N'Quarterly'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR DATEADD(QUARTER, IL.I, [StartDateTime]) < @toDate)
+	AND ([EndDateTime] IS NULL OR DATEADD(QUARTER, IL.I, [StartDateTime]) < [EndDateTime])
+
+	UNION ALL
+	SELECT 
+		[DocumentId],
+		[DocumentType],
+		[SerialNumber],
+		[AssigneeId],
+		CONVERT(NVARCHAR(255), [StartDateTime], 102) AS DocumentDateTime,
+		[EntryId],
+		[LineType],
+		[Direction],
+		[AccountId],
+		[AccountType],
+		[IFRSConceptId],
+		[OperationId],
+		[OrganizationUnitId],
+		[FunctionId],
+		[ProductCategoryId],
+		[GeographicRegionId],
+		[CustomerSegmentId],
+		[TaxSegmentId],
+		[AgentId],
+		[AgentAccountId],
+		[ResourceId],
+		[MoneyAmount],
+		[Mass], [NormalizedMass],
+		[Volume], [NormalizedVolume],
+		[Count],
+		[ServiceTime],
+		[ServiceCount],
+		[ServiceDistance],
+		[Value],
+		[NoteId],
+		[Reference],
+		[Memo],
+		[ExpectedClosingDate],
+		[RelatedResourceId],
+		[RelatedReference],
+		[RelatedAgentId],
+		[RelatedAmount]
+	FROM dbo.[NormalizedVouchersView] 
+	CROSS JOIN IntegerList IL
+	WHERE Frequency		= N'Yearly'
+	AND (@fromDate IS NULL OR StartDateTime >= @fromDate)
+	AND (@toDate IS NULL OR DATEADD(YEAR, IL.I, [StartDateTime]) < @toDate)
+	AND ([EndDateTime] IS NULL OR DATEADD(YEAR, IL.I, [StartDateTime]) < [EndDateTime])	
+	
+	;
+	

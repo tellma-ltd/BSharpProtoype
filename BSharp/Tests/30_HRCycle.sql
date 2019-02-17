@@ -10,7 +10,7 @@ BEGIN --================  OVERTIME =======================--
 						(@DIdx,				@LineType, N'201701');
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	O/T Hours,	Department,		Employee,	Overtime type
-	[DocumentIndex], [LineType], [OperationId1], [Amount1],	[CustodyId1], [CustodyId2],	[ResourceId2]) VALUES
+	[DocumentIndex], [LineType], [OperationId1], [Amount1],	[AgentId1], [AgentId2],	[ResourceId2]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @Expansion,		10,		@Production, @MohamadAkra,	@HOvertime),
 	(@LIdx + 2, @DIdx, @LineType, @Expansion,		5,		@Production, @AhmadAkra,	@ROvertime),
 	(@LIdx + 3, @DIdx, @LineType, @Expansion,		40,		@Production, @TizitaNigussie,@ROvertime);
@@ -27,7 +27,7 @@ BEGIN --================  DEDUCTIONS =======================--
 						(@DIdx,				@LineType,	1,			N'201701');
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,	Absence days,
-	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [Amount1]) VALUES
+	[DocumentIndex], [LineType], [OperationId1],[AgentId2],[AgentId1], [Amount1]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, 10);
 
 	Set @LineType = N'et-employees-penalties';
@@ -35,7 +35,7 @@ BEGIN --================  DEDUCTIONS =======================--
 						(@DIdx,				@LineType,	2,			N'201701');
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,		Currency, Amount,
-	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [ResourceId1], [Amount1], [Value1]) VALUES
+	[DocumentIndex], [LineType], [OperationId1],[AgentId2],[AgentId1], [ResourceId1], [Amount1], [Value1]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
 END;
 IF (1=1)
@@ -50,7 +50,7 @@ BEGIN --================  LEAVES =======================--
 						(@DIdx,				@LineType,	1,			N'201701');
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,	Absence days,
-	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [Amount1]) VALUES
+	[DocumentIndex], [LineType], [OperationId1],[AgentId2],[AgentId1], [Amount1]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, 10);
 
 	Set @LineType = N'et-employees-leaves-hourly-unpaid';
@@ -58,7 +58,7 @@ BEGIN --================  LEAVES =======================--
 						(@DIdx,				@LineType,	2,			N'201701');
 	SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 	INSERT INTO @LSave ([Index],--Operation,	Department, Employee,		Currency, Amount,
-	[DocumentIndex], [LineType], [OperationId1],[CustodyId2],[CustodyId1], [ResourceId1], [Amount1], [Value1]) VALUES
+	[DocumentIndex], [LineType], [OperationId1],[AgentId2],[AgentId1], [ResourceId1], [Amount1], [Value1]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
 END;
 EXEC [dbo].[api_Documents__Save]

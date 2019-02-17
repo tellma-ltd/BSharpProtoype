@@ -8,10 +8,12 @@
 	[ParentId]				INT,
 	[Code]					NVARCHAR (255),
 -- Lookup lists used for reporting
-	[ProductCategoryId]		INT,		-- e.g., sales, services
-	[GeographicRegionId]	INT,		-- e.g., Riyadh, Jeddah
-	[CustomerSegmentId]		INT,		-- e.g., Corporate, Individual or M, F or Adult youth, etc...
-	[FunctionId]			INT,		-- e.g., HQ, Branch, Accommodation
+	[OrganizationUnitId]	INT					NOT NULL, -- e.g., general, admin, S&M, HR, finance, production, maintenance
+	[ProductCategoryId]		INT					NOT NULL, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
+	[GeographicRegionId]	INT					NOT NULL, -- e.g., general, Oromia, Bole, Kersa
+	[CustomerSegmentId]		INT					NOT NULL, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
+	[FunctionId]			INT					NOT NULL, -- e.g., general, HQ, Branch, Accommodation
+	[TaxSegmentId]			INT					NOT NULL, -- e.g., general, existing (30%), expansion (0%)
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]			INT		NOT NULL,
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 

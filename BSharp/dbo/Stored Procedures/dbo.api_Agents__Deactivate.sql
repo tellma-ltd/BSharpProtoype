@@ -5,7 +5,7 @@
 	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
-	EXEC [dbo].[dal_Custodies__Activate] @Ids = @Ids, @IsActive = 0;
+	EXEC [dbo].[dal_Agents__Activate] @Ids = @Ids, @IsActive = 0;
 
 	IF (@ReturnEntities = 1)
 		EXEC [dbo].[dal_Agents__Select] 

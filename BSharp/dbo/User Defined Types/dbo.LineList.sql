@@ -10,7 +10,7 @@
 	
 	[OperationId1]			INT,
 	[AccountId1]			NVARCHAR (255),
-	[CustodyId1]			INT,
+	[AgentId1]			INT,
 	[ResourceId1]			INT,
 	[Direction1]			SMALLINT,
 	[Amount1]				MONEY,
@@ -24,7 +24,7 @@
 
 	[OperationId2]			INT,
 	[AccountId2]			NVARCHAR (255),
-	[CustodyId2]			INT,
+	[AgentId2]			INT,
 	[ResourceId2]			INT,
 	[Direction2]			SMALLINT,
 	[Amount2]				MONEY,
@@ -38,7 +38,7 @@
 
 	[OperationId3]			INT,
 	[AccountId3]			NVARCHAR (255),
-	[CustodyId3]			INT,
+	[AgentId3]			INT,
 	[ResourceId3]			INT,
 	[Direction3]			SMALLINT,
 	[Amount3]				MONEY,
@@ -52,7 +52,7 @@
 
 	[OperationId4]			INT,
 	[AccountId4]			NVARCHAR (255),
-	[CustodyId4]			INT,
+	[AgentId4]			INT,
 	[ResourceId4]			INT,
 	[Direction4]			SMALLINT,
 	[Amount4]				MONEY,

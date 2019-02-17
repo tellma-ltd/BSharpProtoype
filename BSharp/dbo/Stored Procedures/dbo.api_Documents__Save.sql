@@ -18,10 +18,11 @@ BEGIN
 		@Entries = @Entries,
 		@ResultJson = @ResultJson OUTPUT;
 
+		/* TODO: Uncomment and debug
 	INSERT INTO @DocumentsLocal SELECT * FROM dbo.[fw_Documents__Json](@ResultJson);
 	INSERT INTO @LinesLocal SELECT * FROM dbo.[fw_Lines__Json](@ResultJson);
 	INSERT INTO @EntriesLocal SELECT * FROM dbo.[fw_Entries__Json](@ResultJson);
-
+	*/
 	--Validate Domain rules
 	EXEC [dbo].[bll_Documents_Validate__Save]
 		@Documents = @DocumentsLocal,

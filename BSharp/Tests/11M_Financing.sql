@@ -6,7 +6,7 @@ INSERT INTO @DSave(
 
 SELECT @EIdx = ISNULL(MAX([Index]), -1) + 1 FROM @ESave;
 INSERT INTO @ESave (
-[Index],	[DocumentIndex], [OperationId], AccountId,			CustodyId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
+[Index],	[DocumentIndex], [OperationId], AccountId,			AgentId,		ResourceId,	Direction, Amount,	[Value],	NoteId) VALUES
 (@EIdx,		@DIdx,				@WSI,	N'BalancesWithBanks',	@CBEUSD,		@USD,			+1,		200000, 4700000,	N'ProceedsFromIssuingShares'),
 (@EIdx + 1, @DIdx,				@WSI,	N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
 (@EIdx + 2, @DIdx,				@WSI,	N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');

@@ -13,8 +13,8 @@
 	[Memo]				NVARCHAR (255),
 	-- Common for all entries of all lines
 	[OperationId]		INT,
-	[AccountId]			NVARCHAR (255),
-	[CustodyId]			INT,
+	[AccountId]			INT,
+	[AgentId]			INT,
 	[ResourceId]		INT,
 	[Amount]			MONEY,
 	[Value]				VTYPE,

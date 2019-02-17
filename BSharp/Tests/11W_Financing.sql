@@ -9,7 +9,7 @@ INSERT INTO @DLTSave([DocumentIndex], [LineType]) VALUES
 
 SELECT @LIdx = ISNULL(MAX([Index]), -1) FROM @LSave;
 INSERT INTO @LSave ([Index],
-[DocumentIndex], [LineType], [CustodyId2], [Amount2],	[Value1],	[Amount1], [ResourceId1], [CustodyId1], [Reference1])   
+[DocumentIndex], [LineType], [AgentId2], [Amount2],	[Value1],	[Amount1], [ResourceId1], [AgentId1], [Reference1])   
 						-- Shareholder,	NumberOfShares, CapitalInvested, PaidInAmount, BankAccount, Currency
 VALUES
 (@LIdx + 1, @DIdx, @LineType,	@MohamadAkra,	1000,	2350000,	100000,		@USD,			@CBEUSD,	N'LT101'),

@@ -84,7 +84,7 @@ BEGIN
 	USING (
 		SELECT
 			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[OperationId], E.[Reference],
-			E.[AccountId], E.[CustodyId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
+			E.[AccountId], E.[AgentId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
 			E.[RelatedReference], E.[RelatedAgentId], E.[RelatedResourceId], E.[RelatedAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
@@ -95,10 +95,10 @@ BEGIN
 			t.[OperationId]			= s.[OperationId],
 			t.[Reference]			= s.[Reference],
 			t.[AccountId]			= s.[AccountId],
-			t.[AgentId]			= s.[CustodyId],
+			t.[AgentId]			= s.[AgentId],
 			t.[ResourceId]			= s.[ResourceId],
 			t.[Direction]			= s.[Direction],
-			t.[Amount]				= s.[Amount],
+			t.[MoneyAmount]				= s.[Amount],
 			t.[Value]				= s.[Value],
 			t.[NoteId]				= s.[NoteId],
 			t.[RelatedReference]	= s.[RelatedReference],
@@ -109,11 +109,11 @@ BEGIN
 			t.[ModifiedById]		= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [DocumentId], [LineType], [OperationId], [Reference],
-				[AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId],
+				[AccountId], [AgentId], [ResourceId], [Direction], [MoneyAmount], [Value], [NoteId],
 				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
 				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[OperationId], s.[Reference],
-				s.[AccountId], s.[CustodyId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
+				s.[AccountId], s.[AgentId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
 				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],
 				@Now, @UserId, @Now, @UserId);
 
