@@ -4,5 +4,5 @@
 RETURNS NVARCHAR(255)
 AS
 BEGIN
-	RETURN (SELECT Code FROM dbo.Notes WHERE Id = @NoteId);
+	RETURN (SELECT Code FROM dbo.[IFRSNotes] WHERE Id = @NoteId);
 END;

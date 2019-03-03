@@ -5,49 +5,49 @@ AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-	UPDATE dbo.Operations
-	SET
-		[IsOperatingSegment] = 1,
-		[ModifiedAt] = @Now,
-		[ModifiedById] = @UserId
-	WHERE [Id] = @OperationId
-	AND [IsOperatingSegment] = 0;
+	--UPDATE dbo.[ResponsibilityCenters]
+	--SET
+	--	[IsOperatingSegment] = 1,
+	--	[ModifiedAt] = @Now,
+	--	[ModifiedById] = @UserId
+	--WHERE [Id] = @OperationId
+	--AND [IsOperatingSegment] = 0;
 
 -- Reset all ancestors up to the root
 	DECLARE @ParentId int
 	SELECT @ParentId = ParentId
-	FROM dbo.Operations
+	FROM dbo.[ResponsibilityCenters]
 	WHERE Id = @OperationId
 
 	WHILE @ParentId IS NOT NULL
 	BEGIN
-		UPDATE dbo.Operations
-		SET
-			[IsOperatingSegment] = 0,
-			[ModifiedAt] = @Now,
-			[ModifiedById] = @UserId
-		WHERE [Id] = @ParentId
-		AND [IsOperatingSegment] = 1;
+		--UPDATE dbo.[ResponsibilityCenters]
+		--SET
+		--	[IsOperatingSegment] = 0,
+		--	[ModifiedAt] = @Now,
+		--	[ModifiedById] = @UserId
+		--WHERE [Id] = @ParentId
+		--AND [IsOperatingSegment] = 1;
 
 		SELECT @ParentId = ParentId
-		FROM dbo.Operations
+		FROM dbo.[ResponsibilityCenters]
 		WHERE Id = @ParentId
 	END
 
 -- Reset all children
 	INSERT INTO @Ids([Id])
-	SELECT [Id] FROM dbo.Operations
+	SELECT [Id] FROM dbo.[ResponsibilityCenters]
 	WHERE ParentId = @OperationId;
 
 	WHILE EXISTS (SELECT * FROM @Ids)
 	BEGIN
-		UPDATE dbo.Operations
-		SET 
-			[IsOperatingSegment] = 0,
-			[ModifiedAt] = @Now,
-			[ModifiedById] = @UserId
-		WHERE [IsOperatingSegment] = 1
-		AND Id IN (SELECT [Id] FROM @Ids)
+		--UPDATE dbo.[ResponsibilityCenters]
+		--SET 
+		--	[IsOperatingSegment] = 0,
+		--	[ModifiedAt] = @Now,
+		--	[ModifiedById] = @UserId
+		--WHERE [IsOperatingSegment] = 1
+		--AND Id IN (SELECT [Id] FROM @Ids)
 	
 		DELETE FROM @NextIds;
 
@@ -57,7 +57,7 @@ AS
 		DELETE FROM @Ids;
 
 		INSERT INTO @Ids
-		SELECT [Id] FROM dbo.Operations
+		SELECT [Id] FROM dbo.[ResponsibilityCenters]
 		WHERE [ParentId] IN (SELECT [Id] FROM @NextIds);
 	END;
 
@@ -65,19 +65,19 @@ AS
 
 	IF (
 		SELECT ParentId 
-		FROM dbo.Operations 
+		FROM dbo.[ResponsibilityCenters] 
 		WHERE [Id] = @OperationId
 	) IS NULL
 		INSERT INTO @Ids
-		SELECT [Id] FROM dbo.Operations
+		SELECT [Id] FROM dbo.[ResponsibilityCenters]
 		WHERE ParentId IS NULL
 		AND [Id] > @OperationId
 	ELSE
 		INSERT INTO @Ids
-		SELECT [Id] FROM dbo.Operations
+		SELECT [Id] FROM dbo.[ResponsibilityCenters]
 		WHERE ParentId = (
 			SELECT ParentId 
-			FROM dbo.Operations 
+			FROM dbo.[ResponsibilityCenters] 
 			WHERE [Id] = @OperationId
 		)
 		AND [Id] > @OperationId;

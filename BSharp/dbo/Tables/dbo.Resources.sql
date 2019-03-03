@@ -1,20 +1,29 @@
 ﻿CREATE TABLE [dbo].[Resources] (
+/*
+	Money,
+	Intangible [rights,..]
+	Material/Good [RM, WIP, FG, ]
+	PPE (Service)
+	Biological
+	Employee Job
+*/
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
 	[ResourceType]				NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
-	[CurrencyId]				INT,
-	[MassUnitId]				INT,
+	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
+	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.
+	[MassUnitId]				INT, -- the unit If the resource has a mass measure assigned to it.
 	[VolumeUnitId]				INT,
-	[CountUnitId]				INT,
-	[ServiceTimeUnitId]			INT,
-	[ServiceCountUnitId]		INT,
-	[ServiceDistanceUnitId]		INT,
-	[Source]					NVARCHAR (255), -- Lease In/Acquisition/Production
-	[Purpose]					NVARCHAR (255), -- Lease out/Sale/Production/SG&A
+	[LengthUnitId]				INT,
+	[CountUnitId]				INT, -- pcs, each, share
+	[TimeUnitId]				INT, -- training hours, or support days or work months
+	--[Source]					NVARCHAR (255), -- Lease In/Acquisition/Production
+	--[Purpose]					NVARCHAR (255), -- Lease out/Sale/Production/SG&A
 	[Code]						NVARCHAR (255),
+ -- functional currency, common stock, basic, allowance, overtime/types, 
 	[SystemCode]				NVARCHAR (255),
 	[Memo]						NVARCHAR (2048),
 	[Reference]					NVARCHAR (255),
@@ -30,18 +39,18 @@
 	[Lookup4]					NVARCHAR (255),
 	[PartOfId]					INT, -- for compound assets
 	[InstanceOfId]				INT, -- to allow contracts at higher level.
-	[ServiceOfId]				INT, -- to relate services to their assets.
+	--[ServiceOfId]				INT, -- to relate services to their assets.
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT		NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT		NOT NULL,
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
-	CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
+	--CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
+	--CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
 	CONSTRAINT [FK_Resources_MeasurementUnit] FOREIGN KEY ([TenantId], [MassUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
 	CONSTRAINT [FK_Resources_Resources_PartOfId] FOREIGN KEY ([TenantId], [PartOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 	CONSTRAINT [FK_Resources_Resources_InstanceOfId] FOREIGN KEY ([TenantId], [InstanceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
-	CONSTRAINT [FK_Resources_Resources_ServiceOfId] FOREIGN KEY ([TenantId], [ServiceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
+	--CONSTRAINT [FK_Resources_Resources_ServiceOfId] FOREIGN KEY ([TenantId], [ServiceOfId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE NO ACTION,
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name]

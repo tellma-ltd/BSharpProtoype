@@ -7,13 +7,13 @@ AS
 RETURN
 	WITH
 	IFRS_PPE AS (
-		SELECT IFRSConceptNode 
-		FROM dbo.IFRSConcepts WHERE IFRSConceptId = N'PropertyPlandAndEquipment'
+		SELECT [IFRSAccountNode] 
+		FROM dbo.[IFRSAccounts] WHERE [IFRSConcept] = N'PropertyPlandAndEquipment'
 	),
 	FixedAssetAccounts AS (
 		SELECT [Id] FROM dbo.Accounts A
-		JOIN dbo.IFRSConcepts I ON A.IFRSConceptId = I.IFRSConceptId
-		WHERE I.IFRSConceptNode.IsDescendantOf((SELECT * FROM IFRS_PPE))	= 1
+		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountConcept] = I.[IFRSConcept]
+		WHERE I.[IFRSAccountNode].IsDescendantOf((SELECT * FROM IFRS_PPE))	= 1
 	), /*
 	-- To avoid IFRS, we need to define an account type, which is already there:
 	FixedAssetAccounts AS (
@@ -25,7 +25,7 @@ RETURN
 			J.ResourceId,
 			SUM(J.[Count] * J.[Direction]) AS [Count],
 			SUM(J.[Value] * J.[Direction]) AS [Value],
-			SUM(J.[ServiceTime] * J.[Direction]) AS [ServiceLife]
+			SUM(J.[Time] * J.[Direction]) AS [ServiceLife]
 		FROM [dbo].[fi_Journal](NULL, @fromDate) J
 		WHERE J.AccountId IN (SELECT Id FROM FixedAssetAccounts)
 		GROUP BY J.ResourceId
@@ -35,7 +35,7 @@ RETURN
 			J.ResourceId, J.[NoteId],
 			SUM(J.[Count] * J.[Direction]) AS [Count],
 			SUM(J.[Value] * J.[Direction]) AS [Value],
-			SUM(J.[ServiceTime] * J.[Direction]) AS [ServiceLife]
+			SUM(J.[Time] * J.[Direction]) AS [ServiceLife]
 		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 		WHERE J.AccountId IN (SELECT Id FROM FixedAssetAccounts)
 		GROUP BY J.ResourceId, J.[NoteId]

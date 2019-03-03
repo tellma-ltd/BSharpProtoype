@@ -11,13 +11,13 @@ Assumptions:
 AS
 	WITH
 	IFRS_RM AS (
-		SELECT IFRSConceptNode 
-		FROM dbo.IFRSConcepts WHERE IFRSConceptId IN(N'RawMaterials')
+		SELECT [IFRSAccountNode] 
+		FROM dbo.[IFRSAccounts] WHERE [IFRSConcept] IN(N'RawMaterials')
 	),
 	RawMaterialAccounts AS (
 		SELECT [Id] FROM dbo.Accounts A
-		JOIN dbo.IFRSConcepts I ON A.IFRSConceptId = I.IFRSConceptId
-		WHERE I.IFRSConceptNode.IsDescendantOf((SELECT * FROM IFRS_RM))	= 1
+		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountConcept] = I.[IFRSConcept]
+		WHERE I.[IFRSAccountNode].IsDescendantOf((SELECT * FROM IFRS_RM))	= 1
 	), /*
 	-- To avoid IFRS, we need to define an account type:
 	FixedAssetAccounts AS (

@@ -156,7 +156,7 @@ BEGIN -- Fill lines from specifications
 				
 		DELETE FROM @LinesLocal WHERE LineType = @LineType;
 		INSERT INTO @LinesLocal -- would be nice if we can use merge instead.
-			EXEC sp_executeSql @Sql, @ParmDefinition,
+			EXEC sp_executesql @Sql, @ParmDefinition,
 				@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesInput;
 
 		EXEC sp_executeSql @AppendSql, @ParmDefinition,

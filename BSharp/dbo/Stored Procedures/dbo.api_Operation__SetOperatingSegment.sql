@@ -24,9 +24,9 @@ DECLARE @Id int, @Ids [dbo].[IntegerList];
 	IF (@ReturnEntities = 1)
 	BEGIN	
 		INSERT INTO @Ids([Id])
-		SELECT [Id] FROM dbo.Operations;
+		SELECT [Id] FROM dbo.[ResponsibilityCenters];
 
-		EXEC [dbo].[dal_Operations__Select]
+		EXEC [dbo].[dal_ResponsibilityCenters__Select]
 			@Ids = @Ids,
 			@ResultsJson = @ResultsJson OUTPUT;
 	END

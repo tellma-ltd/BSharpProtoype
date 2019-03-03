@@ -13,42 +13,43 @@ RETURN
 		A.TaxIdentificationNumber As [Employee TIN],
 		A.[Name] As [Employee Full Name],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IFRSAccountConcept] = N'ShorttermEmployeeBenefitsAccruals' 
 			-- No IFRS? WHEN (J.AccountType = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @BasicSalaryResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Basic Salary],
 		SUM(CASE
-			WHEN (J.[IFRSConceptId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IFRSAccountConcept] = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @TransportationAllowanceResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Transportation],
 		SUM(CASE
-			WHEN (J.[IFRSConceptId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IFRSAccountConcept] = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @OvertimeResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Overtime],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] = N'CurrentEmployeeIncomeTaxPayable')
+			WHEN (J.[IFRSAccountConcept] = N'CurrentEmployeeIncomeTaxPayable')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Income Tax],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] IN (N'ShorttermPensionContributionAccruals', 'CurrentSocialSecurityTaxPayable'))
+			WHEN (J.[IFRSAccountConcept] IN (N'ShorttermPensionContributionAccruals', 'CurrentSocialSecurityTaxPayable'))
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Pension Contribution 7%],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] = N'CurrentReceivablesFromEmployees')
+			WHEN (J.[IFRSAccountConcept] = N'CurrentReceivablesFromEmployees')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Loans],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] = N'CurrentPayablesToEmployees')
+			WHEN (J.[IFRSAccountConcept] = N'CurrentPayablesToEmployees')
 			THEN -J.Direction * J.[Value] Else 0 
 			END) AS [Net Pay],
 		SUM(CASE 
-			WHEN (J.[IFRSConceptId] = N'ShorttermPensionContributionAccruals')
+			WHEN (J.[IFRSAccountConcept] = N'ShorttermPensionContributionAccruals')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Pension Contribution 11%]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
+	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
+	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
 	--WHERE A.[RelationType] = N'employee'
 	GROUP BY A.TaxIdentificationNumber, A.[Name];

@@ -225,7 +225,7 @@ INSERT INTO @Notes(NoteType, IsActive, Direction, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, -1, N'45242', N'ReversalOfImpairmentLossRecognisedInProfitOrLossLoansAndAdvances', N'Reversal of impairment loss recognised in profit or loss, loans and advances')
 ,(N'Regulatory', 1, 1, N'46', N'TaxExpenseOtherThanIncomeTaxExpense', N'Tax expense other than income tax expense')
 ,(N'Regulatory', 1, 1, N'47', N'OtherExpenseByNature', N'Other expenses, by nature');
-MERGE [dbo].Notes AS t
+MERGE [dbo].[IFRSNotes] AS t
 USING @Notes AS s
 ON s.Code = t.Code
 WHEN MATCHED AND
@@ -242,11 +242,11 @@ UPDATE SET
 	t.[Code]			=	s.[Code],
 	t.[Direction]		=	s.[Direction],
 	t.[IsActive]		=	s.[IsActive],
-	t.[NoteType]		=	s.[NoteType], 
+	t.[IFRSType]		=	s.[NoteType], 
 	t.[IsExtensible]	=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],			[Id], [Name], [Code], [Direction], [IsActive], [NoteType], [IsExtensible])
+    INSERT ([TenantId],			[Id], [Name], [Code], [Direction], [IsActive], [IFRSType], [IsExtensible])
     VALUES (@TenantId, s.[Id], s.[Name], s.[Code], s.[Direction], s.[IsActive], s.[NoteType], s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

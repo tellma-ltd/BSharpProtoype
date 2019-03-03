@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[dal_Operations__Save]
+﻿CREATE PROCEDURE [dbo].[dal_ResponsibilityCenters__Save]
 	@Entities [OperationList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -9,14 +9,14 @@ SET NOCOUNT ON;
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions, if already user, we should deactivate instead
-	DELETE FROM [dbo].Operations
+	DELETE FROM [dbo].[ResponsibilityCenters]
 	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].Operations AS t
+		MERGE INTO [dbo].[ResponsibilityCenters] AS t
 		USING (
 			SELECT [Index], [Id], [Code], [Name], [Name2], [ParentId], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId]
 			FROM @Entities 
@@ -32,18 +32,17 @@ SET NOCOUNT ON;
 				t.[ProductCategoryId] = s.[ProductCategoryId],
 				t.[GeographicRegionId] = s.[GeographicRegionId],
 				t.[CustomerSegmentId] = s.[CustomerSegmentId],
-				t.[FunctionId] = s.[FunctionId],
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [Name],		[Name2], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], s.[ProductCategoryId], s.[GeographicRegionId], s.[CustomerSegmentId], s.[FunctionId],  @Now,			@UserId,	@Now,			@UserId)
+			INSERT ([TenantId], [Name],		[Name2], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			VALUES (@TenantId, s.[Name], s.[Name2], s.[Code], s.[ProductCategoryId], s.[GeographicRegionId], s.[CustomerSegmentId],  @Now,			@UserId,	@Now,			@UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
 
 	UPDATE BE
 	SET BE.[ParentId]= T.[ParentId]
-	FROM [dbo].Operations BE
+	FROM [dbo].[ResponsibilityCenters] BE
 	JOIN (
 		SELECT II.[Id], IIParent.[Id] As ParentId
 		FROM @Entities O

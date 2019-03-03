@@ -4,5 +4,5 @@
 RETURNS NVARCHAR(255)
 AS
 BEGIN
-	RETURN (SELECT [IFRSConceptId] FROM dbo.[IFRSConcepts] WHERE [IFRSConceptNode] = @AccountId);
+	RETURN (SELECT [IFRSConcept] FROM dbo.[IFRSAccounts] WHERE [IFRSAccountNode] = @AccountId);
 END;

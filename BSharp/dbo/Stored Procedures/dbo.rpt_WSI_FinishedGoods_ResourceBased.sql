@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[rpt_WSI_FinishedGoodsResourceBased]
+﻿CREATE PROCEDURE [dbo].[rpt_WSI_FinishedGoods_ResourceBased]
 /*
 Assumptions:
 1) Any inventory account is mapped to IFRS concepts: Inventories, NonCurrentinventories, or their descendants
@@ -11,13 +11,13 @@ Assumptions:
 AS
 	WITH
 	IFRS_FG AS (
-		SELECT IFRSConceptNode 
-		FROM dbo.IFRSConcepts WHERE IFRSConceptId IN(N'FinishedGoods')
+		SELECT [IFRSAccountNode] 
+		FROM dbo.[IFRSAccounts] WHERE [IFRSConcept] IN(N'FinishedGoods')
 	),
 	FinishedGoodsAccounts AS (
 		SELECT [Id] FROM dbo.Accounts A
-		JOIN dbo.IFRSConcepts I ON A.IFRSConceptId = I.IFRSConceptId
-		WHERE I.IFRSConceptNode.IsDescendantOf((SELECT * FROM IFRS_FG))	= 1
+		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountConcept] = I.[IFRSConcept]
+		WHERE I.[IFRSAccountNode].IsDescendantOf((SELECT * FROM IFRS_FG))	= 1
 	), /*
 	-- To avoid IFRS, we need to define an account type:
 	FixedAssetAccounts AS (

@@ -79,8 +79,8 @@
     <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
     <Build Include="dbo\Tables\dbo.Assignments.sql" />
     <Build Include="dbo\Tables\dbo.Lines.sql" />
-    <Build Include="dbo\Tables\dbo.IFRSConcepts.sql" />
-    <Build Include="dbo\Tables\dbo.Notes.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSAccounts.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSNotes.sql" />
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
@@ -88,7 +88,7 @@
     <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
     <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
-    <Build Include="dbo\Tables\dbo.Operations.sql" />
+    <Build Include="dbo\Tables\dbo.ResponsibilityCenters.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
     <Build Include="dbo\Views\dbo.IndividualsView.sql" />
     <Build Include="dbo\Functions\dbo.fn_Settings.sql" />
@@ -128,8 +128,8 @@
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Operations__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Operations_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
@@ -250,11 +250,13 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_RawMaterials.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_RM_FastMovement.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_MerchandiseInTransit.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoodsResourceBased.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoods_ResourceBased.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoods_AccountBased.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_LocalPurchase.sql" />
     <Build Include="dbo\Views\dbo.NormalizedVouchersView.sql" />
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
+    <Build Include="dbo\Tables\dbo.ResourceAccounts.sql" />
+    <Build Include="dbo\Functions\dbo.fi_BankBalances.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

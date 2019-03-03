@@ -83,38 +83,38 @@ BEGIN
 	MERGE INTO [dbo].[Entries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[OperationId], E.[Reference],
-			E.[AccountId], E.[AgentId], E.[ResourceId], E.[Direction], E.[Amount], E.[Value], E.[NoteId],
-			E.[RelatedReference], E.[RelatedAgentId], E.[RelatedResourceId], E.[RelatedAmount]
+			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[ResponsibilityCenterId], E.[Reference],
+			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[NoteId],
+			E.[RelatedReference], E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
 		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON t.Id = s.Id
 	WHEN MATCHED THEN
 		UPDATE SET 
-			t.[OperationId]			= s.[OperationId],
-			t.[Reference]			= s.[Reference],
-			t.[AccountId]			= s.[AccountId],
-			t.[AgentId]			= s.[AgentId],
-			t.[ResourceId]			= s.[ResourceId],
-			t.[Direction]			= s.[Direction],
-			t.[MoneyAmount]				= s.[Amount],
-			t.[Value]				= s.[Value],
-			t.[NoteId]				= s.[NoteId],
-			t.[RelatedReference]	= s.[RelatedReference],
-			t.[RelatedAgentId]		= s.[RelatedAgentId],
-			t.[RelatedResourceId]	= s.[RelatedResourceId],
-			t.[RelatedAmount]		= s.[RelatedAmount],
-			t.[ModifiedAt]			= @Now,
-			t.[ModifiedById]		= @UserId
+			t.[ResponsibilityCenterId]	= s.[ResponsibilityCenterId],
+			t.[Reference]				= s.[Reference],
+			t.[AccountId]				= s.[AccountId],
+			t.[AgentAccountId]			= s.[AgentAccountId],
+			t.[ResourceId]				= s.[ResourceId],
+			t.[Direction]				= s.[Direction],
+			t.[MoneyAmount]				= s.[MoneyAmount],
+			t.[Value]					= s.[Value],
+			t.[NoteId]					= s.[NoteId],
+			t.[RelatedReference]		= s.[RelatedReference],
+			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
+			t.[RelatedResourceId]		= s.[RelatedResourceId],
+			t.[RelatedMoneyAmount]		= s.[RelatedMoneyAmount],
+			t.[ModifiedAt]				= @Now,
+			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [DocumentId], [LineType], [OperationId], [Reference],
-				[AccountId], [AgentId], [ResourceId], [Direction], [MoneyAmount], [Value], [NoteId],
-				[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount],
+		INSERT ([TenantId], [DocumentId], [LineType], [ResponsibilityCenterId], [Reference],
+				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [NoteId],
+				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount],
 				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[OperationId], s.[Reference],
-				s.[AccountId], s.[AgentId], s.[ResourceId], s.[Direction], s.[Amount], s.[Value], s.[NoteId],
-				s.[RelatedReference], s.[RelatedAgentId], s.[RelatedResourceId], s.[RelatedAmount],
+		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[ResponsibilityCenterId], s.[Reference],
+				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[NoteId],
+				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount],
 				@Now, @UserId, @Now, @UserId);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

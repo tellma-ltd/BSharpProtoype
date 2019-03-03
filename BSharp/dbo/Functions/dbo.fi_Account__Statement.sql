@@ -1,7 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[fi_Account__Statement] (-- SELECT * FROM [dbo].[ft_Account__Statement](N'CashOnHand', '01.01.2015', '01.01.2020')
 	@AccountId INT,
-	@OperationId INT = NULL,
-	@AgentId INT = NULL,
+	@ResponsibilityCenterId INT = NULL,
 	@AgentAccountId INT = NULL,
 	@ResourceId INT = NULL,
 	@fromDate Datetime = '01.01.2000', 
@@ -18,17 +17,14 @@ RETURN
 		[LineType],
 		[Direction],
 		[AccountId],
-		[OperationId],
-		[AgentId],
+		[ResponsibilityCenterId],
 		[AgentAccountId],
 		[ResourceId],
 		[MoneyAmount],
 		[Mass],
 		[Volume],
 		[Count],
-		[ServiceTime],
-		[ServiceCount],
-		[ServiceDistance],
+		[Time],
 		[Value],
 		[NoteId],
 		[Reference],
@@ -36,11 +32,10 @@ RETURN
 		[ExpectedClosingDate],
 		[RelatedResourceId],
 		[RelatedReference],
-		[RelatedAgentId],
-		[RelatedAmount]
+		[RelatedAgentAccountId],
+		[RelatedMoneyAmount]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate)
 	WHERE [AccountId] = @AccountId
-	AND (@OperationId IS NULL OR OperationId = @OperationId)
-	AND (@AgentId IS NULL OR [AgentId] = @AgentId)
+	AND (@ResponsibilityCenterId IS NULL OR [ResponsibilityCenterId] = @ResponsibilityCenterId)
 	AND (@AgentAccountId IS NULL OR	[AgentAccountId] = @AgentAccountId)
 	AND (@ResourceId IS NULL OR ResourceId = @ResourceId);

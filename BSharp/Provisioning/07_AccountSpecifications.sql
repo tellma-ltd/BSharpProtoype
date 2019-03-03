@@ -42,8 +42,8 @@ AND
 ) 
 THEN
 UPDATE SET
-	t.[CustodyLabel]			= s.[CustodyLabel],
-	t.[CustodyFilter]			= s.[CustodyFilter],
+	t.[AgentLabel]			= s.[CustodyLabel],
+	t.[AgentFilter]			= s.[CustodyFilter],
 	t.[ResourceLabel]			= s.[ResourceLabel],
 	t.[ResourceFilter]			= s.[ResourceFilter],
 	t.[AmountLabel]				= s.[AmountLabel],
@@ -57,5 +57,5 @@ UPDATE SET
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[AccountId], [Direction], [CustodyLabel], [CustodyFilter], [ResourceLabel], [ResourceFilter], [AmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel])
+    INSERT ([TenantId],	[AccountId], [Direction], [AgentLabel], [AgentFilter], [ResourceLabel], [ResourceFilter], [AmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel])
     VALUES (@TenantId, s.[AccountId], s.[Direction], s.[CustodyLabel], s.[CustodyFilter], s.[ResourceLabel], s.[ResourceFilter], s.[AmountLabel], s.[ReferenceLabel], s.[RelatedReferenceLabel], s.[RelatedAgentLabel], s.[RelatedAgentFilter], s.[RelatedResourceLabel], s.[RelatedResourceFilter], s.[RelatedAmountLabel]);

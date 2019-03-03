@@ -88,7 +88,7 @@ BEGIN
 	)
 	SELECT
 		[Id], [Name], [ParentId], [Code], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [FunctionId], N'Unchanged'
-	FROM [dbo].Operations
+	FROM [dbo].[ResponsibilityCenters]
 	WHERE [Name] IN (N'Existin', N'Fake');
 
 	UPDATE @OperationsDTO 
@@ -116,9 +116,9 @@ BEGIN
 		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
 END
 SELECT
-	@WSI = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Walia Steel Industry'),
-	@Existing = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Existing'),
-	@Expansion = (SELECT [Id] FROM [dbo].[Operations] WHERE [Name] = N'Expansion');
+	@WSI = (SELECT [Id] FROM [dbo].[ResponsibilityCenters] WHERE [Name] = N'Walia Steel Industry'),
+	@Existing = (SELECT [Id] FROM [dbo].[ResponsibilityCenters] WHERE [Name] = N'Existing'),
+	@Expansion = (SELECT [Id] FROM [dbo].[ResponsibilityCenters] WHERE [Name] = N'Expansion');
 	
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = @WSI,

@@ -10,12 +10,13 @@ RETURN
 		A.[Name] As [Organization/Person Name],
 		A.[RegisteredAddress] As [Withholdee Address], 
 		J.[Memo] As [Withholding Type],
-		J.[RelatedAmount] As [Taxable Amount], 
+		J.[RelatedMoneyAmount] As [Taxable Amount], 
 		J.[MoneyAmount] As [Tax Withheld], 
 		J.[Reference] As [Receipt Number], 
 		J.DocumentDateTime As [Receipt Date]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
-	WHERE J.IFRSConceptID = N'CurrentWithholdingTaxPayable'
+	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
+	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
+	WHERE J.[IFRSAccountConcept] = N'CurrentWithholdingTaxPayable'
 	-- No IFRS?: J.AccountType = N'CurrentWithholdingTaxPayable'
 	AND J.Direction = -1;

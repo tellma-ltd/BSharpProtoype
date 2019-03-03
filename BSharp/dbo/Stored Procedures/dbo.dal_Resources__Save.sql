@@ -38,12 +38,11 @@ SET NOCOUNT ON;
 				t.[Lookup4]					= s.[Lookup4],
 				t.[PartOfId]				= s.[PartOfId],
 				t.[InstanceOfId]			= s.[InstanceOfId],
-				t.[ServiceOfId]				= s.[ServiceOfId],
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedById]			= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [MassUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [ServiceOfId],	[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], s.[ServiceOfId], @Now, @UserId, @Now, @UserId)
+			INSERT ([TenantId], [MassUnitId], [ResourceType],	[Name],	[Name2], [Code],		[SystemCode],	 [Memo],	[Lookup1],	[Lookup2],	[Lookup3],	[Lookup4],	[PartOfId],		[InstanceOfId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			VALUES (@TenantId, s.[MeasurementUnitId], s.[ResourceType], s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[Memo], s.[Lookup1], s.[Lookup2], s.[Lookup3], s.[Lookup4], s.[PartOfId], s.[InstanceOfId], @Now, @UserId, @Now, @UserId)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
 
@@ -64,16 +63,6 @@ SET NOCOUNT ON;
 		SELECT II.[Id], IIParent.[Id] As [InstanceOfId]
 		FROM @Resources R
 		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[InstanceOfIndex]
-		JOIN @IndexedIds II ON II.[Index] = R.[Index]
-	) T ON BE.Id = T.[Id];
-
-	UPDATE BE
-	SET BE.[ServiceOfId]= T.[ServiceOfId]
-	FROM [dbo].[Resources] BE
-	JOIN (
-		SELECT II.[Id], IIParent.[Id] As [ServiceOfId]
-		FROM @Resources R
-		JOIN @IndexedIds IIParent ON IIParent.[Index] = R.[ServiceOfIndex]
 		JOIN @IndexedIds II ON II.[Index] = R.[Index]
 	) T ON BE.Id = T.[Id];
 

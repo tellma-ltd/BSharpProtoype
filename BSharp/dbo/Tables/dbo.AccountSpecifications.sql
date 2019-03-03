@@ -2,9 +2,9 @@
 	[TenantId]						INT,
 	[AccountId]						NVARCHAR (255),
 	-- For all directions
-	[CustodyLabel]					NVARCHAR (255),	-- displayed when hovering over the custody column, or when used in line specs. Null means not visible.
-	[CustodyValidation]				NVARCHAR (1024), -- e.g., not null to make it required.
-	[CustodyFilter]					NVARCHAR (255), -- JS code, affecting the picker.
+	[AgentLabel]					NVARCHAR (255),	-- displayed when hovering over the custody column, or when used in line specs. Null means not visible.
+	[AgentValidation]				NVARCHAR (1024), -- e.g., not null to make it required.
+	[AgentFilter]					NVARCHAR (255), -- JS code, affecting the picker.
 	[ResourceLabel]					NVARCHAR (255),
 	[ResourceValidation]			NVARCHAR (1024),
 	[ResourceFilter]				NVARCHAR (255),

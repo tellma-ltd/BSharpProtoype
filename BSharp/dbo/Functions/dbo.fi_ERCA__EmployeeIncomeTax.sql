@@ -9,10 +9,11 @@ RETURN
 		--J.OperationId, -- for example, if different operations declare in different laces
 		A.TaxIdentificationNumber As [Employee TIN],
 		A.[Name] As [Employee Full Name],
-		J.RelatedAmount As [Taxable Income], 
+		J.[RelatedMoneyAmount] As [Taxable Income], 
 		J.[Value] As [Tax Withheld]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
-	WHERE J.IFRSConceptID = N'CurrentEmployeeIncomeTaxPayable'
+	LEFT JOIN [dbo].[AgentAccounts] AA  ON J.[RelatedAgentAccountId] = AA.Id
+	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
+	WHERE J.[IFRSAccountConcept] = N'CurrentEmployeeIncomeTaxPayable'
 	-- No IFRS?: J.AccountType = N'CurrentEmployeeIncomeTaxPayable'
 	AND J.Direction = -1;

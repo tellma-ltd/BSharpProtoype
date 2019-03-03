@@ -15,7 +15,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Operations__Save]
+	EXEC [dbo].[dal_ResponsibilityCenters__Save]
 		@Entities = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
@@ -25,7 +25,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		SELECT [Id] 
 		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 
-		EXEC [dbo].[dal_Operations__Select] 
+		EXEC [dbo].[dal_ResponsibilityCenters__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END;

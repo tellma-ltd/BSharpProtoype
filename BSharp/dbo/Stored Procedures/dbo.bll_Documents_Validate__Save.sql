@@ -12,10 +12,10 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR(255)) + '].Entries[' +
 				CAST(E.[Index] AS NVARCHAR(255)) + ']' As [Key], N'Error_TheAmount0DoesNotMatchTheValue' As [ErrorName],
-				E.[Amount] AS Argument1, E.[Value] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+				E.[MoneyAmount] AS Argument1, E.[Value] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	WHERE (E.[ResourceId] = dbo.fn_FunctionalCurrency())
-	AND (E.[Value] <> E.[Amount] )
+	AND (E.[Value] <> E.[MoneyAmount] )
 	AND E.[EntityState] IN (N'Inserted', N'Updated');
 
 	-- (FE Check, DB constraint)  Cannot save with a future date
@@ -53,7 +53,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNote0IsInactive' As [ErrorName],
 				E.[NoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN [dbo].Notes BE ON E.[NoteId] = BE.[Id]
+	JOIN [dbo].[IFRSNotes] BE ON E.[NoteId] = BE.[Id]
 	WHERE (BE.IsActive = 0)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
@@ -107,7 +107,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
-	WHERE (E.[RelatedAgentId] IS NULL)
+	WHERE (E.[RelatedAgentAccountId] IS NULL)
 	AND (AM.RelatedAgentLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	
@@ -129,7 +129,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
-	WHERE (E.[RelatedAmount] IS NULL)
+	WHERE (E.[RelatedMoneyAmount] IS NULL)
 	AND (AM.RelatedAmountLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	

@@ -1,10 +1,10 @@
-﻿CREATE TABLE [dbo].[IFRSConcepts] (
+﻿CREATE TABLE [dbo].[IFRSAccounts] (
 	[TenantId]					INT,
-	[IFRSConceptNode]			HIERARCHYID,
-	[Level]						AS [IFRSConceptNode].GetLevel(),
-	[ParentNode]				AS [IFRSConceptNode].GetAncestor(1),
-	[IFRSConceptType]			NVARCHAR (255)	NOT NULL, -- N'Correction', N'Extension', N'Regulatory'
-	[IFRSConceptId]				NVARCHAR (255)  NOT NULL,
+	[IFRSAccountNode]			HIERARCHYID,
+	[Level]						AS [IFRSAccountNode].GetLevel(),
+	[ParentNode]				AS [IFRSAccountNode].GetAncestor(1),
+	[IFRSType]					NVARCHAR (255)	DEFAULT (N'Custom') NOT NULL, -- N'Correction', N'Extension', N'Regulatory'
+	[IFRSConcept]				NVARCHAR (255)  NOT NULL,
 	[Label]						NVARCHAR (1024) NOT NULL,
 	[Label2]					NVARCHAR (1024),
 	[Documentation]				NVARCHAR (1024),
@@ -15,8 +15,8 @@
 	
 	[NoteFilter]				NVARCHAR (1024),
 
-	[CustodyFilter]				NVARCHAR (1024),
-	[CustodyLabel]				NVARCHAR (255),
+	[AgentAccountFilter]		NVARCHAR (1024),
+	[AgentAccountLabel]			NVARCHAR (255),
 
 	[ReferenceLabel]			NVARCHAR (255),
 	
@@ -29,23 +29,25 @@
 	[RelatedResourceFilter]		NVARCHAR (1024),
 	[RelatedResourceLabel]		NVARCHAR (255),
 	
-	[RelatedCustodyFilter]		NVARCHAR (1024),
-	[RelatedCustodyLabel]		NVARCHAR (255),
+	[RelatedAgentAccountFilter]	NVARCHAR (1024),
+	[RelatedAgentAccountLabel]	NVARCHAR (255),
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 
-	CONSTRAINT [PK_IFRSConcepts] PRIMARY KEY ([TenantId] ASC, [IFRSConceptNode] ASC),
-	CONSTRAINT [CK_IFRSConcepts_ConceptType] CHECK ([IFRSConceptType] IN (N'Correction', N'Extension', N'Regulatory')),
-	CONSTRAINT [IX_IFRSConcepts_ConceptId] UNIQUE ([TenantId] ASC, [IFRSConceptId] ASC),
-	CONSTRAINT [FK_IFRSConcepts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_IFRSConcepts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [PK_IFRSAccounts] PRIMARY KEY ([TenantId] ASC, [IFRSAccountNode] ASC),
+	CONSTRAINT [CK_IFRSAccounts_IFRSType] CHECK ([IFRSType] IN (N'Correction', N'Extension', N'Regulatory')),
+	CONSTRAINT [FK_IFRSAccounts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_IFRSAccounts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 	);
 GO;
-CREATE UNIQUE INDEX IFRSConcepts__Code_Level   
-ON [dbo].[IFRSConcepts]([TenantId], [IFRSConceptNode], [Level]) ;  
+CREATE UNIQUE INDEX [IX_IFRSAccounts_IFRSConcept]
+ON [dbo].[IFRSAccounts]([TenantId], [IFRSConcept]);
+GO
+CREATE UNIQUE INDEX IFRSAccounts__IFRSAccountNode_Level   
+ON [dbo].[IFRSAccounts]([TenantId], [IFRSAccountNode], [Level]) ;  
 GO  
 /* -- trigger can be avoided by using HierarchyId
 CREATE TRIGGER [dbo].[trD_Accounts]

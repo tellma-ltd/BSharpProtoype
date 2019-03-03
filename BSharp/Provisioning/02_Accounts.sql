@@ -389,7 +389,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'5272', N'ReclassificationAdjustmentsOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeNetOfTax', N'Reclassification adjustments on financial assets measured at fair value through other comprehensive income, net of tax')
 ,(N'Regulatory', 1, N'5273', N'AmountsRemovedFromEquityAndAdjustedAgainstFairValueOfFinancialAssetsOnReclassificationOutOfFairValueThroughOtherComprehensiveIncomeMeasurementCategoryNetOfTax', N'Amounts removed from equity and adjusted against fair value of financial assets on reclassification out of fair value through other comprehensive income measurement category, net of tax')
 ,(N'Regulatory', 1, N'528', N'ShareOfOtherComprehensiveIncomeOfAssociatesAndJointVenturesAccountedForUsingEquityMethodThatWillBeReclassifiedToProfitOrLossNetOfTax', N'Share of other comprehensive income of associates and joint ventures accounted for using equity method that will be reclassified to profit or loss, net of tax');
-MERGE [dbo].[IFRSConcepts] AS t
+MERGE [dbo].[IFRSAccounts] AS t
 USING @Accounts AS s
 ON s.Code = t.Code
 WHEN MATCHED AND
@@ -402,16 +402,16 @@ WHEN MATCHED AND
   t.[IsExtensible]			<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-  t.[IFRSConceptId]					=	s.[Name], 
-  t.[IFRSConceptNode]					=	s.[Code],
+  t.[IFRSConcept]					=	s.[Name], 
+  t.[IFRSAccountNode]					=	s.[Code],
   t.[IsActive]				=	s.[IsActive],
-  t.[IFRSConceptType]			=	s.[AccountType], 
+  t.[IFRSType]			=	s.[AccountType], 
 --  t.[AccountSpecification]	=	s.[AccountSpecification],
   t.[IsExtensible]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[IFRSConceptNode], [IFRSConceptId], [IFRSConceptNode], [IsActive], [IFRSConceptType],-- [AccountSpecification],
+    INSERT ([TenantId],	[IFRSAccountNode], [IFRSConcept], [IFRSAccountNode], [IsActive], [IFRSType],-- [AccountSpecification],
 			[IsExtensible])
     VALUES (@TenantId, 	s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);

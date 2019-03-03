@@ -1,13 +1,12 @@
 ﻿CREATE TABLE [dbo].[Agents] (
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
-	[RelationType]				NVARCHAR (255)		NOT NULL,
+	[RelationType]				NVARCHAR (255)		NOT NULL, -- N'employee', N'supplier', N'customer', N'general'
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous-employee, anonymous-customer, anonymous-supplier, anonymous-general
-
 --	Agents specific
 	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
 	[IsRelated]					BIT					NOT NULL DEFAULT (0),
@@ -72,8 +71,8 @@
 	CONSTRAINT [FK_Agents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
-CREATE UNIQUE INDEX [IX_Agents__Id_CustodyType]
-  ON [dbo].[Agents]([TenantId] ASC, [Id] ASC, [RelationType] ASC);
+CREATE INDEX [IX_Agents__RelationType]
+  ON [dbo].[Agents]([TenantId] ASC, [RelationType] ASC);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name]
   ON [dbo].[Agents]([TenantId] ASC, [Name] ASC);
