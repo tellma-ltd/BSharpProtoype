@@ -5,7 +5,7 @@
 	[LineType]					NVARCHAR(255)		NOT NULL DEFAULT(N'manual-journals'),
 	[Direction]					SMALLINT			NOT NULL,
 	[AccountId]					INT					NOT NULL, -- specifies IFRS Concept (which has filter on Note) and IFRS Note or additional filter 
--- Presumably specifies the IFRS expense function for expense accounts. Several centers may make an operating segment
+-- Several centers may make an operating segment
 -- Sales, Production, Selling & distribution, Admin
 	[ResponsibilityCenterId]	INT					NOT NULL,
 -- Analysis of accounts including: cash, non current assets, equity, and expenses.
