@@ -64,7 +64,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	WHERE (E.NoteId IS NULL)
-	AND (E.AccountId IN (SELECT [AccountId] FROM dbo.[AccountsNotes]))
+	AND (E.AccountId IN (SELECT [IFRSAccountConcept] FROM dbo.[IFRSAccountConceptsNoteConcepts]))
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Invalid Note Id
@@ -73,9 +73,9 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheNote0Incorrect' As [ErrorName],
 				E.[NoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	LEFT JOIN dbo.[AccountsNotes] AN ON E.AccountId = AN.[AccountId] AND E.Direction = AN.Direction AND E.NoteId = AN.NoteId
+	LEFT JOIN dbo.[IFRSAccountConceptsNoteConcepts] AN ON E.AccountId = AN.[IFRSAccountConcept] AND E.Direction = AN.Direction AND E.NoteId = AN.[IFRSNoteConcept]
 	WHERE (E.NoteId IS NOT NULL)
-	AND (AN.NoteId IS NULL)
+	AND (AN.[IFRSNoteConcept] IS NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Reference is required for selected account and direction, 
@@ -84,7 +84,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[Reference] IS NULL)
 	AND (AM.ReferenceLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -95,7 +95,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedReference' As [Key], N'Error_TheRelatedReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[RelatedReference] IS NULL)
 	AND (AM.RelatedReferenceLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -106,7 +106,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAgentId' As [Key], N'Error_TheRelatedAgentIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[RelatedAgentAccountId] IS NULL)
 	AND (AM.RelatedAgentLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -117,7 +117,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedResourceId' As [Key], N'Error_TheRelatedResourceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[RelatedResourceId] IS NULL)
 	AND (AM.RelatedResourceLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -128,7 +128,7 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.AccountSpecifications AM ON E.AccountId = AM.AccountId AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[RelatedMoneyAmount] IS NULL)
 	AND (AM.RelatedAmountLabel IS NOT NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));

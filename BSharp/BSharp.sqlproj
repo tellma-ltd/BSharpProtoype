@@ -86,7 +86,6 @@
     <Build Include="dbo\Tables\dbo.Settings.sql" />
     <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
     <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
-    <Build Include="dbo\Tables\dbo.Accounts_H.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.ResponsibilityCenters.sql" />
     <Build Include="dbo\Views\dbo.OrganizationsView.sql" />
@@ -151,9 +150,9 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Functions\dbo.fn_Operation__FirstSibling.sql" />
-    <Build Include="dbo\Tables\dbo.CustodiesResources.sql" />
+    <Build Include="dbo\Tables\dbo.AgentsResources.sql" />
     <Build Include="dbo\Tables\dbo.Notes_H.sql" />
-    <Build Include="dbo\Tables\dbo.AccountsNotes.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSAccountConceptsNoteConcepts.sql" />
     <Build Include="dbo\Functions\dbo.fn_Account__Code.sql" />
     <Build Include="dbo\Functions\dbo.fn_Note__Code.sql" />
     <Build Include="dbo\User Defined Types\dbo.VType.sql" />
@@ -182,7 +181,7 @@
     <Build Include="dbo\Tables\dbo.LineTypes.sql" />
     <Build Include="dbo\Functions\dbo.fn_EndDateTime__StartDateTime_Frequency_Duration.sql" />
     <Build Include="dbo\Stored Procedures\dbo.ui_Documents_Lines_Entries__Json.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Documents__Fill.sql" />
+    <None Include="dbo\Stored Procedures\dbo.bll_Documents__Fill.sql" />
     <Build Include="dbo\Functions\dbo.fw_Documents__Json.sql" />
     <Build Include="dbo\Functions\dbo.fw_Lines__Json.sql" />
     <Build Include="dbo\Functions\dbo.fw_Entries__Json.sql" />
@@ -200,7 +199,7 @@
     <Build Include="dbo\Functions\dbo.fi_Paysheet.sql" />
     <Build Include="dbo\Functions\dbo.fi_ERCA__VAT_Sales.sql" />
     <Build Include="dbo\User Defined Types\dbo.AccountList.sql" />
-    <Build Include="dbo\Tables\dbo.AccountSpecifications.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSAccountSpecifications.sql" />
     <Build Include="dbo\Functions\dbo.fn_User__Language.sql" />
     <Build Include="dbo\User Defined Types\dbo.UserList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Assign.sql" />
@@ -255,7 +254,6 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_LocalPurchase.sql" />
     <Build Include="dbo\Views\dbo.NormalizedVouchersView.sql" />
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
-    <Build Include="dbo\Tables\dbo.ResourceAccounts.sql" />
     <Build Include="dbo\Functions\dbo.fi_BankBalances.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +267,7 @@
     <None Include="Tests\11M_Financing.sql" />
     <None Include="Tests\12_ManualMisc.sql" />
     <None Include="Provisioning\07_AccountSpecifications.sql" />
+    <None Include="BSharp.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BSharp.refactorlog" />

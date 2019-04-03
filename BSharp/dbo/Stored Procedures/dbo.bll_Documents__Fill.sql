@@ -166,46 +166,63 @@ BEGIN -- Fill lines from specifications
 	END
 END
 BEGIN	-- Smart Posting
-	INSERT @SmartEntriesLocal([Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId], [AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Reference],
-		[RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState]
+	INSERT @SmartEntriesLocal([Index],	[DocumentIndex], [Id], [DocumentId], [LineType],	
+		[Direction], [AccountId], [ResponsibilityCenterId], [NoteId], [AgentAccountId], [ResourceId],
+		[MoneyAmount], [Mass], [Volume], [Count], [Time], [Value], [ExpectedClosingDate], [Reference], [Memo], [RelatedReference],
+		[RelatedResourceId], [RelatedAgentAccountId], [RelatedMoneyAmount], [RelatedMass],
+		[RelatedVolume], [RelatedCount], [RelatedTime], [RelatedValue], [EntityState]
 	) -- assuming a line will not capture more than 100 entries (currently it only captures 4)
 	SELECT 100 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId1], [AccountId1], [AgentId1], [ResourceId1], [Direction1], [Amount1], [Value1], [NoteId1], [Reference1], 
-		[RelatedReference1], [RelatedAgentId1], [RelatedResourceId1], [RelatedAmount1], [EntityState]
+		[Direction1], [AccountId1], [ResponsibilityCenterId1], [NoteId1], [AgentAccountId1], [ResourceId1],
+		[MoneyAmount1], [Mass1], [Volume1], [Count1], [Time1], [Value1], [ExpectedClosingDate1], [Reference1], [Memo1], [RelatedReference1],
+		[RelatedResourceId1], [RelatedAgentAccountId1], [RelatedMoneyAmount1], [RelatedMass1],
+		[RelatedVolume1], [RelatedCount1], [RelatedTime1], [RelatedValue1], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction1] IS NOT NULL
 	UNION
 	SELECT 200 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId2], [AccountId2], [AgentId2], [ResourceId2], [Direction2], [Amount2], [Value2], [NoteId2], [Reference2], 
-		[RelatedReference2], [RelatedAgentId2], [RelatedResourceId2], [RelatedAmount2], [EntityState]
+		[Direction2], [AccountId2], [ResponsibilityCenterId2], [NoteId2], [AgentAccountId2], [ResourceId2],
+		[MoneyAmount2], [Mass2], [Volume2], [Count2], [Time2], [Value2], [ExpectedClosingDate2], [Reference2], [Memo2], [RelatedReference2],
+		[RelatedResourceId2], [RelatedAgentAccountId2], [RelatedMoneyAmount2], [RelatedMass2],
+		[RelatedVolume2], [RelatedCount2], [RelatedTime2], [RelatedValue2], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction2] IS NOT NULL
 	UNION
 	SELECT 300 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId3], [AccountId3], [AgentId3], [ResourceId3], [Direction3], [Amount3], [Value3], [NoteId3], [Reference3], 
-		[RelatedReference3], [RelatedAgentId3], [RelatedResourceId3], [RelatedAmount3], [EntityState]
+		[Direction3], [AccountId3], [ResponsibilityCenterId3], [NoteId3], [AgentAccountId3], [ResourceId3],
+		[MoneyAmount3], [Mass3], [Volume3], [Count3], [Time3], [Value3], [ExpectedClosingDate3], [Reference3], [Memo3], [RelatedReference3],
+		[RelatedResourceId3], [RelatedAgentAccountId3], [RelatedMoneyAmount3], [RelatedMass3],
+		[RelatedVolume3], [RelatedCount3], [RelatedTime3], [RelatedValue3], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction3] IS NOT NULL
 	UNION
 	SELECT 400 + [Index],	[DocumentIndex], [Id], [DocumentId], [LineType],
-		[OperationId4], [AccountId4], [AgentId4], [ResourceId4], [Direction4], [Amount4], [Value4], [NoteId4], [Reference4], 
-		[RelatedReference4], [RelatedAgentId4], [RelatedResourceId4], [RelatedAmount4], [EntityState]
+		[Direction4], [AccountId4], [ResponsibilityCenterId4], [NoteId4], [AgentAccountId4], [ResourceId4],
+		[MoneyAmount4], [Mass4], [Volume4], [Count4], [Time4], [Value4], [ExpectedClosingDate4], [Reference4], [Memo4], [RelatedReference4],
+		[RelatedResourceId4], [RelatedAgentAccountId4], [RelatedMoneyAmount4], [RelatedMass4],
+		[RelatedVolume4], [RelatedCount4], [RelatedTime4], [RelatedValue4], [EntityState]
 	FROM @LinesLocal WHERE [EntityState] IN (N'Inserted', N'Updated') AND [Direction4] IS NOT NULL;
 	
 --	SELECT * FROM @SmartEntriesLocal;
 	UPDATE @SmartEntriesLocal SET [Index] = [Index] + (SELECT ISNULL(MAX([Index]), 0) FROM @EntriesLocal);
 	IF @DEBUG = 2 SELECT * FROM @SmartEntriesLocal;
-	INSERT INTO @EntriesLocal([Index], [DocumentIndex], [Id], [DocumentId], [LineType],	[OperationId],
-		[AccountId], [AgentId], [ResourceId], [Direction], [Amount], [Value], [NoteId], [Memo],
-		[Reference], [RelatedReference], [RelatedAgentId], [RelatedResourceId], [RelatedAmount], [EntityState])
+	INSERT INTO @EntriesLocal([Index], [DocumentIndex], [Id], [DocumentId], [LineType],
+		[Direction], [AccountId], [ResponsibilityCenterId], [NoteId], [AgentAccountId], [ResourceId],
+		[MoneyAmount], [Mass], [Volume], [Count], [Time], [Value], [ExpectedClosingDate], [Reference], [Memo], [RelatedReference],
+		[RelatedResourceId], [RelatedAgentAccountId], [RelatedMoneyAmount], [RelatedMass],
+		[RelatedVolume], [RelatedCount], [RelatedTime], [RelatedValue], [EntityState])
 		-- I used the sort key in order to make the entries grouped together in the same order as the DLT.
-	SELECT ROW_NUMBER() OVER(ORDER BY S.[DocumentIndex] ASC, DLT.[SortKey] ASC, S.[Direction] DESC), S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType],	S.[OperationId],
-		S.[AccountId], S.[AgentId], S.[ResourceId], S.[Direction], SUM(S.[Amount]), SUM(S.[Value]), S.[NoteId], S.[Memo],
-		S.[Reference], S.[RelatedReference], S.[RelatedAgentId], S.[RelatedResourceId], S.[RelatedAmount], N'Inserted' AS [EntityState]
+	SELECT ROW_NUMBER() OVER(ORDER BY S.[DocumentIndex] ASC, DLT.[SortKey] ASC, S.[Direction] DESC), S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType],
+		S.[Direction], S.[AccountId], S.[ResponsibilityCenterId], S.[NoteId], S.[AgentAccountId], S.[ResourceId],
+		SUM(S.[MoneyAmount]), SUM(S.[Mass]), SUM(S.[Volume]), SUM(S.[Count]), SUM(S.[Time]), SUM(S.[Value]), 
+		S.[ExpectedClosingDate], S.[Reference], S.[Memo], S.[RelatedReference],
+		S.[RelatedResourceId], S.[RelatedAgentAccountId], S.[RelatedMoneyAmount], S.[RelatedMass],
+		S.[RelatedVolume], S.[RelatedCount], S.[RelatedTime], S.[RelatedValue], N'Inserted' AS [EntityState]
 	FROM @SmartEntriesLocal S
 	JOIN @DocumentLineTypesLocal DLT ON S.[DocumentIndex] = DLT.[DocumentIndex] AND S.[LineType] = DLT.[LineType]
-	GROUP BY S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType], S.[OperationId],
-		S.[AccountId], S.[AgentId], S.[ResourceId], S.[Direction], S.[NoteId], S.[Memo],
-		S.[Reference], S.[RelatedReference], S.[RelatedAgentId], S.[RelatedResourceId], S.[RelatedAmount], DLT.[SortKey]
-	HAVING(SUM(S.[Amount]) > 0 OR SUM(S.[Value]) > 0)
+	GROUP BY S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType], 
+		S.[Direction], S.[AccountId], S.[ResponsibilityCenterId], S.[NoteId], S.[AgentAccountId], S.[ResourceId],
+		S.[ExpectedClosingDate], S.[Reference], S.[Memo], S.[RelatedReference],
+		S.[RelatedResourceId], S.[RelatedAgentAccountId], S.[RelatedMoneyAmount], S.[RelatedMass],
+		S.[RelatedVolume], S.[RelatedCount], S.[RelatedTime], S.[RelatedValue], DLT.[SortKey]
+	HAVING(SUM(S.[MoneyAmount]) > 0 OR SUM(S.[Mass]) > 0 OR SUM(S.[Volume]) > 0 OR SUM(S.[Count]) > 0 OR SUM(S.[Time]) > 0 OR SUM(S.[Value]) > 0)
 END
 
 IF @DEBUG = 1

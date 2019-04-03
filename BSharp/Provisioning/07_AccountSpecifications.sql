@@ -21,7 +21,7 @@ INSERT INTO @AccountSpecifications(
 (N'CurrentWithholdingTaxPayable', -1,		NULL,		N'SystemCode = N''TaxAgent''',	N'Currency',	N'SystemCode = N''Functional''', N'AmountWithheld',	N'WT Form #',	NULL,					N'Withholdee',		NULL,					NULL,					NULL,			N'Invoice Amount'),
 (N'CurrentValueAddedTaxReceivables',+1,		NULL,		N'SystemCode = N''TaxAgent''',		NULL,		N'SystemCode = N''Functional''',	NULL,		N'Invoice #',		NULL,					N'Customer',		NULL,					NULL,					NULL,			N'Invoice Amount');
 
-MERGE [dbo].AccountSpecifications AS t
+MERGE [dbo].[IFRSAccountSpecifications] AS t
 USING @AccountSpecifications AS s
 ON s.[AccountId] = t.[AccountId] AND s.[Direction] = t.[Direction]
 WHEN MATCHED 
@@ -42,20 +42,20 @@ AND
 ) 
 THEN
 UPDATE SET
-	t.[AgentLabel]			= s.[CustodyLabel],
-	t.[AgentFilter]			= s.[CustodyFilter],
+	t.[AgentAccountLabel]			= s.[CustodyLabel],
+	t.[AgentAccountFilter]			= s.[CustodyFilter],
 	t.[ResourceLabel]			= s.[ResourceLabel],
 	t.[ResourceFilter]			= s.[ResourceFilter],
-	t.[AmountLabel]				= s.[AmountLabel],
+	t.[MoneyAmountLabel]				= s.[AmountLabel],
 	t.[ReferenceLabel]			= s.[ReferenceLabel],
 	t.[RelatedReferenceLabel]	= s.[RelatedReferenceLabel],
 	t.[RelatedAgentLabel]		= s.[RelatedAgentLabel],
-	t.[RelatedAgentFilter]		= s.[RelatedAgentFilter],
+	t.[RelatedAgentAccountFilter]		= s.[RelatedAgentFilter],
 	t.[RelatedResourceLabel]	= s.[RelatedResourceLabel],
 	t.[RelatedResourceFilter]	= s.[RelatedResourceFilter],
 	t.[RelatedAmountLabel]		= s.[RelatedAmountLabel]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[AccountId], [Direction], [AgentLabel], [AgentFilter], [ResourceLabel], [ResourceFilter], [AmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel])
+    INSERT ([TenantId],	[IFRSAccountConcept], [Direction], [AgentAccountLabel], [AgentAccountFilter], [ResourceLabel], [ResourceFilter], [MoneyAmountLabel], [ReferenceLabel], [RelatedReferenceLabel], [RelatedAgentLabel], [RelatedAgentAccountFilter], [RelatedResourceLabel], [RelatedResourceFilter], [RelatedAmountLabel])
     VALUES (@TenantId, s.[AccountId], s.[Direction], s.[CustodyLabel], s.[CustodyFilter], s.[ResourceLabel], s.[ResourceFilter], s.[AmountLabel], s.[ReferenceLabel], s.[RelatedReferenceLabel], s.[RelatedAgentLabel], s.[RelatedAgentFilter], s.[RelatedResourceLabel], s.[RelatedResourceFilter], s.[RelatedAmountLabel]);

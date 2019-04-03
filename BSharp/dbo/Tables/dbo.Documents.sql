@@ -2,18 +2,19 @@
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
 	[State]						NVARCHAR (255)		NOT NULL DEFAULT (N'Voucher'), -- N'Plan', N'Inquiry', N'Template', N'Demand', N'Voucher'
-	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'manual-journalsl'),
-	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'),
-	[Duration]					INT					NOT NULL DEFAULT (0),
-	[StartDateTime]				DATETIMEOFFSET (7)	NOT NULL DEFAULT (SYSDATETIMEOFFSET()),
-	[EndDateTime]				DATETIMEOFFSET (7)	NOT NULL,
-	[Mode]						NVARCHAR (255)		NOT NULL DEFAULT (N'Draft'), -- N'Void', N'Draft', N'Submitted', N'Posted'
-	[SerialNumber]				INT,				-- auto generated
+	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'manual-journals'), -- limits the allowable line types
+	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
+	[Duration]					INT					NOT NULL DEFAULT (0), -- time unit is function of frequency
+	[StartDateTime]				DATETIME2 (7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
+	[EndDateTime]				DATETIME2 (7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())), -- computed column
+	[Mode]						NVARCHAR (255)		NOT NULL DEFAULT (N'Draft'), -- N'Void', N'Draft', N'Posted'
+	[SerialNumber]				INT,				-- auto generated, copied to paper if needed.
+	[Voucher]					NVARCHAR (255),		-- Useful when operating in paper-first mode.
 	[AssigneeId]				INT,
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]					INT		NOT NULL,
+	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]				INT		NOT NULL,
+	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC), -- Data/Demand/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
 	CONSTRAINT [CK_Documents_State] CHECK ([State] IN (N'Plan', N'Template', N'Demand', N'Voucher')),
 	CONSTRAINT [CK_Documents_Frequency] CHECK (
