@@ -16,6 +16,8 @@
 	[Label2]					NVARCHAR (1024),
 	[Documentation]				NVARCHAR (1024),
 	[Documentation2]			NVARCHAR (1024),
+	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
+	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 
 	[AgentAccountTypeList]		NVARCHAR (1024),
 	[AgentAccountFilter]		NVARCHAR (1024),
