@@ -45,14 +45,14 @@ BEGIN
 			UPDATE SET
 				t.[State]				= s.[State],
 				t.[Frequency]			= s.[Frequency],
-				t.[Duration]			= s.[Duration],
+				t.[Repetitions]			= s.[Duration],
 				t.[StartDateTime]		= s.[StartDateTime],
 				t.[EndDateTime]			= s.[EndDateTime],
 				t.[ModifiedAt]			= @Now,
 				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId],[State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], [SerialNumber], 
+				[TenantId],[State], [DocumentType], [Frequency], [Repetitions], [StartDateTime], [EndDateTime], [SerialNumber], 
 				[AssigneeId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
 			)
 			VALUES (
@@ -100,7 +100,7 @@ BEGIN
 			t.[Direction]				= s.[Direction],
 			t.[MoneyAmount]				= s.[MoneyAmount],
 			t.[Value]					= s.[Value],
-			t.[NoteId]					= s.[NoteId],
+			t.[IFRSNoteId]					= s.[NoteId],
 			t.[RelatedReference]		= s.[RelatedReference],
 			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
@@ -109,7 +109,7 @@ BEGIN
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT ([TenantId], [DocumentId], [LineType], [ResponsibilityCenterId], [Reference],
-				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [NoteId],
+				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IFRSNoteId],
 				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount],
 				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[ResponsibilityCenterId], s.[Reference],

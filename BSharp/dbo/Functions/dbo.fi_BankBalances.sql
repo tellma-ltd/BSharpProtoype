@@ -17,6 +17,6 @@ RETURN
 	LEFT JOIN dbo.Resources R ON J.ResourceId = R.Id
 	LEFT JOIN dbo.AgentAccounts AA ON J.AgentAccountId = AA.Id
 	LEFT JOIN dbo.Agents Ag ON AA.AgentId = Ag.Id
-	WHERE Ac.[IFRSAccountConcept] = N'BalancesWithBanks'
+	WHERE Ac.[IFRSAccountId] = N'BalancesWithBanks'
 	GROUP BY Ac.Code, Ac.[Name], Ac.[Name2], Ag.[Name], Ag.[Name2], AA.[Reference], R.[Name], R.Name2
 );

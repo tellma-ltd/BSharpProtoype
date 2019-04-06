@@ -7,7 +7,7 @@
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
-	[Code]						NVARCHAR (255),
+	[Code]						NVARCHAR (255), -- location code for storage locations
 	[Reference]					NVARCHAR (255),
 	[StartDate]					DATETIME2 (7)		DEFAULT (CONVERT (date, SYSDATETIME())),
 -- Employees Only
@@ -30,7 +30,7 @@
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_AgentAccounts] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_AgentAccounts_AgentAccountType] CHECK (
-		[AgentAccountType] IN (N'cash-on-hand', N'balances-with-bank', N'sales', N'purchase', N'employment', N'loan', N'borrowing', N'storage-location' )
+		[AgentAccountType] IN (N'cash-accounts', N'bank-accounts', N'customer-accounts', N'supplier-accounts', N'employee-accounts', N'loans', N'borrowings', N'storage-locations' )
 	),
 	/*
 	CONSTRAINT [CK_AgentsResources] CHECK ([AgentAccountType] IN (

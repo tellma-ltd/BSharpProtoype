@@ -14,7 +14,7 @@ RETURN
 			SUM(J.[Count] * J.[Direction]) AS [Count],
 			SUM(J.[Mass] * J.[Direction]) AS [Mass]
 		FROM [dbo].[fi_Journal](NULL, @fromDate) J
-		WHERE J.[IFRSAccountConcept] = N'RawMaterials'
+		WHERE J.[IFRSAccountId] = N'RawMaterials'
 		-- No IFRS? J.AccountType = N'RawMaterials'
 		GROUP BY J.ResourceId
 	),
@@ -26,7 +26,7 @@ RETURN
 			SUM(CASE WHEN J.[Direction] < 0 THEN J.[Count] ELSE 0 END) AS CountOut,			
 			SUM(CASE WHEN J.[Direction] < 0 THEN J.[Mass] ELSE 0 END) AS MassOut
 		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-		WHERE J.[IFRSAccountConcept] = N'RawMaterials'
+		WHERE J.[IFRSAccountId] = N'RawMaterials'
 		-- No IFRS? J.AccountType = N'RawMaterials'
 		GROUP BY J.ResourceId
 	),

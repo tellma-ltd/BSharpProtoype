@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Settings] (
+﻿CREATE TABLE [dbo].[Settings] ( -- TODO: Make it wide table, up to 30,0000 columns
 	[TenantId]		INT,
 	[Field]			NVARCHAR (255),
 	[Value]			NVARCHAR (1024)		NOT NULL,

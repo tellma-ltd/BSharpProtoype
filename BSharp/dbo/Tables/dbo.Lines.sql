@@ -2,7 +2,7 @@
 	[TenantId]		INT,
 	[Id]			INT IDENTITY,
 	[DocumentId]	INT					NOT NULL,
-	[Assertion]		SMALLINT			NOT NULL CONSTRAINT [DF_Lines_Assertion] DEFAULT(1), -- (-1) for negation.
+--	[Assertion]		SMALLINT			NOT NULL CONSTRAINT [DF_Lines_Assertion] DEFAULT(1), -- (-1) for negation.
 	[LineType]		NVARCHAR(255)		NOT NULL,
 --	Ideally, instead of BaseLineId to store the price list or BOM used, it should be the info needed to compute the line.
 --	Function Name, with list of Params. 

@@ -1,61 +1,36 @@
 ﻿CREATE TABLE [dbo].[IFRSNotes] (
-	[TenantId]		INT,
-	[Id]			NVARCHAR (255),
-	[Name]			NVARCHAR (1024) NOT NULL,
-	[Code]			NVARCHAR (255)  NOT NULL,
-	[Direction]		SMALLINT		NOT NULL,
-	[IFRSType]		NVARCHAR (255)  DEFAULT (N'Custom') NOT NULL,
-	[IFRSConcept]	NVARCHAR (255)  NOT NULL,
-	[IsActive]		BIT				NOT NULL,
-	[IsExtensible]	BIT				DEFAULT (0) NOT NULL,
-	[ParentId]		NVARCHAR (255),
-	CONSTRAINT [PK_IFRSNotes] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [IX_IFRSNotes_Code] UNIQUE CLUSTERED ([TenantId] ASC, [Code] ASC),
-	CONSTRAINT [FK_IFRSNotes_IFRSNotes] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]),
-	CONSTRAINT [CK_IFRSNotes_IFRSNoteType] CHECK ([IFRSType] IN (N'Correction', N'Custom', N'Extension', N'Regulatory')),
-	CONSTRAINT [CK_IFRSNotes_Direction] CHECK ([Direction] IN (-1, 0, 1))
-);
-GO
-CREATE UNIQUE INDEX [IX_IFRSNotes_IFRSConcept]
-ON [dbo].[IFRSNotes]([TenantId], [IFRSConcept]);
-GO
+	[TenantId]					INT,
+	[Id]						NVARCHAR (255), -- IFRS Concept
+	[Node]						HIERARCHYID,
+	[Level]						AS [Node].GetLevel(),
+	[ParentNode]				AS [Node].GetAncestor(1),
+/*
+	- Regulatory: Proposed by regulatory entity. We may have different flavors for different countries
+	- Amendment: Added for consistency, must be amended in the iXBRL tool. Mainly for members vs non members issue
+	- Extension: Added for business logic in B#. Is ignored by the iXBRL tool 
+*/
+	[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
+	[IsAggregate]				BIT					NOT NULL DEFAULT (1),
+	[IsActive]					BIT					NOT NULL DEFAULT (1),
+	[Label]						NVARCHAR (1024)		NOT NULL,
+	[Label2]					NVARCHAR (1024),
+	[Documentation]				NVARCHAR (1024),
+	[Documentation2]			NVARCHAR (1024),
 
-CREATE TRIGGER [dbo].[trD_Notes]
-ON [dbo].[IFRSNotes]
-FOR DELETE 
-AS
-SET NOCOUNT ON
-	Delete Notes_H
-	WHERE	(C IN (SELECT [Id] FROM Deleted))
-	OR		(P IN (SELECT [Id] FROM Deleted));
+	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
+	[CreatedById]				INT					NOT NULL,
+	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
+	[ModifiedById]				INT					NOT NULL,
+
+	CONSTRAINT [PK_IFRSNotes] PRIMARY KEY ([TenantId], [Id]),
+	CONSTRAINT [CK_IFRSNotes_IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
+	CONSTRAINT [FK_IFRSNotes_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_IFRSNotes_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	);
 GO;
-
-CREATE TRIGGER [dbo].[trIU_Notes]
-ON [dbo].[IFRSNotes]
-FOR INSERT, UPDATE
-AS
-SET NOCOUNT ON
-IF UPDATE(Code)
-BEGIN
-	DECLARE @TenantId int = CONVERT(int, SESSION_CONTEXT(N'Tenantid'));
-	Delete Notes_H
-	WHERE	(C IN (SELECT [Id] FROM Deleted))
-	OR		(P IN (SELECT [Id] FROM Deleted));
-
-	MERGE INTO Notes_H As t -- insert x y where x = A or below and y = parentid and above
-	USING (
-		SELECT T1.C, T2.P FROM (
-			SELECT [Code], [Id] As C FROM Inserted
-			UNION 
-			SELECT [Code], [Id] FROM [IFRSNotes]
-		) T1 Join (
-			SELECT [Code], [Id] As P FROM Inserted
-			UNION 
-			SELECT [Code], [Id] FROM [IFRSNotes]
-		) T2 ON (T1.Code Like T2.Code + '%' AND T1.Code <> T2.Code)
-	) AS s ON (t.C = s.C AND t.P = s.P)
-	WHEN NOT MATCHED THEN
-	INSERT ([TenantId], C, P)
-	VALUES(@TenantId, s.C, s.P);
-END;
+CREATE UNIQUE CLUSTERED INDEX IFRSNotes__Node
+ON [dbo].[IFRSNotes]([TenantId], [Node]) ;  
+GO;
+CREATE UNIQUE INDEX IFRSNotes__Level_Node
+ON [dbo].[IFRSNotes]([TenantId], [Level], [Node]) ;  
 GO;

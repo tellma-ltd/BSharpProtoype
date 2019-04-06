@@ -2,42 +2,51 @@
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
 	[DocumentId]				INT					NOT NULL,
+-- TODO: Line types are either 1-1, where you enter all the details in a grid, or M-M like production
 	[LineType]					NVARCHAR(255)		NOT NULL DEFAULT(N'manual-journals'),
 	[Direction]					SMALLINT			NOT NULL,
-	[AccountId]					INT					NOT NULL, -- specifies IFRS Concept (which has filter on Note) and IFRS Note or additional filter 
--- Several centers may make an operating segment
--- Sales, Production, Selling & distribution, Admin
-	[ResponsibilityCenterId]	INT					NOT NULL,
+ -- Account specifies the IFRS Concept (which itself has filter on Note), and additional filters on the other columns
+	[AccountId]					INT					NOT NULL,
 -- Analysis of accounts including: cash, non current assets, equity, and expenses.
-	[NoteId]					INT,				-- Includes expense function. Note that the responsibility center might force it
--- Documentation of assets/liabilites/purchases/sales. Think of inventory and decide what is agent, resource, etc.
-	[AgentAccountId]			INT					NOT NULL, -- subaccount of the actual person having custody of asset/or against whom we are liable/or customer for revenues and COGS expenses, else n/a
-	[ResourceId]				INT					NOT NULL, -- the actual asset, liability, good sold for direct expenses and revenues, good and services consumed for indirect expenses
--- Tracking measures
-	[MoneyAmount]				MONEY				NOT NULL DEFAULT (0), -- AmountCurrency 
-	[Mass]						DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar
+	[IFRSNoteId]				INT,				-- Note that the responsibility center might define the IFRS Note
+-- The business segment that "owns" the asset/liablity, and whose performance is assessed by the revenue/expense
+	[ResponsibilityCenterId]	INT					NOT NULL, -- SegmentId.. When no needed, we use the entity itself.
+-- subaccount of: agent having custody of asset/agent against whom we are liable. N/A for P/L accounts
+	[AgentAccountId]			INT					NOT NULL, 
+	[ResourceId]				INT					NOT NULL, -- the actual asset, liability, good/service sold for revenues and direct expenses, good/service consumed for indirect expenses
+-- Tracking additive measures
+	[ValueMeasure]				VTYPE				NOT NULL DEFAULT (0), -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
+	[MoneyAmount]				MONEY				NOT NULL DEFAULT (0), -- Amount in foreign Currency 
+	[Mass]						DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar, cement bag, etc
 	[Volume]					DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
 	[Count]						DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
 	[Time]						DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
 	[Value]						VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
--- settling date. Can be used to decide current/non current
-	[ExpectedClosingDate]		DATETIMEOFFSET(7), 
--- useful in statements and reports
-	[Reference]					NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- This is Voucher Reference
-	[Memo]						NVARCHAR(255),
--- Related details normally appear on another entry
-	[RelatedReference]			NVARCHAR (255), -- for storing an extra string, such as cash machine ref for ERCA
--- for debiting asset accounts, related resource is acquired from supplier/customer/storage
--- for crediting asset accounts, related reosurce is the resource delivered to supplier/customer/storage as resource
--- for liability account, related resource is n/a
-	[RelatedResourceId]			INT, -- resource purchased or withdrawn from storage) 	service, Labor, Machine service,
-	[RelatedAgentAccountId]		INT, -- Customer/Supplier/Employee in Tax Withholding reports, supplier/warehouse for expenses, sales rep/ for revenues
-	[RelatedMoneyAmount]		MONEY, -- what about related volumne, mass, etc...
+-- Settling date of assets, liabilities. Examples: Asset Disposal date, Inventory expiry date, loan/borrowing settlement date.
+	[ExpectedSettlingDate]		DATETIME2(7),  -- Can be used to decide mobilize split balance between current and non-current
+-- useful to link the system to an external system (bank, paper, etc). 
+	[Reference]					NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- Can be updated even after posting.
+-- Additional information to satisfy reporting requirements
+	[Memo]						NVARCHAR(255), -- a textual description for statements and reports
+	[RelatedReference]			NVARCHAR (255), -- for storing an extra string, such as cash machine ref for Tax purposes
+-- for debiting asset accounts, related resource is the good/service acquired from supplier/customer/storage
+-- for crediting asset accounts, related resource is the good/service delivered to supplier/customer/storage as resource
+-- for debiting VAT purchase account, related resource is the good/service purchased
+-- for crediting VAT Sales account, related resource is the good/service sold
+-- for crediting VAT purchase, debiting VAT sales, or liability account: related resource is N/A
+	[RelatedResourceId]			INT, -- Good, Service, Labor, Machine usage
+-- The related agent account is the implicit agent account that had two entries, one debiting and one crediting and hence removes
+-- Examples include supplier account in cash purchase, customer account in cash sales, employee account in cash payroll, 
+-- supplier account in VAT purchase entry, customer account in VAT sales entry, and WIP account in direct production.
+	[RelatedAgentAccountId]		INT,
+	[RelatedMoneyAmount]		MONEY 				NOT NULL DEFAULT (0), -- e.g., amount subject to tax
+	/*
 	[RelatedMass]				DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar
 	[RelatedVolume]				DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
 	[RelatedCount]				DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
 	[RelatedTime]				DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
-	[RelatedValue]				VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
+	[RelatedValue]				VTYPE				NOT NULL DEFAULT (0), -- 
+	*/
 -- for auditing
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,

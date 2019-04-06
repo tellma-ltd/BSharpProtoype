@@ -17,6 +17,6 @@ RETURN
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
-	WHERE J.[IFRSAccountConcept] = N'CurrentWithholdingTaxPayable'
+	WHERE J.[IFRSAccountId] = N'CurrentWithholdingTaxPayable'
 	-- No IFRS?: J.AccountType = N'CurrentWithholdingTaxPayable'
 	AND J.Direction = -1;

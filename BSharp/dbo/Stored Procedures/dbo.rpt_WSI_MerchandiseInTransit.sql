@@ -10,13 +10,13 @@ Assumptions:
 AS
 	WITH
 	IFRS_MIT AS (
-		SELECT [IFRSAccountNode] 
-		FROM dbo.[IFRSAccounts] WHERE [IFRSConcept] IN(N'CurrentInventoriesInTransit')
+		SELECT [Node] 
+		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'CurrentInventoriesInTransit')
 	),
 	InventoriesInTransitAccounts AS (
 		SELECT [Id] FROM dbo.Accounts A
-		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountConcept] = I.[IFRSConcept]
-		WHERE I.[IFRSAccountNode].IsDescendantOf((SELECT * FROM IFRS_MIT))	= 1
+		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
+		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_MIT))	= 1
 	), /*
 	-- To avoid IFRS, we need to define an account type:
 	FixedAssetAccounts AS (

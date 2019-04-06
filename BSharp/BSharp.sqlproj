@@ -84,7 +84,7 @@
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
-    <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentTypeSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.ResponsibilityCenters.sql" />
@@ -113,7 +113,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
-    <Build Include="dbo\Tables\dbo.DocumentActions.sql" />
+    <Build Include="dbo\Tables\dbo.zDocumentActions.sql" />
     <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_MeasurementUnits_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Save.sql" />
@@ -150,8 +150,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Functions\dbo.fn_Operation__FirstSibling.sql" />
-    <Build Include="dbo\Tables\dbo.AgentsResources.sql" />
-    <Build Include="dbo\Tables\dbo.Notes_H.sql" />
+    <Build Include="dbo\Tables\dbo.zAgentsResources.sql" />
     <Build Include="dbo\Tables\dbo.IFRSAccountConceptsNoteConcepts.sql" />
     <Build Include="dbo\Functions\dbo.fn_Account__Code.sql" />
     <Build Include="dbo\Functions\dbo.fn_Note__Code.sql" />
@@ -255,6 +254,7 @@
     <Build Include="dbo\Views\dbo.NormalizedVouchersView.sql" />
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
     <Build Include="dbo\Functions\dbo.fi_BankBalances.sql" />
+    <Build Include="dbo\Tables\dbo.AccountClassifications.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -8,23 +8,23 @@ Can we assume that purchases are marked as expenses and the supplier is stored i
 AS
 	WITH
 	ExpenseJournal AS (
-		SELECT J.[ResponsibilityCenterId], J.[IFRSAccountConcept], O.[Name], O.[Name2],
+		SELECT J.[ResponsibilityCenterId], J.[IFRSAccountId], O.[Name], O.[Name2],
 			SUM(J.[Direction] * J.[Value]) AS [Expense]
 		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 		JOIN dbo.[ResponsibilityCenters] O ON J.[ResponsibilityCenterId] = O.Id
 --		JOIN dbo.Agents A ON J.RelatedAgentId = A.Id
-		WHERE J.[IFRSAccountConcept] IN (
+		WHERE J.[IFRSAccountId] IN (
 		-- No IFRS? WHERE AccountType IN (
 		-- We need to include only IndirectCostOfSales?
 			N'CostOfSales', N'DistributionCosts', N'AdministrativeExpense', N'OtherExpenseByFunction'
 		)
 	--	AND A.RelationType = N'supplier'
-		GROUP BY J.[ResponsibilityCenterId], J.[IFRSAccountConcept], O.[Name], O.[Name2]
+		GROUP BY J.[ResponsibilityCenterId], J.[IFRSAccountId], O.[Name], O.[Name2]
 	)
 	SELECT * FROM ExpenseJournal
 	PIVOT (
 		SUM([Expense])
-		FOR [IFRSAccountConcept] IN (
+		FOR [IFRSAccountId] IN (
 			[CostOfSales], [DistributionCosts], [AdministrativeExpense], [OtherExpenseByFunction]
 		)
 	) AS pvt;

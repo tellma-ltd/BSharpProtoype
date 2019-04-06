@@ -65,7 +65,7 @@ INSERT @LineTypes ([Id]) VALUES
 	(N'LeaseReceiptFromSupplier'),	
 	(N'StockReceiptFromSupplier');	
 
-MERGE [dbo].DocumentTypes AS t
+MERGE [dbo].[DocumentTypeSpecifications] AS t
 USING @DocumentTypes AS s
 ON s.Id = t.Id
 WHEN NOT MATCHED BY SOURCE THEN

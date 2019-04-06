@@ -13,10 +13,10 @@ BEGIN
 		SELECT Max(Id) FROM dbo.Signatures
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 	)
-	AND [Signatory] = @UserId;
+	AND [SignatoryId] = @UserId;
 
 	-- if last signed by someone else, add user signature
-	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [Signatory])
+	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [SignatoryId])
 	SELECT @TenantId, [DocumentId], @Now, @UserId
 	FROM Signatures
 	WHERE [Id] IN (
@@ -24,10 +24,10 @@ BEGIN
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 		GROUP BY DocumentId
 	)
-	AND [Signatory] <> @UserId
+	AND [SignatoryId] <> @UserId
 	
 	-- if never signed, add user signature
-	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [Signatory])
+	INSERT INTO dbo.Signatures([TenantId], [DocumentId], [SignedAt], [SignatoryId])
 	SELECT @TenantId, [Id], @Now, @UserId
 	FROM @Documents
 	WHERE [Id] NOT IN (

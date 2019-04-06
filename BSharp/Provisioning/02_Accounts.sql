@@ -403,17 +403,17 @@ WHEN MATCHED AND
   t.[IsExtensible]			<>	s.[IsExtensible]
 ) THEN
 UPDATE SET
-  t.[IFRSConcept]					=	s.[Name], 
-  t.[IFRSAccountNode]					=	s.[Code],
+  t.[Id]					=	s.[Name], 
+  t.[Node]					=	s.[Code],
   t.[IsActive]				=	s.[IsActive],
   t.[IFRSType]			=	s.[AccountType], 
 --  t.[AccountSpecification]	=	s.[AccountSpecification],
-  t.[IsExtensible]			=	s.[IsExtensible]
+  t.[IsLeaf]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[IFRSAccountNode], [IFRSConcept], [IFRSAccountNode], [IsActive], [IFRSType],-- [AccountSpecification],
-			[IsExtensible])
+    INSERT ([TenantId],	[Node], [Id], [Node], [IsActive], [IFRSType],-- [AccountSpecification],
+			[IsLeaf])
     VALUES (@TenantId, 	s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

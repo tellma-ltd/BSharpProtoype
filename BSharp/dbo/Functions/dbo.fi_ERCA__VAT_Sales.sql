@@ -15,7 +15,7 @@ RETURN
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
-	WHERE J.[IFRSAccountConcept] = N'CurrentValueAddedTaxPayables'
+	WHERE J.[IFRSAccountId] = N'CurrentValueAddedTaxPayables'
 	-- No IFRS?: J.AccountType = N'CurrentValueAddedTaxPayables'
 	AND J.Direction = -1
 	GROUP BY A.[Name], A.TaxIdentificationNumber, J.Reference, J.RelatedReference, J.DocumentDateTime;

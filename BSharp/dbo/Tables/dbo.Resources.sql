@@ -12,11 +12,13 @@
 	[ResourceType]				NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
-	[IsActive]					BIT					NOT NULL CONSTRAINT [DF_Resources_IsActive] DEFAULT (1),
+	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.
 	[MassUnitId]				INT, -- the unit If the resource has a mass measure assigned to it.
+	[MassRate]					DECIMAL,
 	[VolumeUnitId]				INT,
+	[VolumeRate]				DECIMAL,
 	[LengthUnitId]				INT,
 	[CountUnitId]				INT, -- pcs, each, share
 	[TimeUnitId]				INT, -- training hours, or support days or work months
@@ -26,17 +28,17 @@
  -- functional currency, common stock, basic, allowance, overtime/types, 
 	[SystemCode]				NVARCHAR (255),
 	[Memo]						NVARCHAR (2048),
-	[Reference]					NVARCHAR (255),
+	[Reference]					NVARCHAR (255), -- UPC
 	[RelatedReference]			NVARCHAR (255),
 	[RelatedAgentId]			INT,
 	[RelatedResourceId]			INT,
 	[RelatedMeasurementUnitId]	INT,
 	[RelatedAmount]				INT,
 	[RelatedDateTime]			DATETIMEOFFSET (7),
-	[Lookup1]					NVARCHAR (255),
-	[Lookup2]					NVARCHAR (255),
-	[Lookup3]					NVARCHAR (255),
-	[Lookup4]					NVARCHAR (255),
+	[Lookup1Id]					INT,
+	[Lookup2Id]					INT,
+	[Lookup3Id]					INT,
+	[Lookup4Id]					INT,
 	[PartOfId]					INT, -- for compound assets
 	[InstanceOfId]				INT, -- to allow contracts at higher level.
 	--[ServiceOfId]				INT, -- to relate services to their assets.

@@ -49,7 +49,7 @@ BEGIN -- Updating
 		[PartOfId], [InstanceOfId], [ServiceOfId], [EntityState]
 	)
 	SELECT
-		[Id], [MassUnitId], [ResourceType], [Name], [Code], [Lookup1], [Lookup2], [Lookup3], [Lookup4],
+		[Id], [MassUnitId], [ResourceType], [Name], [Code], [Lookup1Id], [Lookup2], [Lookup3], [Lookup4],
 		[PartOfId], [InstanceOfId], [ServiceOfId], N'Unchanged'
 	FROM [dbo].Resources
 	WHERE [ResourceType] IN (N'MotorVehicles', N'SKD')

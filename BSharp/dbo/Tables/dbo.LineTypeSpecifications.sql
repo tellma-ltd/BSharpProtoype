@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[LineTypeSpecifications] (
+﻿CREATE TABLE [dbo].[LineTypeSpecifications] ( -- TODO Merge with LineTypes
 	[TenantId]						INT,
 	[LineType]						NVARCHAR (255),
 	[IsActive]						BIT				NOT NULL DEFAULT (1),

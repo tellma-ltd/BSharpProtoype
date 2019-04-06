@@ -7,13 +7,13 @@ AS
 RETURN
 	WITH
 	IFRS_PPE AS (
-		SELECT [IFRSAccountNode] 
-		FROM dbo.[IFRSAccounts] WHERE [IFRSConcept] = N'PropertyPlandAndEquipment'
+		SELECT [Node] 
+		FROM dbo.[IFRSAccounts] WHERE [Id] = N'PropertyPlandAndEquipment'
 	),
 	FixedAssetAccounts AS (
 		SELECT [Id] FROM dbo.Accounts A
-		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountConcept] = I.[IFRSConcept]
-		WHERE I.[IFRSAccountNode].IsDescendantOf((SELECT * FROM IFRS_PPE))	= 1
+		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
+		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_PPE))	= 1
 	), /*
 	-- To avoid IFRS, we need to define an account type, which is already there:
 	FixedAssetAccounts AS (
@@ -32,13 +32,13 @@ RETURN
 	),
 	Movements AS (
 		SELECT
-			J.ResourceId, J.[NoteId],
+			J.ResourceId, J.[IFRSNoteId],
 			SUM(J.[Count] * J.[Direction]) AS [Count],
 			SUM(J.[Value] * J.[Direction]) AS [Value],
 			SUM(J.[Time] * J.[Direction]) AS [ServiceLife]
 		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 		WHERE J.AccountId IN (SELECT Id FROM FixedAssetAccounts)
-		GROUP BY J.ResourceId, J.[NoteId]
+		GROUP BY J.ResourceId, J.[IFRSNoteId]
 	),
 	FixedAssetRegsiter AS (
 		SELECT COALESCE(OpeningBalances.ResourceId, Movements.ResourceId) AS ResourceId,

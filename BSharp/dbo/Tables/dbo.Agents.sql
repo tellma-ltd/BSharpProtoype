@@ -1,13 +1,12 @@
 ﻿CREATE TABLE [dbo].[Agents] (
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
---	[RelationType]				NVARCHAR (255)		NOT NULL, -- N'employee', N'supplier', N'customer', N'general'
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
+	[IsActive]					BIT					NOT NULL DEFAULT (1), -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
---	Agents specific
+--	Common
 	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
 	[IsRelated]					BIT					NOT NULL DEFAULT (0),
 	[TaxIdentificationNumber]	NVARCHAR (255),
@@ -24,21 +23,21 @@
 --	--	Personal
 	[BirthDateTime]				DATETIME2 (7),
 	[Title]						NVARCHAR (255),
-	[Gender]					NCHAR (1),		-- M=Male, F=Female
+	[Gender]					NCHAR (1),		-- M=Male, F=Female, X=Other
 	[ResidentialAddress]		NVARCHAR (1024),
 	[ImageId]					UNIQUEIDENTIFIER,
 --	--	Social
 	[MaritalStatus]				NCHAR (1),		-- S=Single, D=Divorced, M=Married, W=Widowed
 	[NumberOfChildren]			TINYINT,
-	[Religion]					NCHAR (1),		-- I=Islam, C=Christianity, X=Others -- , J=Judaism, H=Hinduism, B=Buddhism
-	[Race]						NCHAR (1),		-- W=White, B=Black, A=Asian, H=Hispanic
-	[TribeId]					INT,
-	[RegionId]					INT,
+	[Religion]					NCHAR (1),		-- (?) I=Islam, C=Christianity, X=Others -- , J=Judaism, H=Hinduism, B=Buddhism
+	[Race]						INT,			-- UDL
+	[TribeId]					INT,			-- UDL
+	[RegionId]					INT,			-- UDL
 --	--	Academic
-	[EducationLevel]			NVARCHAR (255),					
-	[EducationSublevel]			NVARCHAR (255),	
+	[EducationLevelId]			INT,			-- UDL
+	[EducationSublevelId]		INT,			-- UDL
 --	--	Financial
-	[BankId]					INT,
+	[BankId]					INT,			-- UDL
 	[BankAccountNumber]			NVARCHAR (255),					
 --	Organizations only
 --	Organization type is defined by the government entity responsible for this organization. For instance, banks
@@ -55,9 +54,9 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Agents_RelationType] CHECK (
-		[RelationType] IN (N'employee', N'supplier', N'customer', N'general')
-		),
+	--CONSTRAINT [CK_Agents_RelationType] CHECK (
+	--	[RelationType] IN (N'employee', N'supplier', N'customer', N'general')
+	--	),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
 	CONSTRAINT [FK_Agents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Agents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])

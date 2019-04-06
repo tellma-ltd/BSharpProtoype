@@ -41,7 +41,7 @@ SET NOCOUNT ON;
 	FROM @Documents FE
 	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
 	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
-	JOIN dbo.[IFRSNotes] N ON E.NoteId = N.Id
+	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
 	WHERE (N.IsActive = 0);
 
 	-- No inactive custody
