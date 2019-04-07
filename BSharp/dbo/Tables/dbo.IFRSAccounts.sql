@@ -19,23 +19,30 @@
 	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
 	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 
+	[IFRSNoteSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+
+	[AgentAccountSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[AgentAccountTypeList]		NVARCHAR (1024),
 	[AgentAccountFilter]		NVARCHAR (1024),
 	[AgentAccountLabel]			NVARCHAR (255),
 	[AgentAccountLabel2]		NVARCHAR (255),
 
+	[ReferenceSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[ReferenceLabel]			NVARCHAR (255),
 	[ReferenceLabel2]			NVARCHAR (255),
 
+	[ResourceSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[ResourceTypeList]			NVARCHAR (1024),	
 	[ResourceFilter]			NVARCHAR (1024),
 	[ResourceLabel]				NVARCHAR (255),
 	[ResourceLabel2]			NVARCHAR (255),
 
+	[RelatedResourceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[RelatedResourceFilter]		NVARCHAR (1024),
 	[RelatedResourceLabel]		NVARCHAR (255),
 	[RelatedResourceLabel2]		NVARCHAR (255),
 	
+	[RelatedAgentAccountSetting]NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[RelatedAgentAccountFilter]	NVARCHAR (1024),
 	[RelatedAgentAccountLabel]	NVARCHAR (255),
 	[RelatedAgentAccountLabel2]	NVARCHAR (255),
@@ -45,15 +52,15 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 
-	CONSTRAINT [PK_IFRSAccounts] PRIMARY KEY ([TenantId] ASC, [Id]),
+	CONSTRAINT [PK_IFRSAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
 	CONSTRAINT [CK_IFRSAccounts_IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
 	CONSTRAINT [FK_IFRSAccounts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_IFRSAccounts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 	);
-GO;
+GO
 CREATE UNIQUE CLUSTERED INDEX IFRSAccounts__Node
 ON [dbo].[IFRSAccounts]([TenantId], [Node]) ;  
-GO;
+GO
 CREATE UNIQUE INDEX IFRSAccounts__Level_FNode
 ON [dbo].[IFRSAccounts]([TenantId], [Level], [Node]) ;  
-GO;
+GO

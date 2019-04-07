@@ -172,7 +172,7 @@
     <None Include="Provisioning\02_Accounts.sql" />
     <None Include="Provisioning\04_AccountsNotes.sql" />
     <None Include="Provisioning\01_MeasurementUnits.sql" />
-    <None Include="Provisioning\03_Notes.sql" />
+    <None Include="Provisioning\03_IFRSNotes.sql" />
     <None Include="Provisioning\00_Main.sql" />
     <None Include="Provisioning\06_LineTypeSpecifications.sql" />
     <None Include="Provisioning\05_DocumentTypes.sql" />
@@ -255,6 +255,9 @@
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
     <Build Include="dbo\Functions\dbo.fi_BankBalances.sql" />
     <Build Include="dbo\Tables\dbo.AccountClassifications.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Deactivate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSNotes__Activate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

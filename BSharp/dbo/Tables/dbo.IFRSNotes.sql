@@ -14,25 +14,33 @@
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Label]						NVARCHAR (1024)		NOT NULL,
 	[Label2]					NVARCHAR (1024),
+	[Label3]					NVARCHAR (1024),
 	[Documentation]				NVARCHAR (1024),
 	[Documentation2]			NVARCHAR (1024),
+	[Documentation3]			NVARCHAR (1024),
 	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
 	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
+--	If [ForDebit] = 1, Note can be used with Debit entries
+	[ForDebit]					BIT			NOT NULL DEFAULT (1),
+--	If [ForCredit] = 1, Note can be used with Credit entries
+	[ForCredit]					BIT			NOT NULL DEFAULT (1),
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,
-	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
+	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL,
 	[ModifiedById]				INT					NOT NULL,
 
-	CONSTRAINT [PK_IFRSNotes] PRIMARY KEY ([TenantId], [Id]),
-	CONSTRAINT [CK_IFRSNotes_IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
-	CONSTRAINT [FK_IFRSNotes_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_IFRSNotes_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [PK_IFRSNotes] PRIMARY KEY NONCLUSTERED ([TenantId], [Id]),
+	CONSTRAINT [CK_IFRSNotes__IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
+	CONSTRAINT [CK_IFRSNotes__ForDebit_ForCredit] CHECK ([ForDebit] = 1 OR [ForCredit] = 1),
+
+	CONSTRAINT [FK_IFRSNotes__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_IFRSNotes__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 	);
-GO;
+GO
 CREATE UNIQUE CLUSTERED INDEX IFRSNotes__Node
 ON [dbo].[IFRSNotes]([TenantId], [Node]) ;  
-GO;
+GO
 CREATE UNIQUE INDEX IFRSNotes__Level_Node
 ON [dbo].[IFRSNotes]([TenantId], [Level], [Node]) ;  
-GO;
+GO

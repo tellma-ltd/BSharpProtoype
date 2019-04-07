@@ -11,15 +11,49 @@
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
+/*
+	An application-wide settings specify whether to activate the following columns:
+	[IsActiveIFRSNote], when wanting to generate specific IFRS statements and notes
+	[IsActiveResponsibilityCenter], when using cost accounting
+	[IsActiveResource] when using inventory or fixed assets module
+	[IsActiveExpectedSettlingDate] when tracking expiry dates and due dates
+	[IsActiveAgentAccount], when using warehouses, or subsidiaries for receivable or payables
+	[IsActiveRelaredResource], when activating certain tax reports
+	[IsActiveRelatedAgentAccount], when activating certain tax reports
+*/
 
+/*
 	-- For the following columns, see the corresponding columns in table Entries for documentation
-	-- They can be set to a new value provided it does not conflict with a (draft/posted) document
+	-- We show a note to the user: for the columns below, if the value is set at the account level
+	-- then it overrides what is set at the entries level.
+	If IsFixed = false, the user is expected to specify it in the journal entry line ite,s
+*/
+
+--	This field will show only if IsActiveIFRSNote, and if IFRSAccount specs require it
 	[IFRSNoteId]				NVARCHAR (255),		-- includes Expense by function
+
+--	These fields will show only if IsActiveResponsibilityCenter, and if IFRSAccount specs require it
+	[ResponsibilityCenterIsFixed]BIT				NOT NULL DEFAULT (1),
 	[ResponsibilityCenterId]	INT,
+
+-- These fields will show only if IsActiveAgentAccount, and if IFRSAccount specs require it
+	[AgentAccountIsFixed]		BIT					NOT NULL DEFAULT (1),
 	[AgentAccountId]			INT,
+
+-- These fields will show only if IsActiveResource, and if IFRSAccount specs require it
+	[ResourceIsFixed]			BIT					NOT NULL DEFAULT (1),
 	[ResourceId]				INT,
+
+-- These fields will show only if IsActiveExpectedSettlingDate, and if IFRSAccount specs require it
+	[ExpectedSettlingDateIsFixed]BIT				NOT NULL DEFAULT (0),
 	[ExpectedSettlingDate]		DATETIME2(7),
+
+-- These fields will show only if IsActiveRelaredResource, and if IFRSAccount specs require it
+	[RelatedResourceIsFixed]	BIT					NOT NULL DEFAULT (0),
 	[RelatedResourceId]			INT,
+
+-- These fields will show only if IsActiveRelatedAgentAccount, and if IFRSAccount specs require it
+	[RelatedAgentAccountIsFixed]BIT					NOT NULL DEFAULT (0),
 	[RelatedAgentAccountId]		INT,
 	-- Audit details
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
