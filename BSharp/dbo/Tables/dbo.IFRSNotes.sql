@@ -18,13 +18,13 @@
 	[Documentation]				NVARCHAR (1024),
 	[Documentation2]			NVARCHAR (1024),
 	[Documentation3]			NVARCHAR (1024),
-	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
-	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 --	If [ForDebit] = 1, Note can be used with Debit entries
-	[ForDebit]					BIT			NOT NULL DEFAULT (1),
+	[ForDebit]					BIT					NOT NULL DEFAULT (1),
 --	If [ForCredit] = 1, Note can be used with Credit entries
-	[ForCredit]					BIT			NOT NULL DEFAULT (1),
-
+	[ForCredit]					BIT					NOT NULL DEFAULT (1),
+-- Concept lifetime according to regulatry body
+	[EffectiveDate]				DATETIME2(7)		NOT NULL,
+	[ExpiryDate]				DATETIME2(7)		NOT NULL,
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL,

@@ -20,4 +20,3 @@ IF NOT EXISTS(
 		AND (P.[Level] Like N'Read%' OR P.[Level] = N'Update')
 	) 
 	RAISERROR(N'Not enough permissions', 16, 1);
-

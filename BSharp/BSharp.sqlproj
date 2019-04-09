@@ -77,7 +77,7 @@
     <Build Include="dbo\Tables\dbo.Agents.sql" />
     <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
-    <Build Include="dbo\Tables\dbo.Assignments.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentAssignments.sql" />
     <Build Include="dbo\Tables\dbo.Lines.sql" />
     <Build Include="dbo\Tables\dbo.IFRSAccounts.sql" />
     <Build Include="dbo\Tables\dbo.IFRSNotes.sql" />
@@ -213,7 +213,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Unsign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Unsign.sql" />
     <Build Include="dbo\Functions\dbo.fi_MyWorkspace.sql" />
-    <Build Include="dbo\Tables\dbo.AssignmentsHistory.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentAssignmentsHistory.sql" />
     <Build Include="dbo\Functions\dbo.fi_MyWorkspaceHistory.sql" />
     <Build Include="dbo\Tables\dbo.Notifications.sql" />
     <Build Include="dbo\Functions\dbo.fi_MyNotifications.sql" />

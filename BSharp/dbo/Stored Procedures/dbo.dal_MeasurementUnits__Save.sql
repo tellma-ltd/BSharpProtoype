@@ -4,9 +4,6 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
-	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
 	DELETE FROM [dbo].MeasurementUnits
@@ -25,18 +22,21 @@ SET NOCOUNT ON;
 		WHEN MATCHED 
 		THEN
 			UPDATE SET 
-				t.[UnitType]	= s.[UnitType],
-				t.[Name]		= s.[Name],
-				t.[Name2]		= s.[Name2],
-				t.[Description]	= s.[Description],
-				t.[UnitAmount]	= s.[UnitAmount],
-				t.[BaseAmount]	= s.[BaseAmount],
-				t.[Code]		= s.[Code],
-				t.[ModifiedAt]	= @Now,
-				t.[ModifiedById]	= @UserId
+				t.[UnitType]		= s.[UnitType],
+				t.[Name]			= s.[Name],
+				t.[Name2]			= s.[Name2],
+				t.[Name3]			= s.[Name3],
+				t.[Description]		= s.[Description],
+				t.[Description2]	= s.[Description2],
+				t.[Description3]	= s.[Description3],
+				t.[UnitAmount]		= s.[UnitAmount],
+				t.[BaseAmount]		= s.[BaseAmount],
+				t.[Code]			= s.[Code],
+				t.[ModifiedAt]		= SYSDATETIMEOFFSET(),
+				t.[ModifiedById]	= CONVERT(INT, SESSION_CONTEXT(N'UserId'))
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [UnitType], [Name], [Name2], [Description], [UnitAmount], [BaseAmount], [Code], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[UnitType], s.[Name], s.[Name2], s.[Description], s.[UnitAmount], s.[BaseAmount], s.[Code], @Now, @UserId, @Now, @UserId)
+			INSERT ([UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount], [Code])
+			VALUES (s.[UnitType], s.[Name], s.[Name2], s.[Name3], s.[Description], s.[Description2], s.[Description3], s.[UnitAmount], s.[BaseAmount], s.[Code])
 		OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

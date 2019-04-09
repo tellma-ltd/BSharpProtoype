@@ -4,6 +4,6 @@
 RETURNS TABLE
 AS
 RETURN
-	SELECT 	[AssigneeId], [Comment], [AssignedBy], [AssignedAt], [OpenedAt]
-	FROM [dbo].Assignments
+	SELECT 	[AssigneeId], [Comment], [CreatedById], [CreatedAt], [OpenedAt]
+	FROM [dbo].[DocumentAssignments]
 	WHERE DocumentId = @DocumentId;

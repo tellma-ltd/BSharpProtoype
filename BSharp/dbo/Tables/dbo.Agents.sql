@@ -1,9 +1,11 @@
 ﻿CREATE TABLE [dbo].[Agents] (
+--	These includes all the natural and legal persons with which the business entity may interact
 	[TenantId]					INT,
 	[Id]						INT					IDENTITY,
 	[IsActive]					BIT					NOT NULL DEFAULT (1), -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
+	[Name3]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
 --	Common
@@ -11,7 +13,7 @@
 	[IsRelated]					BIT					NOT NULL DEFAULT (0),
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,
-	[Citizenship]				NCHAR(2),
+	[Citizenship]				NCHAR(2),		-- ISO 3166-1 Alpha-2 code
 	[Facebook]					NVARCHAR (255),				
 	[Instagram]					NVARCHAR (255),				
 	[Twitter]					NVARCHAR (255),
@@ -22,27 +24,27 @@
 --	Individuals only
 --	--	Personal
 	[BirthDateTime]				DATETIME2 (7),
-	[Title]						NVARCHAR (255),
-	[Gender]					NCHAR (1),		-- M=Male, F=Female, X=Other
-	[ResidentialAddress]		NVARCHAR (1024),
+	[TitleId]					INT,			-- LKT
+	[Gender]					INT,			-- ISO/IEC 5218. 0=unknown, 1=Male, 2=Female, 9=N/A
+	[ResidentialAddress]		NVARCHAR (1024), -- in the country language
 	[ImageId]					UNIQUEIDENTIFIER,
 --	--	Social
-	[MaritalStatus]				NCHAR (1),		-- S=Single, D=Divorced, M=Married, W=Widowed
+	[MaritalStatus]				INT,			-- LKT
 	[NumberOfChildren]			TINYINT,
 	[Religion]					NCHAR (1),		-- (?) I=Islam, C=Christianity, X=Others -- , J=Judaism, H=Hinduism, B=Buddhism
-	[Race]						INT,			-- UDL
-	[TribeId]					INT,			-- UDL
-	[RegionId]					INT,			-- UDL
+	[Race]						INT,			-- LKT
+	[TribeId]					INT,			-- LKT
+	[RegionId]					INT,			-- LKT
 --	--	Academic
-	[EducationLevelId]			INT,			-- UDL
-	[EducationSublevelId]		INT,			-- UDL
+	[EducationLevelId]			INT,			-- LKT
+	[EducationSublevelId]		INT,			-- ===
 --	--	Financial
-	[BankId]					INT,			-- UDL
+	[BankId]					INT,			-- LKT
 	[BankAccountNumber]			NVARCHAR (255),					
 --	Organizations only
 --	Organization type is defined by the government entity responsible for this organization. For instance, banks
 --	are all handled by the central bank. Charities are handled by a different body, and so on.
-	[OrganizationType]			NVARCHAR (255), -- General/Bank/Insurance/Charity/NGO/TaxOrg/Diplomatic
+	[OrganizationType]			INT,			-- UDL General/Bank/Insurance/Charity/NGO/TaxOrg/Diplomatic
 	[WebSite]					NVARCHAR (255),
 	[ContactPerson]				NVARCHAR (255),
 	[RegisteredAddress]			NVARCHAR (1024),
@@ -53,30 +55,24 @@
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
-	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	--CONSTRAINT [CK_Agents_RelationType] CHECK (
-	--	[RelationType] IN (N'employee', N'supplier', N'customer', N'general')
-	--	),
+	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
 	CONSTRAINT [FK_Agents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Agents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
-CREATE INDEX [IX_Agents__RelationType]
-  ON [dbo].[Agents]([TenantId] ASC, [RelationType] ASC);
-GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name]
-  ON [dbo].[Agents]([TenantId] ASC, [Name] ASC);
+  ON [dbo].[Agents]([TenantId], [Name]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name2]
-  ON [dbo].[Agents]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+  ON [dbo].[Agents]([TenantId], [Name2]) WHERE [Name2] IS NOT NULL;
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name3]
+  ON [dbo].[Agents]([TenantId], [Name3]) WHERE [Name3] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Code]
-  ON [dbo].[Agents]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+  ON [dbo].[Agents]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__SystemCode]
-  ON [dbo].[Agents]([TenantId] ASC, [Code] ASC) WHERE [SystemCode] IS NOT NULL;
+  ON [dbo].[Agents]([TenantId], [Code]) WHERE [SystemCode] IS NOT NULL;
  GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Id_AgentType]
-  ON [dbo].[Agents]([Id] ASC, [PersonType] ASC) WHERE [PersonType] IS NOT NULL;
-GO

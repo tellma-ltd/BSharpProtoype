@@ -203,4 +203,46 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[IsAggregate]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d296df3c-51d6-4d72-bf3c-b0a278e2564a" ChangeDateTime="04/08/2019 14:54:11">
+    <Property Name="ElementName" Value="[dbo].[Assignments]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentAssignments]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4bd04f52-d194-4390-8c0d-64e5d58f300c" ChangeDateTime="04/08/2019 14:55:30">
+    <Property Name="ElementName" Value="[dbo].[DocumentAssignments].[AssignedBy]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentAssignments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[AssignedById]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9c125687-3943-4050-99a9-f4f2b9792659" ChangeDateTime="04/08/2019 14:56:38">
+    <Property Name="ElementName" Value="[dbo].[DocumentAssignments].[AssignedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentAssignments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreatedAt]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ce3b89b8-5013-4820-93af-bc06ab966562" ChangeDateTime="04/08/2019 14:57:16">
+    <Property Name="ElementName" Value="[dbo].[DocumentAssignments].[AssignedById]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentAssignments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreatedById]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="03759ffa-6ed4-48c1-98ea-8a431cdd3275" ChangeDateTime="04/08/2019 15:39:54">
+    <Property Name="ElementName" Value="[dbo].[AssignmentsHistory]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentAssignmentsHistory]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2909ad36-f50f-487c-8567-f3d14474968e" ChangeDateTime="04/08/2019 15:42:07">
+    <Property Name="ElementName" Value="[dbo].[DocumentAssignmentsHistory].[AssignedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentAssignmentsHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CreatedAt]" />
+  </Operation>
 </Operations>

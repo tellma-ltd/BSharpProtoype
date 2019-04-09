@@ -10,6 +10,8 @@ DECLARE @IFRSNotes AS TABLE (
 	[Label]						NVARCHAR (1024)		NOT NULL,
 	[ForDebit]					BIT					NOT NULL DEFAULT (1),
 	[ForCredit]					BIT					NOT NULL DEFAULT (1),	
+	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
+	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 	PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 
@@ -196,7 +198,9 @@ WHEN MATCHED AND
 	t.[IsActive]		<>	s.[IsActive]		OR
 	t.[Label]			<>	s.[Label]			OR
 	t.[ForDebit]		<>	s.[ForDebit]		OR
-	t.[ForCredit]		<>	s.[ForCredit]
+	t.[ForCredit]		<>	s.[ForCredit]		OR
+	t.[EffectiveDate]	<>	s.[EffectiveDate]	OR
+	t.[ExpiryDate]		<>	s.[ExpiryDate]
 ) THEN
 UPDATE SET
 	t.[Node]			=	s.[Node], 
@@ -206,12 +210,14 @@ UPDATE SET
 	t.[Label]			=	s.[Label], 
 	t.[ForDebit]		=	s.[ForDebit],
 	t.[ForCredit]		=	s.[ForCredit],
+	t.[EffectiveDate]	=	s.[EffectiveDate],
+	t.[ExpiryDate]		=	s.[ExpiryDate],
 	t.[ModifiedAt]		=	@Now,
 	t.[ModifiedById]	=	@UserId
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[Id], [Node],		[IFRSType], [IsAggregate], [IsActive],		[Label], [ForDebit], [ForCredit], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-    VALUES (@TenantId, s.[Id], s.[Node], s.[IFRSType], s.[IsAggregate], s.[IsActive], s.[Label], s.[ForDebit], s.[ForCredit], @Now,		@UserId,		@Now,		@UserId)
+    INSERT ([TenantId],	[Id], [Node],		[IFRSType], [IsAggregate], [IsActive],		[Label], [ForDebit], [ForCredit], [EffectiveDate], [ExpiryDate], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+    VALUES (@TenantId, s.[Id], s.[Node], s.[IFRSType], s.[IsAggregate], s.[IsActive], s.[Label], s.[ForDebit], s.[ForCredit], s.[EffectiveDate], s.[ExpiryDate], @Now,		@UserId,		@Now,		@UserId)
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 ;

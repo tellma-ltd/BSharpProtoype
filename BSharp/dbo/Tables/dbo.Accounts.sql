@@ -10,6 +10,7 @@
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
+	[Name3]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
 /*
 	An application-wide settings specify whether to activate the following columns:
@@ -60,7 +61,7 @@
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
-	CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__IFRSAccountId] FOREIGN KEY ([TenantId], [IFRSAccountId]) REFERENCES [dbo].[IFRSAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__IFRSNoteId] FOREIGN KEY ([TenantId], [IFRSNoteId]) REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResponsibilityCenterId] FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
