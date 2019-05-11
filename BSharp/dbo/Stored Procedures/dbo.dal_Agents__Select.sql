@@ -3,10 +3,21 @@
 	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @ResultsJson = (
-		SELECT [Id], [PersonType], [Name], [Name2], [Code], [BirthDateTime], IsActive, [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById],
-				[IsRelated], [TaxIdentificationNumber], [Title], [Gender], N'Unchanged' As [EntityState]
+		SELECT
+			-- Common
+			[Id], [IsActive], [Name], [Name2], [Name3], [Code], [SystemCode],
+			[PersonType], [IsRelated], [TaxIdentificationNumber], [IsLocal], [Citizenship],
+			[Facebook], [Instagram], [Twitter], [PreferredContactChannel1], [PreferredContactAddress1],
+			[PreferredContactChannel2], [PreferredContactAddress2],
+			[BankId], [BankAccountNumber],
+			-- Individuals Only
+			[BirthDateTime], [TitleId], [Gender], [ResidentialAddress], [ImageId],
+			[MaritalStatus], [NumberOfChildren], [Religion], [Race], [TribeId], [RegionId],	[EducationLevelId], [EducationSublevelId],
+			--	Organizations only
+			[OrganizationType], [WebSite], [ContactPerson], [RegisteredAddress], [OwnershipType], [OwnershipPercent],
+			[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById],
+			N'Unchanged' As [EntityState]
 		FROM [dbo].[Agents]
-		WHERE [RelationType] = N'Agent'
-		AND [Id] IN (SELECT [Id] FROM @Ids)
+		WHERE [Id] IN (SELECT [Id] FROM @Ids)
 		FOR JSON PATH
 	);

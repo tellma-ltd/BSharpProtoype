@@ -72,3 +72,13 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__SystemCode]
   ON [dbo].[Resources]([TenantId], [SystemCode]) WHERE [SystemCode] IS NOT NULL;
 GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+GO

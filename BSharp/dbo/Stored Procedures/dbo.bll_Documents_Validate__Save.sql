@@ -29,10 +29,10 @@ SET NOCOUNT ON;
 	-- (FE Check, DB IU trigger) Cannot save unless in draft mode
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Mode' As [Key], N'Error_CannotSaveADocumentIn0Mode' As [ErrorName],
-		BE.[Mode] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		BE.[DocumentState] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.Mode <> N'Draft')
+	WHERE (BE.[DocumentState] <> N'Draft')
 	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- No inactive account
@@ -43,7 +43,7 @@ SET NOCOUNT ON;
 		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE (A.IsActive = 0);
 
@@ -84,9 +84,9 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
+	JOIN dbo.[IFRSAccounts] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
 	WHERE (E.[Reference] IS NULL)
-	AND (AM.ReferenceLabel IS NOT NULL)
+	AND (AM.ReferenceSetting = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 		-- RelatedReference is required for selected account and direction, 

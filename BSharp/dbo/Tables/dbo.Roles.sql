@@ -21,6 +21,19 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Roles__Name2]
   ON [dbo].[Roles]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Roles__Name3]
+  ON [dbo].[Roles]([TenantId] ASC, [Name3] ASC) WHERE [Name3] IS NOT NULL;
+GO
 CREATE UNIQUE INDEX [IX_Roles__Code]
   ON [dbo].[Roles]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+GO
+ALTER TABLE [dbo].[Roles] ADD CONSTRAINT [DF_Roles__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[Roles] ADD CONSTRAINT [DF_Roles__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[Roles] ADD CONSTRAINT [DF_Roles__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[Roles] ADD CONSTRAINT [DF_Roles__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[Roles] ADD CONSTRAINT [DF_Roles__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

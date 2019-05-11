@@ -1,16 +1,11 @@
 ﻿CREATE FUNCTION [dbo].[fn_FunctionalCurrency]()
-RETURNS int
+RETURNS INT
 AS
 BEGIN
-	DECLARE @Result int
+	DECLARE @Result INT;
 
-	SELECT @Result = R.Id
-	FROM [dbo].Resources R
-	WHERE SystemCode = N'FunctionalCurrency'
-
-/*	
 	SELECT @Result = FunctionalCurrencyId
 	FROM dbo.Settings
-*/
+	
 	RETURN @Result;
 END;

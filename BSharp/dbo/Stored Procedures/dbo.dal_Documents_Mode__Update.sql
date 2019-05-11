@@ -8,12 +8,12 @@ BEGIN
 
 	UPDATE dbo.Documents
 	SET
-		[Mode] = @Mode,
+		[DocumentState] = @Mode,
 		[AssigneeId] = CASE WHEN @Mode = N'Draft' THEN @UserId ELSE NULL END,
 		ModifiedAt = @Now,
 		ModifiedById = @UserId
 	WHERE [Id] IN (
 		SELECT [Id] FROM @Documents
 	)
-	AND [Mode] <> @Mode;
+	AND [DocumentState] <> @Mode;
 END;

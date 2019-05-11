@@ -2,7 +2,7 @@
 RETURNS TABLE
 AS
 RETURN
-	SELECT A.Comment, A.AssignedBy, A.[CreatedAt], D.DocumentType, D.SerialNumber
+	SELECT A.Comment, A.AssignedBy, A.[CreatedAt], D.[TransactionType], D.SerialNumber
 	FROM [dbo].Documents D
 	JOIN dbo.[DocumentAssignmentsHistory] A ON A.DocumentId = D.Id
 	WHERE A.AssigneeId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));

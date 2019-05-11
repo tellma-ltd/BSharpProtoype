@@ -1,9 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[dal_Employees__Save]
-	@Entities [EmployeeList] READONLY,
+﻿CREATE PROCEDURE [dbo].[dal_Agents__Save]
+	@Entities [AgentList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
@@ -17,7 +16,7 @@ AS
 	(
 		MERGE INTO [dbo].[Agents] AS t
 		USING (
-			SELECT [Index], [Id], [Name], [Name2], [Code], [SystemCode], [IsRelated], [TaxIdentificationNumber],
+			SELECT [Index], [Id], [Name], [Name2], [Code], [SystemCode], [PersonType], [IsRelated], [TaxIdentificationNumber],
 				[IsLocal], [Citizenship], [Facebook], [Instagram], [Twitter],
 				[PreferredContactChannel1], [PreferredContactAddress1], [PreferredContactChannel2], [PreferredContactAddress2],
 				[BirthDateTime], [MaritalStatus], [Religion], [Race], [Gender], [TribeId], [RegionId], [ResidentialAddress], [Title],
@@ -32,6 +31,7 @@ AS
 				t.[Name]					= s.[Name],
 				t.[Name2]					= s.[Name2],
 				t.[Code]					= s.[Code],
+				t.[PersonType]				= s.[PersonType], 
 
 				t.[IsRelated]				= s.[IsRelated],
 				t.[TaxIdentificationNumber] = s.[TaxIdentificationNumber],
@@ -53,12 +53,10 @@ AS
 				t.[TribeId]					= s.[TribeId],
 				t.[RegionId]				= s.[RegionId],
 				t.[ResidentialAddress]		= s.[ResidentialAddress],
-				t.[Title]					= s.[Title],
+				t.[TitleId]					= s.[TitleId],
 
-				t.[JobTitle]				= s.[JobTitle],
-				t.[EmployeeSince]			= s.[EmployeeSince],
-				t.[EducationLevel]			= s.[EducationLevel],
-				t.[EducationSublevel]		= s.[EducationSublevel],
+				t.[EducationLevelId]		= s.[EducationLevelId],
+				t.[EducationSublevelId]		= s.[EducationSublevelId],
 				t.[BankId]					= s.[BankId],
 				t.[BankAccountNumber]		= s.[BankAccountNumber],
 				t.[NumberOfChildren]		= s.[NumberOfChildren],
@@ -66,23 +64,18 @@ AS
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedById]			= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [RelationType], [PersonType], 
+			INSERT ([PersonType], 
 				[Name], [Name2], [Code], [SystemCode], [IsRelated], [TaxIdentificationNumber],
 				[IsLocal], [Citizenship], [Facebook], [Instagram], [Twitter],
 				[PreferredContactChannel1], [PreferredContactAddress1], [PreferredContactChannel2], [PreferredContactAddress2],
-				[BirthDateTime], [MaritalStatus], [Religion], [Race], [Gender], [TribeId], [RegionId], [ResidentialAddress], [Title],
-				[JobTitle], [EmployeeSince], [EducationLevel], [EducationSublevel], [BankId], [BankAccountNumber], [NumberOfChildren],
-				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, N'employee',	N'Individual', 
+				[BirthDateTime], [MaritalStatus], [Religion], [Race], [Gender], [TribeId], [RegionId], [ResidentialAddress], [TitleId],
+				[EducationLevelId], [EducationSublevelId], [BankId], [BankAccountNumber], [NumberOfChildren])
+			VALUES (s.[PersonType],
 				s.[Name], s.[Name2], s.[Code], s.[SystemCode], s.[IsRelated], s.[TaxIdentificationNumber],
 				s.[IsLocal], s.[Citizenship], s.[Facebook], s.[Instagram], s.[Twitter],
 				s.[PreferredContactChannel1], s.[PreferredContactAddress1], s.[PreferredContactChannel2], s.[PreferredContactAddress2],
-				s.[BirthDateTime], s.[MaritalStatus], s.[Religion], s.[Race], s.[Gender], s.[TribeId], s.[RegionId], s.[ResidentialAddress], s.[Title],
-				s.[JobTitle], s.[EmployeeSince], s.[EducationLevel], s.[EducationSublevel], s.[BankId], s.[BankAccountNumber], s.[NumberOfChildren],
-				@Now, @UserId, @Now, @UserId)
+				s.[BirthDateTime], s.[MaritalStatus], s.[Religion], s.[Race], s.[Gender], s.[TribeId], s.[RegionId], s.[ResidentialAddress], s.[TitleId],
+				s.[EducationLevelId], s.[EducationSublevelId], s.[BankId], s.[BankAccountNumber], s.[NumberOfChildren])
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
-	/*	[BasicSalary]				MONEY,
-	[TransporationAllowance]	MONEY,
-	[OvertimeRate]				MONEY, */
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds	FOR JSON PATH);

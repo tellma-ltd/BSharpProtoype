@@ -6,20 +6,15 @@ RETURNS TABLE
 AS 
 RETURN
 	WITH
-	IFRS_PPE AS (
+	IFRS_PPE_Root AS (
 		SELECT [Node] 
 		FROM dbo.[IFRSAccounts] WHERE [Id] = N'PropertyPlandAndEquipment'
 	),
 	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts A
+		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
-		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_PPE))	= 1
-	), /*
-	-- To avoid IFRS, we need to define an account type, which is already there:
-	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts
-		WHERE AccountType = N'PropertyPlandAndEquipment'
-	), */
+		WHERE I.[Node].IsDescendantOf((SELECT FIRST_VALUE([Node]) FROM IFRS_PPE_Root)) = 1
+	),
 	OpeningBalances AS (
 		SELECT
 			J.ResourceId,

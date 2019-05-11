@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[bll_Employees_Validate__Save]
-	@Entities [EmployeeList] READONLY,
+﻿CREATE PROCEDURE [dbo].[bll_Agents_Validate__Save]
+	@Entities [AgentList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

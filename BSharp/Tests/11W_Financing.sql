@@ -31,7 +31,7 @@ END;
 DELETE FROM @Docs;
 INSERT INTO @Docs([Index], [Id]) 
 SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
-WHERE [Mode] = N'Draft';
+WHERE [DocumentState] = N'Draft';
 
 EXEC [dbo].[api_Documents__Post]
 	@Documents = @Docs,

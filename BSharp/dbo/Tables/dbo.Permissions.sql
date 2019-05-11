@@ -7,7 +7,7 @@
 	[Criteria]		NVARCHAR(1024), -- compiles into LINQ expression to filter the applicability
 	[Memo]			NVARCHAR(255),
 	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]		INT		NOT NULL,
+	[CreatedById]	INT		NOT NULL,
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]	INT		NOT NULL,
 	CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
@@ -18,4 +18,14 @@
 );
 GO
 CREATE INDEX [IX_Permissions__RoleId] ON [dbo].[Roles]([TenantId] ASC, [Id] ASC);
+GO
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

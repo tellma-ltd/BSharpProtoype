@@ -6,7 +6,7 @@
 AS
 BEGIN
 	DECLARE @IndexedIds [dbo].[IndexedIdList], @LinesIndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
+
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
@@ -23,7 +23,7 @@ BEGIN
 	--DELETE FROM [dbo].Lines
 	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
 
-	DELETE FROM [dbo].[Entries]
+	DELETE FROM [dbo].[TransactionEntries]
 	WHERE [Id] IN (SELECT [Id] FROM @Entries WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
@@ -43,24 +43,27 @@ BEGIN
 		WHEN MATCHED
 		THEN
 			UPDATE SET
-				t.[State]				= s.[State],
+				t.[DocumentType]				= s.[State],
 				t.[Frequency]			= s.[Frequency],
 				t.[Repetitions]			= s.[Duration],
-				t.[StartDateTime]		= s.[StartDateTime],
-				t.[EndDateTime]			= s.[EndDateTime],
+				t.[DocumentDate]		= s.[StartDateTime],
+				t.[EndDate]			= s.[EndDateTime],
 				t.[ModifiedAt]			= @Now,
 				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId],[State], [DocumentType], [Frequency], [Repetitions], [StartDateTime], [EndDateTime], [SerialNumber], 
-				[AssigneeId], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
+				[DocumentType], [TransactionType], [Frequency], [Repetitions], [DocumentDate], [EndDate], [SerialNumber]
 			)
 			VALUES (
-				@TenantId, s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber], 
-				@UserId,		@Now,		@UserId,	@Now,			@UserId
+				s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
+	-- Assign the new ones to self
+	INSERT INTO dbo.DocumentAssignments(DocumentId, AssigneeId)
+	SELECT Id, @UserId
+	FROM @IndexedIds
+
 
 	--MERGE INTO [dbo].[Lines] AS t
 	--USING (
@@ -80,7 +83,7 @@ BEGIN
 	--	INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 	--	VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
 
-	MERGE INTO [dbo].[Entries] AS t
+	MERGE INTO [dbo].[TransactionEntries] AS t
 	USING (
 		SELECT
 			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[ResponsibilityCenterId], E.[Reference],
@@ -108,14 +111,12 @@ BEGIN
 			t.[ModifiedAt]				= @Now,
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [DocumentId], [LineType], [ResponsibilityCenterId], [Reference],
+		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId], [Reference],
 				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IFRSNoteId],
-				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount],
-				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-		VALUES (@TenantId, s.[DocumentId], s.[LineType], s.[ResponsibilityCenterId], s.[Reference],
+				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
+		VALUES (s.[DocumentId], s.[LineType], s.[ResponsibilityCenterId], s.[Reference],
 				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[NoteId],
-				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount],
-				@Now, @UserId, @Now, @UserId);
+				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;

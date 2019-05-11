@@ -15,7 +15,7 @@ DECLARE @VR1_2 VTYPE, @VRU_3 VTYPE, @Frequency NVARCHAR(255), @P1_2 int, @P1_U i
 		--:r .\14_SalesCycle.sql
 		--:r .\12_ManualMisc.sql
 SELECT @fromDate = '2017.01.01', @toDate = '2017.01.31'
-select [ResponsibilityCenterId], [AgentId], sum([MoneyAmount]) from entries
+select [ResponsibilityCenterId], [AgentId], sum([MoneyAmount]) from [TransactionEntries]
 group by rollup([ResponsibilityCenterId], [AgentId])
 order by [ResponsibilityCenterId], [AgentId]
 --SELECT * from [fi_Journal](@fromDate, @toDate) ORDER BY [Id], [EntryId];

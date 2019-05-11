@@ -8,4 +8,4 @@
 	[CreatedById]	INT					NOT NULL,
 	CONSTRAINT [PK_Reconciliation] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC)
 );
--- Add Foreign keys to table entries and indexes as well
+-- TODO: Add Foreign keys to table entries and indexes as well

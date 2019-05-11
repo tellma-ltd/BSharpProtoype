@@ -1,4 +1,5 @@
-﻿CREATE FUNCTION [dbo].[fi_Account__Statement] (-- SELECT * FROM [dbo].[ft_Account__Statement](N'CashOnHand', '01.01.2015', '01.01.2020')
+﻿CREATE FUNCTION [dbo].[fi_Account__Statement] (
+-- SELECT * FROM [dbo].[ft_Account__Statement](104, '01.01.2015', '01.01.2020')
 	@AccountId INT,
 	@ResponsibilityCenterId INT = NULL,
 	@AgentAccountId INT = NULL,
@@ -10,11 +11,10 @@ AS
 RETURN
 	SELECT 	
 		[DocumentId],
-		[DocumentType],
+		[TransactionType],
 		[SerialNumber] As [Serial Number],
-		[DocumentDateTime],
+		[DocumentDate],
 		[EntryId],
-		[LineType],
 		[Direction],
 		[AccountId],
 		[ResponsibilityCenterId],

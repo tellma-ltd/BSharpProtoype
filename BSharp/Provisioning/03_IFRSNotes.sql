@@ -16,7 +16,8 @@ DECLARE @IFRSNotes AS TABLE (
 );
 
 INSERT INTO @IFRSNotes([IFRSType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES
-('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
+('Extension', 1, 1, 1, '/0/', '', '')
+,('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/1/', 'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment', 'Additions other than through business combinations, property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/2/', 'AcquisitionsThroughBusinessCombinationsPropertyPlantAndEquipment', 'Acquisitions through business combinations, property, plant and equipment')
 ,('Regulatory', 1, 1, 1, '/1/3/', 'IncreaseDecreaseThroughNetExchangeDifferencesPropertyPlantAndEquipment', 'Increase (decrease) through net exchange differences, property, plant and equipment')

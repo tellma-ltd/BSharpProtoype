@@ -3,7 +3,7 @@
 	[Id]						INT					IDENTITY,
 	[AgentId]					INT					NOT NULL,
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
-	[AgentAccountType]			NVARCHAR (255)		NOT NULL,
+	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
@@ -16,11 +16,11 @@
 	[BasicSalary]				MONEY,			-- As of now, typically part of direct labor expenses
 	[TransporationAllowance]	MONEY,			-- As of now, typically part of overhead expenses.
 	[OvertimeRate]				MONEY,			-- probably better moved to a template table
+	[PerDiemRate]				MONEY,			-- probably better moved to a template table
 --	supplier-accounts
-	-- for the supplier in general
 	[SupplierRating]			INT,			-- user defined list
 	[PaymentTerms]				NVARCHAR(255),
-	-- details per account, e.g., PO, LC, etc...
+	-- extra details PO, LC, etc...
 
 --	customer-accounts
 	[CustomerRating]			INT,			-- user defined list
@@ -34,27 +34,29 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_AgentAccounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [CK_AgentAccounts_AgentAccountType] CHECK ([AgentAccountType] IN (
-			N'investor-accounts', N'investment-accounts' ,
-			N'cash-accounts', N'bank-accounts', N'customer-accounts', N'supplier-accounts',
-			N'employee-accounts', N'loans', N'borrowings', N'storage-locations',
-			N'employer-accounts'
+	CONSTRAINT [FK_AgentAccounts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_AgentAccounts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [CK_AgentAccounts_AgentRelationType] CHECK ([AgentRelationType] IN (
+			N'investor', N'investment' ,
+			N'cash', N'bank', N'customer', N'supplier',
+			N'employee', N'debtor', N'creditor', N'custodian',
+			N'employer'
 	)),
-	/*
-		Agent Account type		UDL (can only have ONE default account per (agent, account type)
-		N'investor-accounts'	-- Default
-		N'investment-accounts'	-- Default, per investment contract
-		N'cash-accounts'		-- Petty cash, POS cash, Imprest fund
-		N'bank-accounts'		-- Checking, Savings, etc..
-		N'customer-accounts'	-- Default, per Sales order, per lease out, ...
-		N'supplier-accounts'	-- Default, per Purchase Order, per LC, per lease in
-		N'employee-accounts'	-- Default, per Contract
-		N'loans'				-- per Loan
-		N'borrowings'			-- per Loan
-		N'storage-locations'	-- per storage location. Use the code to define the location structure
-								-- Includes warehouse/aisles/shelves/bins, factory/line/unit, farm/zone/..
-		N'employer-accounts'	-- Default, per contract
-								-- used for companies providing outsourcing services
+/*
+	Agent Relation type		UDL (can only have ONE default account per (agent, relation type)
+		N'investor'			-- Default
+		N'investment'		-- Default, per investment contract
+		N'cash'				-- Default, per cash bag
+		N'bank'				-- Default, per bank account
+		N'customer'			-- Default, per Sales order, per lease out, ...
+		N'supplier'			-- Default, per Purchase Order, per LC, per lease in
+		N'employee'			-- Default, per Contract
+		N'debtor'			-- Default, per Loan
+		N'creditor'			-- Default, per borrowing
+		N'custodian'		-- Default, per storage location. Use the code to define the location structure
+							-- Includes warehouse/aisles/shelves/bins, factory/line/unit, farm/zone/..
+		N'employer'			-- Default, per contract
+							-- used for companies providing outsourcing services
 		)),
 	*/
 );

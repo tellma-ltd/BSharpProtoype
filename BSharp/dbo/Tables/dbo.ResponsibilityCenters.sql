@@ -38,6 +38,7 @@ Produced = Sold + Closing - Opening
 	[ResponsibilityCenterType]	NVARCHAR (255)		NOT NULL, -- Investment, Profit, Revenue, Cost
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
+	[Name3]						NVARCHAR (255),
 -- (IFRS 8) Profit or Investment Center, Performance regularly reviewed by CODM, discrete financial information is available
 	[IsOperatingSegment]		BIT					NOT NULL DEFAULT (0), -- on each path from root to leaf, at most one O/S
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
@@ -66,6 +67,19 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name2]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name3]
+  ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name3] ASC) WHERE [Name3] IS NOT NULL;
+GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Code]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+GO
+ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

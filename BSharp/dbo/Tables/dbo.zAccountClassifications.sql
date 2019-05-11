@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[AccountClassifications]
+﻿CREATE TABLE [dbo].[zAccountClassifications]
 (
 	[TenantId]					INT,
 	[AccountClassificationNode]	HIERARCHYID,
@@ -19,9 +19,9 @@
 	[ModifiedById]				INT					NOT NULL,
 );
 GO
-ALTER TABLE [dbo].[AccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+ALTER TABLE [dbo].[zAccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
 GO
-ALTER TABLE [dbo].[AccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+ALTER TABLE [dbo].[zAccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[AccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[zAccountClassifications] ADD CONSTRAINT [DF_AccountClassifications__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO

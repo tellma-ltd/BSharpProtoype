@@ -13,10 +13,10 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].StartDateTime' As [Key], N'Error_TheDocumentDate0FallsBefore1ArchiveDate' As [ErrorName],
-		BE.[StartDateTime] AS Argument1, @ArchiveDate AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		BE.[DocumentDate] AS Argument1, @ArchiveDate AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.StartDateTime < @ArchiveDate)
+	WHERE (BE.[DocumentDate] < @ArchiveDate)
 
 	-- Cannot unpost if not the user who posted
 
@@ -28,7 +28,7 @@ SET NOCOUNT ON;
 		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE (A.IsActive = 0);
 
@@ -40,7 +40,7 @@ SET NOCOUNT ON;
 		D.SerialNumber AS Argument1, N.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
 	WHERE (N.IsActive = 0);
 

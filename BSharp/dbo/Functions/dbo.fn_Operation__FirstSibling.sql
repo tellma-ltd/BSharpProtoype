@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fn_Operation__FirstSibling] (
+﻿CREATE FUNCTION [dbo].[fn_Operation__FirstSibling] ( -- TODO: still needed?
 	@OperationId int
 )
 RETURNS INT

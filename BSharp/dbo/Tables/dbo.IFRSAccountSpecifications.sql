@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[IFRSAccountSpecifications] (
+﻿CREATE TABLE [dbo].[IFRSAccountSpecifications] ( -- might be obsolete
 	[TenantId]						INT,
 	[IFRSAccountConcept]			NVARCHAR (255),
 	-------------------------------------------------

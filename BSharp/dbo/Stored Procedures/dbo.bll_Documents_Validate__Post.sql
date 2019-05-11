@@ -10,10 +10,10 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Mode' As [Key], N'Error_TheDocument0IsIn1Mode' As [ErrorName],
-		BE.[SerialNumber] AS Argument1, BE.[Mode] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		BE.[SerialNumber] AS Argument1, BE.[DocumentState] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.Mode <> N'Draft');
+	WHERE (BE.[DocumentState] <> N'Draft');
 
 	-- Cannot post with no lines
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
@@ -21,7 +21,7 @@ SET NOCOUNT ON;
 		D.[SerialNumber] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE 
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	LEFT JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	LEFT JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	WHERE (E.DocumentId IS NULL);
 
 	-- Cannot post a non-balanced transaction
@@ -32,7 +32,7 @@ SET NOCOUNT ON;
 		D.[SerialNumber] AS Argument1, SUM(E.[Direction] * E.[Value]) AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	GROUP BY FE.[Index], D.[SerialNumber]
 	HAVING SUM(E.[Direction] * E.[Value]) <> 0;
 
@@ -44,7 +44,7 @@ SET NOCOUNT ON;
 		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON D.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE (A.IsActive = 0);
 	
@@ -56,7 +56,7 @@ SET NOCOUNT ON;
 		D.SerialNumber AS Argument1, N.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[Entries] E ON FE.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
 	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
 	WHERE (N.IsActive = 0);
 

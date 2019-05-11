@@ -13,7 +13,7 @@ RETURN
 		J.[RelatedMoneyAmount] As [Taxable Amount], 
 		J.[MoneyAmount] As [Tax Withheld], 
 		J.[Reference] As [Receipt Number], 
-		J.DocumentDateTime As [Receipt Date]
+		J.DocumentDate As [Receipt Date]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id

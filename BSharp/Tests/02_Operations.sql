@@ -79,7 +79,7 @@ WSI
 	END
 
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson)
+		SELECT * FROM [dbo].[fr_ResponsibilityCenters__Json](@ResultsJson)
 END
 BEGIN
 	DELETE FROM @OperationsDTO;
@@ -113,7 +113,7 @@ BEGIN
 		GOTO Err_Label;
 	END
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_ResponsibilityCenters__Json](@ResultsJson);
 END
 SELECT
 	@WSI = (SELECT [Id] FROM [dbo].[ResponsibilityCenters] WHERE [Name] = N'Walia Steel Industry'),
@@ -125,18 +125,18 @@ EXEC api_Operation__SetOperatingSegment
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_ResponsibilityCenters__Json](@ResultsJson);
 
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = @Existing,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_ResponsibilityCenters__Json](@ResultsJson);
 
 EXEC api_Operation__SetOperatingSegment
 	@OperationId = @WSI,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT;
 	IF @DebugOperations = 1
-		SELECT * FROM [dbo].[fr_Operations__Json](@ResultsJson);
+		SELECT * FROM [dbo].[fr_ResponsibilityCenters__Json](@ResultsJson);
