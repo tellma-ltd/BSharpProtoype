@@ -17,7 +17,6 @@
 	[HourlyOvertimeRate]	MONEY,
 	[DailyPerDiem]			MONEY,
 
-
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]			INT					NOT NULL,
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 

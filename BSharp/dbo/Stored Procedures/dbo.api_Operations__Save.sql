@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Operations__Save]
-	@Entities [OperationList] READONLY,
+	@Entities [ResponsibilityCenterList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultsJson NVARCHAR(MAX) OUTPUT

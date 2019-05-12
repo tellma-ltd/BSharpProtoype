@@ -125,7 +125,7 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Agents__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_MeasurementUnits__Activate.sql" />
-    <Build Include="dbo\User Defined Types\dbo.OperationList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ResponsibilityCenterList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Operations_Validate__Save.sql" />
@@ -138,8 +138,8 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources_Validate__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.LineList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.TransactionList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
@@ -195,9 +195,8 @@
     <Build Include="dbo\Functions\dbo.fi_Paysheet.sql" />
     <Build Include="dbo\Functions\dbo.fi_ERCA__VAT_SalesSummary.sql" />
     <Build Include="dbo\User Defined Types\dbo.AccountList.sql" />
-    <Build Include="dbo\Tables\dbo.IFRSAccountSpecifications.sql" />
     <Build Include="dbo\Functions\dbo.fn_User__Language.sql" />
-    <Build Include="dbo\User Defined Types\dbo.UserList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.LocalUserList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Unpost.sql" />
@@ -237,7 +236,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Views__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Views__Save.sql" />
     <Build Include="dbo\Tables\dbo.TransactionEntries.sql" />
-    <Build Include="dbo\User Defined Types\dbo.EntryList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.TransactionEntryList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Select.sql" />
     <Build Include="dbo\Tables\dbo.RoleMemberships.sql" />
     <Build Include="dbo\Tables\dbo.Accounts.sql" />
@@ -251,7 +250,6 @@
     <Build Include="dbo\Views\dbo.TransactionEntriesView.sql" />
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
     <Build Include="dbo\Functions\dbo.fi_BankAccountsBalances.sql" />
-    <Build Include="dbo\Tables\dbo.zAccountClassifications.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_IFRSNotes__Activate.sql" />

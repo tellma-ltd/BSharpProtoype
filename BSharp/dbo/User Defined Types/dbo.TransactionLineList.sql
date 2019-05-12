@@ -1,10 +1,10 @@
-﻿CREATE TYPE [dbo].[LineList] AS TABLE (
+﻿CREATE TYPE [dbo].[TransactionLineList] AS TABLE (
 	[Index]					INT,
 	[DocumentIndex]			INT				NOT NULL,
 	[Id]					INT,
 	[DocumentId]			INT,
-	[LineType]				NVARCHAR(255)	NOT NULL,
-	[BaseLineId]			INT,
+	[TransactionLineType]	NVARCHAR(255)	NOT NULL,
+	[TemplateLineId]		INT,
 	[ScalingFactor]			FLOAT,
 	[Memo]					NVARCHAR (255),
 	

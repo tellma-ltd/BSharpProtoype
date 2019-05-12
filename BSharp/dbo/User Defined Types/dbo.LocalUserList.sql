@@ -1,8 +1,9 @@
-﻿CREATE TYPE [dbo].[UserList] AS TABLE (
+﻿CREATE TYPE [dbo].[LocalUserList] AS TABLE (
 	[Index]				INT,
 	[Id]				INT,
 	[Name]				NVARCHAR (255)	NOT NULL,
 	[Name2]				NVARCHAR (255),
+	[Name3]				NVARCHAR (255),
 	[PreferredLanguage] NCHAR(2)		NOT NULL DEFAULT (N'en'), 
 	[ProfilePhoto]		VARBINARY (MAX),
 	[AgentId]			INT,

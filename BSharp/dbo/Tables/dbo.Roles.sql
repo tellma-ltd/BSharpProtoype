@@ -3,6 +3,7 @@
 	[Id]						INT					IDENTITY,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
+	[Name3]						NVARCHAR (255),
 	[IsPublic]					BIT					NOT NULL CONSTRAINT [DF_Roles_IsPublic] DEFAULT (0),		
 	[IsActive]					BIT					NOT NULL CONSTRAINT [DF_Roles_IsActive] DEFAULT (1),
 	[Code]						NVARCHAR (255),

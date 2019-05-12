@@ -31,17 +31,32 @@
 	[AgentAccountLabel2]		NVARCHAR (255),
 	[AgentAccountLabel3]		NVARCHAR (255),
 
-	[ReferenceSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
-	[ReferenceLabel]			NVARCHAR (255),
-	[ReferenceLabel2]			NVARCHAR (255),
-	[ReferenceLabel3]			NVARCHAR (255),
-
 	[ResourceSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[ResourceTypeList]			NVARCHAR (1024),	
 --	[ResourceFilter]			NVARCHAR (1024),
 	[ResourceLabel]				NVARCHAR (255),
 	[ResourceLabel2]			NVARCHAR (255),
 	[ResourceLabel3]			NVARCHAR (255),
+
+	[DebitReferenceSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[DebitReferenceLabel]		NVARCHAR (255),
+	[DebitReferenceLabel2]		NVARCHAR (255),
+	[DebitReferenceLabel3]		NVARCHAR (255),
+
+	[CreditReferenceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[CreditReferenceLabel]		NVARCHAR (255),
+	[CreditReferenceLabel2]		NVARCHAR (255),
+	[CreditReferenceLabel3]		NVARCHAR (255),
+
+	[DebitRelatedReferenceSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[DebitRelatedReferenceLabel]		NVARCHAR (255),
+	[DebitRelatedReferenceLabel2]		NVARCHAR (255),
+	[DebitRelatedReferenceLabel3]		NVARCHAR (255),
+
+	[CreditRelatedReferenceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[CreditRelatedReferenceLabel]		NVARCHAR (255),
+	[CreditRelatedReferenceLabel2]		NVARCHAR (255),
+	[CreditRelatedReferenceLabel3]		NVARCHAR (255),
 
 	[RelatedResourceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[RelatedResourceTypeList]	NVARCHAR (1024),	

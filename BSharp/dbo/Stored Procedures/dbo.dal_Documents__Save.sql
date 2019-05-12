@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents [dbo].[DocumentList] READONLY, 
-	@Lines [dbo].[LineList] READONLY, 
-	@Entries [dbo].[EntryList] READONLY,
+	@Documents [dbo].[TransactionList] READONLY, 
+	@Lines [dbo].[TransactionLineList] READONLY, 
+	@Entries [dbo].[TransactionEntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN

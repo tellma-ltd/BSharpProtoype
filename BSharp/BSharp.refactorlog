@@ -448,4 +448,53 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[AgentRelationTypeList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="4ce0eaee-3f4a-4939-a195-adcaa60bf9e9" ChangeDateTime="05/12/2019 11:28:27">
+    <Property Name="ElementName" Value="[dbo].[EntryList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionEntryList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1ca72c0b-9ac0-4ff5-8a16-50bcb817f0dd" ChangeDateTime="05/12/2019 11:30:03">
+    <Property Name="ElementName" Value="[dbo].[CK_Documents_State]" />
+    <Property Name="ElementType" Value="SqlCheckConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CK_Documents_DocumentType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e912b3ec-14a8-448d-8893-becd61552f55" ChangeDateTime="05/12/2019 11:31:27">
+    <Property Name="ElementName" Value="[dbo].[DocumentList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="28d7348d-76b6-4984-9830-58124f956c27" ChangeDateTime="05/12/2019 12:01:28">
+    <Property Name="ElementName" Value="[dbo].[LineList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionLineList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9f5c6169-6c8f-4dcd-b538-22b30203f259" ChangeDateTime="05/12/2019 12:05:49">
+    <Property Name="ElementName" Value="[dbo].[OperationList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ResponsibilityCenterList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="859844f2-98b6-4e9e-81fe-2ce99a1c78dc" ChangeDateTime="05/12/2019 12:11:26">
+    <Property Name="ElementName" Value="[dbo].[ResponsibilityCenters].[ResponsibilityCenterType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ResponsibilityCenters]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ResponsibilityDomain]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="576dada7-f2e2-49ce-ba47-10d06a04ac47" ChangeDateTime="05/12/2019 12:33:51">
+    <Property Name="ElementName" Value="[dbo].[UserList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[LocalUserList]" />
+  </Operation>
 </Operations>

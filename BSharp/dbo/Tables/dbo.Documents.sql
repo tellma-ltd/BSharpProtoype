@@ -47,7 +47,7 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId], [Id]), -- Voucher/Request/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
-	CONSTRAINT [CK_Documents_State] CHECK ([DocumentType] IN (N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template')),
+	CONSTRAINT [CK_Documents_DocumentType] CHECK ([DocumentType] IN (N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template')),
 	CONSTRAINT [CK_Documents_Frequency] CHECK (
 		[EndDate] =
 			CASE 
@@ -59,7 +59,7 @@
 				WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
 			END),
 	CONSTRAINT [CK_Documents_Duration] CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
-	CONSTRAINT [FK_Documents_DocumentType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
+	CONSTRAINT [FK_Documents_TransactionType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),
 	CONSTRAINT [FK_Documents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Documents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])

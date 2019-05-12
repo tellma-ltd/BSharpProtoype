@@ -1,15 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Save]
-	@Documents [dbo].[DocumentList] READONLY,
+	@Documents [dbo].[TransactionList] READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
-	@Lines [dbo].[LineList] READONLY, 
-	@Entries [dbo].[EntryList] READONLY,
+	@Lines [dbo].[TransactionLineList] READONLY, 
+	@Entries [dbo].[TransactionEntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
 	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
-	DECLARE @DocumentsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @EntriesLocal [dbo].[EntryList];
+	DECLARE @DocumentsLocal [dbo].[TransactionList], @LinesLocal [dbo].[TransactionLineList], @EntriesLocal [dbo].[TransactionEntryList];
 
 	EXEC [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
 		@Documents = @Documents,

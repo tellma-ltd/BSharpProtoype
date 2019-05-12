@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
-	@Documents [dbo].[DocumentList] READONLY, 
-	@Lines [dbo].[LineList] READONLY, 
-	@Entries [dbo].[EntryList] READONLY,
+	@Documents [dbo].[TransactionList] READONLY, 
+	@Lines [dbo].[TransactionLineList] READONLY, 
+	@Entries [dbo].[TransactionEntryList] READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@ResultJson NVARCHAR(MAX) OUTPUT
 AS

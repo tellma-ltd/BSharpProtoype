@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Save]
-	@Documents [dbo].[DocumentList] READONLY,
-	@Lines [dbo].LineList READONLY,
-	@Entries [dbo].[EntryList] READONLY,
+	@Documents [dbo].[TransactionList] READONLY,
+	@Lines [dbo].[TransactionLineList] READONLY,
+	@Entries [dbo].[TransactionEntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -84,9 +84,11 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.[IFRSAccounts] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
+	JOIN dbo.[Accounts] A On E.AccountId = A.Id
+	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
 	WHERE (E.[Reference] IS NULL)
-	AND (AM.ReferenceSetting = N'Required')
+	AND (E.[Direction] = 1 AND IA.[DebitReferenceSetting] = N'Required' OR
+		E.[Direction] = -1 AND IA.[CreditReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 		-- RelatedReference is required for selected account and direction, 
@@ -95,9 +97,11 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedReference' As [Key], N'Error_TheRelatedReferenceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
+	JOIN dbo.[Accounts] A On E.AccountId = A.Id
+	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
 	WHERE (E.[RelatedReference] IS NULL)
-	AND (AM.RelatedReferenceLabel IS NOT NULL)
+	AND (E.[Direction] = 1 AND IA.[DebitRelatedReferenceSetting] = N'Required' OR
+		E.[Direction] = -1 AND IA.[CreditRelatedReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- RelatedAgent is required for selected account and direction, 
@@ -106,9 +110,10 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAgentId' As [Key], N'Error_TheRelatedAgentIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
+	JOIN dbo.[Accounts] A On E.AccountId = A.Id
+	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
 	WHERE (E.[RelatedAgentAccountId] IS NULL)
-	AND (AM.RelatedAgentLabel IS NOT NULL)
+	AND (IA.[RelatedAgentSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- RelatedResource is required for selected account and direction, 
@@ -117,20 +122,22 @@ SET NOCOUNT ON;
 				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedResourceId' As [Key], N'Error_TheRelatedResourceIsNotSpecified' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
+	JOIN dbo.[Accounts] A On E.AccountId = A.Id
+	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
 	WHERE (E.[RelatedResourceId] IS NULL)
-	AND (AM.RelatedResourceLabel IS NOT NULL)
+	AND (IA.[RelatedResourceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
-	-- RelatedAmount is required for selected account and direction, 
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR(255)) + '].Entries[' +
-				CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Entries E
-	JOIN dbo.[IFRSAccountSpecifications] AM ON E.AccountId = AM.[IFRSAccountConcept] AND E.Direction = AM.Direction
-	WHERE (E.[RelatedMoneyAmount] IS NULL)
-	AND (AM.RelatedAmountLabel IS NOT NULL)
-	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	---- RelatedAmount is required for selected account and direction, 
+	--INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
+	--SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR(255)) + '].Entries[' +
+	--			CAST(E.[Index] AS NVARCHAR(255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
+	--			NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	--FROM @Entries E
+	--JOIN dbo.[Accounts] A On E.AccountId = A.Id
+	--JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	--WHERE (E.[RelatedMoneyAmount] IS NULL)
+	--AND (IA.[RelatedMoneyAmountSetting] = N'Required')
+	--AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);
