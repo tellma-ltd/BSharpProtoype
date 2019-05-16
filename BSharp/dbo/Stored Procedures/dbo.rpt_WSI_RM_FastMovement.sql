@@ -15,7 +15,7 @@ AS
 		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'RawMaterials')
 	),
 	RawMaterialAccounts AS (
-		SELECT [Id] FROM dbo.Accounts A
+		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_RM))	= 1
 	),/*

@@ -8,6 +8,9 @@ AS
 	FROM OpenJson(@Json)
 	WITH (
 		[FunctionalCurrencyId] INT '$.FunctionalCurrencyId',
+		[ArchiveDate] Date '$.ArchiveDate',
+		[TenantLanguage2] NVARCHAR(255) '$.TenantLanguage2',
+		[TenantLanguage3] NVARCHAR(255) '$.TenantLanguage3',
 		[CreatedAt] DATETIMEOFFSET(7) '$.CreatedAt',
 		[CreatedById] INT '$.CreatedById',
 		[ModifiedAt] DATETIMEOFFSET(7) '$.ModifiedAt',

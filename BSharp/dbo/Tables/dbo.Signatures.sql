@@ -13,5 +13,5 @@ CREATE INDEX [IX_Signatures__DocumentId] ON [dbo].[Signatures]([TenantId] ASC, [
 GO
 ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [SignedAt];
 GO
-ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignatoryId]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [SignatoryId]
+ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignatoryId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [SignatoryId]
 GO

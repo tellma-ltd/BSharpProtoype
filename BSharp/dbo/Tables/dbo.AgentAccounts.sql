@@ -5,7 +5,7 @@
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
-	[Name]						NVARCHAR (255)		NOT NULL,
+	[Name]						NVARCHAR (255)		NOT NULL DEFAULT (N''),
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
 	[Code]						NVARCHAR (255), -- location code for storage locations
@@ -27,7 +27,7 @@
 	[ShippingAddress]			NVARCHAR(255), -- default, the whole list is in a separate table
 	[BillingAddress]			NVARCHAR(255),
 
-	[CreditLine]				MONEY,
+	[CreditLine]				MONEY				DEFAULT(0),
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,

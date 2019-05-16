@@ -1,10 +1,8 @@
-﻿CREATE FUNCTION [dbo].[fi_WithholdingTaxOnPayment] (
+﻿CREATE PROCEDURE [dbo].[rpt_ERCA__WitholdingTaxOnPayment]
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
-)
-RETURNS TABLE 
 AS 
-RETURN
+BEGIN
 	SELECT
 		A.TaxIdentificationNumber As [Withholdee TIN],
 		A.[Name] As [Organization/Person Name],
@@ -18,5 +16,5 @@ RETURN
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
 	WHERE J.[IFRSAccountId] = N'CurrentWithholdingTaxPayable'
-	-- No IFRS?: J.AccountType = N'CurrentWithholdingTaxPayable'
 	AND J.Direction = -1;
+END;

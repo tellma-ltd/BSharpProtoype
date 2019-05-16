@@ -1,5 +1,5 @@
-﻿CREATE FUNCTION [dbo].[fi_Agents] (
-	@AgentRelationType NVARCHAR (255),
+﻿CREATE FUNCTION [dbo].[fi_Agents] ( -- SELECT * FROM dbo.fi_Agents(N'supploer', 0))
+	@AgentRelationType NVARCHAR (255) = NULL,
 	@IsActive BIT = NULL
 ) RETURNS TABLE
 AS

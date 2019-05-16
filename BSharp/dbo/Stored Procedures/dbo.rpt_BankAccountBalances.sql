@@ -1,10 +1,7 @@
-﻿CREATE FUNCTION [dbo].[fi_BankAcountsBalances] (
+﻿CREATE PROCEDURE [dbo].[rpt_BankAccountBalances]
 	@AsOfDate Datetime = '01.01.2020'
-)
-RETURNS TABLE
 AS
-RETURN
-(
+BEGIN
 	SELECT
 		Ac.Code As AccountCode,
 		Ac.[Name] As AccountName, Ac.[Name2] As AccountName2, Ac.[Name3] As AccountName3,
@@ -22,4 +19,4 @@ RETURN
 		Ac.[Name], Ac.[Name2], Ac.[Name3],
 		Ag.[Name], Ag.[Name2], Ag.[Name3],
 		AA.[Reference], R.[Name], R.[Name2], R.[Name3]
-);
+END;

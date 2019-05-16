@@ -23,7 +23,7 @@
 --	The good/service consumed for indirect expenses
 	[ResourceId]			INT,				-- NUll because it may be specified by Account				
 -- Tracking additive measures
-	[ValueMeasure]			VTYPE				NOT NULL DEFAULT (0), -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
+	[Quantity]				VTYPE				NOT NULL DEFAULT (0), -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
 	[MoneyAmount]			MONEY				NOT NULL DEFAULT (0), -- Amount in foreign Currency 
 	[Mass]					DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar, cement bag, etc
 	[Volume]				DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
@@ -48,14 +48,14 @@
 -- Examples include supplier account in cash purchase, customer account in cash sales, employee account in cash payroll, 
 -- supplier account in VAT purchase entry, customer account in VAT sales entry, and WIP account in direct production.
 	[RelatedAgentAccountId]	INT,
+	[RelatedResponsibilityCenterId] INT, -- used in stock issues for consumption
+	[RelatedQuantity]		MONEY ,		-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT (0), -- e.g., amount subject to tax
-	/*
 	[RelatedMass]			DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar
 	[RelatedVolume]			DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
 	[RelatedCount]			DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
 	[RelatedTime]			DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
 	[RelatedValue]			VTYPE				NOT NULL DEFAULT (0), -- 
-	*/
 -- for auditing
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]			INT					NOT NULL,
@@ -65,18 +65,17 @@
 	CONSTRAINT [CK_TransactionEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
 	CONSTRAINT [FK_TransactionEntries__Documents]	FOREIGN KEY ([TenantId], [DocumentId])	REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_TransactionEntries__Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
-	CONSTRAINT [FK_TransactionEntries__IFRSAccounts]FOREIGN KEY ([TenantId], [IFRSAccountId])REFERENCES [dbo].[IFRSAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__IFRSNotes]	FOREIGN KEY ([TenantId], [IFRSNoteId])	REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__ResponsibilityCenters]	FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_TransactionEntries__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_TransactionEntries__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE INDEX [IX_Entries__DocumentId] ON [dbo].[TransactionEntries]([TenantId] ASC, [DocumentId] ASC);
 GO
-CREATE INDEX [IX_Entries__OperationId] ON [dbo].[TransactionEntries]([TenantId] ASC, [ResponsibilityCenterId] ASC);
+CREATE INDEX [IX_Entries__ResponsibilityCenterId] ON [dbo].[TransactionEntries]([TenantId] ASC, [ResponsibilityCenterId] ASC);
 GO
 CREATE INDEX [IX_Entries__AccountId] ON [dbo].[TransactionEntries]([TenantId] ASC, [AccountId] ASC);
 GO
@@ -86,9 +85,9 @@ ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__Te
 GO
 ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

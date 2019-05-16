@@ -36,9 +36,9 @@ ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__Tenant
 GO
 ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

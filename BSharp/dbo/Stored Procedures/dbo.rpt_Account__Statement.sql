@@ -1,39 +1,55 @@
-﻿CREATE FUNCTION [dbo].[fi_Account__Statement] (
--- SELECT * FROM [dbo].[ft_Account__Statement](104, '01.01.2015', '01.01.2020')
+﻿CREATE PROCEDURE [dbo].[rpt_Account__Statement]
+-- EXEC [dbo].[rpt_Account__Statement](104, '01.01.2015', '01.01.2020')
 	@AccountId INT,
 	@ResponsibilityCenterId INT = NULL,
 	@AgentAccountId INT = NULL,
 	@ResourceId INT = NULL,
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
-) RETURNS TABLE
 AS
-RETURN
 	SELECT 	
+		[Id],
 		[DocumentId],
+		DocumentDate,
+		[SerialNumber],
 		[TransactionType],
-		[SerialNumber] As [Serial Number],
-		[DocumentDate],
-		[EntryId],
+		[IsSystem],
 		[Direction],
 		[AccountId],
+		[IFRSAccountId],
+		[IFRSNoteId],
 		[ResponsibilityCenterId],
+		-- [OperationId],
+		-- [ProductCategoryId],
+		-- [GeographicRegionId],
+		-- [CustomerSegmentId],
+		-- [TaxSegmentId],
 		[AgentAccountId],
 		[ResourceId],
+		[Quantity],
 		[MoneyAmount],
 		[Mass],
-		[Volume],
+		-- NormalizedMass,
+		[Volume], 
+		-- NormalizedVolume,
 		[Count],
+		-- NormalizedCount,
 		[Time],
 		[Value],
-		[IFRSNoteId],
+		[ExpectedSettlingDate],
 		[Reference],
 		[Memo],
-		[ExpectedSettlingDate],
-		[RelatedResourceId],
 		[RelatedReference],
+		[RelatedResourceId],
 		[RelatedAgentAccountId],
-		[RelatedMoneyAmount]
+		[RelatedResponsibilityCenterId],
+		[RelatedQuantity],
+		[RelatedMoneyAmount],
+		[RelatedMass],
+		[RelatedVolume],
+		[RelatedCount],
+		[RelatedTime],
+		[RelatedValue]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate)
 	WHERE [AccountId] = @AccountId
 	AND (@ResponsibilityCenterId IS NULL OR [ResponsibilityCenterId] = @ResponsibilityCenterId)

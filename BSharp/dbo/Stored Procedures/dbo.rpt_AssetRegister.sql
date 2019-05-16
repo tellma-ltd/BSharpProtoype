@@ -1,19 +1,18 @@
-﻿CREATE FUNCTION [dbo].[fi_AssetRegister] (
+﻿CREATE PROCEDURE [dbo].[rpt_AssetRegister]
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
-)
-RETURNS TABLE 
-AS 
-RETURN
-	WITH
-	IFRS_PPE_Root AS (
-		SELECT [Node] 
-		FROM dbo.[IFRSAccounts] WHERE [Id] = N'PropertyPlandAndEquipment'
+AS
+BEGIN
+	WITH IFRSFixedAssetAccounts	AS (
+		SELECT Id FROM dbo.[IFRSAccounts]
+		WHERE [Node].IsDescendantOf(
+			(SELECT [Node] FROM dbo.IFRSAccounts WHERE Id = N'PropertyPlandAndEquipment')
+		) = 1
 	),
 	FixedAssetAccounts AS (
-		SELECT A.[Id] FROM dbo.Accounts A
-		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
-		WHERE I.[Node].IsDescendantOf((SELECT FIRST_VALUE([Node]) FROM IFRS_PPE_Root)) = 1
+		SELECT Id FROM dbo.[Accounts]
+		WHERE IFRSAccountId IN
+			(SELECT [Id] FROM IFRSFixedAssetAccounts)
 	),
 	OpeningBalances AS (
 		SELECT
@@ -48,9 +47,10 @@ RETURN
 		FROM OpeningBalances
 		FULL OUTER JOIN Movements ON OpeningBalances.ResourceId = Movements.ResourceId
 	)
-SELECT FAR.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2,
-		FAR.OpeningCount, FAR.OpeningServiceLife, FAR.OpeningValue,
-		FAR.CountChange, FAR.ServiceLifeChange, FAR.ValueChange,
-		FAR.EndingCount, FAR.EndingServiceLife, FAR.EndingValue
-FROM dbo.Resources R JOIN FixedAssetRegsiter FAR ON R.Id = FAR.ResourceId
-JOIN [dbo].[MeasurementUnits] MU ON R.[MassUnitId] = MU.Id;
+	SELECT FAR.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2,
+			FAR.OpeningCount, FAR.OpeningServiceLife, FAR.OpeningValue,
+			FAR.CountChange, FAR.ServiceLifeChange, FAR.ValueChange,
+			FAR.EndingCount, FAR.EndingServiceLife, FAR.EndingValue
+	FROM dbo.Resources R JOIN FixedAssetRegsiter FAR ON R.Id = FAR.ResourceId
+	JOIN [dbo].[MeasurementUnits] MU ON R.[MassUnitId] = MU.Id;
+END

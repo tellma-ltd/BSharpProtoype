@@ -23,9 +23,9 @@ ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__TenantId]  DEFAU
 GO
 ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[Permissions] ADD CONSTRAINT [DF_Permissions__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

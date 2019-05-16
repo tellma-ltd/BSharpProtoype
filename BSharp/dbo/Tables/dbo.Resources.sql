@@ -15,6 +15,7 @@
 	[Name3]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
+	[UnitId]					INT					NOT NULL,
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.
 	[MassUnitId]				INT, -- the unit If the resource has a mass measure assigned to it.
 	[MassRate]					DECIMAL,
@@ -76,9 +77,21 @@ ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__TenantId]  DEFAULT (
 GO
 ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+GO
+ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [CK_Resources__UnitId] CHECK (
+	[UnitId] = (
+		CASE
+			WHEN [ValueMeasure] = N'Currency' THEN [CurrencyId]
+			WHEN [ValueMeasure] = N'Mass' THEN [MassUnitId]
+			WHEN [ValueMeasure] = N'Volume' THEN [VolumeUnitId]
+			WHEN [ValueMeasure] = N'Length' THEN [LengthUnitId]
+			WHEN [ValueMeasure] = N'Count' THEN [CountUnitId]
+			END
+		)
+	)
 GO

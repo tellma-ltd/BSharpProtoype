@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fw_Entries__Json] (
+﻿CREATE FUNCTION [dbo].[fw_TransactionEntries__Json] (
 	@Json NVARCHAR(MAX)
 )
 RETURNS TABLE
@@ -6,7 +6,7 @@ AS
 RETURN
 	SELECT c.*
 	FROM OPENJSON (@json) p
-		CROSS APPLY OpenJson(p.value, N'$.Entries') 
+		CROSS APPLY OpenJson(p.value, N'$.TransactionEntries') 
 		WITH (
 			[Index]					INT,
 			[DocumentIndex]			INT,

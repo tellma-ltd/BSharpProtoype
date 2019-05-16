@@ -14,15 +14,10 @@ AS
 		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'CurrentInventoriesInTransit')
 	),
 	InventoriesInTransitAccounts AS (
-		SELECT [Id] FROM dbo.Accounts A
+		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_MIT))	= 1
-	), /*
-	-- To avoid IFRS, we need to define an account type:
-	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts
-		WHERE AccountType = N'CurrentInventoriesInTransit'
-	), */
+	),
 	Balances AS (
 		SELECT
 			J.ResourceId,
@@ -34,7 +29,7 @@ AS
 		WHERE J.AccountId IN (SELECT Id FROM InventoriesInTransitAccounts)
 		GROUP BY J.ResourceId
 	)
-	SELECT B.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2,
+	SELECT B.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2, MU.Name3 As Unit3,
 		B.[Count], B.[Mass], B.[MoneyAmount]
 	FROM dbo.Resources R 
 	JOIN Balances B ON R.Id = B.ResourceId

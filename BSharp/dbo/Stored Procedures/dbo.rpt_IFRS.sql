@@ -7,7 +7,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	IF @PresentationCurrencyCode IS NULL
-		SET @PresentationCurrencyCode = [dbo].fn_Settings(N'FunctionalCurrencyCode');
+	SELECT @PresentationCurrencyCode = Code FROM dbo.Resources 
+	WHERE Id = (SELECT FunctionalCurrencyId FROM dbo.Settings)
+	
 	DECLARE @PresentationCurrency NVARCHAR(255);
 	SELECT @PresentationCurrency = [Description] FROM dbo.[MeasurementUnits]
 	WHERE [Code] = @PresentationCurrencyCode;
@@ -18,14 +20,14 @@ BEGIN
 		[Value] [nvarchar](255)
 	);
 
-	INSERT INTO #IFRS
+/*	INSERT INTO #IFRS
 	SELECT [Field], [Value] FROM [dbo].Settings
 	WHERE Field IN (
 		N'DisclosureOfGeneralInformationAboutFinancialStatementsExplanatory',
 		N'NameOfReportingEntityOrOtherMeansOfIdentification', -- Ok
 		N'ExplanationOfChangeInNameOfReportingEntityOrOtherMeansOfIdentificationFromEndOfPrecedingReportingPeriod',
 		N'DescriptionOfNatureOfFinancialStatements');
-
+*/
 	DECLARE @strRoundingLevel NVARCHAR(255) = CAST(@RoundingLevel AS NVARCHAR(255)), 
 			@strPeriod NVARCHAR(255) = cast(@fromDate as NVARCHAR(255)) + N' - ' + cast(@toDate as NVARCHAR(255)),
 			@strToDate NVARCHAR(255) = cast(@toDate as NVARCHAR(255));
@@ -36,9 +38,9 @@ BEGIN
 	(N'DateOfEndOfReportingPeriod2013', @strToDate)
 
 	INSERT INTO #IFRS([Field], [Value])
-	SELECT [AccountId], SUM([Value] * [Direction])
+	SELECT [IFRSAccountId], SUM([Value] * [Direction])
 	FROM dbo.[fi_Journal](@fromDate, @toDate)
-	GROUP BY [AccountId];
+	GROUP BY [IFRSAccountId];
 
 	SELECT * FROM #IFRS;
 	DROP TABLE #IFRS;

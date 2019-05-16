@@ -10,14 +10,16 @@ RETURN
 		SELECT 5 As I UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
 	)
 	SELECT
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -26,6 +28,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -35,14 +38,20 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
-		V.[RelatedResourceId],
 		V.[RelatedReference],
+		V.[RelatedResourceId],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	JOIN dbo.Resources R ON V.ResourceId = R.Id
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
@@ -54,14 +63,16 @@ RETURN
 
 	UNION ALL
 	SELECT
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -70,6 +81,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -79,20 +91,27 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
+		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
-		V.[RelatedReference],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
 	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
 	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Daily'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(DAY, IL.I, [DocumentDate]) < @toDate)
@@ -100,14 +119,16 @@ RETURN
 
 	UNION ALL
 	SELECT 
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -116,6 +137,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -125,20 +147,27 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
+		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
-		V.[RelatedReference],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
 	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
 	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Weekly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(WEEK, IL.I, [DocumentDate]) < @toDate)
@@ -146,14 +175,16 @@ RETURN
 
 	UNION ALL
 	SELECT 
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -162,6 +193,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -171,35 +203,44 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
+		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
-		V.[RelatedReference],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
 	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
 	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Monthly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(MONTH, IL.I, [DocumentDate]) < @toDate)
 	AND ([EndDate] IS NULL OR DATEADD(MONTH, IL.I, [DocumentDate]) < [EndDate])
 	
 	UNION ALL
-	SELECT 
+	SELECT
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -208,6 +249,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -217,20 +259,27 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
+		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
-		V.[RelatedReference],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
 	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
 	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Quarterly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(QUARTER, IL.I, [DocumentDate]) < @toDate)
@@ -238,14 +287,16 @@ RETURN
 
 	UNION ALL
 	SELECT 
+		V.[Id],
 		V.[DocumentId],
-		V.[TransactionType],
-		V.[SerialNumber],
 		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
-		V.[EntryId],
+		V.[SerialNumber],
+		V.[TransactionType],
+		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IFRSAccountId],
+		V.[IFRSNoteId],
 		V.[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -254,6 +305,7 @@ RETURN
 		-- [TaxSegmentId],
 		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[Quantity],
 		V.[MoneyAmount],
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
@@ -263,20 +315,27 @@ RETURN
 		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Time],
 		V.[Value],
-		V.[IFRSNoteId],
+		V.[ExpectedSettlingDate],
 		V.[Reference],
 		V.[Memo],
-		V.[ExpectedSettlingDate],
+		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
-		V.[RelatedReference],
 		V.[RelatedAgentAccountId],
-		V.[RelatedMoneyAmount]
+		V.[RelatedResponsibilityCenterId],
+		V.[RelatedQuantity],
+		V.[RelatedMoneyAmount],
+		V.[RelatedMass],
+		V.[RelatedVolume],
+		V.[RelatedCount],
+		V.[RelatedTime],
+		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
 	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
 	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Yearly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(YEAR, IL.I, [DocumentDate]) < @toDate)

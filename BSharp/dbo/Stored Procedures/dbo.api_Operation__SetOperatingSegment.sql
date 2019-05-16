@@ -15,7 +15,7 @@ DECLARE @Id int, @Ids [dbo].[IntegerList];
 	--IF @ValidationErrorsJson IS NOT NULL
 	--	RETURN;
 
-	SET @Id = dbo.fn_Operation__FirstSibling(@OperationId)
+	SET @Id = dbo.[fe_ResponsibilityCenter__FirstSibling](@OperationId)
 
 	-- run it recusrivsely
 	EXEC [dbo].[dal_Operation__SetOperatingSegment]

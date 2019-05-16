@@ -24,7 +24,16 @@
 	[TransactionType]			NVARCHAR (255),		-- N'manual-journals', 
 	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
 	[Repetitions]				INT					NOT NULL DEFAULT (0), -- time unit is function of frequency
-	[EndDate]					DATETIME2 (7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())), -- computed column	
+		[EndDate] AS (
+						CASE 
+							WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
+							WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
+							WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
+							WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
+							WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
+							WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
+						END
+		) PERSISTED,
 	-- Request specific, to acquire goods or services that require pre-authorization
 	-- purchase requisition, payment requesition, production request, maintenance request
 	[RequestType]				NVARCHAR (255),		-- N'payment-requests', N'purchase-requests', 'production-requests'
@@ -48,16 +57,6 @@
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId], [Id]), -- Voucher/Request/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
 	CONSTRAINT [CK_Documents_DocumentType] CHECK ([DocumentType] IN (N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template')),
-	CONSTRAINT [CK_Documents_Frequency] CHECK (
-		[EndDate] =
-			CASE 
-				WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
-				WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
-				WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
-				WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
-				WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
-				WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
-			END),
 	CONSTRAINT [CK_Documents_Duration] CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
 	CONSTRAINT [FK_Documents_TransactionType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),
@@ -69,9 +68,9 @@ ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__TenantId]  DEFAULT (
 GO
 ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[Documents] ADD CONSTRAINT [DF_Documents__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

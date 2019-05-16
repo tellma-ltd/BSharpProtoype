@@ -1,22 +1,30 @@
-﻿CREATE VIEW [dbo].[TransactionEntriesView]
+﻿CREATE VIEW [dbo].[TransactionEntriesView] WITH SCHEMABINDING
 -- It probably helps to materialize it, and add indices to:
 -- AccountId, IFRSAccountId, IFRSNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
 -- Can we add referential integrity to IFRSAccountConcept_IFRSNoteConcept_Direction?
 AS
 	SELECT
+		E.TenantId,
+		E.Id,
 		D.Id As DocumentId,
 		D.[DocumentDate],
 		D.[SerialNumber],
 		D.[TransactionType],
 		D.[Frequency],
 		D.[Repetitions],
+		--CASE 
+		--	WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
+		--	WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
+		--	WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
+		--	WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
+		--	WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
+		--	WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
+		--END AS EndDate,
 		D.[EndDate],
-		--DA.[AssigneeId],
-		E.[Id] As EntryId,
 		E.[IsSystem],
 		E.[Direction],
 		E.[AccountId],
-		COALESCE(A.[IFRSAccountId], E.[IFRSAccountId]) AS IFRSAccountId,
+		A.IFRSAccountId,
 		COALESCE(A.[IFRSNoteId], E.[IFRSNoteId]) AS IFRSNoteId,
 		COALESCE(A.[ResponsibilityCenterId], E.[ResponsibilityCenterId]) AS [ResponsibilityCenterId],
 		--RC.[OperationId],
@@ -26,12 +34,10 @@ AS
 		--RC.[TaxSegmentId],
 		COALESCE(A.[AgentAccountId], E.[AgentAccountId]) AS [AgentAccountId],
 		COALESCE(A.[ResourceId], E.[ResourceId]) AS [ResourceId],
-		E.ValueMeasure,
+		E.[Quantity],
 		E.[MoneyAmount], -- normalization is already done in the Value and stored in the entry
 		E.[Mass],
-		--E.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
 		E.[Volume],
-		--E.[Volume] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedVolume,
 		E.[Count], -- we can normalize every measure, but just showing a proof of concept
 		E.[Time],
 		E.[Value],
@@ -39,19 +45,25 @@ AS
 		COALESCE(D.[Reference], E.[Reference]) AS [Reference],
 		COALESCE(D.[Memo], E.[Memo]) AS [Memo],
 		E.[RelatedReference],
-		COALESCE(A.[RelatedResourceId], E.[RelatedResourceId]) AS [RelatedResourceId],
-		COALESCE(A.[RelatedAgentAccountId], E.[RelatedAgentAccountId]) AS [RelatedAgentAccountId],
+		E.[RelatedResourceId],
+		E.[RelatedAgentAccountId],
+		E.[RelatedResponsibilityCenterId],
+		E.[RelatedQuantity],
 		E.[RelatedMoneyAmount],
+		E.[RelatedMass],
+		E.[RelatedVolume],
+		E.[RelatedCount],
+		E.[RelatedTime],
+		E.[RelatedValue],
 		E.[CreatedAt],
 		E.[CreatedById],
 		E.[ModifiedAt],
 		E.[ModifiedById]
 	FROM 
 		[dbo].[TransactionEntries] E
-		JOIN [dbo].[Documents] D ON E.DocumentId = D.Id
-		JOIN [dbo].[Accounts] A ON E.AccountId = A.Id
-		--LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-		--LEFT JOIN dbo.MeasurementUnits MV ON R.VolumeUnitId = MV.Id
-		--LEFT JOIN dbo.DocumentAssignments DA ON D.Id = DA.DocumentId
+		JOIN [dbo].[Documents] D ON E.DocumentId = D.Id And E.TenantId = D.TenantId
+		JOIN [dbo].[Accounts] A ON E.AccountId = A.Id AND E.TenantId = A.TenantId
 	WHERE
-		(D.[DocumentType] = N'Transaction' AND D.[DocumentState] = N'Posted')
+		(D.[DocumentType] = N'Transaction' AND D.[DocumentState] = N'Posted');
+GO
+CREATE UNIQUE CLUSTERED INDEX IDX_TransactionEntriesView ON [dbo].[TransactionEntriesView]

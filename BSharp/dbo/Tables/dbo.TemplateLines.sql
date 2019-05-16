@@ -31,9 +31,9 @@ ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__TenantId]  D
 GO
 ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[TemplateLines] ADD CONSTRAINT [DF_TemplateLines__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

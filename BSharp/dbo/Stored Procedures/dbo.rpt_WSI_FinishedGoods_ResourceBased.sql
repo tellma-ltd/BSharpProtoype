@@ -15,7 +15,7 @@ AS
 		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'FinishedGoods')
 	),
 	FinishedGoodsAccounts AS (
-		SELECT [Id] FROM dbo.Accounts A
+		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_FG))	= 1
 	), /*

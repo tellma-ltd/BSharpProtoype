@@ -4,7 +4,6 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
@@ -40,13 +39,10 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId],  [Code], [AccountType], [AccountCategory], [Name], [Name2],
-				[IFRSConceptId], [OperationId], [CustodyId], [Reference], [ResourceId], 
-				-- [ParentId], reparenting	
-				[CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[Code], s.[AccountType], s.[AccountCategory], s.[Name], s.[Name2], 
-				s.[IFRSConceptId], s.[OperationId], s.[CustodyId], s.[Reference], s.[ResourceId], s.[ParentId],			
-				@Now,			@UserId,	@Now,			@UserId)
+			INSERT ([Code], [AccountType], [AccountCategory], [Name], [Name2],
+				[IFRSConceptId], [OperationId], [CustodyId], [Reference], [ResourceId], [ParentId])
+			VALUES (s.[Code], s.[AccountType], s.[AccountCategory], s.[Name], s.[Name2], 
+				s.[IFRSConceptId], s.[OperationId], s.[CustodyId], s.[Reference], s.[ResourceId], s.[ParentId])
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

@@ -7,32 +7,19 @@ RETURN
 SELECT *
 	FROM OpenJson(@Json)
 	WITH (
-		[Index]				INT,
-		[Id]				INT,
-		[State]				NVARCHAR (255),
-		[DocumentType]		NVARCHAR (255),
-		[Frequency]			NVARCHAR (255),
-		[Duration]			INT,
-		[StartDateTime]		DATETIMEOFFSET (7),
-		[EndDateTime]		DATETIMEOFFSET (7),
-	--- Common for all lines, regardless of line type.
-		[BaseLineId]		INT,
-		[ScalingFactor]		FLOAT,
-		[Memo]				NVARCHAR (255),
-	-- Common for all entries of all lines
+		[Id] INT '$.Id',
+		[DocumentDate] DATETIME2 (7) '$.DocumentDate',
+		[DocumentState] NVARCHAR (255) '$.DocumentState',
+		[SerialNumber] INT '$.SerialNumber',
+		[Reference] NVARCHAR (255) '$.Reference',
+		[Memo] NVARCHAR (255) '$.Memo',
 
-		[AccountId]			INT,
-		[OperationId]		INT,
-		[AgentId]			INT,
-		[ResourceId]		INT,
-		[Amount]			MONEY,
-		[Value]				VTYPE,
-		[NoteId]			NVARCHAR (255),
-		[Reference]			NVARCHAR (255),
-		[RelatedReference]	NVARCHAR (255),
-		[RelatedAgentId]	INT,
-		[RelatedResourceId]	INT,
-		[RelatedAmount]		MONEY,
+		[TransactionType] NVARCHAR (255) '$.TransactionType',
+		[Frequency] NVARCHAR (255) '$.Frequency',
+		[Repetitions] INT '$.Repetitions',
+		[EndDate] DATETIME2 (7) '$.EndDate',
 
-		[EntityState]			NVARCHAR(255)
+		[EntityState] NVARCHAR(255) '$.EntityState'
 	);
+
+

@@ -497,4 +497,81 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[LocalUserList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9c15420e-1886-4d46-a223-44c4a72f21d0" ChangeDateTime="05/12/2019 12:46:16">
+    <Property Name="ElementName" Value="[dbo].[fn_Operation__FirstSibling]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fn_ResponsibilityCenter__FirstSibling]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2194ccce-f3f7-49cc-b230-f76c2d42a9e4" ChangeDateTime="05/12/2019 12:47:21">
+    <Property Name="ElementName" Value="[dbo].[fn_ResponsibilityCenter__FirstSibling]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fe_ResponsibilityCenter__FirstSibling]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7da32a8a-6ccf-4383-b142-87fca8f9c846" ChangeDateTime="05/12/2019 12:47:57">
+    <Property Name="ElementName" Value="[dbo].[fn_EndDateTime__Frequency_Duration_StartDateTime]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fe_EndDateTime__Frequency_Duration_StartDateTime]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d590c22a-949b-4b4f-a445-1490b8bea673" ChangeDateTime="05/12/2019 14:08:31">
+    <Property Name="ElementName" Value="[dbo].[fw_Entries__Json]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fw_TransactionEntries__Json]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8e7acb9f-8b79-4baf-9d82-e9ea5ce9794b" ChangeDateTime="05/12/2019 14:08:59">
+    <Property Name="ElementName" Value="[dbo].[fw_Lines__Json]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fw_TransactionLines__Json]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="259b7328-1e44-460a-838d-be88ba24128d" ChangeDateTime="05/12/2019 15:30:30">
+    <Property Name="ElementName" Value="[dbo].[dal_Account__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Accounts__Activate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c2dd8535-9d5b-4a8f-9df9-5cdeb13aac29" ChangeDateTime="05/15/2019 10:43:02">
+    <Property Name="ElementName" Value="[dbo].[fi_Fact_FinishedGoods]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fi_Fact_Inventory]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="56c6d296-86d3-4225-89ed-ea5c176254fb" ChangeDateTime="05/15/2019 10:54:12">
+    <Property Name="ElementName" Value="[dbo].[fi_Fact_Inventory]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fi_Fact_Inventories]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ec4a9efb-8ce2-444f-b7cf-7a58ea06fd42" ChangeDateTime="05/15/2019 15:58:01">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntries].[ValueMeasure]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionEntries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Quantity]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fa5bb91b-7b8e-4070-bda2-e81b381b8a8b" ChangeDateTime="05/15/2019 15:58:20">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntries].[RelatedValueMeasure]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionEntries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[RelatedQuantity]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="15032ec2-2c1b-4ff7-8527-8c4c085b7da6" ChangeDateTime="05/16/2019 13:32:39">
+    <Property Name="ElementName" Value="[dbo].[rpt_WSI_LocalPurchase]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[rpt_ConsumablesServices]" />
+  </Operation>
 </Operations>

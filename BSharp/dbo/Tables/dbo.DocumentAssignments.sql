@@ -22,7 +22,7 @@ ALTER TABLE [dbo].[DocumentAssignments] ADD CONSTRAINT [DF_DocumentAssignments__
 GO
 ALTER TABLE [dbo].[DocumentAssignments] ADD CONSTRAINT [DF_DocumentAssignments__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[DocumentAssignments] ADD CONSTRAINT [DF_DocumentAssignments__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[DocumentAssignments] ADD CONSTRAINT [DF_DocumentAssignments__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 CREATE INDEX [IX_Assignments__AssigneeId] ON [dbo].[DocumentAssignments]([TenantId], [AssigneeId]);
 GO

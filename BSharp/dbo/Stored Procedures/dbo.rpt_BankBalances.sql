@@ -1,10 +1,7 @@
-﻿CREATE FUNCTION [dbo].[fi_BankBalances] (
+﻿CREATE PROCEDURE [dbo].[rpt_BankBalances]
 	@AsOfDate Datetime = '01.01.2020'
-)
-RETURNS TABLE
 AS
-RETURN
-(
+BEGIN
 	SELECT
 		Ag.[Name] As BankName, Ag.[Name2] As BankName2, Ag.[Name3] As BankName3,
 		SUM(J.[MoneyAmount] * J.[Direction]) AS [Balance],
@@ -18,4 +15,4 @@ RETURN
 	GROUP BY
 		Ag.[Name], Ag.[Name2], Ag.[Name3],
 		R.[Name], R.[Name2], R.[Name3]
-);
+END;

@@ -6,8 +6,7 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
-	DECLARE @ArchiveDate DATETIMEOFFSET(7) = CONVERT(DATETIMEOFFSET(7), dbo.fn_Settings(N'ArchiveDate'), 102);
-	SET @ArchiveDate = ISNULL(@ArchiveDate, N'01.01.0001');
+	DECLARE @ArchiveDate DATETIMEOFFSET(7) = (SELECT ArchiveDate FROM dbo.Settings);
 
 	-- Cannot unpost if the period is closed	
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 

@@ -1,20 +1,17 @@
-﻿CREATE FUNCTION [dbo].[fi_Paysheet] (
+﻿CREATE PROCEDURE [dbo].[rpt_Paysheet]
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100',
 	@BasicSalaryResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [SystemCode] = N'Basic')
 	-- We should get all resources that are potentially salary components
 	@TransportationAllowanceResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
 	@OvertimeResourceId int -- 
-)
-RETURNS TABLE
 AS 
-RETURN
+BEGIN
 	SELECT
 		A.TaxIdentificationNumber As [Employee TIN],
 		A.[Name] As [Employee Full Name],
 		SUM(CASE 
 			WHEN (J.[IFRSAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
-			-- No IFRS? WHEN (J.AccountType = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @BasicSalaryResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Basic Salary],
@@ -51,5 +48,6 @@ RETURN
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
-	--WHERE A.[RelationType] = N'employee'
+	WHERE AA.AgentRelationType = N'employee'
 	GROUP BY A.TaxIdentificationNumber, A.[Name];
+END

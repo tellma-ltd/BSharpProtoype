@@ -16,9 +16,9 @@ ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__TenantId
 GO
 ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__CreatedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
 ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__ModifiedById]  DEFAULT (CONVERT(INT,SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[RoleMemberships] ADD CONSTRAINT [DF_RoleMemberships__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

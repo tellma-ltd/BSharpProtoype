@@ -50,13 +50,6 @@
 	[ExpectedSettlingDateIsFixed]BIT				NOT NULL DEFAULT (0),
 	[ExpectedSettlingDate]		DATETIME2(7),
 
--- These fields will show only if IsActiveRelaredResource, and if IFRSAccount specs require it
-	[RelatedResourceIsFixed]	BIT					NOT NULL DEFAULT (0),
-	[RelatedResourceId]			INT,
-
--- These fields will show only if IsActiveRelatedAgentAccount, and if IFRSAccount specs require it
-	[RelatedAgentAccountIsFixed]BIT					NOT NULL DEFAULT (0),
-	[RelatedAgentAccountId]		INT,
 	-- Audit details
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,
@@ -79,4 +72,14 @@ GO
 CREATE INDEX [IX_Accounts__Level_Node] ON [dbo].[Accounts]([TenantId], [Level], [Node]);
 GO
 CREATE UNIQUE INDEX [IX_Accounts__Code] ON [dbo].[Accounts]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
+GO
+ALTER TABLE [dbo].[Accounts] ADD CONSTRAINT [DF_Accounts__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[Accounts] ADD CONSTRAINT [DF_Accounts__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[Accounts] ADD CONSTRAINT [DF_Accounts__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[Accounts] ADD CONSTRAINT [DF_Accounts__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[Accounts] ADD CONSTRAINT [DF_Accounts__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO
