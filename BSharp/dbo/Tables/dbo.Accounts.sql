@@ -61,8 +61,6 @@
 	CONSTRAINT [FK_Accounts__ResponsibilityCenterId] FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__AgentAccountId] FOREIGN KEY ([TenantId], [AgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResourceId] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]),
-	CONSTRAINT [FK_Accounts__RelatedResourceId] FOREIGN KEY ([TenantId], [RelatedResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]),
-	CONSTRAINT [FK_Accounts__RelatedAgentAccountId] FOREIGN KEY ([TenantId], [RelatedAgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

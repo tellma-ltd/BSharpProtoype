@@ -11,10 +11,10 @@ RETURN
 		[Index]					INT,
 		[DocumentIndex]			INT,
 
-		[TransactionLineType]	NVARCHAR(255),
+		[TransactionLineType]	NVARCHAR (255),
 		[TemplateLineId]		INT, -- depending on the line type, the user may/may not be allowed to edit
 		[ScalingFactor]			FLOAT, -- Qty sold for Price list, Qty produced for BOM
-		[Memo]					NVARCHAR(255),
+		[Memo]					NVARCHAR (255),
 
 		[Direction1]			SMALLINT,
 		[AccountId1]			INT,
@@ -116,5 +116,5 @@ RETURN
 		[RelatedTime4]			DECIMAL,
 		[RelatedValue4]			VTYPE,
 
-		[EntityState1]			NVARCHAR(255) '$.EntityState'
+		[EntityState1]			NVARCHAR (255) '$.EntityState'
 	) c;

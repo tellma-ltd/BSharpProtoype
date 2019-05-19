@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_Mode__Update]
 	@Documents [dbo].[IndexedIdList] READONLY,
-	@Mode nvarchar(255)
+	@Mode NVARCHAR (255)
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();

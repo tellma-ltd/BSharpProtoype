@@ -19,7 +19,7 @@ SELECT *
 		[Repetitions] INT '$.Repetitions',
 		[EndDate] DATETIME2 (7) '$.EndDate',
 
-		[EntityState] NVARCHAR(255) '$.EntityState'
+		[EntityState] NVARCHAR (255) '$.EntityState'
 	);
 
 

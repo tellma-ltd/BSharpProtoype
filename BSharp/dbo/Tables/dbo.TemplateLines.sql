@@ -2,7 +2,7 @@
 	[TenantId]				INT,
 	[Id]					INT IDENTITY,
 	[DocumentId]			INT					NOT NULL,
-	[TemplateLineType]		NVARCHAR(255)		NOT NULL,
+	[TemplateLineType]		NVARCHAR (255)		NOT NULL,
 	[ValidFrom]				DATETIME2(7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	-- for sales/purchase price lists
 	[ResourceId]			INT,

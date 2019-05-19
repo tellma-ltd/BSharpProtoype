@@ -3,7 +3,7 @@
 	[DocumentIndex]			INT				NOT NULL,
 	[Id]					INT,
 	[DocumentId]			INT,
-	[TransactionLineType]	NVARCHAR(255)	NOT NULL,
+	[TransactionLineType]	NVARCHAR (255)	NOT NULL,
 	[TemplateLineId]		INT,
 	[ScalingFactor]			FLOAT,
 	[Memo]					NVARCHAR (255),
@@ -108,7 +108,7 @@
 	[RelatedTime4]			DECIMAL,
 	[RelatedValue4]			VTYPE,
 
-	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]		NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)

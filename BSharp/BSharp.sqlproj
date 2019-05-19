@@ -106,7 +106,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.IndexedIdList.sql" />
     <Build Include="dbo\Tables\dbo.Translations.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Operations__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ResponsibilityCenters__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.MeasurementUnitList.sql" />
@@ -124,7 +124,7 @@
     <Build Include="dbo\User Defined Types\dbo.ResponsibilityCenterList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ResponsibilityCenters__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Operations_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_ResponsibilityCenters_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
@@ -258,6 +258,12 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_ERCA__WitholdingTaxOnPayment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_Paysheet.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_BankAccount__Statement.sql" />
+    <Build Include="dbo\Tables\dbo.ProductCategories.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ProductCategoryList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Select.sql" />
+    <Build Include="dbo\User Defined Types\dbo.Tree.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

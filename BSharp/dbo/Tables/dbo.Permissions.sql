@@ -2,10 +2,10 @@
 	[TenantId]		INT,
 	[Id]			INT					IDENTITY(1,1),
 	[RoleId]		INT					NOT NULL,
-	[ViewId]		NVARCHAR(255)		NOT NULL,
-	[Level]			NVARCHAR(255)		NOT NULL,
+	[ViewId]		NVARCHAR (255)		NOT NULL,
+	[Level]			NVARCHAR (255)		NOT NULL,
 	[Criteria]		NVARCHAR(1024), -- compiles into LINQ expression to filter the applicability
-	[Memo]			NVARCHAR(255),
+	[Memo]			NVARCHAR (255),
 	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]	INT		NOT NULL,
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 

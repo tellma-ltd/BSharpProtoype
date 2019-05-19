@@ -38,7 +38,7 @@ SET NOCOUNT ON;
 				t.[CustomerSegmentId]	= s.[CustomerSegmentId],
 				t.[TaxSegmentId]		= s.[TaxSegmentId],
 				t.[ModifiedAt]			= @Now,
-				t.[ModifiedById]	= @UserId
+				t.[ModifiedById]		= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT ([ResponsibilityDomain], [Name],	[Name2], [Name3], [Code], 
 					[OperationId], [ProductCategoryId], [GeographicRegionId], [CustomerSegmentId], [TaxSegmentId])

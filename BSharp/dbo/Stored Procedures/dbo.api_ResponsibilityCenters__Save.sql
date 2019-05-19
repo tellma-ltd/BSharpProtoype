@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[api_Operations__Save]
+﻿CREATE PROCEDURE [dbo].[api_ResponsibilityCenters__Save]
 	@Entities [ResponsibilityCenterList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
@@ -8,7 +8,7 @@ BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
-	EXEC [dbo].[bll_Operations_Validate__Save]
+	EXEC [dbo].[bll_ResponsibilityCenters_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 

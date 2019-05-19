@@ -110,7 +110,7 @@ BEGIN -- Fill lines from specifications
 	FROM @LinesLocal L
 	JOIN dbo.LineTypeSpecifications LTS ON L.LineType = LTS.LineType;
 
-	DECLARE @Sql NVARCHAR(4000), @ParmDefinition NVARCHAR(255), @AppendSql NVARCHAR(4000), @LineType NVARCHAR(255);
+	DECLARE @Sql NVARCHAR(4000), @ParmDefinition NVARCHAR (255), @AppendSql NVARCHAR(4000), @LineType NVARCHAR (255);
 	SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes;
 	WHILE @LineType IS NOT NULL
 	BEGIN

@@ -22,7 +22,7 @@
 	[RelatedResourceId]			INT,
 	[RelatedAgentAccountId]		INT,
 
-	[EntityState]		NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]		NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_AccountList__Code ([Code]),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),

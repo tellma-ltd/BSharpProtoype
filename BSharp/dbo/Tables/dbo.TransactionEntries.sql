@@ -35,7 +35,7 @@
 	-- useful to link the system to an external system (bank, paper, etc). 
 	[Reference]				NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- Can be updated even after posting.
 -- Additional information to satisfy reporting requirements
-	[Memo]					NVARCHAR(255), -- a textual description for statements and reports
+	[Memo]					NVARCHAR (255), -- a textual description for statements and reports
 -- for storing an extra string, such as cash machine ref for Tax purposes
 	[RelatedReference]		NVARCHAR (255), -- Can be updated after posting
 -- for debiting asset accounts, related resource is the good/service acquired from supplier/customer/storage

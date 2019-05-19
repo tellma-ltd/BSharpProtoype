@@ -1,4 +1,4 @@
-﻿DECLARE @DocumentTypes TABLE([id] NVARCHAR(255) PRIMARY KEY, [Description] NVARCHAR(255), [Description2] NVARCHAR(255))
+﻿DECLARE @DocumentTypes TABLE([id] NVARCHAR (255) PRIMARY KEY, [Description] NVARCHAR (255), [Description2] NVARCHAR (255))
 INSERT @DocumentTypes ([Id]) VALUES
 	(N'manual-journals'),
 	(N'equity-issues'),	--	(N'equity-issues-foreign'),
@@ -25,7 +25,7 @@ INSERT @DocumentTypes ([Id]) VALUES
 	(N'SaleWitholdingTax'),
 	(N'StockIssueToCustomer');
 
-DECLARE @LineTypes TABLE([id] NVARCHAR(255) PRIMARY KEY, [Description] NVARCHAR(255), [Description2] NVARCHAR(255))
+DECLARE @LineTypes TABLE([id] NVARCHAR (255) PRIMARY KEY, [Description] NVARCHAR (255), [Description2] NVARCHAR (255))
 INSERT @LineTypes ([Id]) VALUES
 	(N'manual-journals'),							-- Needed
 	(N'equity-issues-foreign'),

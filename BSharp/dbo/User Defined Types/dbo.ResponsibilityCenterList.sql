@@ -18,7 +18,7 @@
 	[CustomerSegmentId]		INT, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
 	[TaxSegmentId]			INT, -- e.g., general, existing (30%), expansion (0%)
 
-	[EntityState]			NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]			NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_ResponsibilityCenterList__Code ([Code]),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),

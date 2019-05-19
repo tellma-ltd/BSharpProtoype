@@ -12,7 +12,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],
@@ -65,7 +65,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],
@@ -121,7 +121,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],
@@ -177,7 +177,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],
@@ -233,7 +233,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],
@@ -289,7 +289,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR(255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
 		V.[SerialNumber],
 		V.[TransactionType],
 		V.[IsSystem],

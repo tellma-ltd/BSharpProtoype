@@ -10,7 +10,7 @@
 	[Description3]	NVARCHAR (255),
 	[UnitAmount]	FLOAT (53)		NOT NULL,
 	[BaseAmount]	FLOAT (53)		NOT NULL,
-	[EntityState]	NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]	NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	[Code]			NVARCHAR (255),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_MeasurementUnitList__Code ([Code]),

@@ -18,9 +18,9 @@
 	[Instagram]					NVARCHAR (255),				
 	[Twitter]					NVARCHAR (255),
 	[PreferredContactChannel1]	INT,			-- e.g., Mobile
-	[PreferredContactAddress1]	NVARCHAR(255),  -- e.g., +251 94 123 4567
+	[PreferredContactAddress1]	NVARCHAR (255),  -- e.g., +251 94 123 4567
 	[PreferredContactChannel2]	INT,			-- e.g., email
-	[PreferredContactAddress2]	NVARCHAR(255),	-- e.g., info@contoso.com
+	[PreferredContactAddress2]	NVARCHAR (255),	-- e.g., info@contoso.com
 --	Individuals only
 --	--	Personal
 	[BirthDateTime]				DATETIME2 (7),

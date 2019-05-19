@@ -574,4 +574,18 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[rpt_ConsumablesServices]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="56abd98d-fed2-47c9-8be9-942f85d25f41" ChangeDateTime="05/17/2019 10:02:24">
+    <Property Name="ElementName" Value="[dbo].[api_Operations__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_ResponsibilityCenters__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="13f6b61f-79c7-4613-a179-fc5957dd8b0f" ChangeDateTime="05/17/2019 10:03:53">
+    <Property Name="ElementName" Value="[dbo].[bll_Operations_Validate__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_ResponsibilityCenters_Validate__Save]" />
+  </Operation>
 </Operations>

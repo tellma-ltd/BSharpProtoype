@@ -19,7 +19,7 @@
 	[Value]					VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
 	[ExpectedSettlingDate]	DATETIME2(7),  -- Can be used to decide mobilize split balance between current and non-current
 	[Reference]				NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- Can be updated even after posting.
-	[Memo]					NVARCHAR(255), -- a textual description for statements and reports
+	[Memo]					NVARCHAR (255), -- a textual description for statements and reports
 	[RelatedReference]		NVARCHAR (255), -- Can be updated after posting
 	[RelatedResourceId]		INT, -- Good, Service, Labor, Machine usage
 	[RelatedAgentAccountId]	INT,
@@ -31,7 +31,7 @@
 	[RelatedTime]			DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
 	[RelatedValue]			VTYPE				NOT NULL DEFAULT (0), -- 
 	*/
-	[EntityState]			NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]			NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_EntryList_DocumentIndex ([DocumentIndex]),
 	CHECK ([Direction] IN (-1, 1)),

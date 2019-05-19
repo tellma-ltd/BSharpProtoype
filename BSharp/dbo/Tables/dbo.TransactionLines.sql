@@ -2,10 +2,10 @@
 	[TenantId]				INT,
 	[Id]					INT IDENTITY,
 	[DocumentId]			INT					NOT NULL,
-	[TransactionLineType]	NVARCHAR(255)		NOT NULL,
+	[TransactionLineType]	NVARCHAR (255)		NOT NULL,
 	[TemplateLineId]		INT, -- depending on the line type, the user may/may not be allowed to edit
 	[ScalingFactor]			FLOAT, -- Qty sold for Price list, Qty produced for BOM
-	[Memo]					NVARCHAR(255),
+	[Memo]					NVARCHAR (255),
 
 	[Direction1]			SMALLINT		NOT NULL,
 	[AccountId1]			INT,

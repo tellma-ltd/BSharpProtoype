@@ -10,7 +10,7 @@ BEGIN
 	SELECT @PresentationCurrencyCode = Code FROM dbo.Resources 
 	WHERE Id = (SELECT FunctionalCurrencyId FROM dbo.Settings)
 	
-	DECLARE @PresentationCurrency NVARCHAR(255);
+	DECLARE @PresentationCurrency NVARCHAR (255);
 	SELECT @PresentationCurrency = [Description] FROM dbo.[MeasurementUnits]
 	WHERE [Code] = @PresentationCurrencyCode;
 
@@ -28,9 +28,9 @@ BEGIN
 		N'ExplanationOfChangeInNameOfReportingEntityOrOtherMeansOfIdentificationFromEndOfPrecedingReportingPeriod',
 		N'DescriptionOfNatureOfFinancialStatements');
 */
-	DECLARE @strRoundingLevel NVARCHAR(255) = CAST(@RoundingLevel AS NVARCHAR(255)), 
-			@strPeriod NVARCHAR(255) = cast(@fromDate as NVARCHAR(255)) + N' - ' + cast(@toDate as NVARCHAR(255)),
-			@strToDate NVARCHAR(255) = cast(@toDate as NVARCHAR(255));
+	DECLARE @strRoundingLevel NVARCHAR (255) = CAST(@RoundingLevel AS NVARCHAR (255)), 
+			@strPeriod NVARCHAR (255) = cast(@fromDate as NVARCHAR (255)) + N' - ' + cast(@toDate as NVARCHAR (255)),
+			@strToDate NVARCHAR (255) = cast(@toDate as NVARCHAR (255));
 	INSERT INTO #IFRS([Field], [Value]) VALUES
 	(N'DescriptionOfPresentationCurrency', @PresentationCurrency),
 	(N'PeriodCoveredByFinancialStatements', @strPeriod),

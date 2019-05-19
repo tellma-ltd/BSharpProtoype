@@ -2,8 +2,8 @@
 	[TenantId]			INT,
 	[Id]				INT					IDENTITY,
 	[RecipientId]		INT					NOT NULL, -- An agent ... Even those without AVATAR can be notified.
-	[ContactChannel]	NVARCHAR(255)		NOT NULL,
-	[ContactAddress]	NVARCHAR(255)		NOT NULL,
+	[ContactChannel]	NVARCHAR (255)		NOT NULL,
+	[ContactAddress]	NVARCHAR (255)		NOT NULL,
 	[Message]			NVARCHAR (1024),
 	[CreatedAt]			DATETIMEOFFSET (7)	NOT NULL,
 	[CreatedById]		INT					NOT NULL,

@@ -4,7 +4,7 @@
 	[SortKey]				TINYINT DEFAULT(1),
 	[BaseLineId]			INT,
 	[ScalingFactor]			FLOAT,
-	[Memo]					NVARCHAR(255),
+	[Memo]					NVARCHAR (255),
 
 	[OperationId1]			INT	,
 	[AccountId1]			NVARCHAR (255),
@@ -62,7 +62,7 @@
 	[RelatedResourceId4]	INT,
 	[RelatedAmount4]		MONEY,
 
-	[EntityState]		NVARCHAR(255)		NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]		NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([DocumentIndex] ASC, [LineType] ASC),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

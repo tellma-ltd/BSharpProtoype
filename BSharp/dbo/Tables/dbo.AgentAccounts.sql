@@ -19,13 +19,13 @@
 	[PerDiemRate]				MONEY,			-- probably better moved to a template table
 --	supplier-accounts
 	[SupplierRating]			INT,			-- user defined list
-	[PaymentTerms]				NVARCHAR(255),
+	[PaymentTerms]				NVARCHAR (255),
 	-- extra details PO, LC, etc...
 
 --	customer-accounts
 	[CustomerRating]			INT,			-- user defined list
-	[ShippingAddress]			NVARCHAR(255), -- default, the whole list is in a separate table
-	[BillingAddress]			NVARCHAR(255),
+	[ShippingAddress]			NVARCHAR (255), -- default, the whole list is in a separate table
+	[BillingAddress]			NVARCHAR (255),
 
 	[CreditLine]				MONEY				DEFAULT(0),
 

@@ -17,9 +17,9 @@
 	[Instagram]					NVARCHAR (255),				
 	[Twitter]					NVARCHAR (255),
 	[PreferredContactChannel1]	INT,			-- e.g., Mobile
-	[PreferredContactAddress1]	NVARCHAR(255),  -- e.g., +251 94 123 4567
+	[PreferredContactAddress1]	NVARCHAR (255),  -- e.g., +251 94 123 4567
 	[PreferredContactChannel2]	INT,			-- e.g., email
-	[PreferredContactAddress2]	NVARCHAR(255),	-- e.g., info@contoso.com
+	[PreferredContactAddress2]	NVARCHAR (255),	-- e.g., info@contoso.com
 --	Individuals only
 --	--	Personal
 	[BirthDateTime]				DATETIME2 (7),
@@ -50,7 +50,7 @@
 	[OwnershipType]				NVARCHAR (255), -- Investment/Shareholder/SisterCompany/Other(Default) -- We Own shares in them, they own share in us, ...
 	[OwnershipPercent]			DECIMAL	DEFAULT(0), -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
 
-	[EntityState]				NVARCHAR(255)	NOT NULL DEFAULT(N'Inserted'),
+	[EntityState]				NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_AgentList__Code ([Code]),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),

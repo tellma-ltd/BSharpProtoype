@@ -74,13 +74,13 @@ RETURN;
 ERR_LABEL:
 	SELECT * FROM OpenJson(@ValidationErrorsJson)
 	WITH (
-		[Key] NVARCHAR(255) '$.Key',
-		[ErrorName] NVARCHAR(255) '$.ErrorName',
-		[Argument1] NVARCHAR(255) '$.Argument1',
-		[Argument2] NVARCHAR(255) '$.Argument2',
-		[Argument3] NVARCHAR(255) '$.Argument3',
-		[Argument4] NVARCHAR(255) '$.Argument4',
-		[Argument5] NVARCHAR(255) '$.Argument5'	
+		[Key] NVARCHAR (255) '$.Key',
+		[ErrorName] NVARCHAR (255) '$.ErrorName',
+		[Argument1] NVARCHAR (255) '$.Argument1',
+		[Argument2] NVARCHAR (255) '$.Argument2',
+		[Argument3] NVARCHAR (255) '$.Argument3',
+		[Argument4] NVARCHAR (255) '$.Argument4',
+		[Argument5] NVARCHAR (255) '$.Argument5'	
 	);
 	ROLLBACK;
 RETURN;

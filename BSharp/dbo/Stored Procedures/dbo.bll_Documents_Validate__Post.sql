@@ -9,7 +9,7 @@ SET NOCOUNT ON;
 	-- Cannot post unless in draft mode
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Mode' As [Key], N'Error_TheDocument0IsIn1Mode' As [ErrorName],
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Mode' As [Key], N'Error_TheDocument0IsIn1Mode' As [ErrorName],
 		BE.[SerialNumber] AS Argument1, BE.[DocumentState] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
@@ -17,7 +17,7 @@ SET NOCOUNT ON;
 
 	-- Cannot post with no lines
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR(255)) + ']' As [Key], N'Error_TheDocument0HasNoEntries' As [ErrorName],
+	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']' As [Key], N'Error_TheDocument0HasNoEntries' As [ErrorName],
 		D.[SerialNumber] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE 
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
@@ -27,7 +27,7 @@ SET NOCOUNT ON;
 	-- Cannot post a non-balanced transaction
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR(255)),'') + ']' As [Key], 
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']' As [Key], 
 		N'Error_Document0HasDebitCreditDifference1' As [ErrorName],
 		D.[SerialNumber] AS Argument1, SUM(E.[Direction] * E.[Value]) AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
@@ -39,8 +39,8 @@ SET NOCOUNT ON;
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR(255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
+		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
@@ -51,8 +51,8 @@ SET NOCOUNT ON;
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR(255)) + ']..Entries[' +
-		CAST(E.[Id] AS NVARCHAR(255)) + '].NoteId' As [Key], N'Error_TheDocument0TheNoteId1IsInactive' As [ErrorName],
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']..Entries[' +
+		CAST(E.[Id] AS NVARCHAR (255)) + '].NoteId' As [Key], N'Error_TheDocument0TheNoteId1IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, N.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Documents FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]

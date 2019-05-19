@@ -24,5 +24,5 @@ AS
 		[CreatedById]				INT '$.CreatedById',
 		[ModifiedAt]				DATETIMEOFFSET(7) '$.ModifiedAt',
 		[ModifiedById]				INT '$.ModifiedById',
-		[EntityState]				NVARCHAR(255) '$.EntityState'
+		[EntityState]				NVARCHAR (255) '$.EntityState'
 	);

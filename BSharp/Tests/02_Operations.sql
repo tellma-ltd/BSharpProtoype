@@ -67,7 +67,7 @@ WSI
 				(N'Walia Water Bottling', 18),
 		(N'New Kersa', NULL);
 
-	EXEC [dbo].[api_Operations__Save]
+	EXEC [dbo].[api_ResponsibilityCenters__Save]
 		@Entities = @OperationsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResultsJson = @ResultsJson OUTPUT
@@ -102,7 +102,7 @@ BEGIN
 		[EntityState] = N'Deleted'
 	WHERE [Name] = N'Fake';
 
-	EXEC [dbo].[api_Operations__Save]
+	EXEC [dbo].[api_ResponsibilityCenters__Save]
 		@Entities = @OperationsDTO,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 		@ResultsJson = @ResultsJson OUTPUT;

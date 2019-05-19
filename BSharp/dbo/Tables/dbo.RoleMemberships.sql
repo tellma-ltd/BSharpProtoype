@@ -3,7 +3,7 @@
 	[Id]				INT				IDENTITY,
 	[Userid]			INT				NOT NULL,
 	[RoleId]			INT				NOT NULL,
-	[Memo]				NVARCHAR(255),
+	[Memo]				NVARCHAR (255),
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]		INT				NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 

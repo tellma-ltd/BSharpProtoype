@@ -114,7 +114,7 @@
 
 	PRIMARY KEY CLUSTERED ([LineType] ASC)
 );
-DECLARE @LineType NVARCHAR(255);
+DECLARE @LineType NVARCHAR (255);
 /* RULES
 	FillSql should NOT be based on other calculated columns.
 */

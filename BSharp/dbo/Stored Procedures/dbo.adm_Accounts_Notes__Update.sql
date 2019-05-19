@@ -2,7 +2,7 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @Code nvarchar(255);
+	DECLARE @Code NVARCHAR (255);
 /*
 	SELECT @Code = min(Code) FROM [dbo].[IFRSConcepts];
 	WHILE @Code IS NOT NULL
