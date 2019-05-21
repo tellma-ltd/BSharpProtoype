@@ -17,11 +17,14 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].[Agents] AS t
 		USING (
-			SELECT [Index], [Id], [Name], [Name2], [Name3], [Code], [SystemCode], [PersonType], [IsRelated], [TaxIdentificationNumber],
+			SELECT [Index], [Id], 
+				[Name], [Name2], [Name3], [Code], [PersonType], [IsRelated], [TaxIdentificationNumber],
 				[IsLocal], [Citizenship], [Facebook], [Instagram], [Twitter],
 				[PreferredContactChannel1], [PreferredContactAddress1], [PreferredContactChannel2], [PreferredContactAddress2],
-				[BirthDateTime], [MaritalStatus], [Religion], [Race], [Gender], [TribeId], [RegionId], [ResidentialAddress], [TitleId],
-				[JobTitle], [EmployeeSince], [EducationLevelId], [EducationSublevelId], [BankId], [BankAccountNumber], [NumberOfChildren]
+				[BirthDateTime], [TitleId], [Gender], [ResidentialAddress], [ImageId], [MaritalStatus], [NumberOfChildren],
+				[Religion], [Race],  [TribeId], [RegionId],  
+				[EducationLevelId], [EducationSublevelId], [BankId], [BankAccountNumber],
+				[OrganizationType], [WebSite], [ContactPerson], [RegisteredAddress], [OwnershipType], [OwnershipPercent]
 
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -48,36 +51,48 @@ SET NOCOUNT ON;
 				t.[PreferredContactAddress2] = s.[PreferredContactAddress2],
 
 				t.[BirthDateTime]			= s.[BirthDateTime],
+				t.[TitleId]					= s.[TitleId],
+				t.[Gender]					= s.[Gender],
+				t.[ResidentialAddress]		= s.[ResidentialAddress],
+				t.[ImageId]					= s.[ImageId],
+
 				t.[MaritalStatus]			= s.[MaritalStatus],
+				t.[NumberOfChildren]		= s.[NumberOfChildren],
 				t.[Religion]				= s.[Religion],
 				t.[Race]					= s.[Race],
-				t.[Gender]					= s.[Gender],
 				t.[TribeId]					= s.[TribeId],
 				t.[RegionId]				= s.[RegionId],
-				t.[ResidentialAddress]		= s.[ResidentialAddress],
-				t.[TitleId]					= s.[TitleId],
 
 				t.[EducationLevelId]		= s.[EducationLevelId],
 				t.[EducationSublevelId]		= s.[EducationSublevelId],
 				t.[BankId]					= s.[BankId],
 				t.[BankAccountNumber]		= s.[BankAccountNumber],
-				t.[NumberOfChildren]		= s.[NumberOfChildren],
+
+				t.[OrganizationType]		= s.[OrganizationType],
+				t.[WebSite]					= s.[WebSite],
+				t.[ContactPerson]			= s.[ContactPerson],
+				t.[RegisteredAddress]		= s.[RegisteredAddress],
+				t.[OwnershipType]			= s.[OwnershipType],
+				t.[OwnershipPercent]		= s.[OwnershipPercent],
 
 				t.[ModifiedAt]				= @Now,
 				t.[ModifiedById]			= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([PersonType], 
-				[Name], [Name2], [Name3], [Code], [SystemCode], [IsRelated], [TaxIdentificationNumber],
+			INSERT (
+				[Name], [Name2], [Name3], [Code], [PersonType], [IsRelated], [TaxIdentificationNumber],
 				[IsLocal], [Citizenship], [Facebook], [Instagram], [Twitter],
 				[PreferredContactChannel1], [PreferredContactAddress1], [PreferredContactChannel2], [PreferredContactAddress2],
-				[BirthDateTime], [MaritalStatus], [Religion], [Race], [Gender], [TribeId], [RegionId], [ResidentialAddress], [TitleId],
-				[EducationLevelId], [EducationSublevelId], [BankId], [BankAccountNumber], [NumberOfChildren])
-			VALUES (s.[PersonType],
-				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[SystemCode], s.[IsRelated], s.[TaxIdentificationNumber],
+				[BirthDateTime], [TitleId], [Gender], [ResidentialAddress], [ImageId], [MaritalStatus], [NumberOfChildren],
+				[Religion], [Race],  [TribeId], [RegionId],  
+				[EducationLevelId], [EducationSublevelId], [BankId], [BankAccountNumber],
+				[OrganizationType], [WebSite], [ContactPerson], [RegisteredAddress], [OwnershipType], [OwnershipPercent])
+			VALUES (
+				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[PersonType], s.[IsRelated], s.[TaxIdentificationNumber],
 				s.[IsLocal], s.[Citizenship], s.[Facebook], s.[Instagram], s.[Twitter],
 				s.[PreferredContactChannel1], s.[PreferredContactAddress1], s.[PreferredContactChannel2], s.[PreferredContactAddress2],
-				s.[BirthDateTime], s.[MaritalStatus], s.[Religion], s.[Race], s.[Gender], s.[TribeId], s.[RegionId], s.[ResidentialAddress], s.[TitleId],
-				s.[EducationLevelId], s.[EducationSublevelId], s.[BankId], s.[BankAccountNumber], s.[NumberOfChildren])
+				s.[BirthDateTime], s.[TitleId], s.[Gender], s.[ResidentialAddress], s.[ImageId], s.[MaritalStatus], s.[NumberOfChildren], s.[Religion], s.[Race], s.[TribeId], s.[RegionId], 
+				s.[EducationLevelId], s.[EducationSublevelId], s.[BankId], s.[BankAccountNumber],
+				s.[OrganizationType], s.[WebSite], s.[ContactPerson], s.[RegisteredAddress], s.[OwnershipType], s.[OwnershipPercent])
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds	FOR JSON PATH);

@@ -8,7 +8,12 @@
 	[DocumentDate]				DATETIME2 (7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	[DocumentState]				NVARCHAR (255)		NOT NULL DEFAULT (N'Draft'), -- N'Void', N'InProcess', N'Completed' {Voucher: Posted, Request:Authorized, Inquiry:Resolved, Plan:Approved, Template:Accepted}
 	[SerialNumber]				INT,				-- auto generated, copied to paper if needed.
-	[Reference]					NVARCHAR (255),		-- Overridden by the one in entries. Useful when operating in paper-first mode.
+	-- When operating in paper-first mode, accountants fill vouchers, then enter them in the system
+	-- later. By writing the voucher type and number in the system, we can determine if vouchers
+	-- are missing or duplicated.
+	-- Usually, the voucher type = transaction type, except in the case of JV: the user has to select
+	[VoucherTypeId]				INT,
+	[VoucherNumber]				NVARCHAR (255),
 	[Memo]						NVARCHAR (255),	
 	-- Transaction specific, to record the acquisition or loss of goods and services
 	-- Orders that are not negotiables, are assumed to happen, and hence are journalized, even we are verifying it later.
@@ -24,16 +29,16 @@
 	[TransactionType]			NVARCHAR (255),		-- N'manual-journals', 
 	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
 	[Repetitions]				INT					NOT NULL DEFAULT (0), -- time unit is function of frequency
-		[EndDate] AS (
-						CASE 
-							WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
-							WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
-							WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
-							WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
-							WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
-							WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
-						END
-		) PERSISTED,
+	[EndDate] AS (
+					CASE 
+						WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
+						WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
+						WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
+						WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
+						WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
+						WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
+					END
+	) PERSISTED,
 	-- Request specific, to acquire goods or services that require pre-authorization
 	-- purchase requisition, payment requesition, production request, maintenance request
 	[RequestType]				NVARCHAR (255),		-- N'payment-requests', N'purchase-requests', 'production-requests'
@@ -57,6 +62,10 @@
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId], [Id]), -- Voucher/Request/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
 	CONSTRAINT [CK_Documents_DocumentType] CHECK ([DocumentType] IN (N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template')),
+	-- If the company is in Alofi, and the server is hosted in Apia, the server time will be one day behind
+	-- So, the user will not be able to enter transactions unless DocumentDate is allowed 1d future 
+	CONSTRAINT [CK_Documents_DocumentDate] CHECK ([DocumentDate] < DATEADD(DAY, 1, GETDATE()) OR [DocumentType] <> N'Transaction') ,
+	CONSTRAINT [FK_Documents_VoucherType] FOREIGN KEY ([TenantId], [VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([TenantId], [Id]),
 	CONSTRAINT [CK_Documents_Duration] CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
 	CONSTRAINT [FK_Documents_TransactionType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),

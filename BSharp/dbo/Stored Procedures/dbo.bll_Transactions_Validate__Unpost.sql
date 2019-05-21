@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Unpost]
-	@Documents [dbo].[IndexedIdList] READONLY,
+﻿CREATE PROCEDURE [dbo].[bll_Transactions_Validate__Unpost]
+	@Transactions [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -11,9 +11,9 @@ SET NOCOUNT ON;
 	-- Cannot unpost if the period is closed	
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].StartDateTime' As [Key], N'Error_TheDocumentDate0FallsBefore1ArchiveDate' As [ErrorName],
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].[DocumentDate]' As [Key], N'Error_TheDocumentDate0FallsBefore1ArchiveDate' As [ErrorName],
 		BE.[DocumentDate] AS Argument1, @ArchiveDate AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Documents FE
+	FROM @Transactions FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
 	WHERE (BE.[DocumentDate] < @ArchiveDate)
 
@@ -22,10 +22,10 @@ SET NOCOUNT ON;
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].TransactionEntries[' +
+		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId' As [Key], N'Error_TheTransaction0TheAccountId1IsInactive' As [ErrorName],
 		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Documents FE
+	FROM @Transactions FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
 	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
 	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
@@ -34,12 +34,12 @@ SET NOCOUNT ON;
 	-- No inactive note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].NoteId' As [Key], N'Error_TheDocument0TheNoteId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, N.[Name] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Documents FE
-	JOIN dbo.[Documents] D ON FE.[Id] = D.[Id]
-	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].TransactionEntries[' +
+		CAST(E.[Id] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheTransaction0TheNoteId1IsInactive' As [ErrorName],
+		D.SerialNumber AS Argument1, N.[Label] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	FROM @Transactions FE
+	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
+	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
 	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
 	WHERE (N.IsActive = 0);
 

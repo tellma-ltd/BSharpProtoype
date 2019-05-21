@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[dal_Documents_Mode__Update]
+﻿CREATE PROCEDURE [dbo].[dal_Documents_State__Update]
 	@Documents [dbo].[IndexedIdList] READONLY,
-	@Mode NVARCHAR (255)
+	@State NVARCHAR (255)
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
@@ -8,12 +8,11 @@ BEGIN
 
 	UPDATE dbo.Documents
 	SET
-		[DocumentState] = @Mode,
-		[AssigneeId] = CASE WHEN @Mode = N'Draft' THEN @UserId ELSE NULL END,
+		[DocumentState] = @State,
 		ModifiedAt = @Now,
 		ModifiedById = @UserId
 	WHERE [Id] IN (
 		SELECT [Id] FROM @Documents
 	)
-	AND [DocumentState] <> @Mode;
+	AND [DocumentState] <> @State;
 END;

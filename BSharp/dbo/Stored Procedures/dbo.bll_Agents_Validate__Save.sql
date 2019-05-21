@@ -10,7 +10,9 @@ SET NOCOUNT ON;
     INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
     SELECT '[' + CAST([Index] AS NVARCHAR (255)) + '].Id' As [Key], N'Error_TheId0WasNotFound' As [ErrorName], CAST([Id] As NVARCHAR (255)) As [Argument1]
     FROM @Entities
-    WHERE Id Is NOT NULL AND Id NOT IN (SELECT Id from [dbo].[Agents] WHERE [RelationType] = N'Agent');
+    WHERE Id Is NOT NULL
+	AND Id NOT IN (SELECT Id from [dbo].[Agents])
+	OPTION(HASH JOIN);
 
 	-- Code must be unique
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 

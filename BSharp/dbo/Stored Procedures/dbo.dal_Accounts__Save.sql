@@ -17,43 +17,46 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].Accounts AS t
 		USING (
-			SELECT [Index], [Id], [Code], [AccountType], [AccountCategory], [Name], [Name2],
-				[IFRSConceptId], [OperationId], [CustodyId], [Reference], [ResourceId], [ParentId] 
+			SELECT
+				[Index], [Id], [Node], [IFRSAccountId], [IsAggregate],
+				[Name], [Name2], [Name3], [Code], [IFRSNoteId], [ResponsibilityCenterIsFixed],
+				[ResponsibilityCenterId], [AgentAccountIsFixed], [AgentAccountId],
+				[ResourceIsFixed], [ResourceId], [ExpectedSettlingDateIsFixed], [ExpectedSettlingDate]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED 
 		THEN
 			UPDATE SET
-				t.[Code]			= s.[Code],
-				t.[AccountType]		= s.[AccountType],
-				t.[AccountCategory] = s.[AccountCategory],
-				t.[Name]			= s.[Name],
-				t.[Name2]			= s.[Name2],
-				t.[IFRSConceptId]	= s.[IFRSConceptId],
-				t.[OperationId]		= s.[OperationId],
-				t.[CustodyId]		= s.[CustodyId],
-				t.[Reference]		= s.[Reference],
-				t.[ResourceId]		= s.[ResourceId],
-				--t.[ParentId]		= s.[ParentId], reparenting
+				t.[Node]						= s.[Node], 
+				t.[IFRSAccountId]				= s.[IFRSAccountId],
+				t.[IsAggregate]					= s.[IsAggregate],
+				t.[Name]						= s.[Name],
+				t.[Name2]						= s.[Name2],
+				t.[Name3]						= s.[Name3],
+				t.[Code]						= s.[Code],
+				t.[IFRSNoteId]					= s.[IFRSNoteId],
+				t.[ResponsibilityCenterIsFixed] = s.[ResponsibilityCenterIsFixed],
+				t.[ResponsibilityCenterId]		= s.[ResponsibilityCenterId],
+				t.[AgentAccountIsFixed]			= s.[AgentAccountIsFixed],
+				t.[AgentAccountId]				= s.[AgentAccountId],
+				t.[ResourceIsFixed]				= s.[ResourceIsFixed],
+				t.[ResourceId]					= s.[ResourceId],
+				t.[ExpectedSettlingDateIsFixed] = s.[ExpectedSettlingDateIsFixed],
+				t.[ExpectedSettlingDate]		= s.[ExpectedSettlingDate],
+
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([Code], [AccountType], [AccountCategory], [Name], [Name2],
-				[IFRSConceptId], [OperationId], [CustodyId], [Reference], [ResourceId], [ParentId])
-			VALUES (s.[Code], s.[AccountType], s.[AccountCategory], s.[Name], s.[Name2], 
-				s.[IFRSConceptId], s.[OperationId], s.[CustodyId], s.[Reference], s.[ResourceId], s.[ParentId])
+			INSERT ([Node], [IFRSAccountId], [IsAggregate],
+				[Name], [Name2], [Name3], [Code], [IFRSNoteId], [ResponsibilityCenterIsFixed],
+				[ResponsibilityCenterId], [AgentAccountIsFixed], [AgentAccountId],
+				[ResourceIsFixed], [ResourceId], [ExpectedSettlingDateIsFixed], [ExpectedSettlingDate])
+			VALUES (s.[Node], s.[IFRSAccountId], s.[IsAggregate],
+				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[IFRSNoteId], s.[ResponsibilityCenterIsFixed],
+				s.[ResponsibilityCenterId], s.[AgentAccountIsFixed], s.[AgentAccountId],
+				s.[ResourceIsFixed], s.[ResourceId], s.[ExpectedSettlingDateIsFixed], s.[ExpectedSettlingDate])
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x
-
-	UPDATE BE
-	SET BE.[ParentId]= T.[ParentId]
-	FROM [dbo].Accounts BE
-	JOIN (
-		SELECT II.[Id], IIParent.[Id] As ParentId
-		FROM @Entities O
-		JOIN @IndexedIds IIParent ON IIParent.[Index] = O.ParentIndex
-		JOIN @IndexedIds II ON II.[Index] = O.[Index]
-	) T ON BE.Id = T.[Id]
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

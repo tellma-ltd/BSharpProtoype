@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[dal_Documents__Save]
-	@Documents [dbo].[TransactionList] READONLY, 
+﻿CREATE PROCEDURE [dbo].[dal_Transactions__Save]
+	@TransactionType NVARCHAR(255),
+	@Transactions [dbo].[TransactionList] READONLY,
 	@Lines [dbo].[TransactionLineList] READONLY, 
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
@@ -12,13 +13,13 @@ BEGIN
 
 	-- Delete only if the last one of its type, (WARNING: WE NEED TO do it for the given transaction type)
 	--DELETE FROM [dbo].[Documents]
-	--WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted')
+	--WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
 	--AND [Id] > (SELECT MAX([Id]) FROM dbo.Documents WHERE Mode <> N'Void')
 
 	---- Otherwise, mark as void
 	--UPDATE [dbo].[Documents]
 	--SET Mode = N'Void'
-	--WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
+	--WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted');
 
 	--DELETE FROM [dbo].Lines
 	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
@@ -33,29 +34,32 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [State], [DocumentType], [Frequency], [Duration], [StartDateTime], [EndDateTime], 
-				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + 
+				[Index], [Id], [DocumentDate], [VoucherTypeId], [VoucherNumber], [Memo], [Frequency], [Repetitions],
+				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
 				-- and max(Id) per transaction type.
-					(SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents) As [SerialNumber]
-			FROM @Documents 
+					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE TransactionType = @TransactionType
+				) As [SerialNumber]
+			FROM @Transactions 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED
 		THEN
 			UPDATE SET
-				t.[DocumentType]				= s.[State],
-				t.[Frequency]			= s.[Frequency],
-				t.[Repetitions]			= s.[Duration],
-				t.[DocumentDate]		= s.[StartDateTime],
-				t.[EndDate]			= s.[EndDateTime],
-				t.[ModifiedAt]			= @Now,
-				t.[ModifiedById]		= @UserId
+				t.[DocumentDate]	= s.[DocumentDate],
+				t.[VoucherTypeId]	= s.[VoucherTypeId],
+				t.[VoucherNumber]	= s.[VoucherNumber],
+				t.[Memo]			= s.[Memo],
+				t.[Frequency]		= s.[Frequency],
+				t.[Repetitions]		= s.[Repetitions],
+
+				t.[ModifiedAt]		= @Now,
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[DocumentType], [TransactionType], [Frequency], [Repetitions], [DocumentDate], [EndDate], [SerialNumber]
+				[DocumentDate],[VoucherTypeId], [VoucherNumber],[Memo],[Frequency],[Repetitions]
 			)
 			VALUES (
-				s.[State], s.[DocumentType], s.[Frequency], s.[Duration], s.[StartDateTime], s.[EndDateTime], s.[SerialNumber]
+				s.[DocumentDate], s.[VoucherTypeId], s.[VoucherNumber], s.[Memo], s.[Frequency], s.[Repetitions]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -86,8 +90,8 @@ BEGIN
 	MERGE INTO [dbo].[TransactionEntries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [DocumentId], E.[LineType], E.[ResponsibilityCenterId], E.[Reference],
-			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[NoteId],
+			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[ResponsibilityCenterId], E.[Reference],
+			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[IFRSNoteId],
 			E.[RelatedReference], E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
@@ -103,7 +107,7 @@ BEGIN
 			t.[Direction]				= s.[Direction],
 			t.[MoneyAmount]				= s.[MoneyAmount],
 			t.[Value]					= s.[Value],
-			t.[IFRSNoteId]					= s.[NoteId],
+			t.[IFRSNoteId]				= s.[IFRSNoteId],
 			t.[RelatedReference]		= s.[RelatedReference],
 			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
@@ -114,8 +118,8 @@ BEGIN
 		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId], [Reference],
 				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IFRSNoteId],
 				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
-		VALUES (s.[DocumentId], s.[LineType], s.[ResponsibilityCenterId], s.[Reference],
-				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[NoteId],
+		VALUES (s.[DocumentId], s.[IsSystem], s.[ResponsibilityCenterId], s.[Reference],
+				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[IFRSNoteId],
 				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

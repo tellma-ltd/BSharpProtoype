@@ -32,7 +32,9 @@
 	[Value]					VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
 -- Settling date of assets, liabilities. Examples: Asset Disposal date, Inventory expiry date, loan/borrowing settlement date.
 	[ExpectedSettlingDate]	DATETIME2(7),  -- Can be used to decide mobilize split balance between current and non-current
-	-- useful to link the system to an external system (bank, paper, etc). 
+	-- While Voucher Number referes to the voucher representing the transaction, if any,
+	-- this refers to any other identifying string that we may need to store, such as Check number
+	-- deposit slip reference, invoice number, etc...
 	[Reference]				NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- Can be updated even after posting.
 -- Additional information to satisfy reporting requirements
 	[Memo]					NVARCHAR (255), -- a textual description for statements and reports

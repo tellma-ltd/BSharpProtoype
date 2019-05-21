@@ -76,3 +76,13 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__SystemCode]
   ON [dbo].[Agents]([TenantId], [Code]) WHERE [SystemCode] IS NOT NULL;
  GO
+ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO
+ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+GO
+ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+GO
+ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+GO
+ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+GO

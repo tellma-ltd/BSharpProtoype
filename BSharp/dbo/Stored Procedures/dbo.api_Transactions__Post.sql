@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents__Post]
+﻿CREATE PROCEDURE [dbo].[api_Transactions__Post]
 	@Documents [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
@@ -25,14 +25,14 @@ BEGIN
 	EXEC [dbo].[dal_Documents__Sign] @Documents = @Documents;
 
 	-- Validate, checking available signatures for transaction type
-	EXEC [dbo].[bll_Documents_Validate__Post]
+	EXEC [dbo].[bll_Transactions_Validate__Post]
 		@Documents = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents_Mode__Update]	@Documents = @Documents, @Mode = N'Posted';
+	EXEC [dbo].[dal_Documents_State__Update]	@Documents = @Documents, @State = N'Posted';
 
 	IF (@ReturnEntities = 1)
 	BEGIN

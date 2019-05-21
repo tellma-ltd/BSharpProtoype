@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[api_Documents__Save]
-	@Documents [dbo].[TransactionList] READONLY,
+﻿CREATE PROCEDURE [dbo].[api_Transactions__Save]
+	@Transactions [dbo].[TransactionList] READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@Lines [dbo].[TransactionLineList] READONLY, 
 	@Entries [dbo].[TransactionEntryList] READONLY,
@@ -9,23 +9,24 @@
 AS
 BEGIN
 	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
-	DECLARE @DocumentsLocal [dbo].[TransactionList], @LinesLocal [dbo].[TransactionLineList], @EntriesLocal [dbo].[TransactionEntryList];
+	DECLARE @TransactionsLocal [dbo].[TransactionList], @LinesLocal [dbo].[TransactionLineList], @EntriesLocal [dbo].[TransactionEntryList];
 
+	/*TODO: Uncomment and debug
 	EXEC [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
-		@Documents = @Documents,
+		@Transactions = @Transactions,
 		@DocumentLineTypes = @DocumentLineTypes,
 		@Lines = @Lines,
 		@Entries = @Entries,
 		@ResultJson = @ResultJson OUTPUT;
-
+*/
 		/* TODO: Uncomment and debug
-	INSERT INTO @DocumentsLocal SELECT * FROM dbo.[fw_Documents__Json](@ResultJson);
+	INSERT INTO @TransactionsLocal SELECT * FROM dbo.[fw_Documents__Json](@ResultJson);
 	INSERT INTO @LinesLocal SELECT * FROM dbo.[fw_Lines__Json](@ResultJson);
 	INSERT INTO @EntriesLocal SELECT * FROM dbo.[fw_Entries__Json](@ResultJson);
 	*/
 	--Validate Domain rules
-	EXEC [dbo].[bll_Documents_Validate__Save]
-		@Documents = @DocumentsLocal,
+	EXEC [dbo].[bll_Transactions_Validate__Save]
+		@Transactions = @TransactionsLocal,
 		@Lines = @LinesLocal,
 		@Entries = @EntriesLocal,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
@@ -33,13 +34,13 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	--SELECT * FROM @DocumentsLocal;
+	--SELECT * FROM @TransactionsLocal;
 	--SELECT * FROM @LinesLocal;
 	--SELECT * FROM @EntriesLocal;
 	-- Validate business rules (read from the table)
 
-	EXEC [dbo].[dal_Documents__Save]
-		@Documents = @DocumentsLocal,
+	EXEC [dbo].[dal_Transactions__Save]
+		@Transactions = @TransactionsLocal,
 		@Lines = @LinesLocal,
 		@Entries = @EntriesLocal,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;

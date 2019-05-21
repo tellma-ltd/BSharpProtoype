@@ -7,6 +7,7 @@
 	[Name3]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
+	[UnitId]					INT					NOT NULL,
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.
 	[MassUnitId]				INT, -- the unit If the resource has a mass measure assigned to it.
 	[MassRate]					DECIMAL,
@@ -35,6 +36,8 @@
 	[Lookup4Id]					INT,			-- UDL 
 	[PartOfId]					INT, -- for compound assets
 	[InstanceOfId]				INT, -- to allow contracts to be for higher level.
+	[PartOfIndex]					INT, -- for compound assets
+	[InstanceOfIndex]				INT, -- to allow contracts to be for higher level.
 	[EntityState]			NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
 	INDEX IX_ResourceList__Code ([Code]),

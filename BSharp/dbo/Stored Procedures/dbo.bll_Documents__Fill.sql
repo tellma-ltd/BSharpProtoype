@@ -1,15 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
-	@Documents [dbo].[TransactionList] READONLY, 
+	@Transactions [dbo].[TransactionList] READONLY, 
 	@Lines [dbo].[TransactionLineList] READONLY, 
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@ResultJson NVARCHAR(MAX) OUTPUT
 AS
 DECLARE @DEBUG INT = CONVERT(INT, SESSION_CONTEXT(N'Debug'));
-DECLARE @DocumentsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @DocumentLineTypesLocal [dbo].[DocumentLineTypeList],
+DECLARE @TransactionsLocal [dbo].[DocumentList], @LinesLocal [dbo].[LineList], @DocumentLineTypesLocal [dbo].[DocumentLineTypeList],
 		@EntriesLocal [dbo].[EntryList], @SmartEntriesLocal [dbo].[EntryList], @Offset INT;
 BEGIN -- fill missing data from the inserted/updated
-	INSERT INTO @DocumentsLocal SELECT * FROM @Documents WHERE [EntityState] IN (N'Inserted', N'Updated');
+	INSERT INTO @TransactionsLocal SELECT * FROM @Transactions WHERE [EntityState] IN (N'Inserted', N'Updated');
 	INSERT INTO @DocumentLineTypesLocal SELECT * FROM @DocumentLineTypes WHERE [EntityState] IN (N'Inserted', N'Updated');
 	INSERT INTO @LinesLocal SELECT * FROM @Lines WHERE [EntityState] IN (N'Inserted', N'Updated');
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries WHERE [EntityState] IN (N'Inserted', N'Updated');
@@ -18,7 +18,7 @@ BEGIN -- Inherit from defaults
 	UPDATE D -- Set End Date Time
 	SET [EndDateTime] = 
 		[dbo].[fn_EndDateTime__Frequency_Duration_StartDateTime]([Frequency], [Duration], [StartDateTime])
-	FROM @DocumentsLocal D
+	FROM @TransactionsLocal D
 
 	Update E
 	SET
@@ -35,7 +35,7 @@ BEGIN -- Inherit from defaults
 		E.[RelatedResourceId] = CASE WHEN D.[RelatedResourceId] IS NOT NULL THEN D.[RelatedResourceId] ELSE E.[RelatedResourceId] END,
 		E.[RelatedAmount] = CASE WHEN D.[RelatedAmount] IS NOT NULL THEN D.[RelatedAmount] ELSE E.[RelatedAmount] END
 	FROM @EntriesLocal E
-	JOIN @DocumentsLocal D ON E.[DocumentIndex] = D.[Index];
+	JOIN @TransactionsLocal D ON E.[DocumentIndex] = D.[Index];
 
 	UPDATE L -- Inherit lines data from tab headers data. Useful..
 	SET 
@@ -96,7 +96,7 @@ BEGIN -- Inherit from defaults
 		L.[RelatedAmount4] = COALESCE(D.[RelatedAmount], DLT.[RelatedAmount4], L.[RelatedAmount4])
 	FROM @LinesLocal L
 	JOIN @DocumentLineTypesLocal DLT ON L.DocumentIndex = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType]
-	JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
+	JOIN @TransactionsLocal D ON D.[Index] = L.[DocumentIndex]
 END
 
 BEGIN -- Fill lines from specifications
@@ -137,7 +137,7 @@ BEGIN -- Fill lines from specifications
 			', '') + ISNULL('L.Reference2 = ' +	(SELECT Reference2FillSql FROM LineTypeSpecifications WHERE LineType = @LineType) + ',
 			', '') + 'L.[Index] = L.[Index]
 			FROM @LinesLocal L
-			JOIN @DocumentsLocal D ON D.[Index] = L.[DocumentIndex]
+			JOIN @TransactionsLocal D ON D.[Index] = L.[DocumentIndex]
 			JOIN @DocumentLineTypesLocal DLT ON D.[Index] = DLT.[DocumentIndex] AND L.[LineType] = DLT.[LineType];
 			SELECT * FROM @LinesLocal;
 		';
@@ -150,17 +150,17 @@ BEGIN -- Fill lines from specifications
 		END;
 
 		DECLARE @LinesInput LineList;
-		SET @ParmDefinition = N'@DocumentsLocal dbo.DocumentList READONLY, @DocumentLineTypesLocal dbo.DocumentLineTypeList READONLY, @Lines dbo.LineList READONLY';		
+		SET @ParmDefinition = N'@TransactionsLocal dbo.DocumentList READONLY, @DocumentLineTypesLocal dbo.DocumentLineTypeList READONLY, @Lines dbo.LineList READONLY';		
 
 		DELETE FROM @LinesInput; INSERT INTO @LinesInput SELECT * FROM @LinesLocal WHERE LineType = @LineType;
 				
 		DELETE FROM @LinesLocal WHERE LineType = @LineType;
 		INSERT INTO @LinesLocal -- would be nice if we can use merge instead.
 			EXEC sp_executesql @Sql, @ParmDefinition,
-				@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesInput;
+				@TransactionsLocal = @TransactionsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesInput;
 
 		EXEC sp_executeSql @AppendSql, @ParmDefinition,
-			@DocumentsLocal = @DocumentsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesLocal;
+			@TransactionsLocal = @TransactionsLocal, @DocumentLineTypesLocal = @DocumentLineTypesLocal, @Lines = @LinesLocal;
 
 		SELECT @LineType = MIN(LineType) FROM @DocumentLineTypes WHERE LineType > @LineType;
 	END
@@ -227,13 +227,13 @@ END
 
 IF @DEBUG = 1
 BEGIN
-	select * from @DocumentsLocal;
+	select * from @TransactionsLocal;
 	select * from @DocumentLineTypesLocal;
 	select * from @LinesLocal;
 	select * from @EntriesLocal;
 END
 BEGIN -- Append the deleted ones
-	INSERT INTO @DocumentsLocal SELECT * FROM @Documents WHERE [EntityState] = N'Deleted';
+	INSERT INTO @TransactionsLocal SELECT * FROM @Transactions WHERE [EntityState] = N'Deleted';
 	INSERT INTO @LinesLocal SELECT * FROM @Lines WHERE [EntityState] = N'Deleted';
 	INSERT INTO @EntriesLocal SELECT * FROM @Entries WHERE [EntityState] = N'Deleted';
 	SELECT @ResultJson = (
@@ -241,7 +241,7 @@ BEGIN -- Append the deleted ones
 			*,
 			(SELECT * FROM @EntriesLocal E WHERE E.[DocumentIndex] = D.[Index] FOR JSON PATH) Entries,
 			(SELECT * FROM @LinesLocal L WHERE L.[DocumentIndex] = D.[Index] FOR JSON PATH) Lines
-		FROM @DocumentsLocal D
+		FROM @TransactionsLocal D
 		FOR JSON PATH 
 	);
 END

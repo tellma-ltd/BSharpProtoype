@@ -1,7 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_NegativeInventories]
 	@AsOfDate Datetime = '01.01.2020'
-AS 
-RETURN
+AS
 WITH IFRSInventoryAccounts
 AS
 (

@@ -61,7 +61,7 @@ BEGIN --================  LEAVES =======================--
 	[DocumentIndex], [LineType], [OperationId1],[AgentId2],[AgentId1], [ResourceId1], [Amount1], [Value1]) VALUES
 	(@LIdx + 1, @DIdx, @LineType, @WSI, @Finance,	@TizitaNigussie, @ETB,			1000,		1000);
 END;
-EXEC [dbo].[api_Documents__Save]
+EXEC [dbo].[api_Transactions__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave,
 	@Lines = @LSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
@@ -79,7 +79,7 @@ INSERT INTO @Docs([Index], [Id])
 SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [DocumentState] = N'Draft';
 
-EXEC [dbo].[api_Documents__Post]
+EXEC [dbo].[api_Transactions__Post]
 	@Documents = @Docs,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ReturnEntities = 0,

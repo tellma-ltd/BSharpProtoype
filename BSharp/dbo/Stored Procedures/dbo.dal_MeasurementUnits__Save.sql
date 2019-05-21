@@ -15,7 +15,7 @@ SET NOCOUNT ON;
 	(
 		MERGE INTO [dbo].MeasurementUnits AS t
 		USING (
-			SELECT [Index], [Id], [Code], [UnitType], [Name], [Name2], [Description], [UnitAmount], [BaseAmount]
+			SELECT [Index], [Id], [Code], [UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)

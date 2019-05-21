@@ -9,6 +9,7 @@ AS
 		D.Id As DocumentId,
 		D.[DocumentDate],
 		D.[SerialNumber],
+		D.[VoucherNumber],
 		D.[TransactionType],
 		D.[Frequency],
 		D.[Repetitions],
@@ -42,7 +43,7 @@ AS
 		E.[Time],
 		E.[Value],
 		E.[ExpectedSettlingDate],
-		COALESCE(D.[Reference], E.[Reference]) AS [Reference],
+		E.[Reference],
 		COALESCE(D.[Memo], E.[Memo]) AS [Memo],
 		E.[RelatedReference],
 		E.[RelatedResourceId],
@@ -65,5 +66,5 @@ AS
 		JOIN [dbo].[Accounts] A ON E.AccountId = A.Id AND E.TenantId = A.TenantId
 	WHERE
 		(D.[DocumentType] = N'Transaction' AND D.[DocumentState] = N'Posted');
-GO
-CREATE UNIQUE CLUSTERED INDEX IDX_TransactionEntriesView ON [dbo].[TransactionEntriesView]
+GO;
+--CREATE UNIQUE CLUSTERED INDEX IDX_TransactionEntriesView ON [dbo].[TransactionEntriesView];

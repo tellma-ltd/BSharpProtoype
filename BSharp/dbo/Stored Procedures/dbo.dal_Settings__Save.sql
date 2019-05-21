@@ -3,27 +3,25 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
-
--- Deletions
-	DELETE FROM [dbo].Settings
-	WHERE [Field] IN (SELECT [Field] FROM @Settings WHERE [EntityState] = N'Deleted');
 
 -- Inserts and Updates
 	MERGE INTO [dbo].Settings AS t
 	USING (
-		SELECT [Field], [Value]
+		SELECT [FunctionalCurrencyId], [ArchiveDate], [TenantLanguage2], [TenantLanguage3]
 		FROM @Settings 
 		WHERE [EntityState] IN (N'Inserted', N'Updated')
-	) AS s ON (t.[Field] = s.[Field])
+	) AS s ON (1=1)
 	WHEN MATCHED 
 	THEN
 		UPDATE SET 
-			t.[Value]		= s.[Value],
-			t.[ModifiedAt]	= @Now,
-			t.[ModifiedById]	= @UserId
+			t.[FunctionalCurrencyId]	= s.[FunctionalCurrencyId],
+			t.[ArchiveDate]				= s.[ArchiveDate],
+			t.[TenantLanguage2]			= s.[TenantLanguage2],
+			t.[TenantLanguage3]			= s.[TenantLanguage3],
+			t.ModifiedAt				= @Now,
+			t.ModifiedById				= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [Field], [Value], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-		VALUES (@TenantId, s.[Field], s.[Value], @Now, @UserId, @Now, @UserId);
+		INSERT ([FunctionalCurrencyId], [ArchiveDate], [TenantLanguage2], [TenantLanguage3])
+		VALUES (s.[FunctionalCurrencyId], s.[ArchiveDate], s.[TenantLanguage2], s.[TenantLanguage3]);	

@@ -7,7 +7,7 @@
 	CONSTRAINT [PK_AccountsNotes] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_AccountsNotes_Direction] CHECK ([Direction] IN (-1, 0, +1)),
 	CONSTRAINT [FK_AccountsNotes_IFRSAccountConcepts] FOREIGN KEY ([TenantId], [IFRSAccountConcept]) REFERENCES [dbo].[IFRSAccounts] ([TenantId], [Id]) ON DELETE CASCADE, 
-	CONSTRAINT [FK_AccountsNotes_IFRSNoteConcepts] FOREIGN KEY ([TenantId], [IFRSNoteConcept]) REFERENCES [dbo].[IFRSNotes] ([TenantId], [IFRSConcept]) ON DELETE CASCADE
+	CONSTRAINT [FK_AccountsNotes_IFRSNoteConcepts] FOREIGN KEY ([TenantId], [IFRSNoteConcept]) REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]) ON DELETE CASCADE
 );
 GO;
 CREATE UNIQUE INDEX [IX_IFRSAccountConceptsNoteConcepts__IFRSAccountConcept_IFRSNoteConcept_Direction]

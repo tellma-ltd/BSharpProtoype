@@ -15,14 +15,14 @@ BEGIN
 		RETURN;
 
 	-- Validate, checking available signatures for transaction type
-	EXEC [dbo].[bll_Documents_Validate__Unpost]
+	EXEC [dbo].[bll_Transactions_Validate__Unpost]
 		@Documents = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents_Mode__Update]	@Documents = @Documents, @Mode = N'Draft';
+	EXEC [dbo].[dal_Documents_State__Update]	@Documents = @Documents, @Mode = N'Draft';
 
 	IF (@ReturnEntities = 1)
 	BEGIN

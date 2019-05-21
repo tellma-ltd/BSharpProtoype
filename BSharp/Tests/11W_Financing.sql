@@ -15,7 +15,7 @@ VALUES
 (@LIdx + 1, @DIdx, @LineType,	@MohamadAkra,	1000,	2350000,	100000,		@USD,			@CBEUSD,	N'LT101'),
 (@LIdx + 2, @DIdx, @LineType,	@AhmadAkra,		1000,	2350000,	100000,		@USD,			@CBEUSD,	N'LT101');
 
-EXEC [dbo].[api_Documents__Save]
+EXEC [dbo].[api_Transactions__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave,
 	@Lines = @LSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
@@ -33,7 +33,7 @@ INSERT INTO @Docs([Index], [Id])
 SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [DocumentState] = N'Draft';
 
-EXEC [dbo].[api_Documents__Post]
+EXEC [dbo].[api_Transactions__Post]
 	@Documents = @Docs,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ReturnEntities = 0,

@@ -21,5 +21,3 @@ SELECT *
 
 		[EntityState] NVARCHAR (255) '$.EntityState'
 	);
-
-

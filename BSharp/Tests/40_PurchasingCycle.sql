@@ -18,7 +18,7 @@ INSERT INTO @WLSave ([LineIndex],
 VALUES
 (@WLIdx + 1, @DIdx, N'PaymentIssueToSupplier',	@Lifan,	N'FS104', 200000, 4000, N'WT101', 196000, N'CK1201', @TigistSafe, @ERCA);
 
-EXEC [dbo].[api_Documents__Save]
+EXEC [dbo].[api_Transactions__Save]
 	@Documents = @DSave, @DocumentLineTypes = @DLTSave, @WideLines = @WLSave,
 	@Lines = @LSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
@@ -36,7 +36,7 @@ INSERT INTO @Docs([Index], [Id])
 SELECT ROW_NUMBER() OVER(ORDER BY [Id]), [Id] FROM dbo.Documents 
 WHERE [DocumentState] = N'Draft';
 
-EXEC [dbo].[api_Documents__Post]
+EXEC [dbo].[api_Transactions__Post]
 	@Documents = @Docs,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ReturnEntities = 0,

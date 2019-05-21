@@ -170,7 +170,7 @@ END
 --	IF (1=0)-- Inventory transfer event
 
 EXEC [dbo].[api_Documents_WideLines__Save] @Documents = @Documents, @WideLines = @WideLines, @Lines = @Lines, @Entries = @Entries, @DocumentOffset = @DocumentOffset Output
-EXEC [dbo].[api_Documents__Post] @Documents = @Documents;
+EXEC [dbo].[api_Transactions__Post] @Documents = @Documents;
 RETURN
 UI_Error:
 	Print @ValidationMessage;

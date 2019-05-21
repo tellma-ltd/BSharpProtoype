@@ -91,9 +91,9 @@
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
     <Build Include="dbo\Functions\dbo.fi_Journal.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Post.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Transactions__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.adm_Accounts_Notes__Update.sql" />
@@ -128,8 +128,8 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Settings_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSSettings__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_IFRSSettings_Validate__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
@@ -138,9 +138,9 @@
     <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Post.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_Mode__Update.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Post.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents_State__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Agents__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Operation__SetOperatingSegment.sql" />
@@ -190,7 +190,7 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Assign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Unpost.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Unpost.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Unpost.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Sign.sql" />
@@ -264,6 +264,10 @@
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.Tree.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSSettings.sql" />
+    <Build Include="dbo\Tables\dbo.VoucherTypes.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IFRSSettingList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSSettings__Save.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
