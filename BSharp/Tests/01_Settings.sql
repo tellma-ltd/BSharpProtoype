@@ -1,7 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @SettingsDTO SettingList;
+	DECLARE @IFRSSettingsDTO [IFRSSettingList];
 END
-INSERT INTO @SettingsDTO
+INSERT INTO @IFRSSettingsDTO
 ([Field],[Value]) Values
 -- IFRS values
 (N'NameOfReportingEntityOrOtherMeansOfIdentification', N'Banan IT, plc'),
@@ -17,8 +17,8 @@ INSERT INTO @SettingsDTO
 (N'TaxIdentificationNumber', N'123456789'),
 (N'FunctionalCurrencyCode', N'ETB');
 
-EXEC [dbo].[api_Settings__Save]
-	@Settings = @SettingsDTO,
+EXEC [dbo].[api_IFRSSettings__Save]
+	@IFRSSettings = @IFRSSettingsDTO,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT
 
@@ -32,4 +32,4 @@ IF @DebugSettings = 1
 	SELECT * FROM dbo.[fr_Settings__Json](@ResultsJson);
 
 IF @DebugSettings = 1
-	SELECT * FROM [dbo].Settings;
+	SELECT * FROM [dbo].IFRSSettings;

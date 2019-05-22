@@ -1,14 +1,14 @@
 ﻿SET NOCOUNT ON;
 BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
+	IF NOT EXISTS(SELECT * FROM [dbo].[IFRSSettings])	DBCC CHECKIDENT ('[dbo].[IFRSSettings]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])			DBCC CHECKIDENT ('[dbo].[Operations]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])			DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionEntries])			DBCC CHECKIDENT ('[dbo].[Entries]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])				DBCC CHECKIDENT ('[dbo].[Lines]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionEntries])			DBCC CHECKIDENT ('[dbo].[TransactionEntries]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])				DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
-
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
 	DECLARE @DebugSettings bit = 0, @DebugMeasurementUnits bit = 0;
 	DECLARE @DebugOperations bit = 1, @DebugResources bit = 0;
@@ -21,8 +21,8 @@ BEGIN -- reset Identities
 	DECLARE @UserId int;
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
 	BEGIN
-		INSERT INTO [dbo].[LocalUsers]([TenantId], [Name], [AgentId]) VALUES
-		(@TenantId, N'Dr. Akra', NULL); -- N'DESKTOP-V0VNDC4\Mohamad Akra'
+		INSERT INTO [dbo].[LocalUsers]([Name], [AgentId]) VALUES
+		(N'Dr. Akra', NULL); -- N'DESKTOP-V0VNDC4\Mohamad Akra'
 		 SET @UserId = SCOPE_IDENTITY();
 	END
 	ELSE
@@ -34,12 +34,11 @@ BEGIN -- reset Identities
 END
 BEGIN TRY
 	BEGIN TRANSACTION
-		:r .\00_Settings.sql
-		:r .\01_MeasurementUnits.sql
-		:r .\02_Operations.sql
-		--:r .\03_Resources.sql
-		--:r .\04_Agents.sql
-		--:r .\05_Places.sql
+		:r .\01_Settings.sql
+		--:r .\02_MeasurementUnits.sql
+		--:r .\03_Operations.sql
+		--:r .\04_Resources.sql
+		--:r .\05_Agents.sql
 		--:r .\10_Documents.sql
 	--	select * from entries;
 	--SELECT @fromDate = '2017.01.01', @toDate = '2024.03.01'

@@ -3,7 +3,7 @@
 	[Id]						INT					IDENTITY,
 	[Field]						NVARCHAR (255)		NOT NULL,
 	[Value]						NVARCHAR (255),
-	[ValidSince]				Date,
+	[ValidSince]				Date				NOT NULL DEFAULT('01.01.0001'),
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]				INT					NOT NULL,
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 

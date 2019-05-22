@@ -23,3 +23,5 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__AgentId]
   ON [dbo].[LocalUsers]([TenantId] ASC, [AgentId] ASC) WHERE [AgentId] IS NOT NULL;
 GO
+ALTER TABLE [dbo].[LocalUsers] ADD CONSTRAINT [DF_LocalUsers__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+GO

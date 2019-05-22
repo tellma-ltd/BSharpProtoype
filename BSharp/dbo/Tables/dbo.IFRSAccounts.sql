@@ -10,6 +10,10 @@
 	- Extension: Added for business logic in B#. Is ignored by the iXBRL tool 
 */
 	[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
+	-- Aggregate means, it does not take direct entries, but rather used for aggregation only
+	-- IsAggergate = True If and only if isLeaf = False. We used IsAggregate instead since
+	-- a leaf is used in computer science to mean a node with no children. So, as we build the tree
+	-- leaves are converted into internal nodes. Hence it is a computed property, unlike IsAggregate
 	[IsAggregate]				BIT					NOT NULL DEFAULT (1),
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Label]						NVARCHAR (1024)		NOT NULL,
