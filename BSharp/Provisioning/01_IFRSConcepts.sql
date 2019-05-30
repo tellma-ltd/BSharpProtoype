@@ -7314,6 +7314,8 @@ INSERT INTO @IfrsDisclosures VALUES
 (N'NameOfParentEntity'),
 (N'NameOfUltimateParentOfGroup');
 
+IF (SELECT COUNT(*) FROM [dbo].[IfrsConcepts]) 
+	<> (SELECT COUNT(DISTINCT [Id]) FROM @IfrsConcepts)
 MERGE [dbo].[IfrsConcepts] AS t
 USING (
 	SELECT [Id], [IfrsType], [IsActive], [Label], [Label2], [Label3],

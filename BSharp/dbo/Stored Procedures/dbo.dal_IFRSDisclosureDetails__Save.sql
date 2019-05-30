@@ -20,10 +20,12 @@ SET NOCOUNT ON;
 			SELECT [Index], [Id], [IfrsDisclosureId], [Value], [ValidSince]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
-		) AS s ON (t.[Id] = s.[Id])
+		) AS s 
+		ON (t.[Id] = s.[Id])
 		WHEN MATCHED 
 		THEN
-			UPDATE SET 
+			UPDATE SET
+				t.[IfrsDisclosureId]= s.[IfrsDisclosureId],
 				t.[Value]			= s.[Value],
 				t.[ValidSince]		= s.[ValidSince],
 				t.[ModifiedAt]		= @Now,

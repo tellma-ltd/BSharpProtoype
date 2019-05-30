@@ -35,7 +35,7 @@ END
 
 BEGIN TRY
 	BEGIN TRANSACTION
-		:r .\01_Settings.sql
+		:r .\01_IfrsConcepts.sql
 		--:r .\02_MeasurementUnits.sql
 		--:r .\03_Operations.sql
 		--:r .\04_Resources.sql
@@ -47,7 +47,6 @@ BEGIN TRY
 	--EXEC rpt_TrialBalance @fromDate = @fromDate, @toDate = @toDate;
 	--SELECT * FROM dbo.[fi_WithholdingTaxOnPayment](default, default);
 	--SELECT * FROM dbo.[fi_ERCA__VAT_Purchases](default, default);
-	--EXEC rpt_Ifrs @fromDate = @fromDate, @toDate = @toDate;
 	--DECLARE @i int = 0;
 	--SELECT @fromDate = '2017.01.1'; SELECT @toDate = DATEADD(DAY, 90, @fromDate);
 	--WHILE @i < 30

@@ -6,7 +6,7 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL
 	CONSTRAINT [PK_IfrsDisclosures] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
-	--CONSTRAINT [CK_IfrsDisclosures__IfrsType] CHECK ([IfrsType] IN (N'Amendment', N'Extension', N'Regulatory')),
+	CONSTRAINT [FK_IfrsDisclosures__IfrsConcepts]	FOREIGN KEY ([TenantId], [Id])	REFERENCES [dbo].[IfrsConcepts] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_IfrsDisclosures__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_IfrsDisclosures__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 )

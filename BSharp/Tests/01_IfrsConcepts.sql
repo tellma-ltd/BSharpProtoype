@@ -22,11 +22,37 @@ EXEC [dbo].[api_IfrsDisclosureDetails__Save]
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT
 
+IF @ValidationErrorsJson IS NOT NULL 
+BEGIN
+	Print 'Place: Inserting IfrsConcepts'
+	GOTO Err_Label;
+END
+--SELECT * FROM [dbo].[IfrsDisclosureDetails];
+
+UPDATE @IfrsDisclosureDetailsDTO
+SET ValidSince = N'2018.08.01', EntityState = N'Updated', [Id] = [Index]
+WHERE [Index] IN (2, 3, 6);
+
+UPDATE @IfrsDisclosureDetailsDTO
+SET ValidSince = N'2018.09.15', EntityState = N'Updated', [Id] = [Index]
+WHERE [Index] IN (5);
+
+UPDATE @IfrsDisclosureDetailsDTO SET EntityState = N'Unchanged', [Id] = [Index]
+WHERE EntityState = N'Inserted';
+
+INSERT INTO @IfrsDisclosureDetailsDTO ([IfrsDisclosureId],[Value], [ValidSince]) Values
+(N'AddressOfRegisteredOfficeOfEntity', N'Addis Abab, N/S/L, Woreda:01, House:New', N'2018.08.01');
+
+EXEC [dbo].[api_IfrsDisclosureDetails__Save]
+	@Entities = @IfrsDisclosureDetailsDTO,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
+	@ResultsJson = @ResultsJson OUTPUT
+
 EXEC rpt_Ifrs @fromDate = '2018.07.01', @toDate = '2019.06.30'
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
-	Print 'Place: Settings 1'
+	Print 'Place: Updating IfrsConcepts'
 	GOTO Err_Label;
 END
 

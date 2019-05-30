@@ -1,5 +1,5 @@
 ﻿CREATE TYPE [dbo].[IfrsDisclosureDetailList] AS TABLE (
-	[Index]				INT				IDENTITY(0, 1),
+	[Index]				INT				IDENTITY(1, 1),
 	[Id]				INT,
 	[IfrsDisclosureId]	NVARCHAR (255)	NOT NULL,
 	[Value]				NVARCHAR (255),
