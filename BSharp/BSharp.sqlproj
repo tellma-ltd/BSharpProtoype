@@ -165,7 +165,7 @@
     <None Include="Provisioning\02_Accounts.sql" />
     <None Include="Provisioning\04_AccountsNotes.sql" />
     <None Include="Provisioning\08_MeasurementUnits.sql" />
-    <None Include="Provisioning\03_IfrsNotes.sql" />
+    <None Include="Provisioning\012_IfrsNotes.sql" />
     <PostDeploy Include="Provisioning\00_Main.sql" />
     <None Include="Provisioning\06_LineTypeSpecifications.sql" />
     <None Include="Provisioning\05_DocumentTypes.sql" />
@@ -287,6 +287,7 @@
     <None Include="Provisioning\07_AccountSpecifications.sql" />
     <None Include="BSharp.publish.xml" />
     <None Include="Provisioning\01_IfrsConcepts.sql" />
+    <None Include="Provisioning\011_IfrsDisclosures.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BSharp.refactorlog" />

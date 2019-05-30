@@ -13,10 +13,6 @@
 	[ExpiryDate]		DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59')
 );
 
-DECLARE @IfrsDisclosures AS TABLE (
-	[Id]				NVARCHAR (255)		PRIMARY KEY NONCLUSTERED
-);
-
 BEGIN -- Ifrs Concepts list
 	INSERT INTO @IfrsConcepts([Id], [Label], [Documentation]) VALUES (N'DisclosureOfGeneralInformationAboutFinancialStatementsExplanatory' ,N'Disclosure of general information about financial statements [text block]', N'The entire disclosure for general information about financial statements.');
 	INSERT INTO @IfrsConcepts([Id], [Label], [Documentation]) VALUES (N'NameOfReportingEntityOrOtherMeansOfIdentification' ,N'Name of reporting entity or other means of identification', N'The name of the reporting entity or other means of identification.');
@@ -7303,17 +7299,6 @@ BEGIN -- Ifrs Concepts list
 	INSERT INTO @IfrsConcepts([Id], [Label], [Documentation]) VALUES (N'AllYearsOfInsuranceClaimMember' ,N'All years of insurance claim [member]', N'This member stands for all years of the insurance claims. It also represents the standard value for the ''Years of insurance claim'' axis if no other member is used.');
 END -- Ifrs Concept list
 
-INSERT INTO @IfrsDisclosures VALUES
-(N'NameOfReportingEntityOrOtherMeansOfIdentification'),
-(N'DomicileOfEntity'),
-(N'LegalFormOfEntity'),
-(N'CountryOfIncorporation'),
-(N'AddressOfRegisteredOfficeOfEntity'),
-(N'PrincipalPlaceOfBusiness'),
-(N'DescriptionOfNatureOfEntitysOperationsAndPrincipalActivities'),
-(N'NameOfParentEntity'),
-(N'NameOfUltimateParentOfGroup');
-
 IF (SELECT COUNT(*) FROM [dbo].[IfrsConcepts]) 
 	<> (SELECT COUNT(DISTINCT [Id]) FROM @IfrsConcepts)
 MERGE [dbo].[IfrsConcepts] AS t
@@ -7341,10 +7326,3 @@ WHEN NOT MATCHED BY SOURCE THEN
 WHEN NOT MATCHED BY TARGET THEN
 	INSERT ([Id], [Label], [Documentation], [Documentation2], [Documentation3], [EffectiveDate], [ExpiryDate])
 	VALUES(s.[Id], s.[Label], s.[Documentation], s.[Documentation2], s.[Documentation3], s.[EffectiveDate], s.[ExpiryDate]);
-
-MERGE INTO IfrsDisclosures t
-USING (SELECT [Id] FROM @IfrsDisclosures) AS s 
-ON (t.[Id] = s.[Id])
-WHEN NOT MATCHED THEN 
-	INSERT ([Id])
-	VALUES(s.[Id]);
