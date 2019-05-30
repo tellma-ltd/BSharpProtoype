@@ -47,7 +47,7 @@ INSERT INTO @Entities SELECT * FROM @EntitiesIn;
 
 		UNION ALL   
 		-- This section provides values for all nodes except the root  
-		SELECT CAST(P.[Node].ToString() + CAST(C.Num AS varchar(30)) + '/' AS hierarchyid), C.[Index]
+		SELECT CAST(P.[Node].ToString() + CAST(C.Num AS varchar(30)) + '/' AS HIERARCHYID), C.[Index]
 		FROM @Children C
 		JOIN Paths P ON C.[ParentIndex] = P.[Index]
 		)

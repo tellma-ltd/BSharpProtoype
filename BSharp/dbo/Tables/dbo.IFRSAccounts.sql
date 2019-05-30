@@ -9,21 +9,21 @@
 	- Amendment: Added for consistency, must be amended in the iXBRL tool. Mainly for members vs non members issue
 	- Extension: Added for business logic in B#. Is ignored by the iXBRL tool 
 */
-	[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
+	--[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
 	-- Aggregate means, it does not take direct entries, but rather used for aggregation only
 	-- IsAggergate = True If and only if isLeaf = False. We used IsAggregate instead since
 	-- a leaf is used in computer science to mean a node with no children. So, as we build the tree
 	-- leaves are converted into internal nodes. Hence it is a computed property, unlike IsAggregate
 	[IsAggregate]				BIT					NOT NULL DEFAULT (1),
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
-	[Label]						NVARCHAR (1024)		NOT NULL,
-	[Label2]					NVARCHAR (1024),
-	[Label3]					NVARCHAR (1024),
-	[Documentation]				NVARCHAR (1024),
-	[Documentation2]			NVARCHAR (1024),
-	[Documentation3]			NVARCHAR (1024),
-	[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
-	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
+	--[IsActive]					BIT					NOT NULL DEFAULT (1),
+	--[Label]						NVARCHAR (1024)		NOT NULL,
+	--[Label2]					NVARCHAR (1024),
+	--[Label3]					NVARCHAR (1024),
+	--[Documentation]				NVARCHAR (1024),
+	--[Documentation2]			NVARCHAR (1024),
+	--[Documentation3]			NVARCHAR (1024),
+	--[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
+	--[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 
 --	The settings below apply to the Account with this IFRS, as well to the JE.LI endowed with this IFRS
 	[IFRSNoteSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
@@ -82,7 +82,7 @@
 	[ModifiedById]				INT					NOT NULL,
 
 	CONSTRAINT [PK_IFRSAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
-	CONSTRAINT [CK_IFRSAccounts__IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
+	--CONSTRAINT [CK_IFRSAccounts__IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
 	CONSTRAINT [FK_IFRSAccounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_IFRSAccounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 	);

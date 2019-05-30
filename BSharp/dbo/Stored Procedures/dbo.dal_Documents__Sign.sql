@@ -4,6 +4,7 @@ AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	-- TODO: The logic below should apply only to signatures defined as required.
 	-- if last signed by same user, simply update the time
 	UPDATE dbo.Signatures
 	SET [SignedAt] = @Now
@@ -32,4 +33,6 @@ BEGIN
 		SELECT [DocumentId] FROM dbo.Signatures 
 		WHERE [UnsignedAt] IS NOT NULL
 	)
+
+	-- TODO: We need to sign the lines involving the resource transfer as well
 END;

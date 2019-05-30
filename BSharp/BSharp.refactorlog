@@ -658,4 +658,109 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_IFRSSettings_Validate__Save]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0f5a06f6-4cf7-4072-b8ff-e3b4b4ec559f" ChangeDateTime="05/23/2019 11:57:48">
+    <Property Name="ElementName" Value="[dbo].[IFRSSettings]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IFRSDisclosureDetails]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf6b44ae-07b3-4ed3-ab95-fbf1baae9a32" ChangeDateTime="05/23/2019 11:58:42">
+    <Property Name="ElementName" Value="[dbo].[IFRSDisclosureDetails].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[IFRSDisclosureDetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Id1]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="da6ddcec-e9a2-40e6-ac62-391fd2f3c610" ChangeDateTime="05/23/2019 11:58:56">
+    <Property Name="ElementName" Value="[dbo].[IFRSDisclosureDetails].[Field]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[IFRSDisclosureDetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Id]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="74ea4a84-ff9c-4792-b49c-8b5711401267" ChangeDateTime="05/23/2019 12:00:14">
+    <Property Name="ElementName" Value="[dbo].[IFRSDisclosureDetails].[IX_IFRSDisclosureDetails__Field_ValidSince]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[IFRSDisclosureDetails]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_IFRSDisclosureDetails__Id_ValidSince]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="01f01438-ba83-49c2-b544-79d393cb3f20" ChangeDateTime="05/23/2019 16:42:15">
+    <Property Name="ElementName" Value="[dbo].[IFRSSettingList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IFRSDisclosureList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bdcab07b-6302-4c8a-9f90-648ee8dd6c4d" ChangeDateTime="05/23/2019 16:44:04">
+    <Property Name="ElementName" Value="[dbo].[IFRSDisclosureList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IFRSDisclosureDetailList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b38c49a9-fba8-43b0-89f7-56f259c33204" ChangeDateTime="05/23/2019 16:54:05">
+    <Property Name="ElementName" Value="[dbo].[fi_IFRSSettings]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fi_IFRSDisclosures]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e1bf27c0-f101-4d99-a1b6-44d3450a0fd5" ChangeDateTime="05/23/2019 16:54:53">
+    <Property Name="ElementName" Value="[dbo].[fi_IFRSDisclosures]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fi_IFRSDisclosureDetails]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1c187d9e-c07c-41d0-8744-7e06dc26f9d5" ChangeDateTime="05/23/2019 16:58:13">
+    <Property Name="ElementName" Value="[dbo].[dal_IFRSSettings__Select]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_IFRSDisclosureDetails__Select]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8fb59f4a-b88e-4ea7-b338-3f6a6f30c845" ChangeDateTime="05/23/2019 16:59:16">
+    <Property Name="ElementName" Value="[dbo].[dal_IFRSNotes__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_IFRSConcepts__Activate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ebcdf9d7-0854-4834-ba7f-1ef37dd11b83" ChangeDateTime="05/23/2019 17:01:12">
+    <Property Name="ElementName" Value="[dbo].[api_IFRSNotes__Activate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_IFRSConcepts__Activate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b248417e-03a9-4601-af77-f14968c47ae5" ChangeDateTime="05/23/2019 17:01:41">
+    <Property Name="ElementName" Value="[dbo].[api_IFRSNotes__Deactivate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_IFRSConcepts__Deactivate]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1876138a-80a5-4425-a633-fecdf42309a4" ChangeDateTime="05/23/2019 17:03:40">
+    <Property Name="ElementName" Value="[dbo].[dal_IFRSSettings__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_IFRSDisclosureDetails__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="01bff393-22ea-4405-9d45-b502485a2e90" ChangeDateTime="05/23/2019 17:06:06">
+    <Property Name="ElementName" Value="[dbo].[api_IFRSSettings__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_IFRSDisclosureDetails__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8bcf7314-efaf-453a-886e-a66f5634005d" ChangeDateTime="05/30/2019 09:01:47">
+    <Property Name="ElementName" Value="[dbo].[bll_IFRSSettings_Validate__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_IFRSDisclosureDetails_Validate__Save]" />
+  </Operation>
 </Operations>

@@ -4,6 +4,8 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
+	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
 	DELETE FROM [dbo].MeasurementUnits
@@ -32,8 +34,8 @@ SET NOCOUNT ON;
 				t.[UnitAmount]		= s.[UnitAmount],
 				t.[BaseAmount]		= s.[BaseAmount],
 				t.[Code]			= s.[Code],
-				t.[ModifiedAt]		= SYSDATETIMEOFFSET(),
-				t.[ModifiedById]	= CONVERT(INT, SESSION_CONTEXT(N'UserId'))
+				t.[ModifiedAt]		= @Now,
+				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT ([UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount], [Code])
 			VALUES (s.[UnitType], s.[Name], s.[Name2], s.[Name3], s.[Description], s.[Description2], s.[Description3], s.[UnitAmount], s.[BaseAmount], s.[Code])

@@ -41,24 +41,11 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
 		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId' As [Key], N'Error_TheTransaction0TheAccountId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		E.SerialNumber AS Argument1, E.[AccountId] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Transactions FE
-	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
-	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
-	WHERE (A.IsActive = 0);
-	
-	-- No inactive note
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].NoteId' As [Key], N'Error_TheTransaction0TheNoteId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, N.[Label] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Transactions FE
-	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
-	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
-	WHERE (N.IsActive = 0);
+	JOIN dbo.[TransactionEntriesView] E ON FE.[Id] = E.[DocumentId]
+	JOIN dbo.[IFRSConcepts] IC ON E.IFRSAccountId = IC.Id
+	WHERE (IC.IsActive = 0);
 
 	-- No inactive Responsibility Center, AgentAccount, Resource, Related resource, Related Agent Account, Related Responsibility Center
 	-- No 

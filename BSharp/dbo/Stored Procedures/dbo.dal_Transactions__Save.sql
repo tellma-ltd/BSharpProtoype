@@ -11,17 +11,21 @@ BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-	-- Delete only if the last one of its type, (WARNING: WE NEED TO do it for the given transaction type)
-	--DELETE FROM [dbo].[Documents]
-	--WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
-	--AND [Id] > (SELECT MAX([Id]) FROM dbo.Documents WHERE Mode <> N'Void')
+	-- Delete only if the last one of its type
+	DELETE FROM [dbo].[Documents]
+	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
+	AND [Id] > (
+		SELECT MAX([Id]) FROM dbo.Documents 
+		WHERE [TransactionType] = @TransactionType 
+		AND [DocumentState] <> N'Void'
+		);
 
-	---- Otherwise, mark as void
-	--UPDATE [dbo].[Documents]
-	--SET Mode = N'Void'
-	--WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted');
+	-- Otherwise, mark as void
+	UPDATE [dbo].[Documents]
+	SET [DocumentState] = N'Void'
+	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted');
 
-	--DELETE FROM [dbo].Lines
+	--DELETE FROM [dbo].[TransactionLines]
 	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
 
 	DELETE FROM [dbo].[TransactionEntries]
@@ -34,9 +38,9 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [DocumentDate], [VoucherTypeId], [VoucherNumber], [Memo], [Frequency], [Repetitions],
+				[Index], [Id], [DocumentDate], [VoucherNumber], [Memo], [Frequency], [Repetitions],
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
-				-- and max(Id) per transaction type.
+					-- max(Id) per transaction type.
 					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE TransactionType = @TransactionType
 				) As [SerialNumber]
 			FROM @Transactions 
@@ -46,7 +50,6 @@ BEGIN
 		THEN
 			UPDATE SET
 				t.[DocumentDate]	= s.[DocumentDate],
-				t.[VoucherTypeId]	= s.[VoucherTypeId],
 				t.[VoucherNumber]	= s.[VoucherNumber],
 				t.[Memo]			= s.[Memo],
 				t.[Frequency]		= s.[Frequency],
@@ -56,10 +59,10 @@ BEGIN
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[DocumentDate],[VoucherTypeId], [VoucherNumber],[Memo],[Frequency],[Repetitions]
+				[DocumentDate], [VoucherNumber],[Memo],[Frequency],[Repetitions]
 			)
 			VALUES (
-				s.[DocumentDate], s.[VoucherTypeId], s.[VoucherNumber], s.[Memo], s.[Frequency], s.[Repetitions]
+				s.[DocumentDate], s.[VoucherNumber], s.[Memo], s.[Frequency], s.[Repetitions]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -69,7 +72,7 @@ BEGIN
 	FROM @IndexedIds
 
 
-	--MERGE INTO [dbo].[Lines] AS t
+	--MERGE INTO [dbo].[TransactionLines] AS t
 	--USING (
 	--	SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [BaseLineId], [ScalingFactor], [Memo]
 	--	FROM @Lines L
@@ -84,8 +87,8 @@ BEGIN
 	--		t.[ModifiedAt]		= @Now,
 	--		t.[ModifiedById]		= @UserId
 	--WHEN NOT MATCHED THEN
-	--	INSERT ([TenantId], [DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-	--	VALUES (@TenantId, s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
+	--	INSERT ([DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+	--	VALUES (s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
 
 	MERGE INTO [dbo].[TransactionEntries] AS t
 	USING (

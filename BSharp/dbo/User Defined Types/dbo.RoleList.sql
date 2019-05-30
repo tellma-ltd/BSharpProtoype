@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[RoleList] AS TABLE (
-	[Index]				INT,
-	[Id]				INT					IDENTITY,
+	[Index]				INT				IDENTITY(0, 1),
+	[Id]				INT,
 	[Name]				NVARCHAR (255)		NOT NULL,
 	[Name2]				NVARCHAR (255),
 	[Name3]						NVARCHAR (255),

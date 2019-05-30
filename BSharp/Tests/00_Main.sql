@@ -1,7 +1,7 @@
 ﻿SET NOCOUNT ON;
 BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
-	IF NOT EXISTS(SELECT * FROM [dbo].[IFRSSettings])	DBCC CHECKIDENT ('[dbo].[IFRSSettings]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[IFRSDisclosureDetails])	DBCC CHECKIDENT ('[dbo].[IFRSDisclosureDetails]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])			DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
@@ -10,13 +10,13 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])				DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
-	DECLARE @DebugSettings bit = 0, @DebugMeasurementUnits bit = 0;
+	DECLARE @DebugSettings bit = 1, @DebugMeasurementUnits bit = 0;
 	DECLARE @DebugOperations bit = 1, @DebugResources bit = 0;
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
 	EXEC sp_set_session_context 'TenantId', 106;
-	EXEC sp_set_session_context 'Debug', 0;
+	EXEC sp_set_session_context 'Debug', 1;
 	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @UserId int;
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
@@ -32,6 +32,7 @@ BEGIN -- reset Identities
 	SET @UserId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 END
+
 BEGIN TRY
 	BEGIN TRANSACTION
 		:r .\01_Settings.sql
@@ -68,6 +69,7 @@ BEGIN CATCH
 	ROLLBACK;
 	THROW;
 END CATCH
+
 RETURN;
 
 ERR_LABEL:

@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[dal_IFRSNotes__Activate]
+﻿CREATE PROCEDURE [dbo].[dal_IFRSConcepts__Activate]
 	@Ids [dbo].[StringList] READONLY,
 	@IsActive bit
 AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-	MERGE INTO [dbo].[IFRSNotes] AS t
+	MERGE INTO [dbo].[IFRSConcepts] AS t
 	USING (
 		SELECT [Id]
 		FROM @Ids

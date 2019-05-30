@@ -5,7 +5,6 @@
 AS
 BEGIN
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
@@ -26,18 +25,18 @@ BEGIN
 		WHEN MATCHED 
 		THEN
 			UPDATE SET
-				t.[Name]		= s.[Name],
-				t.[Name2]		= s.[Name2],
-				t.[IsPublic]	= s.[IsPublic],
-				t.[Code]		= s.[Code],
-				t.[ModifiedAt]	= @Now,
+				t.[Name]			= s.[Name],
+				t.[Name2]			= s.[Name2],
+				t.[IsPublic]		= s.[IsPublic],
+				t.[Code]			= s.[Code],
+				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[TenantId], [Name], [Name2],	[IsPublic],		[Code], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
+				[Name], [Name2],	[IsPublic],		[Code]
 			)
 			VALUES (
-				@TenantId, s.[Name], s.[Name2], s.[IsPublic], s.[Code], @Now,		@UserId,		@Now,		@UserId
+				s.[Name], s.[Name2], s.[IsPublic], s.[Code]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -59,8 +58,8 @@ BEGIN
 			t.[ModifiedAt]	= @Now,
 			t.[ModifiedById]	= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TenantId], [RoleId],	[ViewId],	[Level],	[Criteria], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-		VALUES (@TenantId, s.[RoleId], s.[ViewId], s.[Level], s.[Criteria], s.[Memo], @Now,		@UserId,		@Now,		@UserId);
+		INSERT ([RoleId],	[ViewId],	[Level],	[Criteria], [Memo])
+		VALUES (s.[RoleId], s.[ViewId], s.[Level], s.[Criteria], s.[Memo]);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;

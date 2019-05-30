@@ -6,13 +6,7 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
-	-- Cannot sign unless in draft mode
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Mode' As [Key], N'Error_TheDocument0IsIn1Mode' As [ErrorName],
-		BE.[SerialNumber] AS Argument1, BE.[DocumentState] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Documents FE
-	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.[DocumentState] <> N'Draft');
-
-	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);
+	-- Signing can be at any time
+	-- We simply record the signature if
+	-- It belongs to an agent
+	-- It is required as per policy

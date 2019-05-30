@@ -12,7 +12,7 @@
 	-- later. By writing the voucher type and number in the system, we can determine if vouchers
 	-- are missing or duplicated.
 	-- Usually, the voucher type = transaction type, except in the case of JV: the user has to select
-	[VoucherTypeId]				INT,
+	--[VoucherTypeId]				INT,
 	[VoucherNumber]				NVARCHAR (255),
 	[Memo]						NVARCHAR (255),	
 	-- Transaction specific, to record the acquisition or loss of goods and services
@@ -65,7 +65,7 @@
 	-- If the company is in Alofi, and the server is hosted in Apia, the server time will be one day behind
 	-- So, the user will not be able to enter transactions unless DocumentDate is allowed 1d future 
 	CONSTRAINT [CK_Documents_DocumentDate] CHECK ([DocumentDate] < DATEADD(DAY, 1, GETDATE()) OR [DocumentType] <> N'Transaction') ,
-	CONSTRAINT [FK_Documents_VoucherType] FOREIGN KEY ([TenantId], [VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([TenantId], [Id]),
+	--CONSTRAINT [FK_Documents_VoucherType] FOREIGN KEY ([TenantId], [VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([TenantId], [Id]),
 	CONSTRAINT [CK_Documents_Duration] CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
 	CONSTRAINT [FK_Documents_TransactionType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),

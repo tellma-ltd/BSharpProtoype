@@ -128,8 +128,8 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Settings__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.SettingList.sql" />
     <Build Include="dbo\User Defined Types\dbo.StringList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSSettings__Select.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_IFRSSettings_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSDisclosureDetails__Select.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_IFRSDisclosureDetails_Validate__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.ResourceList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
@@ -164,9 +164,9 @@
     <None Include="Tests\TestingToBeCleaned.sql" />
     <None Include="Provisioning\02_Accounts.sql" />
     <None Include="Provisioning\04_AccountsNotes.sql" />
-    <None Include="Provisioning\01_MeasurementUnits.sql" />
+    <None Include="Provisioning\08_MeasurementUnits.sql" />
     <None Include="Provisioning\03_IFRSNotes.sql" />
-    <None Include="Provisioning\00_Main.sql" />
+    <PostDeploy Include="Provisioning\00_Main.sql" />
     <None Include="Provisioning\06_LineTypeSpecifications.sql" />
     <None Include="Provisioning\05_DocumentTypes.sql" />
     <Build Include="Security\bll.sql" />
@@ -238,9 +238,9 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_ConsumablesServices.sql" />
     <Build Include="dbo\Views\dbo.TransactionEntriesView.sql" />
     <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Activate.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_IFRSNotes__Deactivate.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSNotes__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSConcepts__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSConcepts__Deactivate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSConcepts__Activate.sql" />
     <Build Include="dbo\Tables\dbo.TemplateLines.sql" />
     <Build Include="dbo\Views\dbo.Employees.sql" />
     <Build Include="dbo\Functions\dbo.fi_Agents.sql" />
@@ -264,10 +264,15 @@
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.Tree.sql" />
-    <Build Include="dbo\Tables\dbo.IFRSSettings.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSDisclosureDetails.sql" />
     <Build Include="dbo\Tables\dbo.VoucherTypes.sql" />
-    <Build Include="dbo\User Defined Types\dbo.IFRSSettingList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_IFRSSettings__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_IFRSDisclosureDetails__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_IFRSDisclosureDetails__Save.sql" />
+    <Build Include="dbo\Functions\dbo.fr_IFRSSettings__Json.sql" />
+    <Build Include="dbo\Functions\dbo.fi_IFRSDisclosureDetails.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSConcepts.sql" />
+    <Build Include="dbo\Tables\dbo.IFRSDisclosures.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IFRSDisclosureDetailList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
@@ -281,6 +286,7 @@
     <None Include="Tests\12_ManualMisc.sql" />
     <None Include="Provisioning\07_AccountSpecifications.sql" />
     <None Include="BSharp.publish.xml" />
+    <None Include="Provisioning\01_IFRSConcepts.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BSharp.refactorlog" />

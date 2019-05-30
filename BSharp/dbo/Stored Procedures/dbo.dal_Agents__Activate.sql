@@ -14,7 +14,7 @@ BEGIN
 	WHEN MATCHED AND (t.IsActive <> @IsActive)
 	THEN
 		UPDATE SET 
-			t.[IsActive]	= @IsActive,
-			t.[ModifiedAt]	= @Now,
+			t.[IsActive]		= @IsActive,
+			t.[ModifiedAt]		= @Now,
 			t.[ModifiedById]	= @UserId;
 END;

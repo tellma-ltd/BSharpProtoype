@@ -1,8 +1,8 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @IFRSSettingsDTO [IFRSSettingList];
+	DECLARE @IFRSDisclosureDetailsDTO [IFRSDisclosureDetailList];
 END
-INSERT INTO @IFRSSettingsDTO
-([Field],[Value]) Values
+INSERT INTO @IFRSDisclosureDetailsDTO
+([IFRSDisclosureId],[Value]) Values
 -- IFRS values
 (N'NameOfReportingEntityOrOtherMeansOfIdentification', N'Banan IT, plc'),
 (N'DomicileOfEntity', N'ET'),
@@ -17,10 +17,12 @@ INSERT INTO @IFRSSettingsDTO
 (N'TaxIdentificationNumber', N'123456789'),
 (N'FunctionalCurrencyCode', N'ETB');
 
-EXEC [dbo].[api_IFRSSettings__Save]
-	@IFRSSettings = @IFRSSettingsDTO,
+EXEC [dbo].[api_IFRSDisclosureDetails__Save]
+	@Entities = @IFRSDisclosureDetailsDTO,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT
+
+EXEC rpt_IFRS @fromDate = '2018.07.01', @toDate = '2019.06.30'
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
@@ -29,7 +31,4 @@ BEGIN
 END
 
 IF @DebugSettings = 1
-	SELECT * FROM dbo.[fr_Settings__Json](@ResultsJson);
-
-IF @DebugSettings = 1
-	SELECT * FROM [dbo].IFRSSettings;
+	SELECT * FROM [dbo].[IFRSDisclosureDetails];

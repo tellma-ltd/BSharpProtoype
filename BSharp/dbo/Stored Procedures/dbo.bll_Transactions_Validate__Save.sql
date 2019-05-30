@@ -43,29 +43,8 @@ SET NOCOUNT ON;
 	WHERE (BE.[DocumentState] <> N'Draft')
 	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 	
-	-- No inactive account
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].TransactionEntries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId' As [Key], N'Error_TheDocument0TheAccountId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, A.[Id] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Transactions FE
-	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
-	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
-	WHERE (A.IsActive = 0);
-
-	-- No inactive note
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheIFRSNote0IsInactive' As [ErrorName],
-				E.[IFRSNoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	FROM @Entries E
-	JOIN [dbo].[IFRSNotes] BE ON E.[IFRSNoteId] = BE.[Id]
-	WHERE (BE.IsActive = 0)
-	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
-
 	-- Note Id is missing when required
+	-- TODO: Add the condition that IFRS Note is enforced
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
 				CAST(E.[Index] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheIFRSNoteIsRequired' As [ErrorName],
