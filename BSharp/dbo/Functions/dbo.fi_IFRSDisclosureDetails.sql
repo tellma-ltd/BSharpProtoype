@@ -1,13 +1,13 @@
-﻿CREATE FUNCTION [dbo].[fi_IFRSDisclosureDetails] (
+﻿CREATE FUNCTION [dbo].[fi_IfrsDisclosureDetails] (
 	@fromDate Date = NULL, 
 	@toDate Date = NULL
 ) RETURNS TABLE
 AS
 RETURN
-	SELECT S.* FROM dbo.[IFRSDisclosureDetails] S
+	SELECT S.* FROM dbo.[IfrsDisclosureDetails] S
 	JOIN (
-	SELECT [IFRSDisclosureId], MAX([ValidSince]) AS ValidSince
-	FROM [dbo].[IFRSDisclosureDetails]
+	SELECT [IfrsDisclosureId], MAX([ValidSince]) AS ValidSince
+	FROM [dbo].[IfrsDisclosureDetails]
 	WHERE [ValidSince] <= @fromDate
-	GROUP BY [IFRSDisclosureId]
-	) H ON S.[IFRSDisclosureId] = H.[IFRSDisclosureId] AND S.[ValidSince] = H.[ValidSince];
+	GROUP BY [IfrsDisclosureId]
+	) H ON S.[IfrsDisclosureId] = H.[IfrsDisclosureId] AND S.[ValidSince] = H.[ValidSince];

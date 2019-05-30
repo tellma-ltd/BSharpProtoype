@@ -11,38 +11,38 @@ BEGIN
 		A.TaxIdentificationNumber As [Employee TIN],
 		A.[Name] As [Employee Full Name],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IfrsAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @BasicSalaryResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Basic Salary],
 		SUM(CASE
-			WHEN (J.[IFRSAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IfrsAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @TransportationAllowanceResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Transportation],
 		SUM(CASE
-			WHEN (J.[IFRSAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
+			WHEN (J.[IfrsAccountId] = N'ShorttermEmployeeBenefitsAccruals' 
 			AND J.ResourceId = @OvertimeResourceId)
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Overtime],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] = N'CurrentEmployeeIncomeTaxPayable')
+			WHEN (J.[IfrsAccountId] = N'CurrentEmployeeIncomeTaxPayable')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Income Tax],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] IN (N'ShorttermPensionContributionAccruals', 'CurrentSocialSecurityTaxPayable'))
+			WHEN (J.[IfrsAccountId] IN (N'ShorttermPensionContributionAccruals', 'CurrentSocialSecurityTaxPayable'))
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Pension Contribution 7%],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] = N'CurrentReceivablesFromEmployees')
+			WHEN (J.[IfrsAccountId] = N'CurrentReceivablesFromEmployees')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Loans],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] = N'CurrentPayablesToEmployees')
+			WHEN (J.[IfrsAccountId] = N'CurrentPayablesToEmployees')
 			THEN -J.Direction * J.[Value] Else 0 
 			END) AS [Net Pay],
 		SUM(CASE 
-			WHEN (J.[IFRSAccountId] = N'ShorttermPensionContributionAccruals')
+			WHEN (J.[IfrsAccountId] = N'ShorttermPensionContributionAccruals')
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Pension Contribution 11%]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J

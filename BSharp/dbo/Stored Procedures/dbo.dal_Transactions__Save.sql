@@ -94,7 +94,7 @@ BEGIN
 	USING (
 		SELECT
 			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[ResponsibilityCenterId], E.[Reference],
-			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[IFRSNoteId],
+			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[IfrsNoteId],
 			E.[RelatedReference], E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
@@ -110,7 +110,7 @@ BEGIN
 			t.[Direction]				= s.[Direction],
 			t.[MoneyAmount]				= s.[MoneyAmount],
 			t.[Value]					= s.[Value],
-			t.[IFRSNoteId]				= s.[IFRSNoteId],
+			t.[IfrsNoteId]				= s.[IfrsNoteId],
 			t.[RelatedReference]		= s.[RelatedReference],
 			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
@@ -119,10 +119,10 @@ BEGIN
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId], [Reference],
-				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IFRSNoteId],
+				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IfrsNoteId],
 				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
 		VALUES (s.[DocumentId], s.[IsSystem], s.[ResponsibilityCenterId], s.[Reference],
-				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[IFRSNoteId],
+				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[IfrsNoteId],
 				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

@@ -6,7 +6,7 @@
 	[IsSystem]				BIT					NOT NULL DEFAULT (0),
 	[Direction]				SMALLINT			NOT NULL,
 	[AccountId]				INT		NOT NULL,
-	[IFRSNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the IFRS Note
+	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
 	[ResponsibilityCenterId]INT,				-- called SegmentId in B10. When not needed, we use the entity itself.
 	[AgentAccountId]		INT, 
 	[ResourceId]			INT,				-- NUll because it may be specified by Account				

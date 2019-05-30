@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_WSI_MerchandiseInTransit]
 /*
 Assumptions:
-1) Any inventory account is mapped to IFRS concepts: Inventories, NonCurrentinventories, or their descendants
+1) Any inventory account is mapped to Ifrs concepts: Inventories, NonCurrentinventories, or their descendants
 2) All entries use a raw material resource. For balance migration, we need to add for every inventory account
 	a resource called non-specified (for that account), and migrate balances to it.
 
@@ -9,14 +9,14 @@ Assumptions:
 	@AsOfDate Datetime = '01.01.2020'
 AS
 	WITH
-	IFRS_MIT AS (
+	Ifrs_MIT AS (
 		SELECT [Node] 
-		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'CurrentInventoriesInTransit')
+		FROM dbo.[IfrsAccounts] WHERE [Id] IN(N'CurrentInventoriesInTransit')
 	),
 	InventoriesInTransitAccounts AS (
 		SELECT A.[Id] FROM dbo.Accounts A
-		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
-		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_MIT))	= 1
+		JOIN dbo.[IfrsAccounts] I ON A.[IfrsAccountId] = I.[Id]
+		WHERE I.[Node].IsDescendantOf((SELECT * FROM Ifrs_MIT))	= 1
 	),
 	Balances AS (
 		SELECT

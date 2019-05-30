@@ -1,13 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_TrialBalance] 
 /* 
-EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByAgent = 1, @ByResource = 1, @ByIFRSNote = 1, @PrintQuery = 1
+EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByAgent = 1, @ByResource = 1, @ByIfrsNote = 1, @PrintQuery = 1
 */	
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2020',
 	@ByResponsibilityCenter bit = 1,
 	@ByAgentAccount bit = 1,
 	@ByResource bit = 1,
-	@ByIFRSNote bit = 1,
+	@ByIfrsNote bit = 1,
 	@PrintQuery bit = 0
 AS
 BEGIN
@@ -27,9 +27,9 @@ BEGIN
 		SET @Query = @Query + N'
 			R.[Name] As Resource,
 			T.[Amount], MU.[Name] As UOM,'
-	IF (@ByIFRSNote = 1)
+	IF (@ByIfrsNote = 1)
 		SET @Query = @Query + N'
-			T.IFRSNoteId As IFRSNote,'
+			T.IfrsNoteId As IfrsNote,'
 	SET @Query = @Query + N'
 			Mass, Volume, Count, Usage,
 			(CASE WHEN T.Net > 0 THEN Net ELSE 0 END) As Debit,
@@ -41,7 +41,7 @@ BEGIN
 	IF (@ByResponsibilityCenter = 1) SET @Query = @Query + N'ResponsibilityCenterId, '
 	IF (@ByAgentAccount = 1) SET @Query = @Query + N'AgentAccountId, '
 	IF (@ByResource = 1) SET @Query = @Query + N'ResourceId, '
-	IF (@ByIFRSNote = 1) SET @Query = @Query + N'IFRSNoteId, '
+	IF (@ByIfrsNote = 1) SET @Query = @Query + N'IfrsNoteId, '
 	SET @Query = @Query + N'
 			CAST(SUM([Direction] * [Mass]) AS money) AS Mass,	
 			CAST(SUM([Direction] * [Volume]) AS money) AS Volume,	
@@ -53,7 +53,7 @@ BEGIN
 	IF (@ByResponsibilityCenter = 1) SET @Query = @Query + N', ResponsibilityCenterId'
 	IF (@ByAgentAccount = 1) SET @Query = @Query + N', AgentAccountId'
 	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'
-	IF (@ByIFRSNote = 1) SET @Query = @Query + N', IFRSNoteId'
+	IF (@ByIfrsNote = 1) SET @Query = @Query + N', IfrsNoteId'
 	SET @Query = @Query + N'		
 			HAVING 
 				SUM([Direction] * [Mass]) OR

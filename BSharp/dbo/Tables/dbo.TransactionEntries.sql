@@ -4,15 +4,15 @@
 	[Id]					INT					IDENTITY,
 	[DocumentId]			INT					NOT NULL,
 --	Upon posting the document, the auto generated entries will be MERGED with the present ones
---	based on TenantId, IsSystem, AccountId, IFRSAccountId, IFRSNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
+--	based on TenantId, IsSystem, AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
 --	to minimize Transaction Entries deletions
---	It will be presented ORDER BY IsSystem, Direction, AccountId.Code, IFRSAccountId.Node, IFRSNoteId.Node, ResponsibilityCenterId.Node
+--	It will be presented ORDER BY IsSystem, Direction, AccountId.Code, IfrsAccountId.Node, IfrsNoteId.Node, ResponsibilityCenterId.Node
 	[IsSystem]				BIT					NOT NULL DEFAULT (0),
 	[Direction]				SMALLINT			NOT NULL,
  -- Account selection enforces additional filters on the other columns
 	[AccountId]				INT					NOT NULL,
 -- Analysis of accounts including: cash, non current assets, equity, and expenses. Can be updated after posting
-	[IFRSNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the IFRS Note
+	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
 -- The business segment that "owns" the asset/liablity, and whose performance is assessed by the revenue/expense
 	[ResponsibilityCenterId]INT,				-- called SegmentId in B10. When not needed, we use the entity itself.
 -- subaccount of: agent having custody of asset/agent against whom we are liable. N/A for P/L accounts
@@ -67,7 +67,7 @@
 	CONSTRAINT [CK_TransactionEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
 	CONSTRAINT [FK_TransactionEntries__Documents]	FOREIGN KEY ([TenantId], [DocumentId])	REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_TransactionEntries__Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
-	CONSTRAINT [FK_TransactionEntries__IFRSNotes]	FOREIGN KEY ([TenantId], [IFRSNoteId])	REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]),
+	CONSTRAINT [FK_TransactionEntries__IfrsNotes]	FOREIGN KEY ([TenantId], [IfrsNoteId])	REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__ResponsibilityCenters]	FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
@@ -81,7 +81,7 @@ CREATE INDEX [IX_Entries__ResponsibilityCenterId] ON [dbo].[TransactionEntries](
 GO
 CREATE INDEX [IX_Entries__AccountId] ON [dbo].[TransactionEntries]([TenantId] ASC, [AccountId] ASC);
 GO
-CREATE INDEX [IX_Entries__IFRSNoteId] ON [dbo].[TransactionEntries]([TenantId] ASC, [IFRSNoteId] ASC);
+CREATE INDEX [IX_Entries__IfrsNoteId] ON [dbo].[TransactionEntries]([TenantId] ASC, [IfrsNoteId] ASC);
 GO
 ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
 GO

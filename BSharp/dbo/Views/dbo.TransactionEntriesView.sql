@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [dbo].[TransactionEntriesView] WITH SCHEMABINDING
 -- It probably helps to materialize it, and add indices to:
--- AccountId, IFRSAccountId, IFRSNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
--- Can we add referential integrity to IFRSAccountConcept_IFRSNoteConcept_Direction?
+-- AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
+-- Can we add referential integrity to IfrsAccountConcept_IfrsNoteConcept_Direction?
 AS
 	SELECT
 		E.TenantId,
@@ -25,8 +25,8 @@ AS
 		E.[IsSystem],
 		E.[Direction],
 		E.[AccountId],
-		A.IFRSAccountId,
-		COALESCE(A.[IFRSNoteId], E.[IFRSNoteId]) AS IFRSNoteId,
+		A.IfrsAccountId,
+		COALESCE(A.[IfrsNoteId], E.[IfrsNoteId]) AS IfrsNoteId,
 		COALESCE(A.[ResponsibilityCenterId], E.[ResponsibilityCenterId]) AS [ResponsibilityCenterId],
 		--RC.[OperationId],
 		--RC.[ProductCategoryId],

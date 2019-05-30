@@ -13,6 +13,6 @@ FROM dbo.fi_Journal(@fromDate, @toDate) J
 LEFT JOIN dbo.Resources R ON J.RelatedResourceId = R.Id 
 LEFT JOIN dbo.AgentAccounts AA ON J.RelatedAgentAccountId = AA.Id
 LEFT JOIN dbo.Agents A ON AA.AgentId = A.Id
-WHERE IFRSAccountId = N'CurrentValueAddedTaxPayables'
+WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
 GROUP BY A.[Name], A.TaxIdentificationNumber, J.Reference, J.RelatedReference,
 		J.DocumentDate,	J.TransactionType, J.SerialNumber

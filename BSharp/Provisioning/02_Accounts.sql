@@ -340,7 +340,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'41042', N'LossesArisingFromDerecognitionOfFinancialAssetsMeasuredAtAmortisedCost', N'Losses arising from derecognition of financial assets measured at amortised cost')
 ,(N'Regulatory', 1, N'4105', N'FinanceIncome', N'Finance income')
 ,(N'Regulatory', 1, N'4106', N'FinanceCosts', N'Finance costs')
-,(N'Regulatory', 1, N'4107', N'ImpairmentLossImpairmentGainAndReversalOfImpairmentLossDeterminedInAccordanceWithIFRS9', N'Impairment loss (impairment gain and reversal of impairment loss) determined in accordance with IFRS 9')
+,(N'Regulatory', 1, N'4107', N'ImpairmentLossImpairmentGainAndReversalOfImpairmentLossDeterminedInAccordanceWithIfrs9', N'Impairment loss (impairment gain and reversal of impairment loss) determined in accordance with Ifrs 9')
 ,(N'Regulatory', 1, N'4108', N'ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod', N'Share of profit (loss) of associates and joint ventures accounted for using equity method')
 ,(N'Regulatory', 1, N'4109', N'OtherIncomeExpenseFromSubsidiariesJointlyControlledEntitiesAndAssociates', N'Other income (expense) from subsidiaries, jointly controlled entities and associates')
 ,(N'Regulatory', 1, N'4110', N'GainsLossesArisingFromDifferenceBetweenPreviousCarryingAmountAndFairValueOfFinancialAssetsReclassifiedAsMeasuredAtFairValue', N'Gains (losses) arising from difference between previous amortised cost and fair value of financial assets reclassified out of amortised cost into fair value through profit or loss measurement category')
@@ -390,7 +390,7 @@ INSERT INTO @Accounts(AccountType, IsActive, Code, [Id], [Name]) VALUES
 ,(N'Regulatory', 1, N'5272', N'ReclassificationAdjustmentsOnFinancialAssetsMeasuredAtFairValueThroughOtherComprehensiveIncomeNetOfTax', N'Reclassification adjustments on financial assets measured at fair value through other comprehensive income, net of tax')
 ,(N'Regulatory', 1, N'5273', N'AmountsRemovedFromEquityAndAdjustedAgainstFairValueOfFinancialAssetsOnReclassificationOutOfFairValueThroughOtherComprehensiveIncomeMeasurementCategoryNetOfTax', N'Amounts removed from equity and adjusted against fair value of financial assets on reclassification out of fair value through other comprehensive income measurement category, net of tax')
 ,(N'Regulatory', 1, N'528', N'ShareOfOtherComprehensiveIncomeOfAssociatesAndJointVenturesAccountedForUsingEquityMethodThatWillBeReclassifiedToProfitOrLossNetOfTax', N'Share of other comprehensive income of associates and joint ventures accounted for using equity method that will be reclassified to profit or loss, net of tax');
-MERGE [dbo].[IFRSAccounts] AS t
+MERGE [dbo].[IfrsAccounts] AS t
 USING @Accounts AS s
 ON s.Code = t.Code
 WHEN MATCHED AND
@@ -406,13 +406,13 @@ UPDATE SET
   t.[Id]					=	s.[Name], 
   t.[Node]					=	s.[Code],
   t.[IsActive]				=	s.[IsActive],
-  t.[IFRSType]			=	s.[AccountType], 
+  t.[IfrsType]			=	s.[AccountType], 
 --  t.[AccountSpecification]	=	s.[AccountSpecification],
   t.[IsLeaf]			=	s.[IsExtensible]
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[Node], [Id], [Node], [IsActive], [IFRSType],-- [AccountSpecification],
+    INSERT ([TenantId],	[Node], [Id], [Node], [IsActive], [IfrsType],-- [AccountSpecification],
 			[IsLeaf])
     VALUES (@TenantId, 	s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);

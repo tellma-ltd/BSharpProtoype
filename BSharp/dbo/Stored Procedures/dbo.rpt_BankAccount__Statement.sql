@@ -15,7 +15,7 @@ AS
 		[IsSystem],
 		[Direction],
 --		[AccountId],
-		[IFRSNoteId],
+		[IfrsNoteId],
 		[ResponsibilityCenterId],
 		-- [OperationId],
 		-- [ProductCategoryId],
@@ -36,7 +36,7 @@ AS
 		[RelatedMoneyAmount] As [OtherPartyAmount]
 --		[RelatedValue]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate)
-	WHERE [IFRSAccountId] = N'BalancesWithBanks'
+	WHERE [IfrsAccountId] = N'BalancesWithBanks'
 	AND [AccountId] = @AccountId
 	--AND (@AgentAccountId IS NULL OR	[AgentAccountId] = @AgentAccountId)
 	--AND (@ResourceId IS NULL OR ResourceId = @ResourceId);

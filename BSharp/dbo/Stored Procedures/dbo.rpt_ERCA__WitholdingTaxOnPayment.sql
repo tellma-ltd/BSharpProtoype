@@ -15,6 +15,6 @@ BEGIN
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
 	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
-	WHERE J.[IFRSAccountId] = N'CurrentWithholdingTaxPayable'
+	WHERE J.[IfrsAccountId] = N'CurrentWithholdingTaxPayable'
 	AND J.Direction = -1;
 END;

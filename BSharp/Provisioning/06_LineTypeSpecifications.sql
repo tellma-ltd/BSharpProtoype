@@ -1,7 +1,7 @@
 ﻿DECLARE @LineTypeSpecifications TABLE (
 	[LineType]					NVARCHAR (255),
 	[AppendSql]					NVARCHAR (MAX),
--- For Account, It might be better to use normalized version: Transaction Type, Resource Type, etc, and conclude the IFRS accordingly.
+-- For Account, It might be better to use normalized version: Transaction Type, Resource Type, etc, and conclude the Ifrs accordingly.
 	[Direction1]				SMALLINT,
 	[OperationId1Label]			NVARCHAR (255),
 	[OperationId1FillSql]		NVARCHAR (MAX),

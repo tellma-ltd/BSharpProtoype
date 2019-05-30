@@ -13,10 +13,10 @@ SELECT @UserId = [Id] FROM dbo.LocalUsers WHERE [Name] = N'Dr. Akra';
 EXEC sp_set_session_context 'UserId', @UserId;
 SET @UserId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-:r .\01_IFRSConcepts.sql
+:r .\01_IfrsConcepts.sql
 --:r .\08_MeasurementUnits.sql -- WRONG. To provision, use the code in Testing instead
 --:r .\02_Accounts.sql
---:r .\03_IFRSNotes.sql
+--:r .\03_IfrsNotes.sql
 --EXEC [dbo].[adm_Accounts_Notes__Update];
 --:r .\04_AccountsNotes.sql
 --:r .\05_DocumentTypes.sql

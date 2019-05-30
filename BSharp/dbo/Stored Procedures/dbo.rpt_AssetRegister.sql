@@ -3,16 +3,16 @@
 	@toDate Datetime = '01.01.2020'
 AS
 BEGIN
-	WITH IFRSFixedAssetAccounts	AS (
-		SELECT Id FROM dbo.[IFRSAccounts]
+	WITH IfrsFixedAssetAccounts	AS (
+		SELECT Id FROM dbo.[IfrsAccounts]
 		WHERE [Node].IsDescendantOf(
-			(SELECT [Node] FROM dbo.IFRSAccounts WHERE Id = N'PropertyPlandAndEquipment')
+			(SELECT [Node] FROM dbo.IfrsAccounts WHERE Id = N'PropertyPlandAndEquipment')
 		) = 1
 	),
 	FixedAssetAccounts AS (
 		SELECT Id FROM dbo.[Accounts]
-		WHERE IFRSAccountId IN
-			(SELECT [Id] FROM IFRSFixedAssetAccounts)
+		WHERE IfrsAccountId IN
+			(SELECT [Id] FROM IfrsFixedAssetAccounts)
 	),
 	OpeningBalances AS (
 		SELECT
@@ -26,13 +26,13 @@ BEGIN
 	),
 	Movements AS (
 		SELECT
-			J.ResourceId, J.[IFRSNoteId],
+			J.ResourceId, J.[IfrsNoteId],
 			SUM(J.[Count] * J.[Direction]) AS [Count],
 			SUM(J.[Value] * J.[Direction]) AS [Value],
 			SUM(J.[Time] * J.[Direction]) AS [ServiceLife]
 		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
 		WHERE J.AccountId IN (SELECT Id FROM FixedAssetAccounts)
-		GROUP BY J.ResourceId, J.[IFRSNoteId]
+		GROUP BY J.ResourceId, J.[IfrsNoteId]
 	),
 	FixedAssetRegsiter AS (
 		SELECT COALESCE(OpeningBalances.ResourceId, Movements.ResourceId) AS ResourceId,

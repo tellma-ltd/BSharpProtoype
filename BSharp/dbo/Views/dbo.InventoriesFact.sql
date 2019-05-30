@@ -2,12 +2,12 @@
 -- This is used just as an example. All reports will actually be 
 -- read from the TransactionViews fact table or the wrapping fi_Journal()
 AS
-WITH IFRSInventoryAccounts
+WITH IfrsInventoryAccounts
 AS
 (
-	SELECT Id FROM dbo.[IFRSAccounts]
+	SELECT Id FROM dbo.[IfrsAccounts]
 	WHERE [Node].IsDescendantOf(
-		(SELECT [Node] FROM dbo.IFRSAccounts WHERE Id = N'Inventories')
+		(SELECT [Node] FROM dbo.IfrsAccounts WHERE Id = N'Inventories')
 	) = 1
 )
 	SELECT
@@ -18,7 +18,7 @@ AS
 			J.[Id],
 			J.[Direction],
 			J.[AccountId],
-			J.[IFRSAccountId],
+			J.[IfrsAccountId],
 			J.[ResponsibilityCenterId],
 			-- J.[OperationId],
 			-- J.[ProductCategoryId],
@@ -37,7 +37,7 @@ AS
 			J.[NormalizedCount],
 			--J.[Time],
 			J.[Value],
-			J.[IFRSNoteId],
+			J.[IfrsNoteId],
 			J.[Reference],
 			J.[Memo],
 			J.[ExpectedSettlingDate] As ExpiryDate,
@@ -53,4 +53,4 @@ AS
 			R.Lookup4Id
 	FROM dbo.fi_Journal(NULL, NULL) J
 	JOIN dbo.Resources R ON J.ResourceId = R.Id
-	WHERE J.IFRSAccountId IN (SELECT Id FROM IFRSInventoryAccounts);
+	WHERE J.IfrsAccountId IN (SELECT Id FROM IfrsInventoryAccounts);

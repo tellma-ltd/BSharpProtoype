@@ -18,8 +18,8 @@ SET NOCOUNT ON;
 		MERGE INTO [dbo].Accounts AS t
 		USING (
 			SELECT
-				[Index], [Id], [Node], [IFRSAccountId], [IsAggregate],
-				[Name], [Name2], [Name3], [Code], [IFRSNoteId], [ResponsibilityCenterIsFixed],
+				[Index], [Id], [Node], [IfrsAccountId], [IsAggregate],
+				[Name], [Name2], [Name3], [Code], [IfrsNoteId], [ResponsibilityCenterIsFixed],
 				[ResponsibilityCenterId], [AgentAccountIsFixed], [AgentAccountId],
 				[ResourceIsFixed], [ResourceId], [ExpectedSettlingDateIsFixed], [ExpectedSettlingDate]
 			FROM @Entities 
@@ -29,13 +29,13 @@ SET NOCOUNT ON;
 		THEN
 			UPDATE SET
 				t.[Node]						= s.[Node], 
-				t.[IFRSAccountId]				= s.[IFRSAccountId],
+				t.[IfrsAccountId]				= s.[IfrsAccountId],
 				t.[IsAggregate]					= s.[IsAggregate],
 				t.[Name]						= s.[Name],
 				t.[Name2]						= s.[Name2],
 				t.[Name3]						= s.[Name3],
 				t.[Code]						= s.[Code],
-				t.[IFRSNoteId]					= s.[IFRSNoteId],
+				t.[IfrsNoteId]					= s.[IfrsNoteId],
 				t.[ResponsibilityCenterIsFixed] = s.[ResponsibilityCenterIsFixed],
 				t.[ResponsibilityCenterId]		= s.[ResponsibilityCenterId],
 				t.[AgentAccountIsFixed]			= s.[AgentAccountIsFixed],
@@ -48,12 +48,12 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([Node], [IFRSAccountId], [IsAggregate],
-				[Name], [Name2], [Name3], [Code], [IFRSNoteId], [ResponsibilityCenterIsFixed],
+			INSERT ([Node], [IfrsAccountId], [IsAggregate],
+				[Name], [Name2], [Name3], [Code], [IfrsNoteId], [ResponsibilityCenterIsFixed],
 				[ResponsibilityCenterId], [AgentAccountIsFixed], [AgentAccountId],
 				[ResourceIsFixed], [ResourceId], [ExpectedSettlingDateIsFixed], [ExpectedSettlingDate])
-			VALUES (s.[Node], s.[IFRSAccountId], s.[IsAggregate],
-				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[IFRSNoteId], s.[ResponsibilityCenterIsFixed],
+			VALUES (s.[Node], s.[IfrsAccountId], s.[IsAggregate],
+				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[IfrsNoteId], s.[ResponsibilityCenterIsFixed],
 				s.[ResponsibilityCenterId], s.[AgentAccountIsFixed], s.[AgentAccountId],
 				s.[ResourceIsFixed], s.[ResourceId], s.[ExpectedSettlingDateIsFixed], s.[ExpectedSettlingDate])
 			OUTPUT s.[Index], inserted.[Id] 

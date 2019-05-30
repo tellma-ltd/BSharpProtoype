@@ -8,16 +8,16 @@ INSERT INTO @AccountsNotes([AccountId], [NoteId], [Direction])
 SELECT A.[Node] As AccountId, N.[Id] AS [NoteId], N.Direction
 FROM (
 	SELECT [Node], [Node]
-	FROM dbo.[IFRSAccounts]
+	FROM dbo.[IfrsAccounts]
 	WHERE [IsLeaf] = 1
 ) A	CROSS JOIN (
-	SELECT [Code], [Id], [Direction] FROM dbo.[IFRSNotes]
+	SELECT [Code], [Id], [Direction] FROM dbo.[IfrsNotes]
 	WHERE Direction <> 0 AND IsExtensible = 1
 	UNION
-	SELECT [Code], [Id], 1 FROM dbo.[IFRSNotes]
+	SELECT [Code], [Id], 1 FROM dbo.[IfrsNotes]
 	WHERE Direction = 0 AND IsExtensible = 1
 	UNION
-	SELECT [Code], [Id], -1 FROM dbo.[IFRSNotes]
+	SELECT [Code], [Id], -1 FROM dbo.[IfrsNotes]
 	WHERE Direction = 0 AND IsExtensible = 1
 ) N
 WHERE (
@@ -48,12 +48,12 @@ WHERE (
 --	(A.Code LIKE dbo.fn_Account__Code(N'OtherExpenseByFunction') +'%' AND N.Code LIKE dbo.fn_Note__Code(N'ExpenseByNature') + '%') OR
 	(A.[Node] LIKE N'41015%'												AND N.Code LIKE N'4%')
 );
-MERGE [dbo].[IFRSAccountConceptsNoteConcepts] AS t
+MERGE [dbo].[IfrsAccountConceptsNoteConcepts] AS t
 USING @AccountsNotes AS s
 ON (s.[AccountId] = t.[AccountId] AND s.[NoteId] = s.[NoteId] AND s.[Direction] = s.[Direction])
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[IFRSAccountConcept], [IFRSNoteConcept], [Direction])
+    INSERT ([TenantId],	[IfrsAccountConcept], [IfrsNoteConcept], [Direction])
     VALUES (@TenantId, s.[AccountId], s.[NoteId], s.[Direction])
 OPTION (RECOMPILE);

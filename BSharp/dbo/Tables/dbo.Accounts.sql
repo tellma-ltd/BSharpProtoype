@@ -4,8 +4,8 @@
 	[Node]						HIERARCHYID,
 	[Level]						AS [Node].GetLevel(),
 	[ParentNode]				AS [Node].GetAncestor(1),
-	-- IFRSAccountId becomes immutable once account appears in a (draft/posted) document
-	[IFRSAccountId]				NVARCHAR (255)		NOT NULL, -- IFRS Concept
+	-- IfrsAccountId becomes immutable once account appears in a (draft/posted) document
+	[IfrsAccountId]				NVARCHAR (255)		NOT NULL, -- Ifrs Concept
 	[IsAggregate]				BIT					NOT NULL,
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
@@ -14,7 +14,7 @@
 	[Code]						NVARCHAR (255),
 /*
 	An application-wide settings specify whether to activate the following columns:
-	[IsActiveIFRSNote], when wanting to generate specific IFRS statements and notes
+	[IsActiveIfrsNote], when wanting to generate specific Ifrs statements and notes
 	[IsActiveResponsibilityCenter], when using cost accounting
 	[IsActiveResource] when using inventory, fixed assets, or services modules
 	[IsActiveExpectedSettlingDate] when tracking expiry dates and due dates
@@ -31,22 +31,22 @@
 */
 
 --	This field will show only if two requirements are satisfied:
---	IsActiveIFRSNote is true, and if IFRSAccount specs requires specifying IFRS Note in journal entry line item (JE.LI)
-	[IFRSNoteId]				NVARCHAR (255),		-- includes Expense by function
+--	IsActiveIfrsNote is true, and if IfrsAccount specs requires specifying Ifrs Note in journal entry line item (JE.LI)
+	[IfrsNoteId]				NVARCHAR (255),		-- includes Expense by function
 
---	These fields will show only if IsActiveResponsibilityCenter=True, and if IFRSAccount specs require it in JE.Li
+--	These fields will show only if IsActiveResponsibilityCenter=True, and if IfrsAccount specs require it in JE.Li
 	[ResponsibilityCenterIsFixed]BIT				NOT NULL DEFAULT (1),
 	[ResponsibilityCenterId]	INT,
 
--- These fields will show only if IsActiveAgentAccount, and if IFRSAccount specs require it
+-- These fields will show only if IsActiveAgentAccount, and if IfrsAccount specs require it
 	[AgentAccountIsFixed]		BIT					NOT NULL DEFAULT (1),
 	[AgentAccountId]			INT,
 
--- These fields will show only if IsActiveResource, and if IFRSAccount specs require it
+-- These fields will show only if IsActiveResource, and if IfrsAccount specs require it
 	[ResourceIsFixed]			BIT					NOT NULL DEFAULT (1),
 	[ResourceId]				INT,
 
--- These fields will show only if IsActiveExpectedSettlingDate, and if IFRSAccount specs require it
+-- These fields will show only if IsActiveExpectedSettlingDate, and if IfrsAccount specs require it
 	[ExpectedSettlingDateIsFixed]BIT				NOT NULL DEFAULT (0),
 	[ExpectedSettlingDate]		DATETIME2(7),
 
@@ -56,8 +56,8 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 	CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_Accounts__IFRSAccountId] FOREIGN KEY ([TenantId], [IFRSAccountId]) REFERENCES [dbo].[IFRSAccounts] ([TenantId], [Id]),
-	CONSTRAINT [FK_Accounts__IFRSNoteId] FOREIGN KEY ([TenantId], [IFRSNoteId]) REFERENCES [dbo].[IFRSNotes] ([TenantId], [Id]),
+	CONSTRAINT [FK_Accounts__IfrsAccountId] FOREIGN KEY ([TenantId], [IfrsAccountId]) REFERENCES [dbo].[IfrsAccounts] ([TenantId], [Id]),
+	CONSTRAINT [FK_Accounts__IfrsNoteId] FOREIGN KEY ([TenantId], [IfrsNoteId]) REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResponsibilityCenterId] FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__AgentAccountId] FOREIGN KEY ([TenantId], [AgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResourceId] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]),

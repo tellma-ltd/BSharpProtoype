@@ -44,25 +44,25 @@ SET NOCOUNT ON;
 	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- Note Id is missing when required
-	-- TODO: Add the condition that IFRS Note is enforced
+	-- TODO: Add the condition that Ifrs Note is enforced
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheIFRSNoteIsRequired' As [ErrorName],
+				CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId' As [Key], N'Error_TheIfrsNoteIsRequired' As [ErrorName],
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	WHERE (E.[IFRSNoteId] IS NULL)
-	AND (E.AccountId IN (SELECT [IFRSAccountConcept] FROM dbo.[IFRSAccountConceptsNoteConcepts]))
+	WHERE (E.[IfrsNoteId] IS NULL)
+	AND (E.AccountId IN (SELECT [IfrsAccountConcept] FROM dbo.[IfrsAccountConceptsNoteConcepts]))
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Invalid Note Id
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheIFRSNote0Incorrect' As [ErrorName],
-				E.[IFRSNoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+				CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId' As [Key], N'Error_TheIfrsNote0Incorrect' As [ErrorName],
+				E.[IfrsNoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
-	LEFT JOIN dbo.[IFRSAccountConceptsNoteConcepts] AN ON E.AccountId = AN.[IFRSAccountConcept] AND E.Direction = AN.Direction AND E.IFRSNoteId = AN.[IFRSNoteConcept]
-	WHERE (E.[IFRSNoteId] IS NOT NULL)
-	AND (AN.[IFRSNoteConcept] IS NULL)
+	LEFT JOIN dbo.[IfrsAccountConceptsNoteConcepts] AN ON E.AccountId = AN.[IfrsAccountConcept] AND E.Direction = AN.Direction AND E.IfrsNoteId = AN.[IfrsNoteConcept]
+	WHERE (E.[IfrsNoteId] IS NOT NULL)
+	AND (AN.[IfrsNoteConcept] IS NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Reference is required for selected account and direction, 
@@ -72,7 +72,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
 	WHERE (E.[Reference] IS NULL)
 	AND (E.[Direction] = 1 AND IA.[DebitReferenceSetting] = N'Required' OR
 		E.[Direction] = -1 AND IA.[CreditReferenceSetting] = N'Required')
@@ -85,7 +85,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
 	WHERE (E.[RelatedReference] IS NULL)
 	AND (E.[Direction] = 1 AND IA.[DebitRelatedReferenceSetting] = N'Required' OR
 		E.[Direction] = -1 AND IA.[CreditRelatedReferenceSetting] = N'Required')
@@ -98,7 +98,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
 	WHERE (E.[RelatedAgentAccountId] IS NULL)
 	AND (IA.[RelatedAgentAccountSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -110,7 +110,7 @@ SET NOCOUNT ON;
 				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
 	WHERE (E.[RelatedResourceId] IS NULL)
 	AND (IA.[RelatedResourceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
@@ -122,7 +122,7 @@ SET NOCOUNT ON;
 	--			NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	--FROM @Entries E
 	--JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	--JOIN dbo.[IFRSAccounts] IA ON A.IFRSAccountId = IA.Id
+	--JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
 	--WHERE (E.[RelatedMoneyAmount] IS NULL)
 	--AND (IA.[RelatedMoneyAmountSetting] = N'Required')
 	--AND (E.[EntityState] IN (N'Inserted', N'Updated'));

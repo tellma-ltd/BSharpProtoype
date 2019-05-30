@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[dal_IFRSDisclosureDetails__Save]
-	@Entities [IFRSDisclosureDetailList] READONLY,
+﻿CREATE PROCEDURE [dbo].[dal_IfrsDisclosureDetails__Save]
+	@Entities [IfrsDisclosureDetailList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -8,16 +8,16 @@ SET NOCOUNT ON;
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 -- Deletions
-	DELETE FROM [dbo].[IFRSDisclosureDetails]
+	DELETE FROM [dbo].[IfrsDisclosureDetails]
 	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
 	FROM
 	(
-		MERGE INTO [dbo].[IFRSDisclosureDetails] AS t
+		MERGE INTO [dbo].[IfrsDisclosureDetails] AS t
 		USING (
-			SELECT [Index], [Id], [IFRSDisclosureId], [Value], [ValidSince]
+			SELECT [Index], [Id], [IfrsDisclosureId], [Value], [ValidSince]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.[Id] = s.[Id])
@@ -29,8 +29,8 @@ SET NOCOUNT ON;
 				t.[ModifiedAt]		= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([IFRSDisclosureId], [Value], [ValidSince])
-			VALUES (s.[IFRSDisclosureId], s.[Value], s.[ValidSince])
+			INSERT ([IfrsDisclosureId], [Value], [ValidSince])
+			VALUES (s.[IfrsDisclosureId], s.[Value], s.[ValidSince])
 		OUTPUT s.[Index], inserted.[Id] 
 	) As x
 

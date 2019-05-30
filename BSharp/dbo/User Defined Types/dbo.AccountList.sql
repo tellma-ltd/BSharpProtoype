@@ -6,7 +6,7 @@
 	[ParentIndex]				INT,
 	[ParentId]					INT, 
 
-	[IFRSAccountId]				NVARCHAR (255)		NOT NULL, -- IFRS Concept
+	[IfrsAccountId]				NVARCHAR (255)		NOT NULL, -- Ifrs Concept
 	[IsAggregate]				BIT					NOT NULL,
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL,
@@ -14,7 +14,7 @@
 	[Name3]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
 
-	[IFRSNoteId]				NVARCHAR (255),		-- includes Expense by function
+	[IfrsNoteId]				NVARCHAR (255),		-- includes Expense by function
 
 	[ResponsibilityCenterIsFixed]BIT				NOT NULL DEFAULT (1),
 	[ResponsibilityCenterId]	INT,

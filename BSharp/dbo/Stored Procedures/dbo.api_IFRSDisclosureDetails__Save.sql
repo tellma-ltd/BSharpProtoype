@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[api_IFRSDisclosureDetails__Save]
-	@Entities [IFRSDisclosureDetailList] READONLY,
+﻿CREATE PROCEDURE [dbo].[api_IfrsDisclosureDetails__Save]
+	@Entities [IfrsDisclosureDetailList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultsJson NVARCHAR(MAX) OUTPUT
@@ -8,14 +8,14 @@ BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 -- Validate
-	EXEC [dbo].[bll_IFRSDisclosureDetails_Validate__Save]
+	EXEC [dbo].[bll_IfrsDisclosureDetails_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 	
-	EXEC [dbo].[dal_IFRSDisclosureDetails__Save]
+	EXEC [dbo].[dal_IfrsDisclosureDetails__Save]
 		@Entities = @Entities,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
 
@@ -25,7 +25,7 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		SELECT [Id] 
 		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 		
-		EXEC [dbo].[dal_IFRSDisclosureDetails__Select] 
+		EXEC [dbo].[dal_IfrsDisclosureDetails__Select] 
 			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
 	END
 END;

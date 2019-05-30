@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_WSI_FinishedGoods_AccountBased]
 /*
 Assumptions:
-1) Any inventory account is mapped to IFRS concepts: Inventories, NonCurrentinventories, or their descendants
+1) Any inventory account is mapped to Ifrs concepts: Inventories, NonCurrentinventories, or their descendants
 2) All entries use a finished goods resource. For balance migration, we need to add for every inventory account
 	a resource called non-specified (for that account), and migrate balances to it.
 
@@ -14,16 +14,16 @@ Assumptions:
 	@CountUnit INT = 4 -- (SELECT [Id] FROM dbo.MeasurementUnits WHERE [Name] = N'ea');
 AS
 	WITH
-	IFRS_FG AS (
+	Ifrs_FG AS (
 		SELECT [Node] 
-		FROM dbo.[IFRSAccounts] WHERE [Id] IN(N'FinishedGoods')
+		FROM dbo.[IfrsAccounts] WHERE [Id] IN(N'FinishedGoods')
 	),
 	FinishedGoodsAccounts AS (
 		SELECT A.[Id] FROM dbo.Accounts A
-		JOIN dbo.[IFRSAccounts] I ON A.[IFRSAccountId] = I.[Id]
-		WHERE I.[Node].IsDescendantOf((SELECT * FROM IFRS_FG))	= 1
+		JOIN dbo.[IfrsAccounts] I ON A.[IfrsAccountId] = I.[Id]
+		WHERE I.[Node].IsDescendantOf((SELECT * FROM Ifrs_FG))	= 1
 	), /*
-	-- To avoid IFRS, we need to define an account type:
+	-- To avoid Ifrs, we need to define an account type:
 	FixedAssetAccounts AS (
 		SELECT [Id] FROM dbo.Accounts
 		WHERE AccountType = N'FinishedGoods'

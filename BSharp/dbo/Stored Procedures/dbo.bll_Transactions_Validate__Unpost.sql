@@ -35,13 +35,14 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].TransactionEntries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].IFRSNoteId' As [Key], N'Error_TheTransaction0TheNoteId1IsInactive' As [ErrorName],
-		D.SerialNumber AS Argument1, N.[Label] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+		CAST(E.[Id] AS NVARCHAR (255)) + '].IfrsNoteId' As [Key], N'Error_TheTransaction0TheNoteId1IsInactive' As [ErrorName],
+		D.SerialNumber AS Argument1, IC.[Label] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Transactions FE
 	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
 	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
-	JOIN dbo.[IFRSNotes] N ON E.[IFRSNoteId] = N.Id
-	WHERE (N.IsActive = 0);
+	JOIN dbo.[IfrsNotes] N ON E.[IfrsNoteId] = N.Id
+	JOIN dbo.[IfrsConcepts] IC ON N.Id = IC.Id
+	WHERE (IC.IsActive = 0);
 
 	-- No inactive custody
 	-- No inactive resource

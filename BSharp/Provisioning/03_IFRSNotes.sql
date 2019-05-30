@@ -1,10 +1,10 @@
 ﻿DECLARE @TenantId INT = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
-DECLARE @IFRSNotes AS TABLE (
-	[Id]						NVARCHAR (255), -- IFRS Concept
+DECLARE @IfrsNotes AS TABLE (
+	[Id]						NVARCHAR (255), -- Ifrs Concept
 	[Node]						HIERARCHYID,
-	[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
+	[IfrsType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
 	[IsAggregate]				BIT					NOT NULL DEFAULT (1),
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Label]						NVARCHAR (1024)		NOT NULL,
@@ -15,7 +15,7 @@ DECLARE @IFRSNotes AS TABLE (
 	PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 
-INSERT INTO @IFRSNotes([IFRSType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES
+INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES
 ('Extension', 1, 1, 1, '/0/', '', '')
 ,('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/1/', 'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment', 'Additions other than through business combinations, property, plant and equipment')
@@ -188,13 +188,13 @@ INSERT INTO @IFRSNotes([IFRSType], IsActive, [ForDebit], [ForCredit], [Node], [I
 ,('Regulatory', 1, 1, 0, '/9/3/', 'AdministrativeExpense', 'Administrative expenses')
 ,('Regulatory', 1, 1, 0, '/9/4/', 'OtherExpenseByFunction', 'Other expense, by function')
 
-MERGE [dbo].[IFRSNotes] AS t
-USING @IFRSNotes AS s
+MERGE [dbo].[IfrsNotes] AS t
+USING @IfrsNotes AS s
 ON s.[Id] = t.[Id]
 WHEN MATCHED AND
 (
 	t.[Node]			<>	s.[Node]			OR
-	t.[IFRSType]		<>	s.[IFRSType]		OR
+	t.[IfrsType]		<>	s.[IfrsType]		OR
 	t.[IsAggregate]		<>	s.[IsAggregate]		OR
 	t.[IsActive]		<>	s.[IsActive]		OR
 	t.[Label]			<>	s.[Label]			OR
@@ -205,7 +205,7 @@ WHEN MATCHED AND
 ) THEN
 UPDATE SET
 	t.[Node]			=	s.[Node], 
-	t.[IFRSType]		=	s.[IFRSType],
+	t.[IfrsType]		=	s.[IfrsType],
 	t.[IsAggregate]		=	s.[IsAggregate],
 	t.[IsActive]		=	s.[IsActive],
 	t.[Label]			=	s.[Label], 
@@ -218,7 +218,7 @@ UPDATE SET
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[Id], [Node],		[IFRSType], [IsAggregate], [IsActive],		[Label], [ForDebit], [ForCredit], [EffectiveDate], [ExpiryDate], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-    VALUES (@TenantId, s.[Id], s.[Node], s.[IFRSType], s.[IsAggregate], s.[IsActive], s.[Label], s.[ForDebit], s.[ForCredit], s.[EffectiveDate], s.[ExpiryDate], @Now,		@UserId,		@Now,		@UserId)
+    INSERT ([TenantId],	[Id], [Node],		[IfrsType], [IsAggregate], [IsActive],		[Label], [ForDebit], [ForCredit], [EffectiveDate], [ExpiryDate], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+    VALUES (@TenantId, s.[Id], s.[Node], s.[IfrsType], s.[IsAggregate], s.[IsActive], s.[Label], s.[ForDebit], s.[ForCredit], s.[EffectiveDate], s.[ExpiryDate], @Now,		@UserId,		@Now,		@UserId)
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 ;

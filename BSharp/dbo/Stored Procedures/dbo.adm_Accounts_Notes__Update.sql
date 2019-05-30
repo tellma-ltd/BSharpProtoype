@@ -4,14 +4,14 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @Code NVARCHAR (255);
 /*
-	SELECT @Code = min(Code) FROM [dbo].[IFRSConcepts];
+	SELECT @Code = min(Code) FROM [dbo].[IfrsConcepts];
 	WHILE @Code IS NOT NULL
 	BEGIN
-		IF EXISTS(SELECT * FROM [dbo].[IFRSConcepts] WHERE Code Like @Code + '%' AND Code <> @Code AND [ConceptType] IN  (N'Regulatory', N'Correction'))
-			UPDATE [dbo].[IFRSConcepts] SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
+		IF EXISTS(SELECT * FROM [dbo].[IfrsConcepts] WHERE Code Like @Code + '%' AND Code <> @Code AND [ConceptType] IN  (N'Regulatory', N'Correction'))
+			UPDATE [dbo].[IfrsConcepts] SET IsExtensible = 0 WHERE Code = @Code AND IsExtensible = 1;
 		ELSE
-			UPDATE [dbo].[IFRSConcepts] SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
-		SELECT @Code = min(Code) FROM [dbo].[IFRSConcepts] WHERE Code > @Code;
+			UPDATE [dbo].[IfrsConcepts] SET IsExtensible = 1 WHERE Code = @Code AND IsExtensible = 0;
+		SELECT @Code = min(Code) FROM [dbo].[IfrsConcepts] WHERE Code > @Code;
 	END;
 
 	SELECT @Code = min(Code) FROM [dbo].Notes;

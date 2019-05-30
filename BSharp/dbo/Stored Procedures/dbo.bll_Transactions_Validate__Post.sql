@@ -44,7 +44,7 @@ SET NOCOUNT ON;
 		E.SerialNumber AS Argument1, E.[AccountId] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
 	FROM @Transactions FE
 	JOIN dbo.[TransactionEntriesView] E ON FE.[Id] = E.[DocumentId]
-	JOIN dbo.[IFRSConcepts] IC ON E.IFRSAccountId = IC.Id
+	JOIN dbo.[IfrsConcepts] IC ON E.IfrsAccountId = IC.Id
 	WHERE (IC.IsActive = 0);
 
 	-- No inactive Responsibility Center, AgentAccount, Resource, Related resource, Related Agent Account, Related Responsibility Center

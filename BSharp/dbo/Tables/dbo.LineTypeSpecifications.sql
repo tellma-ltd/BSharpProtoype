@@ -3,7 +3,7 @@
 	[LineType]						NVARCHAR (255),
 	[IsActive]						BIT				NOT NULL DEFAULT (1),
 	[AppendSql]						NVARCHAR (MAX) SPARSE,
--- For Account, It might be better to use normalized version: Transaction Type, Resource Type, etc, and conclude the IFRS accordingly.
+-- For Account, It might be better to use normalized version: Transaction Type, Resource Type, etc, and conclude the Ifrs accordingly.
 	[Operation1IsVisible]			BIT				NOT NULL DEFAULT(0),
 	[Account1IsVisible]				BIT				NOT NULL DEFAULT(0),
 	[Agent1IsVisible]				BIT				NOT NULL DEFAULT(0),

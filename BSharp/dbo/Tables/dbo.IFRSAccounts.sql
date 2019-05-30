@@ -1,6 +1,6 @@
-﻿CREATE TABLE [dbo].[IFRSAccounts] (
+﻿CREATE TABLE [dbo].[IfrsAccounts] (
 	[TenantId]					INT,
-	[Id]						NVARCHAR (255), -- IFRS Concept
+	[Id]						NVARCHAR (255), -- Ifrs Concept
 	[Node]						HIERARCHYID,
 	[Level]						AS [Node].GetLevel(),
 	[ParentNode]				AS [Node].GetAncestor(1),
@@ -9,7 +9,7 @@
 	- Amendment: Added for consistency, must be amended in the iXBRL tool. Mainly for members vs non members issue
 	- Extension: Added for business logic in B#. Is ignored by the iXBRL tool 
 */
-	--[IFRSType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
+	--[IfrsType]					NVARCHAR (255)	DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
 	-- Aggregate means, it does not take direct entries, but rather used for aggregation only
 	-- IsAggergate = True If and only if isLeaf = False. We used IsAggregate instead since
 	-- a leaf is used in computer science to mean a node with no children. So, as we build the tree
@@ -25,8 +25,8 @@
 	--[EffectiveDate]				DATETIME2(7)		NOT NULL DEFAULT('0001-01-01 00:00:00'),
 	--[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 
---	The settings below apply to the Account with this IFRS, as well to the JE.LI endowed with this IFRS
-	[IFRSNoteSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+--	The settings below apply to the Account with this Ifrs, as well to the JE.LI endowed with this Ifrs
+	[IfrsNoteSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 
 	[AgentAccountSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
 	[AgentRelationTypeList]		NVARCHAR (1024),	-- e.g., OtherCurrentReceivables applies to ALL except supplier & customer
@@ -81,25 +81,25 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]				INT					NOT NULL,
 
-	CONSTRAINT [PK_IFRSAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
-	--CONSTRAINT [CK_IFRSAccounts__IFRSType] CHECK ([IFRSType] IN (N'Amendment', N'Extension', N'Regulatory')),
-	CONSTRAINT [FK_IFRSAccounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_IFRSAccounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [PK_IfrsAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
+	--CONSTRAINT [CK_IfrsAccounts__IfrsType] CHECK ([IfrsType] IN (N'Amendment', N'Extension', N'Regulatory')),
+	CONSTRAINT [FK_IfrsAccounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_IfrsAccounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 	);
 GO
-CREATE UNIQUE CLUSTERED INDEX IFRSAccounts__Node
-ON [dbo].[IFRSAccounts]([TenantId], [Node]) ;  
+CREATE UNIQUE CLUSTERED INDEX IfrsAccounts__Node
+ON [dbo].[IfrsAccounts]([TenantId], [Node]) ;  
 GO
-CREATE UNIQUE INDEX IFRSAccounts__Level_FNode
-ON [dbo].[IFRSAccounts]([TenantId], [Level], [Node]) ;  
+CREATE UNIQUE INDEX IfrsAccounts__Level_FNode
+ON [dbo].[IfrsAccounts]([TenantId], [Level], [Node]) ;  
 GO
-ALTER TABLE [dbo].[IFRSAccounts] ADD CONSTRAINT [DF_IFRSAccounts__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
 GO
-ALTER TABLE [dbo].[IFRSAccounts] ADD CONSTRAINT [DF_IFRSAccounts__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
+ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
 GO
-ALTER TABLE [dbo].[IFRSAccounts] ADD CONSTRAINT [DF_IFRSAccounts__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
+ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
 GO
-ALTER TABLE [dbo].[IFRSAccounts] ADD CONSTRAINT [DF_IFRSAccounts__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
+ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
 GO
-ALTER TABLE [dbo].[IFRSAccounts] ADD CONSTRAINT [DF_IFRSAccounts__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
+ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

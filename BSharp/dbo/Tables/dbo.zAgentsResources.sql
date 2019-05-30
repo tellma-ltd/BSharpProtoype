@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[AgentsResources] (
 -- This table is used as a filter to show which resources are compatible with which Agent account, or relations.
--- But we may be able to simulate it using the filters on tables IFRS and Accounts...
+-- But we may be able to simulate it using the filters on tables Ifrs and Accounts...
 	[TenantId]			INT,
 	[Id]				INT					IDENTITY,
 	[AgentAccountId]	INT					NOT NULL,

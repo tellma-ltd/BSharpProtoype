@@ -1,17 +1,17 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_NegativeInventories]
 	@AsOfDate Datetime = '01.01.2020'
 AS
-WITH IFRSInventoryAccounts
+WITH IfrsInventoryAccounts
 AS
 (
-	SELECT Id FROM dbo.[IFRSAccounts]
+	SELECT Id FROM dbo.[IfrsAccounts]
 	WHERE [Node].IsDescendantOf(
-		(SELECT [Node] FROM dbo.IFRSAccounts WHERE Id = N'Inventories')
+		(SELECT [Node] FROM dbo.IfrsAccounts WHERE Id = N'Inventories')
 	) = 1
 )
 	SELECT
 			[AccountId],
-			[IFRSAccountId],
+			[IfrsAccountId],
 			[ResponsibilityCenterId],
 			-- [OperationId],
 			-- [ProductCategoryId],
@@ -25,10 +25,10 @@ AS
 			SUM([Count]) AS [Count],
 			SUM([Value]) As [Value]
 	FROM dbo.fi_Journal(NULL, @AsOfDate) J
-	WHERE IFRSAccountId IN (SELECT Id FROM IFRSInventoryAccounts)
+	WHERE IfrsAccountId IN (SELECT Id FROM IfrsInventoryAccounts)
 	GROUP BY
 			[AccountId],
-			[IFRSAccountId],
+			[IfrsAccountId],
 			[ResponsibilityCenterId],
 			-- [OperationId],
 			-- [ProductCategoryId],
