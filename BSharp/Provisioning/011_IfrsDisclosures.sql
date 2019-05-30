@@ -7,7 +7,6 @@ INSERT INTO @IfrsDisclosures VALUES
 (N'NameOfReportingEntityOrOtherMeansOfIdentification'),
 (N'ExplanationOfChangeInNameOfReportingEntityOrOtherMeansOfIdentificationFromEndOfPrecedingReportingPeriod'),
 (N'DescriptionOfNatureOfFinancialStatements'),
-
 (N'DomicileOfEntity'),
 (N'LegalFormOfEntity'),
 (N'CountryOfIncorporation'),
