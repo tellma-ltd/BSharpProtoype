@@ -11,7 +11,7 @@
 );
 
 INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES
-('Extension', 1, 1, 1, '/0/', '', '')
+('Extension', 0, 1, 1, '/0/', '', '')
 ,('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/1/', 'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment', 'Additions other than through business combinations, property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/2/', 'AcquisitionsThroughBusinessCombinationsPropertyPlantAndEquipment', 'Acquisitions through business combinations, property, plant and equipment')
@@ -177,7 +177,7 @@ INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [I
 ,('Regulatory', 1, 1, 1, '/8/7/', 'IncreaseDecreaseThroughNetExchangeDifferencesOtherProvisions', 'Increase (decrease) through net exchange differences, other provisions')
 ,('Regulatory', 1, 1, 1, '/8/8/', 'DecreaseThroughLossOfControlOfSubsidiaryOtherProvisions', 'Decrease through loss of control of subsidiary, other provisions')
 ,('Regulatory', 1, 1, 1, '/8/9/', 'IncreaseDecreaseThroughTransfersAndOtherChangesOtherProvisions', 'Increase (decrease) through transfers and other changes, other provisions')
-,('Extension', 1, 1, 1, '/9/', 'ExpenseByFunction', 'Expense, by function')
+,('Extension', 1, 1, 1, '/9/', 'ExpenseByFunctionExtension', 'Expense, by function')
 ,('Regulatory', 1, 1, 0, '/9/1/', 'CostOfSales', 'Cost of sales')
 ,('Regulatory', 1, 1, 0, '/9/2/', 'DistributionCosts', 'Distribution costs')
 ,('Regulatory', 1, 1, 0, '/9/3/', 'AdministrativeExpense', 'Administrative expenses')
@@ -186,7 +186,7 @@ INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [I
 MERGE [dbo].[IfrsNotes] AS t
 USING (
 	SELECT  [Id], [Node], [IsAggregate], [ForDebit], [ForCredit]
-	FROM @IfrsNotes WHERE Id IN (SELECT [Id] FROM dbo.IfrsConcepts)
+	FROM @IfrsNotes --WHERE Id IN (SELECT [Id] FROM dbo.IfrsConcepts)
 ) AS s
 ON s.[Id] = t.[Id]
 WHEN MATCHED AND
