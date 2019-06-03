@@ -3,6 +3,7 @@ BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
 	IF NOT EXISTS(SELECT * FROM [dbo].[IfrsDisclosureDetails])	DBCC CHECKIDENT ('[dbo].[IfrsDisclosureDetails]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[ProductCategories])	DBCC CHECKIDENT ('[dbo].[ProductCategories]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])			DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
@@ -35,8 +36,8 @@ END
 
 BEGIN TRY
 	BEGIN TRANSACTION
-		:r .\01_IfrsConcepts.sql
-		:r .\02_MeasurementUnits.sql
+		--:r .\01_IfrsConcepts.sql
+		--:r .\02_MeasurementUnits.sql
 		:r .\03_ProductCategories.sql
 		--:r .\03_Operations.sql
 		--:r .\04_Resources.sql

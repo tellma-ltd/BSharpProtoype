@@ -36,6 +36,22 @@ BEGIN -- Inserting
 	END
 
 	select *, [Node].ToString() As NodePath, [ParentNode].ToString() As ParentNodePath from ProductCategories;
+	DECLARE @Entities [IndexedIdList];
+	INSERT INTO @Entities([Index], [Id]) VALUES
+	(2,2);
+
+	WITH DeletedSet AS
+	(
+		SELECT E.[Index], T.[Node], T.[ParentNode]
+		FROM dbo.ProductCategories T 
+		JOIN @Entities E ON T.[Id] = E.[Id]
+	)
+--	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
+    SELECT DISTINCT '[' + CAST(S.[Index] AS NVARCHAR (255)) + '].Id' As [Key], N'Error_CannotDeleteNodeWithCHildren' As [ErrorName], NULL As [Argument1]
+	FROM [dbo].[ProductCategories] T -- get me every node in the table
+	JOIN DeletedSet S ON T.[ParentNode] = S.[Node] -- whose parent is to be deleted
+	WHERE T.[Node] NOT IN (SELECT [Node] FROM DeletedSet) -- but it is not going to be deleted;
+
 	--IF @DebugProductCategories = 1
 	--	SELECT * FROM dbo.[fr_ProductCategories__Json](@ResultsJson);
 END
