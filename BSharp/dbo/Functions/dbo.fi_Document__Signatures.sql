@@ -4,6 +4,6 @@
 RETURNS TABLE
 AS
 RETURN
-	SELECT	[SignatoryId], [SignedAt], [UnsignedAt]
+	SELECT	[SignedById], [SignedAt], [UnsignedAt]
 	FROM [dbo].Signatures
 	WHERE DocumentId = @DocumentId;

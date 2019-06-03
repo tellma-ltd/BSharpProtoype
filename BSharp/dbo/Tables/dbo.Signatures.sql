@@ -2,7 +2,7 @@
 	[TenantId]		INT,
 	[Id]			INT IDENTITY,
 	[DocumentId]	INT					NOT NULL,
-	[SignatoryId]	INT					NOT NULL,
+	[SignedById]	INT					NOT NULL,
 	[SignedAt]		DATETIMEOFFSET(7)	NOT NULL,
 	[UnsignedAt]	DATETIMEOFFSET(7)
 	CONSTRAINT [PK_Signatures] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
@@ -13,5 +13,5 @@ CREATE INDEX [IX_Signatures__DocumentId] ON [dbo].[Signatures]([TenantId] ASC, [
 GO
 ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [SignedAt];
 GO
-ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignatoryId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [SignatoryId]
+ALTER TABLE [dbo].[Signatures] ADD CONSTRAINT [DF_Signatures__SignatoryId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [SignedById]
 GO

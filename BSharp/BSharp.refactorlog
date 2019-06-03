@@ -763,4 +763,53 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_IfrsDisclosureDetails_Validate__Save]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c9e82602-3dee-43ef-b680-2172ff2336a9" ChangeDateTime="05/31/2019 09:10:37">
+    <Property Name="ElementName" Value="[dbo].[Signatures].[SignatoryId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Signatures]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[SignedById]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1470473b-703d-4d72-901b-88263954d15f" ChangeDateTime="05/31/2019 09:51:24">
+    <Property Name="ElementName" Value="[dbo].[Documents].[VoucherNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[VoucherReference]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="38bbff3f-1416-4808-ac85-f217005e8701" ChangeDateTime="05/31/2019 10:03:44">
+    <Property Name="ElementName" Value="[dbo].[DocumentTypeSpecifications]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionTypeSpecifications]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b3e569a7-8bf3-4184-9c00-edd18915cb69" ChangeDateTime="05/31/2019 11:52:08">
+    <Property Name="ElementName" Value="[dbo].[Documents].[TransactionType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[DocumentType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="42453bd9-30e5-44d8-b42b-2a1ef02ddf73" ChangeDateTime="05/31/2019 11:53:50">
+    <Property Name="ElementName" Value="[dbo].[TransactionTypeSpecifications]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentTypeSpecifications]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="eca3006e-02a8-497d-baa8-fa86c22e3a99" ChangeDateTime="05/31/2019 11:55:28">
+    <Property Name="ElementName" Value="[dbo].[FK_Documents_TransactionType]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Documents_DocumentType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2d8a47ff-b2ff-4ed5-9f70-9d0656519318" ChangeDateTime="06/02/2019 09:59:10">
+    <Property Name="ElementName" Value="[dbo].[DocumentTypeSpecifications]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentTypes]" />
+  </Operation>
 </Operations>

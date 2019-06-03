@@ -11,8 +11,8 @@
 );
 
 INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES
-('Extension', 0, 1, 1, '/0/', '', '')
-,('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
+--('Extension', 0, 1, 1, '/0/', '', '')
+('Regulatory', 1, 1, 1, '/1/', 'ChangesInPropertyPlantAndEquipment', 'Increase (decrease) in property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/1/', 'AdditionsOtherThanThroughBusinessCombinationsPropertyPlantAndEquipment', 'Additions other than through business combinations, property, plant and equipment')
 ,('Regulatory', 1, 1, 0, '/1/2/', 'AcquisitionsThroughBusinessCombinationsPropertyPlantAndEquipment', 'Acquisitions through business combinations, property, plant and equipment')
 ,('Regulatory', 1, 1, 1, '/1/3/', 'IncreaseDecreaseThroughNetExchangeDifferencesPropertyPlantAndEquipment', 'Increase (decrease) through net exchange differences, property, plant and equipment')
@@ -182,7 +182,8 @@ INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [I
 ,('Regulatory', 1, 1, 0, '/9/2/', 'DistributionCosts', 'Distribution costs')
 ,('Regulatory', 1, 1, 0, '/9/3/', 'AdministrativeExpense', 'Administrative expenses')
 ,('Regulatory', 1, 1, 0, '/9/4/', 'OtherExpenseByFunction', 'Other expense, by function')
-
+-- TODO: Add extension describing the issue and receipt of inventory items.
+-- purchase, production, sales, consumption, loss, transfer
 MERGE [dbo].[IfrsNotes] AS t
 USING (
 	SELECT  [Id], [Node], [IsAggregate], [ForDebit], [ForCredit]
@@ -208,3 +209,15 @@ WHEN NOT MATCHED BY TARGET THEN
     VALUES (s.[Id], s.[Node], s.[IsAggregate], s.[ForDebit], s.[ForCredit])
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 ;
+MERGE [dbo].[IfrsConcepts] As t
+USING (SELECT  [Id], [IsActive]	FROM @IfrsNotes) AS s
+ON s.[Id] = t.[Id]
+WHEN MATCHED AND
+(
+	t.[IfrsType]		<> s.[IfrsType]	OR
+	t.[IsActive]		<>	s.[IsActive]
+
+) THEN
+UPDATE SET
+	t.[IfrsType]		= s.[IfrsType],
+	t.[IsActive]		= s.[IsActive];

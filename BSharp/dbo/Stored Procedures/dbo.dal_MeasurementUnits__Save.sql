@@ -41,5 +41,6 @@ SET NOCOUNT ON;
 			VALUES (s.[UnitType], s.[Name], s.[Name2], s.[Name3], s.[Description], s.[Description2], s.[Description3], s.[UnitAmount], s.[BaseAmount], s.[Code])
 		OUTPUT s.[Index], inserted.[Id] 
 	) As x
+	OPTION (RECOMPILE);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

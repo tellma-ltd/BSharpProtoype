@@ -12,7 +12,7 @@ AS
 		[DocumentId],
 		DocumentDate,
 		[SerialNumber],
-		[TransactionType],
+		[DocumentType],
 		[IsSystem],
 		[Direction],
 		[AccountId],

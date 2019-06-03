@@ -1,34 +1,39 @@
 ﻿CREATE TABLE [dbo].[Documents] (
 --	This table for all business documents that are routed for authorization, execution, and journalizing.
 --	Its scope is 
-	[TenantId]					INT,
-	[Id]						INT					IDENTITY,
+	[TenantId]								INT,
+	[Id]									INT				IDENTITY,
 	-- Common to all document types
-	[DocumentType]				NVARCHAR (255)		NOT NULL DEFAULT (N'Transaction'), -- N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template'.
-	[DocumentDate]				DATETIME2 (7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
-	[DocumentState]				NVARCHAR (255)		NOT NULL DEFAULT (N'Draft'), -- N'Void', N'InProcess', N'Completed' {Voucher: Posted, Request:Authorized, Inquiry:Resolved, Plan:Approved, Template:Accepted}
-	[SerialNumber]				INT,				-- auto generated, copied to paper if needed.
-	-- When operating in paper-first mode, accountants fill vouchers, then enter them in the system
-	-- later. By writing the voucher type and number in the system, we can determine if vouchers
-	-- are missing or duplicated.
-	-- Usually, the voucher type = transaction type, except in the case of JV: the user has to select
-	--[VoucherTypeId]				INT,
-	[VoucherNumber]				NVARCHAR (255),
-	[Memo]						NVARCHAR (255),	
+	[DocumentType]							NVARCHAR (255),	
+	[DocumentDate]							DATETIME2 (7)	NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
+	[DocumentState]							NVARCHAR (255)	NOT NULL DEFAULT (N'Draft'), -- N'Void', N'InProcess', N'Completed' {Voucher: Posted, Request:Authorized, Inquiry:Resolved, Plan:Approved, Template:Accepted}
+	[SerialNumber]							INT,				-- auto generated, copied to paper if needed.
+	-- for authenticiy when the original source document is not this record itself, but rather a paper
+	-- voucher or a record in another system such as a cash register. By writing the unique voucher
+	-- reference in the system, we can determine if any source document is missing or duplicated.
+	[VoucherReference]						NVARCHAR (255),
+	[RelatedReference]						NVARCHAR (255),
+	[Memo]									NVARCHAR (255),
+	-- To simplify data entry
+	[CustomerAccountId]						INT,
+	[CustomerAccountIsCommon]				BIT				DEFAULT (1),
+	[SupplierAccountId]						INT, 
+	[SupplierAccountIsCommon]				BIT				DEFAULT (1),
+	[EmployeeAccountId]						INT, 
+	[EmployeeAccountIsCommon]				BIT				DEFAULT (1),
+	[CurrencyId]							INT, 
+	[CurrencyIsCommon]						BIT				DEFAULT (1),
+	[SourceCustodianAccountId]				INT, 
+	[SourceCustodianAccountIsCommon]		BIT				DEFAULT (1),
+	[DestinationCustodianAccountId]			INT, 
+	[DestinationCustodianAccountIsCommon]	BIT				DEFAULT (1),
+	[InvoiceReference]						NVARCHAR (255),
+	[InvoiceReferenceIsCommon]				BIT				DEFAULT (1),
 	-- Transaction specific, to record the acquisition or loss of goods and services
 	-- Orders that are not negotiables, are assumed to happen, and hence are journalized, even we are verifying it later.
-	-- The list includes the following transaction types, and their variant flavours depending on country and industry:
-	-- cash purchase w/invoice, purchase agreement (w/invoice, w/payment, w/receipt), cash deposit, cash payment (w/invoice), G/S receipt (w/invoice),  purchase invoice
-	-- lease-in agreement, lease-in receipt, lease-in invoice
-	-- cash sale w/invoice, sales agreement (w/invoice, w/collection, w/issue), cash collection (w/invoice), G/S issue (w/invoice), sales invoice
-	-- lease-out agreement, lease out issue, lease-out invoice
-	-- Inventory transfer, stock issue to consumption, inventory adjustment 
-	-- production, maintenance
-	-- payroll, paysheet (w/loan deduction), loan issue, penalty, overtime, paid leave, unpaid leave
-	-- manual journal, depreciation, 
-	[TransactionType]			NVARCHAR (255),		-- N'manual-journals', 
-	[Frequency]					NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
-	[Repetitions]				INT					NOT NULL DEFAULT (0), -- time unit is function of frequency
+	
+	[Frequency]								NVARCHAR (255)	NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
+	[Repetitions]							INT				NOT NULL DEFAULT (0), -- time unit is function of frequency
 	[EndDate] AS (
 					CASE 
 						WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
@@ -41,33 +46,30 @@
 	) PERSISTED,
 	-- Request specific, to acquire goods or services that require pre-authorization
 	-- purchase requisition, payment requesition, production request, maintenance request
-	[RequestType]				NVARCHAR (255),		-- N'payment-requests', N'purchase-requests', 'production-requests'
-	[NeededBy]					DATETIME2 (7),
+	[RequestType]							NVARCHAR (255),	-- N'payment-requests', N'purchase-requests', 'production-requests'
+	[NeededBy]								DATETIME2 (7),
 	-- Inquiry specific, to acquire information
 	-- request for purchase quotation, request for sales-quotation, customer inquiry
-	[InquiryType]				NVARCHAR (255),		-- N'sales-quotations', N'purchase-quotation', N'employment-offers'
-	[AgentId]					INT,				-- person inquiring, person inquired, 
-	[ValidTill]					DATETIMEOFFSET(7),
+	[InquiryType]							NVARCHAR (255),	-- N'sales-quotations', N'purchase-quotation', N'employment-offers'
+	[AgentId]								INT,			-- person inquiring, person inquired, 
+	[ValidTill]								DATETIME2 (7),
 	-- Plan specific, for acquiring or dispensing goods and services
 	-- sales forecast, production plan, materials budget, expenses budget, capex budgets, 
-	[PlanType]					NVARCHAR (255),
+	[PlanType]								NVARCHAR (255),
 	-- Template specific, for modeling business transactions
 	-- employment agreement, sales price list, purchase price list, bill of material
-	[TemplateType]				NVARCHAR (255),
-	[AgentAccountId]			INT, -- customer (for specific deals), supplier (specific deals), employee, production unit
+	[TemplateType]							NVARCHAR (255),
 
-	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]				INT					NOT NULL,
-	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]				INT					NOT NULL,
+	[CreatedAt]								DATETIMEOFFSET(7)	NOT NULL,
+	[CreatedById]							INT					NOT NULL,
+	[ModifiedAt]							DATETIMEOFFSET(7)	NOT NULL, 
+	[ModifiedById]							INT					NOT NULL,
 	CONSTRAINT [PK_Documents] PRIMARY KEY CLUSTERED ([TenantId], [Id]), -- Voucher/Request/Definition-Model-Template/Commitment, Free(text)/Hierarchichal(xml)/Structured(grid)/Transactional
-	CONSTRAINT [CK_Documents_DocumentType] CHECK ([DocumentType] IN (N'Transaction', N'Request', N'Inquiry', N'Plan', N'Template')),
 	-- If the company is in Alofi, and the server is hosted in Apia, the server time will be one day behind
 	-- So, the user will not be able to enter transactions unless DocumentDate is allowed 1d future 
-	CONSTRAINT [CK_Documents_DocumentDate] CHECK ([DocumentDate] < DATEADD(DAY, 1, GETDATE()) OR [DocumentType] <> N'Transaction') ,
-	--CONSTRAINT [FK_Documents_VoucherType] FOREIGN KEY ([TenantId], [VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([TenantId], [Id]),
+	CONSTRAINT [CK_Documents_DocumentDate] CHECK ([DocumentDate] < DATEADD(DAY, 1, GETDATE())) ,
 	CONSTRAINT [CK_Documents_Duration] CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
-	CONSTRAINT [FK_Documents_TransactionType] FOREIGN KEY ([TenantId], [TransactionType]) REFERENCES [dbo].[DocumentTypeSpecifications] ([TenantId], [Id]) ON UPDATE CASCADE, 
+	CONSTRAINT [FK_Documents_DocumentType] FOREIGN KEY ([TenantId], [DocumentType]) REFERENCES [dbo].[DocumentTypes] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),
 	CONSTRAINT [FK_Documents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Documents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])

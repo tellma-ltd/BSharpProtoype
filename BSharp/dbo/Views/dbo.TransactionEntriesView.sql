@@ -9,8 +9,8 @@ AS
 		D.Id As DocumentId,
 		D.[DocumentDate],
 		D.[SerialNumber],
-		D.[VoucherNumber],
-		D.[TransactionType],
+		D.[VoucherReference],
+		D.[DocumentType],
 		D.[Frequency],
 		D.[Repetitions],
 		--CASE 
@@ -65,6 +65,6 @@ AS
 		JOIN [dbo].[Documents] D ON E.DocumentId = D.Id And E.TenantId = D.TenantId
 		JOIN [dbo].[Accounts] A ON E.AccountId = A.Id AND E.TenantId = A.TenantId
 	WHERE
-		(D.[DocumentType] = N'Transaction' AND D.[DocumentState] = N'Posted');
+		(D.[DocumentState] = N'Posted');
 GO;
 --CREATE UNIQUE CLUSTERED INDEX IDX_TransactionEntriesView ON [dbo].[TransactionEntriesView];

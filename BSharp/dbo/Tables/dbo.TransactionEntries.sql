@@ -32,10 +32,6 @@
 	[Value]					VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
 -- Settling date of assets, liabilities. Examples: Asset Disposal date, Inventory expiry date, loan/borrowing settlement date.
 	[ExpectedSettlingDate]	DATETIME2(7),  -- Can be used to decide mobilize split balance between current and non-current
-	-- While Voucher Number referes to the voucher representing the transaction, if any,
-	-- this refers to any other identifying string that we may need to store, such as Check number
-	-- deposit slip reference, invoice number, etc...
-	[Reference]				NVARCHAR (255)		NOT NULL DEFAULT  (N''), -- Can be updated even after posting.
 -- Additional information to satisfy reporting requirements
 	[Memo]					NVARCHAR (255), -- a textual description for statements and reports
 -- for storing an extra string, such as cash machine ref for Tax purposes
@@ -58,11 +54,23 @@
 	[RelatedCount]			DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
 	[RelatedTime]			DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
 	[RelatedValue]			VTYPE				NOT NULL DEFAULT (0), -- 
+
+	[Reference]				NVARCHAR (255), -- Can be updated even after posting.
+-- for authenticity when the source document is the record itself, an entry has to be signed by:
+--	1) The Agent (of AgentAccount) in the case of Balance sheet account
+--	2) The revenue customer or expense consumer in the case of Profit/loss account
+--	3) Entries whose accounts that do not have an agent account do not need to be signed
+	-- While Voucher Number referes to the voucher representing the transaction, if any,
+	-- this refers to any other identifying string that we may need to store, such as Check number
+	-- deposit slip reference, invoice number, etc...
+	[SignedAt]				DATETIMEOFFSET(7), 
+	[SignedById]			INT,
 -- for auditing
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
 	[CreatedById]			INT					NOT NULL,
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]			INT					NOT NULL,
+
 	CONSTRAINT [PK_TransactionEntries] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_TransactionEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
 	CONSTRAINT [FK_TransactionEntries__Documents]	FOREIGN KEY ([TenantId], [DocumentId])	REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
@@ -72,7 +80,8 @@
 	CONSTRAINT [FK_TransactionEntries__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_TransactionEntries__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_TransactionEntries__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_TransactionEntries__SignedById]FOREIGN KEY ([TenantId], [SignedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE INDEX [IX_Entries__DocumentId] ON [dbo].[TransactionEntries]([TenantId] ASC, [DocumentId] ASC);

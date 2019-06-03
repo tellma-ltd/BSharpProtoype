@@ -12,10 +12,10 @@ BEGIN
 		SELECT Max(Id) FROM dbo.Signatures
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 	)
-	AND [SignatoryId] = @UserId;
+	AND [SignedById] = @UserId;
 
 	-- else, soft delete the signature
 	UPDATE dbo.Signatures
 	SET [UnsignedAt] = @Now
-	WHERE [SignatoryId] = @UserId;
+	WHERE [SignedById] = @UserId;
 END;

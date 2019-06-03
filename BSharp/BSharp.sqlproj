@@ -84,7 +84,7 @@
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
     <Build Include="dbo\Tables\dbo.Resources.sql" />
     <Build Include="dbo\Tables\dbo.Settings.sql" />
-    <Build Include="dbo\Tables\dbo.DocumentTypeSpecifications.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentTypes.sql" />
     <Build Include="dbo\Tables\dbo.MeasurementUnits.sql" />
     <Build Include="dbo\Tables\dbo.ExchangeRatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.ResponsibilityCenters.sql" />
@@ -265,7 +265,6 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.Tree.sql" />
     <Build Include="dbo\Tables\dbo.IfrsDisclosureDetails.sql" />
-    <Build Include="dbo\Tables\dbo.VoucherTypes.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IfrsDisclosureDetails__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_IfrsDisclosureDetails__Save.sql" />
     <Build Include="dbo\Functions\dbo.fr_IfrsSettings__Json.sql" />

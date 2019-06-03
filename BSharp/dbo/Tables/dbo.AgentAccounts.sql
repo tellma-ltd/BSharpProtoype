@@ -4,6 +4,7 @@
 	[AgentId]					INT					NOT NULL,
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
+	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:General, Student, Employee: part-time, full-time
 	[IsActive]					BIT					NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)		NOT NULL DEFAULT (N''),
 	[Name2]						NVARCHAR (255),

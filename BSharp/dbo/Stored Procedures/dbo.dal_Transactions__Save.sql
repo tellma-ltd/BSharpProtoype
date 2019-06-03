@@ -16,7 +16,7 @@ BEGIN
 	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
 	AND [Id] > (
 		SELECT MAX([Id]) FROM dbo.Documents 
-		WHERE [TransactionType] = @TransactionType 
+		WHERE [DocumentType] = @TransactionType 
 		AND [DocumentState] <> N'Void'
 		);
 
@@ -41,7 +41,7 @@ BEGIN
 				[Index], [Id], [DocumentDate], [VoucherNumber], [Memo], [Frequency], [Repetitions],
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
 					-- max(Id) per transaction type.
-					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE TransactionType = @TransactionType
+					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentType] = @TransactionType
 				) As [SerialNumber]
 			FROM @Transactions 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -50,7 +50,7 @@ BEGIN
 		THEN
 			UPDATE SET
 				t.[DocumentDate]	= s.[DocumentDate],
-				t.[VoucherNumber]	= s.[VoucherNumber],
+				t.[VoucherReference]	= s.[VoucherNumber],
 				t.[Memo]			= s.[Memo],
 				t.[Frequency]		= s.[Frequency],
 				t.[Repetitions]		= s.[Repetitions],
@@ -59,7 +59,7 @@ BEGIN
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[DocumentDate], [VoucherNumber],[Memo],[Frequency],[Repetitions]
+				[DocumentDate], [VoucherReference],[Memo],[Frequency],[Repetitions]
 			)
 			VALUES (
 				s.[DocumentDate], s.[VoucherNumber], s.[Memo], s.[Frequency], s.[Repetitions]

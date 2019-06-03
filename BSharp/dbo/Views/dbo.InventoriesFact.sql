@@ -12,7 +12,7 @@ AS
 )
 	SELECT
 			J.[DocumentId],
-			J.[TransactionType],
+			J.[DocumentType],
 			J.[SerialNumber],
 			J.[DocumentDate],
 			J.[Id],

@@ -12,7 +12,7 @@ BEGIN
 		SELECT Max(Id) FROM dbo.Signatures
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 	)
-	AND [SignatoryId] = @UserId;
+	AND [SignedById] = @UserId;
 
 	-- if last signed by someone else, add user signature
 	INSERT INTO dbo.Signatures([DocumentId])
@@ -23,7 +23,7 @@ BEGIN
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 		GROUP BY DocumentId
 	)
-	AND [SignatoryId] <> @UserId
+	AND [SignedById] <> @UserId
 	
 	-- if never signed, add user signature
 	INSERT INTO dbo.Signatures([DocumentId])
