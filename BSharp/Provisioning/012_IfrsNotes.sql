@@ -210,7 +210,7 @@ WHEN NOT MATCHED BY TARGET THEN
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers
 ;
 MERGE [dbo].[IfrsConcepts] As t
-USING (SELECT  [Id], [IsActive]	FROM @IfrsNotes) AS s
+USING (SELECT  [Id], [IsActive], [IfrsType]	FROM @IfrsNotes) AS s
 ON s.[Id] = t.[Id]
 WHEN MATCHED AND
 (

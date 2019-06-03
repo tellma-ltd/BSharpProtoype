@@ -48,7 +48,8 @@ EXEC [dbo].[api_IfrsDisclosureDetails__Save]
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultsJson = @ResultsJson OUTPUT
 
-EXEC rpt_Ifrs @fromDate = '2018.07.01', @toDate = '2019.06.30'
+IF @DebugIfrsConcepts = 1
+	EXEC rpt_Ifrs @fromDate = '2018.07.01', @toDate = '2019.06.30';
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN

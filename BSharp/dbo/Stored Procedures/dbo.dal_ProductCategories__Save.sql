@@ -7,16 +7,18 @@ SET NOCOUNT ON;
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
+	DECLARE @EntitiesLocal [ProductCategoryList];
+	INSERT INTO @EntitiesLocal SELECT * FROM @Entities;
 	-- For items with known Id, get the Node from the database
 	UPDATE E
 	SET E.[Node] = T.[Node]
-	FROM @Entities E JOIN dbo.ProductCategories T ON T.Id = E.Id;
+	FROM @EntitiesLocal E JOIN dbo.ProductCategories T ON T.Id = E.Id;
 	-- For items with known ParentId, get the Parent Node from the database
 	UPDATE E
 	SET E.[ParentNode] = T.[Node]
-	FROM @Entities E JOIN dbo.ProductCategories T ON T.Id = E.ParentId;
+	FROM @EntitiesLocal E JOIN dbo.ProductCategories T ON T.Id = E.ParentId;
 -- For items with unknown Parent, set them as root, or define Parent as '/'
-	UPDATE @Entities
+	UPDATE @EntitiesLocal
 	SET [ParentNode] = HIERARCHYID::GetRoot()
 	WHERE [ParentNode] IS NULL AND ParentIndex IS NULL;
 
@@ -26,7 +28,7 @@ SET NOCOUNT ON;
 		-- The recursive node does NOT rely on ParentNode.
 		INSERT INTO  @Children ([Index], [ParentIndex], [Num])
 		SELECT [Index], [ParentIndex], ROW_NUMBER() OVER (PARTITION BY [ParentIndex] ORDER BY [ParentIndex])   
-		FROM @Entities;
+		FROM @EntitiesLocal;
 
 		WITH Paths([Node], [Index])   
 		AS (  
@@ -43,44 +45,44 @@ SET NOCOUNT ON;
 		)
 		UPDATE E
 		SET E.[Node] = P.[Node]
-		FROM @Entities E JOIN Paths P ON E.[Index] = P.[Index];
+		FROM @EntitiesLocal E JOIN Paths P ON E.[Index] = P.[Index];
 	END
 	ELSE BEGIN -- We run the iterative code, if the table already has items
 		-- For items with unknown Id, but known parent node, generate the child node.
-		WHILE Exists(SELECT * FROM @Entities WHERE [Node] IS NULL)
+		WHILE Exists(SELECT * FROM @EntitiesLocal WHERE [Node] IS NULL)
 		BEGIN
 			DECLARE @FirstParentedItemIndex INT, @ParentNode HIERARCHYID, @LastChild HIERARCHYID;
 			
 			-- Dissiminate the Parent Node to children
 			UPDATE E1
 			SET E1.[ParentNode] = E2.[Node]
-			FROM @Entities E1 JOIN @Entities E2 ON E1.[ParentIndex] = E2.[Index]
+			FROM @EntitiesLocal E1 JOIN @EntitiesLocal E2 ON E1.[ParentIndex] = E2.[Index]
 			WHERE E1.[ParentNode] IS NULL AND E2.[Node] IS NOT NULL;
 
 			-- Get the first new item whose parent node is defined
 			SELECT @FirstParentedItemIndex = MIN([Index])		
-			FROM @Entities E
+			FROM @EntitiesLocal E
 			WHERE [Node] IS NULL AND [ParentNode] IS NOT NULL
 
 			-- Get the Parent node for the first parented item
-			SELECT @ParentNode = ParentNode FROM @Entities WHERE [Index] = @FirstParentedItemIndex;
+			SELECT @ParentNode = ParentNode FROM @EntitiesLocal WHERE [Index] = @FirstParentedItemIndex;
 
 			-- Get the last child of that parent
 			SELECT @LastChild = MAX([Node]) FROM (
-				SELECT [Node] FROM @Entities WHERE ParentNode = @ParentNode AND [Node] IS NOT NULL
+				SELECT [Node] FROM @EntitiesLocal WHERE ParentNode = @ParentNode AND [Node] IS NOT NULL
 				UNION
 				SELECT [Node] FROM dbo.ProductCategories WHERE ParentNode = @ParentNode
 			) AS EUT;
 
 			-- Make the new node after that child
-			UPDATE @Entities
+			UPDATE @EntitiesLocal
 			SET [Node] = @ParentNode.GetDescendant(@LastChild, NULL)
 			WHERE [Index] = @FirstParentedItemIndex
 		END
 	END
 	-- Deletions, if already used, we should deactivate instead
 	DELETE FROM [dbo].[ProductCategories]
-	WHERE [Id] IN (SELECT [Id] FROM @Entities WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @EntitiesLocal WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]
@@ -89,7 +91,7 @@ SET NOCOUNT ON;
 		MERGE INTO [dbo].[ProductCategories] AS t
 		USING (
 			SELECT [Index], [Id], [Node], [Name], [Name2], [Name3], [Code], [EntityState]
-			FROM @Entities 
+			FROM @EntitiesLocal 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED 

@@ -10,7 +10,7 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])				DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
-	DECLARE @DebugSettings bit = 1, @DebugMeasurementUnits bit = 0;
+	DECLARE @DebugIfrsConcepts bit = 0, @DebugMeasurementUnits bit = 0;
 	DECLARE @DebugOperations bit = 1, @DebugResources bit = 0;
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
@@ -36,7 +36,8 @@ END
 BEGIN TRY
 	BEGIN TRANSACTION
 		:r .\01_IfrsConcepts.sql
-		--:r .\02_MeasurementUnits.sql
+		:r .\02_MeasurementUnits.sql
+		:r .\03_ProductCategories.sql
 		--:r .\03_Operations.sql
 		--:r .\04_Resources.sql
 		--:r .\05_Agents.sql

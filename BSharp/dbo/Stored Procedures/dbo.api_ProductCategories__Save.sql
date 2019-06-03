@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_ProductCategories__Save]
-	@EntitiesIn [ProductCategoryList] READONLY,
+	@Entities [ProductCategoryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultsJson NVARCHAR(MAX) OUTPUT
@@ -7,8 +7,6 @@ AS
 BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
-DECLARE @Entities [ProductCategoryList];
-INSERT INTO @Entities SELECT * FROM @EntitiesIn;
 -- Validate
 /*
 	EXEC [dbo].[bll_ProductCategories_Validate__Save]
