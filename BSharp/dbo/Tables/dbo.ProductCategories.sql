@@ -5,11 +5,13 @@
 	[Node]						HIERARCHYID					NOT NULL,
 	[Level]						AS [Node].GetLevel()		PERSISTED,
 	[ParentNode]				AS [Node].GetAncestor(1)	PERSISTED,
-	[IsActive]					BIT							NOT NULL DEFAULT (1),
 	[Name]						NVARCHAR (255)				NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
 	[Code]						NVARCHAR (255),
+	-- Additional properties, IsAggregate ..
+	-- Is Active
+	[IsActive]					BIT							NOT NULL DEFAULT (1),
 	-- Audit details
 	[CreatedAt]					DATETIMEOFFSET(7)			NOT NULL,
 	[CreatedById]				INT							NOT NULL,
