@@ -263,7 +263,6 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Select.sql" />
-    <Build Include="dbo\User Defined Types\dbo.Tree.sql" />
     <Build Include="dbo\Tables\dbo.IfrsDisclosureDetails.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IfrsDisclosureDetails__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_IfrsDisclosureDetails__Save.sql" />
@@ -273,6 +272,11 @@
     <Build Include="dbo\Tables\dbo.IfrsDisclosures.sql" />
     <Build Include="dbo\User Defined Types\dbo.IfrsDisclosureDetailList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_ProductCategories_Validate__Delete.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.adm_Tree__Organize.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Delete.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Delete.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_ProductCategories_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Select.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -12,7 +12,7 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
 	DECLARE @DebugIfrsConcepts bit = 0, @DebugMeasurementUnits bit = 0;
-	DECLARE @DebugOperations bit = 1, @DebugResources bit = 0;
+	DECLARE @DebugProductCategories bit = 0, @DebugOperations bit = 1, @DebugResources bit = 0;
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;

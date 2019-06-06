@@ -812,4 +812,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[DocumentTypes]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9c803253-dce0-4ff1-8611-3440f0ca4d7d" ChangeDateTime="06/04/2019 19:11:17">
+    <Property Name="ElementName" Value="[dbo].[fn_ProductCategories__IsEmpty]" />
+    <Property Name="ElementType" Value="SqlScalarFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[fn_ProductCategories__HasData]" />
+  </Operation>
 </Operations>

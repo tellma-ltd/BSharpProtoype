@@ -11,7 +11,7 @@ SET NOCOUNT ON;
 		JOIN @Entities E ON T.[Id] = E.[Id]
 	)
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
-    SELECT DISTINCT '[' + CAST(S.[Index] AS NVARCHAR (255)) + '].Id' As [Key], N'Error_CannotDeleteNodeWithCHildren' As [ErrorName], NULL As [Argument1]
+    SELECT DISTINCT '[' + CAST(S.[Index] AS NVARCHAR (255)) + ']' As [Key], N'Error_CannotDeleteNodeWithCHildren' As [ErrorName], NULL As [Argument1]
 	FROM [dbo].[ProductCategories] T -- get me every node in the table
 	JOIN DeletedSet S ON T.[ParentNode] = S.[Node] -- whose parent is to be deleted
 	WHERE T.[Node] NOT IN (SELECT [Node] FROM DeletedSet) -- but it is not going to be deleted

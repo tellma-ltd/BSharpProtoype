@@ -1,18 +1,17 @@
 ﻿CREATE PROCEDURE [dbo].[api_ProductCategories__Save]
 	@Entities [ProductCategoryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnEntities bit = 1,
-	@ResultsJson NVARCHAR(MAX) OUTPUT
+	@ReturnEntities bit = 1
 AS
 BEGIN
 SET NOCOUNT ON;
 DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
+
 -- Validate
-/*
 	EXEC [dbo].[bll_ProductCategories_Validate__Save]
 		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
-*/
+
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
@@ -26,7 +25,6 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
 		SELECT [Id] 
 		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
 
-		EXEC [dbo].[dal_ProductCategories__Select] 
-			@Ids = @Ids, @ResultsJson = @ResultsJson OUTPUT;
+		EXEC [dbo].[dal_ProductCategories__Select] @Ids = @Ids;
 	END
 END;
