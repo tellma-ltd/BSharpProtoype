@@ -6,9 +6,12 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 
 	-- Field must be unique
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Index' As [Key], N'Error_TheConcept0AndValidDate1AreUsed' As [ErrorName],
-		FE.[IfrsDisclosureId] AS Argument1, FE.[ValidSince] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']',
+		N'Error_TheConcept0AndValidDate1AreUsed',
+		FE.[IfrsDisclosureId],
+		FE.[ValidSince]
 	FROM @Entities FE 
 	JOIN [dbo].[IfrsDisclosureDetails] BE 
 	ON FE.[IfrsDisclosureId] = BE.[IfrsDisclosureId]

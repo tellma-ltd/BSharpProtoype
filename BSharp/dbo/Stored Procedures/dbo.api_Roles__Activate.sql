@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Roles__Activate]
-	@Ids [dbo].[IntegerList] READONLY,
+	@Ids [dbo].[IdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) = NULL OUTPUT,
 	@ReturnEntities bit = 1,
 	@RolesResultJson NVARCHAR(MAX) OUTPUT,

@@ -6,7 +6,7 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
 -- Validate
 	EXEC [dbo].[bll_Resources_Validate__Save]
 		@Entities = @Entities,

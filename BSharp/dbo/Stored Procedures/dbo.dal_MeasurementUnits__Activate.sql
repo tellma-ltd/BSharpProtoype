@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Activate]
-	@Ids [dbo].[IntegerList] READONLY,
+	@Ids [dbo].[IdList] READONLY,
 	@IsActive bit
 AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();

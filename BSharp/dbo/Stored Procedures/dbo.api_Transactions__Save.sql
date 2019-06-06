@@ -8,7 +8,7 @@
 	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
-	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
+	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
 	DECLARE @TransactionsLocal [dbo].[TransactionList], @LinesLocal [dbo].[TransactionLineList], @EntriesLocal [dbo].[TransactionEntryList];
 
 	/*TODO: Uncomment and debug

@@ -4,11 +4,11 @@ BEGIN -- reset Identities
 	IF NOT EXISTS(SELECT * FROM [dbo].[IfrsDisclosureDetails])	DBCC CHECKIDENT ('[dbo].[IfrsDisclosureDetails]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[ProductCategories])	DBCC CHECKIDENT ('[dbo].[ProductCategories]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])			DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])			DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])	DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])				DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionEntries])			DBCC CHECKIDENT ('[dbo].[TransactionEntries]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])				DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionEntries])	DBCC CHECKIDENT ('[dbo].[TransactionEntries]', RESEED, 0) WITH NO_INFOMSGS;
+	IF NOT EXISTS(SELECT * FROM [dbo].[TransactionLines])	DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
 	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
 	DECLARE @DebugIfrsConcepts bit = 0, @DebugMeasurementUnits bit = 0;

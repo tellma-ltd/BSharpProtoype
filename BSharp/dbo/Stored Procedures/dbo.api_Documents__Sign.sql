@@ -16,7 +16,7 @@ BEGIN
 
 	IF (@ReturnEntities = 1)
 	BEGIN
-		DECLARE @Ids [dbo].[IntegerList];
+		DECLARE @Ids [dbo].[IdList];
 		
 		INSERT INTO @Ids([Id])
 		SELECT [Id] 

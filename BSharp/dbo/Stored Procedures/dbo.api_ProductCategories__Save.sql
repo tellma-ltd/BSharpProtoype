@@ -5,7 +5,7 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
 
 -- Validate
 	EXEC [dbo].[bll_ProductCategories_Validate__Save]

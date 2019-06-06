@@ -7,7 +7,7 @@
 	@PermissionsResultJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IntegerList];
+DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
 DECLARE @RolesLocal [dbo].[RoleList] , @PermissionsLocal [dbo].[PermissionList];
 DECLARE @RolesLocalResultJson NVARCHAR(MAX), @PermissionsLocalResultJson NVARCHAR(MAX);
 	--Validate Domain rules

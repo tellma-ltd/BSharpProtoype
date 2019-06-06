@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_ProductCategories__Select]
-	@Ids [dbo].[IntegerList] READONLY
+	@Ids [dbo].[IdList] READONLY
 AS
 	SELECT
 		[Id], [ParentId], [Name], [Name2], [Name3], [IsActive], [Code],

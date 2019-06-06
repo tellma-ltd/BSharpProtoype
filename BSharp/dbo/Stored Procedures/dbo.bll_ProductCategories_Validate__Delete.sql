@@ -4,17 +4,18 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
-	WITH DeletedSet AS
-	(
-		SELECT E.[Index], T.[Node], T.[ParentNode]
-		FROM dbo.ProductCategories T 
-		JOIN @Entities E ON T.[Id] = E.[Id]
-	)
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
-    SELECT DISTINCT '[' + CAST(S.[Index] AS NVARCHAR (255)) + ']' As [Key], N'Error_CannotDeleteNodeWithCHildren' As [ErrorName], NULL As [Argument1]
-	FROM [dbo].[ProductCategories] T -- get me every node in the table
-	JOIN DeletedSet S ON T.[ParentNode] = S.[Node] -- whose parent is to be deleted
-	WHERE T.[Node] NOT IN (SELECT [Node] FROM DeletedSet) -- but it is not going to be deleted
+
+	-- Node should not be used in other tables
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3])
+    SELECT 
+		'[' + CAST(E.[Index] AS NVARCHAR (255)) + ']' As [Key], 
+		N'Error_EntityUsed0TimesIn1FirstCodeIs2' As [ErrorName],
+		COUNT(RC.[Id]) As [Argument1],
+		N'ResponsibilityCenters' As [Argument2],
+		MIN(RC.[Code]) As [Argument3]
+	FROM @Entities E -- get me every node in the table
+	JOIN dbo.[ResponsibilityCenters] RC ON E.[Id] = RC.[ProductCategoryId]
+	GROUP BY E.[Index]
 	OPTION(HASH JOIN);
 
 	SELECT @ValidationErrorsJson = 

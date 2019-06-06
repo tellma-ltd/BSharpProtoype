@@ -137,7 +137,7 @@
     <Build Include="dbo\User Defined Types\dbo.TransactionList.sql" />
     <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
-    <Build Include="dbo\User Defined Types\dbo.IntegerList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IdList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_State__Update.sql" />

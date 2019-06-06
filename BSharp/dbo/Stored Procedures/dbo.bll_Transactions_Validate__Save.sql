@@ -9,35 +9,44 @@ SET NOCOUNT ON;
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
 	-- (FE Check) If Resource = functional currency, the value must match the quantity
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + ']' As [Key], N'Error_TheAmount0DoesNotMatchTheValue' As [ErrorName],
-				E.[MoneyAmount] AS Argument1, E.[Value] AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + ']',
+		N'Error_TheAmount0DoesNotMatchTheValue1',
+		E.[MoneyAmount],
+		E.[Value]
 	FROM @Entries E
 	WHERE (E.[ResourceId] = dbo.fn_FunctionalCurrency())
 	AND (E.[Value] <> E.[MoneyAmount] )
 	AND E.[EntityState] IN (N'Inserted', N'Updated');
 
 	-- (FE Check, DB constraint)  Cannot save with a future date
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate' As [Key], N'Error_TheTransactionDate0IsInTheFuture' As [ErrorName],
-		FE.[DocumentDate] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate',
+		N'Error_TheTransactionDate0IsInTheFuture',
+		FE.[DocumentDate]
 	FROM @Transactions FE
 	WHERE (FE.[DocumentDate] > DATEADD(DAY, 1, @Now)) -- More accurately, FE.[DocumentDate] > CONVERT(DATE, SWITCHOFFSET(@Now, user_time_zone)) 
 	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- (FE Check, DB constraint)  Cannot save with a date that lies in the archived period
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate' As [Key], N'Error_TheTransactionDate0IsBeforeArchiveDate' As [ErrorName],
-		FE.[DocumentDate] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate',
+		N'Error_TheTransactionDate0IsBeforeArchiveDate',
+		FE.[DocumentDate]
 	FROM @Transactions FE
 	WHERE (FE.[DocumentDate] < (SELECT TOP 1 ArchiveDate FROM dbo.Settings)) 
 	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- (FE Check, DB IU trigger) Cannot save unless in draft mode
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentState' As [Key], N'Error_CannotSaveADocumentIn0State' As [ErrorName],
-		BE.[DocumentState] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentState',
+		N'Error_CannotSaveADocumentIn0State',
+		BE.[DocumentState]
 	FROM @Transactions FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
 	WHERE (BE.[DocumentState] <> N'Draft')
@@ -45,31 +54,37 @@ SET NOCOUNT ON;
 	
 	-- Note Id is missing when required
 	-- TODO: Add the condition that Ifrs Note is enforced
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId' As [Key], N'Error_TheIfrsNoteIsRequired' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		N'Error_TheIfrsNoteIsRequired'
 	FROM @Entries E
+	JOIN dbo.Accounts A ON E.AccountId = A.Id
 	WHERE (E.[IfrsNoteId] IS NULL)
-	AND (E.AccountId IN (SELECT [IfrsAccountConcept] FROM dbo.[IfrsAccountConceptsNoteConcepts]))
+	AND (A.[IfrsAccountId] IN (SELECT [IfrsAccountConcept] FROM dbo.[IfrsAccountConceptsNoteConcepts]))
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Invalid Note Id
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId' As [Key], N'Error_TheIfrsNote0Incorrect' As [ErrorName],
-				E.[IfrsNoteId] AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		N'Error_TheIfrsNote0Incorrect',
+		E.[IfrsNoteId]
 	FROM @Entries E
-	LEFT JOIN dbo.[IfrsAccountConceptsNoteConcepts] AN ON E.AccountId = AN.[IfrsAccountConcept] AND E.Direction = AN.Direction AND E.IfrsNoteId = AN.[IfrsNoteConcept]
+	JOIN dbo.Accounts A ON E.AccountId = A.Id
+	LEFT JOIN dbo.[IfrsAccountConceptsNoteConcepts] AN ON A.[IfrsAccountId] = AN.[IfrsAccountConcept] AND E.Direction = AN.Direction AND E.IfrsNoteId = AN.[IfrsNoteConcept]
 	WHERE (E.[IfrsNoteId] IS NOT NULL)
 	AND (AN.[IfrsNoteConcept] IS NULL)
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- Reference is required for selected account and direction, 
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].Reference' As [Key], N'Error_TheReferenceIsNotSpecified' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].Reference',
+		N'Error_TheReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
@@ -78,11 +93,12 @@ SET NOCOUNT ON;
 		E.[Direction] = -1 AND IA.[CreditReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
-		-- RelatedReference is required for selected account and direction, 
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedReference' As [Key], N'Error_TheRelatedReferenceIsNotSpecified' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	-- RelatedReference is required for selected account and direction, 
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedReference',
+		N'Error_TheRelatedReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
@@ -91,6 +107,7 @@ SET NOCOUNT ON;
 		E.[Direction] = -1 AND IA.[CreditRelatedReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
+	-- REACHED HERE IN CLEANING validation
 	-- RelatedAgent is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
 	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +

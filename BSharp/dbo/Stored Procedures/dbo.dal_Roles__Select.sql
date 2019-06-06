@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Roles__Select]
-	@Ids [dbo].[IntegerList] READONLY,
+	@Ids [dbo].[IdList] READONLY,
 	@RolesResultJson NVARCHAR(MAX) OUTPUT,
 	@PermissionsResultJson NVARCHAR(MAX) OUTPUT
 AS

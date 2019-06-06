@@ -6,7 +6,7 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @Id int, @Ids [dbo].[IntegerList];
+DECLARE @Id int, @Ids [dbo].[IdList];
 -- Validate
 	--EXEC [dbo].[bll_Operation_Validate__SetOperatingSegment]
 	--	@Entity = @OperationId,

@@ -819,4 +819,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[fn_ProductCategories__HasData]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="09b278e6-c8bb-41b7-9f8c-05dce08400e2" ChangeDateTime="06/06/2019 13:17:22">
+    <Property Name="ElementName" Value="[dbo].[IntegerList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IdList]" />
+  </Operation>
 </Operations>

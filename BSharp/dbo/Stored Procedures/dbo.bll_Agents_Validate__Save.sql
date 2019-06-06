@@ -4,20 +4,24 @@
 AS
 SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
-	DECLARE @Language INT = dbo.fn_User__Language();
 
     -- Non Null Ids must exist
-    INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1])
-    SELECT '[' + CAST([Index] AS NVARCHAR (255)) + '].Id' As [Key], N'Error_TheId0WasNotFound' As [ErrorName], CAST([Id] As NVARCHAR (255)) As [Argument1]
+    INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+    SELECT
+		'[' + CAST([Index] AS NVARCHAR (255)) + '].Id',
+		N'Error_TheId0WasNotFound',
+		CAST([Id] As NVARCHAR (255))
     FROM @Entities
     WHERE Id Is NOT NULL
 	AND Id NOT IN (SELECT Id from [dbo].[Agents])
 	OPTION(HASH JOIN);
 
 	-- Code must be unique
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Code' As [Key], N'Error_TheCode0IsUsed' As [ErrorName],
-		FE.Code AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0]) 
+	SELECT
+		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Code',
+		N'Error_TheCode0IsUsed',
+		FE.Code
 	FROM @Entities FE 
 	JOIN [dbo].[Agents] BE ON FE.Code = BE.Code
 	WHERE ((FE.Id IS NULL) OR (FE.Id <> BE.Id));

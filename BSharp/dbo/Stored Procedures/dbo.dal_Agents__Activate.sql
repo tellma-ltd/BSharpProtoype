@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Agents__Activate]
-	@Ids dbo.IntegerList READONLY,
+	@Ids dbo.[IdList] READONLY,
 	@IsActive bit
 AS
 BEGIN

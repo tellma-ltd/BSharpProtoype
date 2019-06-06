@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_IfrsDisclosureDetails__Select]
-	@Ids [dbo].[IntegerList] READONLY,
+	@Ids [dbo].[IdList] READONLY,
 	@ResultsJson NVARCHAR(MAX) OUTPUT
 AS
 SELECT @ResultsJson = (

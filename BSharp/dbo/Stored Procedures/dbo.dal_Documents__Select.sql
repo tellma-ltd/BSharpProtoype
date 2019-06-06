@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Select]
-	@Ids [dbo].[IntegerList] READONLY,
+	@Ids [dbo].[IdList] READONLY,
 	@ResultJson NVARCHAR(MAX) OUTPUT
 AS
 	SELECT @ResultJson = (

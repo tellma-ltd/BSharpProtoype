@@ -5,7 +5,7 @@
 	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 BEGIN
-	DECLARE @Ids [dbo].[IntegerList];
+	DECLARE @Ids [dbo].[IdList];
 	-- if all documents are already posted, return
 	IF NOT EXISTS(
 		SELECT * FROM [dbo].[Documents]

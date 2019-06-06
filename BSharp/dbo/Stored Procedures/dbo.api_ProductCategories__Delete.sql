@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[api_ProductCategories__Delete]
-	@Entities [IntegerList] READONLY,
+	@Entities [IdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @Ids [dbo].[IntegerList];
+DECLARE @Ids [dbo].[IdList];
 -- Validate
 
 	EXEC [dbo].[bll_ProductCategories_Validate__Delete]
