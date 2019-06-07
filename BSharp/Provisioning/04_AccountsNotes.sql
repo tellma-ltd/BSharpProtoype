@@ -48,12 +48,12 @@ WHERE (
 --	(A.Code LIKE dbo.fn_Account__Code(N'OtherExpenseByFunction') +'%' AND N.Code LIKE dbo.fn_Note__Code(N'ExpenseByNature') + '%') OR
 	(A.[Node] LIKE N'41015%'												AND N.Code LIKE N'4%')
 );
-MERGE [dbo].[IfrsAccountConceptsNoteConcepts] AS t
+MERGE [dbo].[IfrsAccountsIfrsNotes] AS t
 USING @AccountsNotes AS s
 ON (s.[AccountId] = t.[AccountId] AND s.[NoteId] = s.[NoteId] AND s.[Direction] = s.[Direction])
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[IfrsAccountConcept], [IfrsNoteConcept], [Direction])
+    INSERT ([TenantId],	[IfrsAccountId], [IfrsNoteId], [Direction])
     VALUES (@TenantId, s.[AccountId], s.[NoteId], s.[Direction])
 OPTION (RECOMPILE);

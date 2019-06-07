@@ -33,15 +33,15 @@ Produced = Sold + Closing - Opening
 
 */
 -- some operations are used in the line corresponding to production event
-	[TenantId]				INT,
+	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]					INT					IDENTITY,
 	[ResponsibilityDomain]	NVARCHAR (255)		NOT NULL, -- Investment, Profit, Revenue, Cost
 	[Name]					NVARCHAR (255)		NOT NULL,
 	[Name2]					NVARCHAR (255),
 	[Name3]					NVARCHAR (255),
 -- (Ifrs 8) Profit or Investment Center, Performance regularly reviewed by CODM, discrete financial information is available
-	[IsOperatingSegment]	BIT					NOT NULL DEFAULT (0), -- on each path from root to leaf, at most one O/S
-	[IsActive]				BIT					NOT NULL DEFAULT (1),
+	[IsOperatingSegment]	BIT					NOT NULL DEFAULT 0, -- on each path from root to leaf, at most one O/S
+	[IsActive]				BIT					NOT NULL DEFAULT 1,
 	[ParentId]				INT, -- Only leaves can have data. Parents are represented by an extra leaf.
 	[Code]					NVARCHAR (255),
 -- Optional. used for convenient reporting
@@ -51,35 +51,25 @@ Produced = Sold + Closing - Opening
 	[CustomerSegmentId]		INT, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
 	[TaxSegmentId]			INT, -- e.g., general, existing (30%), expansion (0%)
 
-	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]			INT					NOT NULL,
-	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]			INT					NOT NULL,
-	CONSTRAINT [PK_Operations] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [FK_Operations_Operations] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
-	CONSTRAINT [FK_Operations_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Operations_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	CONSTRAINT [PK_ResponsibilityCenters] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [FK_ResponsibilityCenters_ResponsibilityCenters] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
+	CONSTRAINT [FK_ResponsibilityCenters_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_ResponsibilityCenters_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name] ASC);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name2]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name2]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Name3]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name3]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name3] ASC) WHERE [Name3] IS NOT NULL;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Operations__Code]
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Code]
   ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
-GO
-ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[ResponsibilityCenters] ADD CONSTRAINT [DF_ResponsibilityCenters__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

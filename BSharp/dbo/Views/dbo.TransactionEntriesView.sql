@@ -1,40 +1,33 @@
-﻿CREATE VIEW [dbo].[TransactionEntriesView] WITH SCHEMABINDING
--- It probably helps to materialize it, and add indices to:
--- AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
--- Can we add referential integrity to IfrsAccountConcept_IfrsNoteConcept_Direction?
+﻿CREATE VIEW [dbo].[TransactionEntriesView]
 AS
 	SELECT
-		E.TenantId,
-		E.Id,
-		D.Id As DocumentId,
-		D.[DocumentDate],
-		D.[SerialNumber],
-		D.[VoucherReference],
+		E.[Id],
+		E.[DocumentId],
 		D.[DocumentType],
+		D.[SerialNumber],
+		D.[DocumentDate],
+		D.[VoucherReference],
+		D.[Lookup1Id] As HeaderLookup1Id,
+		D.[Lookup2Id] As HeaderLookup2Id,
+		D.[String1] As HeaderString1,
+		D.[String2] As HeaderString2,
 		D.[Frequency],
 		D.[Repetitions],
-		--CASE 
-		--	WHEN [Frequency] = N'OneTime' THEN [DocumentDate]
-		--	WHEN [Frequency] = N'Daily' THEN DATEADD(DAY, [Repetitions], [DocumentDate])
-		--	WHEN [Frequency] = N'Weekly' THEN DATEADD(WEEK, [Repetitions], [DocumentDate])
-		--	WHEN [Frequency] = N'Monthly' THEN DATEADD(MONTH, [Repetitions], [DocumentDate])
-		--	WHEN [Frequency] = N'Quarterly' THEN DATEADD(QUARTER, [Repetitions], [DocumentDate])
-		--	WHEN [Frequency] = N'Yearly' THEN DATEADD(YEAR, [Repetitions], [DocumentDate])
-		--END AS EndDate,
 		D.[EndDate],
 		E.[IsSystem],
 		E.[Direction],
 		E.[AccountId],
-		A.IfrsAccountId,
-		COALESCE(A.[IfrsNoteId], E.[IfrsNoteId]) AS IfrsNoteId,
-		COALESCE(A.[ResponsibilityCenterId], E.[ResponsibilityCenterId]) AS [ResponsibilityCenterId],
+		A.[CustomClassificationId],
+		A.[IfrsAccountId],		
+		E.[IfrsNoteId],
+		E.[ResponsibilityCenterId],
 		--RC.[OperationId],
 		--RC.[ProductCategoryId],
 		--RC.[GeographicRegionId],
 		--RC.[CustomerSegmentId],
 		--RC.[TaxSegmentId],
-		COALESCE(A.[AgentAccountId], E.[AgentAccountId]) AS [AgentAccountId],
-		COALESCE(A.[ResourceId], E.[ResourceId]) AS [ResourceId],
+		E.[AgentAccountId],
+		E.[ResourceId],
 		E.[Quantity],
 		E.[MoneyAmount], -- normalization is already done in the Value and stored in the entry
 		E.[Mass],
@@ -43,9 +36,8 @@ AS
 		E.[Time],
 		E.[Value],
 		E.[ExpectedSettlingDate],
-		E.[Reference],
-		COALESCE(D.[Memo], E.[Memo]) AS [Memo],
-		E.[RelatedReference],
+		COALESCE(D.[Memo], E.[Memo]) AS [Memo], -- or is it COALESCE(E.[Memo], D.[Memo])?!
+		E.[ExternalReference],
 		E.[RelatedResourceId],
 		E.[RelatedAgentAccountId],
 		E.[RelatedResponsibilityCenterId],
@@ -62,9 +54,9 @@ AS
 		E.[ModifiedById]
 	FROM 
 		[dbo].[TransactionEntries] E
-		JOIN [dbo].[Documents] D ON E.DocumentId = D.Id And E.TenantId = D.TenantId
-		JOIN [dbo].[Accounts] A ON E.AccountId = A.Id AND E.TenantId = A.TenantId
+		JOIN [dbo].[Documents] D ON E.[DocumentId] = D.[Id]
+		JOIN dbo.[DocumentTypes] DT ON D.[DocumentType] = DT.[Id]
+		JOIN [dbo].[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE
-		(D.[DocumentState] = N'Posted');
+		DT.[DocumentCategory] = N'Transaction' AND D.[DocumentState] = N'Posted';
 GO;
---CREATE UNIQUE CLUSTERED INDEX IDX_TransactionEntriesView ON [dbo].[TransactionEntriesView];

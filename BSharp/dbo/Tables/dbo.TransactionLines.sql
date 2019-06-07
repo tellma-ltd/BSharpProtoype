@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[TransactionLines] (
-	[TenantId]				INT,
+	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]					INT IDENTITY,
 	[DocumentId]			INT					NOT NULL,
 	[TransactionLineType]	NVARCHAR (255)		NOT NULL,
@@ -107,10 +107,10 @@
 	[RelatedTime4]			DECIMAL,
 	[RelatedValue4]			VTYPE,
 
-	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]			INT					NOT NULL,
-	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]			INT					NOT NULL,
+	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_TransactionLines] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_TransactionLines__Documents] FOREIGN KEY ([TenantId], [DocumentId]) REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_TransactionLines__TransactionLineTypes] FOREIGN KEY ([TenantId], [TransactionLineType]) REFERENCES [dbo].[LineTypes] ([TenantId], [Id]) ON DELETE CASCADE,
@@ -120,14 +120,4 @@
 );
 GO
 CREATE INDEX [IX_TransactionLines__DocumentId] ON [dbo].[TransactionLines]([TenantId] ASC, [DocumentId] ASC);
-GO
-ALTER TABLE [dbo].[TransactionLines] ADD CONSTRAINT [DF_TransactionLines__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[TransactionLines] ADD CONSTRAINT [DF_TransactionLines__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[TransactionLines] ADD CONSTRAINT [DF_TransactionLines__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[TransactionLines] ADD CONSTRAINT [DF_TransactionLines__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[TransactionLines] ADD CONSTRAINT [DF_TransactionLines__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

@@ -2,11 +2,11 @@
 	[Id]						NVARCHAR (255), -- Ifrs Concept
 	[Node]						HIERARCHYID,
 	[IfrsType]					NVARCHAR (255),
-	[IsAggregate]				BIT					NOT NULL DEFAULT (0),
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
+	[IsAggregate]				BIT					NOT NULL DEFAULT 0,
+	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	[Label]						NVARCHAR (1024)		NOT NULL,
-	[ForDebit]					BIT					NOT NULL DEFAULT (1),
-	[ForCredit]					BIT					NOT NULL DEFAULT (1)
+	[ForDebit]					BIT					NOT NULL DEFAULT 1,
+	[ForCredit]					BIT					NOT NULL DEFAULT 1
 	PRIMARY KEY NONCLUSTERED ([Id] ASC)
 );
 

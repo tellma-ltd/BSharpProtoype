@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Agents] (
 --	These includes all the natural and legal persons with which the business entity may interact
-	[TenantId]					INT,
+	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						INT					IDENTITY,
-	[IsActive]					BIT					NOT NULL DEFAULT (1), -- 0 means the person is dead or the organization is close
+	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
@@ -10,7 +10,7 @@
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
 --	Common
 	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
-	[IsRelated]					BIT					NOT NULL DEFAULT (0),
+	[IsRelated]					BIT					NOT NULL DEFAULT 0,
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,
 	[Citizenship]				NCHAR(2),		-- ISO 3166-1 Alpha-2 code
@@ -49,12 +49,12 @@
 	[ContactPerson]				NVARCHAR (255),
 	[RegisteredAddress]			NVARCHAR (1024),
 	[OwnershipType]				NVARCHAR (255), -- Investment/Shareholder/SisterCompany/Other(Default) -- We Own shares in them, they own share in us, ...
-	[OwnershipPercent]			DECIMAL	DEFAULT(0), -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
+	[OwnershipPercent]			DECIMAL	DEFAULT 0, -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
 
-	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]				INT					NOT NULL,
-	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]				INT					NOT NULL,
+	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
+	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
 	CONSTRAINT [FK_Agents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
@@ -76,13 +76,3 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__SystemCode]
   ON [dbo].[Agents]([TenantId], [Code]) WHERE [SystemCode] IS NOT NULL;
  GO
-ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[Agents] ADD CONSTRAINT [DF_Agents__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
-GO

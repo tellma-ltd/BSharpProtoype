@@ -1,8 +1,7 @@
 ﻿CREATE TABLE [dbo].[IfrsAccounts] (
-	[TenantId]					INT,
+	[TenantId]					INT								DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						NVARCHAR (255), -- Ifrs Concept
 	[Node]						HIERARCHYID,
-	[Level]						AS [Node].GetLevel(),
 	[ParentNode]				AS [Node].GetAncestor(1),
 /*
 	- Regulatory: Proposed by regulatory entity. We may have different flavors for different countries
@@ -13,53 +12,53 @@
 	-- IsAggergate = True If and only if isLeaf = False. We used IsAggregate instead since
 	-- a leaf is used in computer science to mean a node with no children. So, as we build the tree
 	-- leaves are converted into internal nodes. Hence it is a computed property, unlike IsAggregate
-	[IsAggregate]				BIT					NOT NULL DEFAULT (1),
+	[IsAggregate]				BIT						NOT NULL DEFAULT 1,
 
 --	The settings below apply to the Account with this Ifrs, as well to the JE.LI endowed with this Ifrs
-	[IfrsNoteSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[IfrsNoteSetting]			NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 
-	[AgentAccountSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[AgentAccountSetting]		NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[AgentRelationTypeList]		NVARCHAR (1024),	-- e.g., OtherCurrentReceivables applies to ALL except supplier & customer
 --	[AgentAccountFilter]		NVARCHAR (1024),	
 	[AgentAccountLabel]			NVARCHAR (255),
 	[AgentAccountLabel2]		NVARCHAR (255),
 	[AgentAccountLabel3]		NVARCHAR (255),
 
-	[ResourceSetting]			NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[ResourceSetting]			NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[ResourceTypeList]			NVARCHAR (1024),	
 --	[ResourceFilter]			NVARCHAR (1024),
 	[ResourceLabel]				NVARCHAR (255),
 	[ResourceLabel2]			NVARCHAR (255),
 	[ResourceLabel3]			NVARCHAR (255),
 
-	[DebitReferenceSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[DebitReferenceSetting]		NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[DebitReferenceLabel]		NVARCHAR (255),
 	[DebitReferenceLabel2]		NVARCHAR (255),
 	[DebitReferenceLabel3]		NVARCHAR (255),
 
-	[CreditReferenceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[CreditReferenceSetting]	NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[CreditReferenceLabel]		NVARCHAR (255),
 	[CreditReferenceLabel2]		NVARCHAR (255),
 	[CreditReferenceLabel3]		NVARCHAR (255),
 
-	[DebitRelatedReferenceSetting]		NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[DebitRelatedReferenceSetting]		NVARCHAR (255)	NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[DebitRelatedReferenceLabel]		NVARCHAR (255),
 	[DebitRelatedReferenceLabel2]		NVARCHAR (255),
 	[DebitRelatedReferenceLabel3]		NVARCHAR (255),
 
-	[CreditRelatedReferenceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[CreditRelatedReferenceSetting]	NVARCHAR (255)		NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[CreditRelatedReferenceLabel]		NVARCHAR (255),
 	[CreditRelatedReferenceLabel2]		NVARCHAR (255),
 	[CreditRelatedReferenceLabel3]		NVARCHAR (255),
 
-	[RelatedResourceSetting]	NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[RelatedResourceSetting]	NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 	[RelatedResourceTypeList]	NVARCHAR (1024),	
 --	[RelatedResourceFilter]		NVARCHAR (1024),
 	[RelatedResourceLabel]		NVARCHAR (255),
 	[RelatedResourceLabel2]		NVARCHAR (255),
 	[RelatedResourceLabel3]		NVARCHAR (255),
 	
-	[RelatedAgentAccountSetting]NVARCHAR (255)		NOT NULL DEFAULT('N/A'), -- N/A, Optional, Required
+	[RelatedAgentAccountSetting]NVARCHAR (255)			NOT NULL DEFAULT 'N/A', -- N/A, Optional, Required
 --	[RelatedAgentAccountFilter]	NVARCHAR (1024),
 	[RelatedAgentRelationTypeList]NVARCHAR (1024),
 	[RelatedAgentAccountLabel]	NVARCHAR (255),
@@ -67,13 +66,9 @@
 	[RelatedAgentAccountLabel3]	NVARCHAR (255),
 
 	CONSTRAINT [PK_IfrsAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
+	CONSTRAINT [FK_IfrsAccounts__IfrsConcepts]	FOREIGN KEY ([TenantId], [Id]) REFERENCES [dbo].[IfrsConcepts] ([TenantId], [Id]) ON DELETE CASCADE
 	);
 GO
 CREATE UNIQUE CLUSTERED INDEX IfrsAccounts__Node
-ON [dbo].[IfrsAccounts]([TenantId], [Node]) ;  
-GO
-CREATE UNIQUE INDEX IfrsAccounts__Level_FNode
-ON [dbo].[IfrsAccounts]([TenantId], [Level], [Node]) ;  
-GO
-ALTER TABLE [dbo].[IfrsAccounts] ADD CONSTRAINT [DF_IfrsAccounts__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
+ON [dbo].[IfrsAccounts]([TenantId], [Node]);  
 GO

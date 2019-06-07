@@ -16,7 +16,7 @@ BEGIN
 
 	-- Sign the document before posting it
 	EXEC [dbo].[bll_Documents_Validate__Sign]
-		@Documents = @Entities,
+		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
@@ -26,7 +26,7 @@ BEGIN
 
 	-- Validate, checking available signatures for transaction type
 	EXEC [dbo].[bll_Transactions_Validate__Post]
-		@Transactions = @Entities,
+		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL

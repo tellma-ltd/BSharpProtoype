@@ -2,7 +2,7 @@
 	[Pk]				INT					IDENTITY(1,1) PRIMARY KEY,
 	[Id]				NVARCHAR (255)		,--NONUNIQUE INDEX IX_@IfrsConcepts__Id,		-- Ifrs Concept
 	[IfrsType]			NVARCHAR (255)		DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
-	[IsActive]			BIT					NOT NULL DEFAULT (1),
+	[IsActive]			BIT					NOT NULL DEFAULT 1,
 	[Label]				NVARCHAR (1024)		NOT NULL,
 	[Label2]			NVARCHAR (1024),
 	[Label3]			NVARCHAR (1024),

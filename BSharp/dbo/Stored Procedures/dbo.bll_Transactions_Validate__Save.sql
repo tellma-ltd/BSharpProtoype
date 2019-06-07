@@ -8,49 +8,44 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 
-	-- (FE Check) If Resource = functional currency, the value must match the quantity
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
-	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + ']',
-		N'Error_TheAmount0DoesNotMatchTheValue1',
-		E.[MoneyAmount],
-		E.[Value]
-	FROM @Entries E
-	WHERE (E.[ResourceId] = dbo.fn_FunctionalCurrency())
-	AND (E.[Value] <> E.[MoneyAmount] )
-	AND E.[EntityState] IN (N'Inserted', N'Updated');
-
-	-- (FE Check, DB constraint)  Cannot save with a future date
+	-- (SL Check)  Cannot save with a future date, (Settings dependent)
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate',
+		'[' + CAST([Index] AS NVARCHAR (255)) + '].DocumentDate',
 		N'Error_TheTransactionDate0IsInTheFuture',
-		FE.[DocumentDate]
-	FROM @Transactions FE
-	WHERE (FE.[DocumentDate] > DATEADD(DAY, 1, @Now)) -- More accurately, FE.[DocumentDate] > CONVERT(DATE, SWITCHOFFSET(@Now, user_time_zone)) 
-	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
+		[DocumentDate]
+	FROM @Transactions
+	WHERE ([DocumentDate] > DATEADD(DAY, 1, @Now)) -- More accurately, FE.[DocumentDate] > CONVERT(DATE, SWITCHOFFSET(@Now, user_time_zone)) 
+
+	-- (FE Check) If Resource = functional currency, the value must match the money amount
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	SELECT
+		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST([Index] AS NVARCHAR (255)) + ']',
+		N'Error_TheAmount0DoesNotMatchTheValue1',
+		[MoneyAmount],
+		[Value]
+	FROM @Entries
+	WHERE ([ResourceId] = dbo.fn_FunctionalCurrency())
+	AND ([Value] <> [MoneyAmount] )
 
 	-- (FE Check, DB constraint)  Cannot save with a date that lies in the archived period
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentDate',
-		N'Error_TheTransactionDate0IsBeforeArchiveDate',
-		FE.[DocumentDate]
-	FROM @Transactions FE
-	WHERE (FE.[DocumentDate] < (SELECT TOP 1 ArchiveDate FROM dbo.Settings)) 
-	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
+		'[' + CAST([Index] AS NVARCHAR (255)) + '].DocumentDate',
+		N'Error_TheTransactionDateIsBeforeArchiveDate0',
+		(SELECT TOP 1 ArchiveDate FROM dbo.Settings)
+	FROM @Transactions
+	WHERE [DocumentDate] < (SELECT TOP 1 ArchiveDate FROM dbo.Settings) 
 	
-	-- (FE Check, DB IU trigger) Cannot save unless in draft mode
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	-- (FE Check, DB IU trigger) Cannot save a document not in draft state
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentState',
-		N'Error_CannotSaveADocumentIn0State',
-		BE.[DocumentState]
+		N'Error_CannotOnlySaveADocumentInDraftState'
 	FROM @Transactions FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
 	WHERE (BE.[DocumentState] <> N'Draft')
-	AND (FE.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- Note Id is missing when required
 	-- TODO: Add the condition that Ifrs Note is enforced
@@ -62,23 +57,37 @@ SET NOCOUNT ON;
 	FROM @Entries E
 	JOIN dbo.Accounts A ON E.AccountId = A.Id
 	WHERE (E.[IfrsNoteId] IS NULL)
-	AND (A.[IfrsAccountId] IN (SELECT [IfrsAccountConcept] FROM dbo.[IfrsAccountConceptsNoteConcepts]))
-	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	AND A.[IfrsAccountId] IN (
+		SELECT [IfrsAccountId] FROM dbo.[IfrsAccountsIfrsNotes]
+	);
 
 	-- Invalid Note Id
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
 			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
-		N'Error_TheIfrsNote0Incorrect',
-		E.[IfrsNoteId]
+		N'Error_TheIfrsNoteIsIncompatibleWithAccountClassification0',
+		A.[IfrsAccountId]
 	FROM @Entries E
 	JOIN dbo.Accounts A ON E.AccountId = A.Id
-	LEFT JOIN dbo.[IfrsAccountConceptsNoteConcepts] AN ON A.[IfrsAccountId] = AN.[IfrsAccountConcept] AND E.Direction = AN.Direction AND E.IfrsNoteId = AN.[IfrsNoteConcept]
+	LEFT JOIN dbo.[IfrsAccountsIfrsNotes] AN ON A.[IfrsAccountId] = AN.[IfrsAccountId] AND E.Direction = AN.Direction AND E.IfrsNoteId = AN.[IfrsNoteId]
 	WHERE (E.[IfrsNoteId] IS NOT NULL)
-	AND (AN.[IfrsNoteConcept] IS NULL)
-	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
+	AND (AN.[IfrsNoteId] IS NULL);
 
+	-- No expired Ifrs Account
+	-- No expired Ifrs Note
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		N'Error_TheIfrsNoteId0HasExpired',
+		IC.[Label]
+	FROM @Entries E
+	JOIN @Transactions T ON E.[DocumentIndex] = T.[Index]
+	JOIN dbo.[IfrsNotes] N ON E.[IfrsNoteId] = N.Id
+	JOIN dbo.[IfrsConcepts] IC ON N.Id = IC.Id
+	WHERE (IC.ExpiryDate < T.[DocumentDate]);
+	
 	-- Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
@@ -102,17 +111,17 @@ SET NOCOUNT ON;
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
-	WHERE (E.[RelatedReference] IS NULL)
+	WHERE (E.[ExternalReference] IS NULL)
 	AND (E.[Direction] = 1 AND IA.[DebitRelatedReferenceSetting] = N'Required' OR
 		E.[Direction] = -1 AND IA.[CreditRelatedReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
-	-- REACHED HERE IN CLEANING validation
 	-- RelatedAgent is required for selected account and direction, 
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedAgentId' As [Key], N'Error_TheRelatedAgentIsNotSpecified' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedAgentId',
+		N'Error_TheRelatedAgentIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
@@ -121,10 +130,11 @@ SET NOCOUNT ON;
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	
 	-- RelatedResource is required for selected account and direction, 
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-				CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedResourceId' As [Key], N'Error_TheRelatedResourceIsNotSpecified' As [ErrorName],
-				NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
+	SELECT
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
+			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedResourceId',
+		N'Error_TheRelatedResourceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
@@ -132,16 +142,4 @@ SET NOCOUNT ON;
 	AND (IA.[RelatedResourceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
-	---- RelatedAmount is required for selected account and direction, 
-	--INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument1], [Argument2], [Argument3], [Argument4], [Argument5]) 
-	--SELECT '[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-	--			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedAmount' As [Key], N'Error_TheRelatedAmountIsNotSpecified' As [ErrorName],
-	--			NULL AS Argument1, NULL AS Argument2, NULL AS Argument3, NULL AS Argument4, NULL AS Argument5
-	--FROM @Entries E
-	--JOIN dbo.[Accounts] A On E.AccountId = A.Id
-	--JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
-	--WHERE (E.[RelatedMoneyAmount] IS NULL)
-	--AND (IA.[RelatedMoneyAmountSetting] = N'Required')
-	--AND (E.[EntityState] IN (N'Inserted', N'Updated'));
-	
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

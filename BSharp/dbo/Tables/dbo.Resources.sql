@@ -7,13 +7,13 @@
 	Biological
 	Employee Job
 */
-	[TenantId]					INT,
+	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						INT					IDENTITY,
 	[ResourceType]				NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
+	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
 	[UnitId]					INT					NOT NULL,
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.
@@ -45,10 +45,10 @@
 	[PartOfId]					INT, -- for compound assets
 	[InstanceOfId]				INT, -- to allow contracts to be for higher level.
 	--[ServiceOfId]				INT, -- to relate services to their assets.
-	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]				INT		NOT NULL,
-	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]				INT		NOT NULL,
+	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	--CONSTRAINT [CK_Resources_Source] CHECK ([Source] IN (N'LeaseIn', N'Acquisition', N'Production')),
 	--CONSTRAINT [CK_Resources_Purpose] CHECK ([Purpose] IN (N'LeaseOut', N'Sale', N'Production', N'Selling', N'GeneralAndAdministrative')),
@@ -73,16 +73,6 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__SystemCode]
   ON [dbo].[Resources]([TenantId], [SystemCode]) WHERE [SystemCode] IS NOT NULL;
 GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [DF_Resources__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
-GO
 ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [CK_Resources__UnitId] CHECK (
 	[UnitId] = (
 		CASE
@@ -91,7 +81,7 @@ ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [CK_Resources__UnitId] CHECK (
 			WHEN [ValueMeasure] = N'Volume' THEN [VolumeUnitId]
 			WHEN [ValueMeasure] = N'Length' THEN [LengthUnitId]
 			WHEN [ValueMeasure] = N'Count' THEN [CountUnitId]
-			END
-		)
+		END
 	)
+)
 GO

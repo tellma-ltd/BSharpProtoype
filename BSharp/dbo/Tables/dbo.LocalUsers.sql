@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[LocalUsers] (
-	[TenantId]			INT,
+	[TenantId]			INT							DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]				INT				IDENTITY(1,1),
 	[Name]				NVARCHAR (255)	NOT NULL,
 	[Name2]				NVARCHAR (255),
@@ -22,6 +22,4 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__Name3]
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__AgentId]
   ON [dbo].[LocalUsers]([TenantId] ASC, [AgentId] ASC) WHERE [AgentId] IS NOT NULL;
-GO
-ALTER TABLE [dbo].[LocalUsers] ADD CONSTRAINT [DF_LocalUsers__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
 GO

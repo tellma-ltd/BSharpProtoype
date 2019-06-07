@@ -16,7 +16,7 @@ BEGIN
 
 	-- Validate, checking available signatures for transaction type
 	EXEC [dbo].[bll_Transactions_Validate__Unpost]
-		@Transactions = @Documents,
+		@Entities = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL

@@ -6,53 +6,79 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 
 	-- Cannot post unless in draft mode
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].[DocumentState]',
-		N'Error_TheTransaction0IsIn1State',
-		BE.[SerialNumber],
-		BE.[DocumentState]
-	FROM @Entities FE
-	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.[DocumentState] <> N'Draft');
+		'[' + CAST([Index] AS NVARCHAR (255)) + ']',
+		N'Error_TheDocumentIsNotInDraftState'
+	FROM @Entities
+	WHERE [Id] IN (
+		SELECT [Id] FROM [dbo].[Documents]
+		WHERE [DocumentState] <> N'Draft'
+	);
 
-	-- Cannot post with no lines
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	-- Cannot post with no entries
+	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']',
-		N'Error_TheTransaction0HasNoEntries',
-		D.[SerialNumber]
-	FROM @Entities FE 
-	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	LEFT JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
-	WHERE (E.DocumentId IS NULL);
+		'[' + CAST([Index] AS NVARCHAR (255)) + ']',
+		N'Error_TheTransactionHasNoEntries'
+	FROM @Entities 
+	WHERE [Id] NOT IN (
+		SELECT [DocumentId] FROM dbo.[TransactionEntries]
+	);
 
 	-- Cannot post a non-balanced transaction
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
 		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
-		N'Error_Transaction0HasDebitCreditDifference1',
-		D.[SerialNumber],
-		SUM(E.[Direction] * E.[Value])
+		N'Error_TransactionHasDebitCreditDifference0',
+		SUM([Direction] * [Value])
 	FROM @Entities FE
-	JOIN dbo.Documents D ON FE.[Id] = D.[Id]
-	JOIN dbo.[TransactionEntries] E ON D.[Id] = E.[DocumentId]
-	GROUP BY FE.[Index], D.[SerialNumber]
-	HAVING SUM(E.[Direction] * E.[Value]) <> 0;
+	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
+	GROUP BY FE.[Index]
+	HAVING SUM([Direction] * [Value]) <> 0;
 
 	-- No inactive account
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Entries[' +
-		CAST(E.[Id] AS NVARCHAR (255)) + '].AccountId',
-		N'Error_TheAccountId1IsInactive',
-		E.[AccountId]
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
+		N'Error_TheAccount0IsInactive',
+		A.[Name]
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
-	JOIN dbo.[Accounts] A ON E.AccountId = A.Id
-	WHERE (A.IsActive = 0);
+	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
+	JOIN dbo.[Accounts] A ON TE.[AccountId] = A.[Id]
+	WHERE (A.[IsActive] = 0);
 
-	-- No inactive Responsibility Center, AgentAccount, Resource, Related resource, Related Agent Account, Related Responsibility Center
-	-- No 
+	-- No inactive responsibility center
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
+		N'Error_TheResponsibilityCenter0IsInactive',
+		RC.[Name]
+	FROM @Entities FE
+	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
+	JOIN dbo.[ResponsibilityCenters] RC ON TE.ResponsibilityCenterId = RC.[Id]
+	WHERE (RC.[IsActive] = 0);
+
+	-- No inactive Agent Account
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
+		N'Error_TheAgentAccount0IsInactive',
+		AA.[Name]
+	FROM @Entities FE
+	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
+	JOIN dbo.[AgentAccounts] AA ON TE.ResponsibilityCenterId = AA.[Id]
+	WHERE (AA.[IsActive] = 0);
+
+	-- No inactive Resource
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
+	SELECT
+		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
+		N'Error_TheResource0IsInactive',
+		R.[Name]
+	FROM @Entities FE
+	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
+	JOIN dbo.[Resources] R ON TE.ResponsibilityCenterId = R.[Id]
+	WHERE (R.[IsActive] = 0);
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

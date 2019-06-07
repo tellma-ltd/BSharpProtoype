@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[MeasurementUnits] (
-	[TenantId]		INT,
+	[TenantId]		INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]			INT					IDENTITY,
 	[UnitType]		NVARCHAR (255)		NOT NULL,
 	[Name]			NVARCHAR (255)		NOT NULL,
@@ -8,14 +8,14 @@
 	[Description]	NVARCHAR (255)		NOT NULL,
 	[Description2]	NVARCHAR (255),
 	[Description3]	NVARCHAR (255),
-	[UnitAmount]	FLOAT (53)			NOT NULL DEFAULT (1),
-	[BaseAmount]	FLOAT (53)			NOT NULL DEFAULT (1),
-	[IsActive]		BIT					NOT NULL DEFAULT (1),
+	[UnitAmount]	FLOAT (53)			NOT NULL DEFAULT 1,
+	[BaseAmount]	FLOAT (53)			NOT NULL DEFAULT 1,
+	[IsActive]		BIT					NOT NULL DEFAULT 1,
 	[Code]			NVARCHAR (255),
-	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]	INT					NOT NULL,
-	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]	INT					NOT NULL,
+	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]	INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
+	[ModifiedById]	INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_MeasurementUnits] PRIMARY KEY ([TenantId], [Id]),
 	CONSTRAINT [CK_MeasurementUnits__UnitType] CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money'))
 );
@@ -31,14 +31,4 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_MeasurementUnits__Name3]
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_MeasurementUnits__Code]
   ON [dbo].[MeasurementUnits]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
-GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[MeasurementUnits] ADD CONSTRAINT [DF_MeasurementUnits__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

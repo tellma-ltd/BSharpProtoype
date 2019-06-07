@@ -1,13 +1,13 @@
 ﻿CREATE TABLE [dbo].[TransactionEntries] (
 --	These are for vouchers only. If there are entries from requests or inquiries, etc=> other tables
-	[TenantId]				INT,
+	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]					INT					IDENTITY,
 	[DocumentId]			INT					NOT NULL,
 --	Upon posting the document, the auto generated entries will be MERGED with the present ones
 --	based on TenantId, IsSystem, AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
 --	to minimize Transaction Entries deletions
 --	It will be presented ORDER BY IsSystem, Direction, AccountId.Code, IfrsAccountId.Node, IfrsNoteId.Node, ResponsibilityCenterId.Node
-	[IsSystem]				BIT					NOT NULL DEFAULT (0),
+	[IsSystem]				BIT					NOT NULL DEFAULT 0,
 	[Direction]				SMALLINT			NOT NULL,
  -- Account selection enforces additional filters on the other columns
 	[AccountId]				INT					NOT NULL,
@@ -21,21 +21,21 @@
 --	The actual asset, liability
 --	The good/service sold for revenues and direct expenses
 --	The good/service consumed for indirect expenses
-	[ResourceId]			INT,				-- NUll because it may be specified by Account				
+	[ResourceId]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'FunctionalCurrencyId')),
 -- Tracking additive measures
-	[Quantity]				VTYPE				NOT NULL DEFAULT (0), -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
-	[MoneyAmount]			MONEY				NOT NULL DEFAULT (0), -- Amount in foreign Currency 
-	[Mass]					DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar, cement bag, etc
-	[Volume]				DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
-	[Count]					DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
-	[Time]					DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
-	[Value]					VTYPE				NOT NULL DEFAULT (0), -- equivalent in functional currency
+	[Quantity]				VTYPE				NOT NULL DEFAULT 0, -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
+	[MoneyAmount]			MONEY				NOT NULL DEFAULT 0, -- Amount in foreign Currency 
+	[Mass]					DECIMAL				NOT NULL DEFAULT 0, -- MassUnit, like LTZ bar, cement bag, etc
+	[Volume]				DECIMAL				NOT NULL DEFAULT 0, -- VolumeUnit, possibly for shipping
+	[Count]					DECIMAL				NOT NULL DEFAULT 0, -- CountUnit
+	[Time]					DECIMAL				NOT NULL DEFAULT 0, -- ServiceTimeUnit
+	[Value]					VTYPE				NOT NULL DEFAULT 0, -- equivalent in functional currency
 -- Settling date of assets, liabilities. Examples: Asset Disposal date, Inventory expiry date, loan/borrowing settlement date.
 	[ExpectedSettlingDate]	DATETIME2(7),  -- Can be used to decide mobilize split balance between current and non-current
 -- Additional information to satisfy reporting requirements
 	[Memo]					NVARCHAR (255), -- a textual description for statements and reports
--- for storing an extra string, such as cash machine ref for Tax purposes
-	[RelatedReference]		NVARCHAR (255), -- Can be updated after posting
+-- for storing external voucher references, such as check #, Supplier invoice, Bank Deposit Ref
+	[ExternalReference]		NVARCHAR (255), -- should not 
 -- for debiting asset accounts, related resource is the good/service acquired from supplier/customer/storage
 -- for crediting asset accounts, related resource is the good/service delivered to supplier/customer/storage as resource
 -- for debiting VAT purchase account, related resource is the good/service purchased
@@ -48,14 +48,12 @@
 	[RelatedAgentAccountId]	INT,
 	[RelatedResponsibilityCenterId] INT, -- used in stock issues for consumption
 	[RelatedQuantity]		MONEY ,		-- used in Tax accounts, to store the quantiy of taxable item
-	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT (0), -- e.g., amount subject to tax
-	[RelatedMass]			DECIMAL				NOT NULL DEFAULT (0), -- MassUnit, like LTZ bar
-	[RelatedVolume]			DECIMAL				NOT NULL DEFAULT (0), -- VolumeUnit, possibly for shipping
-	[RelatedCount]			DECIMAL				NOT NULL DEFAULT (0), -- CountUnit
-	[RelatedTime]			DECIMAL				NOT NULL DEFAULT (0), -- ServiceTimeUnit
-	[RelatedValue]			VTYPE				NOT NULL DEFAULT (0), -- 
-
-	[Reference]				NVARCHAR (255), -- Can be updated even after posting.
+	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
+	[RelatedMass]			DECIMAL				NOT NULL DEFAULT 0, -- MassUnit, like LTZ bar
+	[RelatedVolume]			DECIMAL				NOT NULL DEFAULT 0, -- VolumeUnit, possibly for shipping
+	[RelatedCount]			DECIMAL				NOT NULL DEFAULT 0, -- CountUnit
+	[RelatedTime]			DECIMAL				NOT NULL DEFAULT 0, -- ServiceTimeUnit
+	[RelatedValue]			VTYPE				NOT NULL DEFAULT 0, -- 
 -- for authenticity when the source document is the record itself, an entry has to be signed by:
 --	1) The Agent (of AgentAccount) in the case of Balance sheet account
 --	2) The revenue customer or expense consumer in the case of Profit/loss account
@@ -66,10 +64,10 @@
 	[SignedAt]				DATETIMEOFFSET(7), 
 	[SignedById]			INT,
 -- for auditing
-	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]			INT					NOT NULL,
-	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]			INT					NOT NULL,
+	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 
 	CONSTRAINT [PK_TransactionEntries] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_TransactionEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
@@ -91,14 +89,4 @@ GO
 CREATE INDEX [IX_Entries__AccountId] ON [dbo].[TransactionEntries]([TenantId] ASC, [AccountId] ASC);
 GO
 CREATE INDEX [IX_Entries__IfrsNoteId] ON [dbo].[TransactionEntries]([TenantId] ASC, [IfrsNoteId] ASC);
-GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__TenantId]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'TenantId'))) FOR [TenantId];
-GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__CreatedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [CreatedAt];
-GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__CreatedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [CreatedById]
-GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__ModifiedAt]  DEFAULT (SYSDATETIMEOFFSET()) FOR [ModifiedAt];
-GO
-ALTER TABLE [dbo].[TransactionEntries] ADD CONSTRAINT [DF_TransactionEntries__ModifiedById]  DEFAULT (CONVERT(INT, SESSION_CONTEXT(N'UserId'))) FOR [ModifiedById]
 GO

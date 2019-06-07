@@ -5,7 +5,7 @@
 	[IsActive]		BIT				NOT NULL,
 	[AccountType]	NVARCHAR (10)	NOT NULL DEFAULT (N'Custom'),
 --  [AccountSpecification] NVARCHAR (50)  DEFAULT (N'Basic') NOT NULL,
-	[IsExtensible]	BIT			NOT NULL DEFAULT (1),
+	[IsExtensible]	BIT			NOT NULL DEFAULT 1,
 	[ParentId]		NVARCHAR (255),
 	PRIMARY KEY NONCLUSTERED ([Id])
 );

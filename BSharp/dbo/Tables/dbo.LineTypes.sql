@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[LineTypes] (
-	[TenantId]		INT,
-	[Id]			NVARCHAR (255) NOT NULL,
+	[TenantId]		INT							DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),	[Id]			NVARCHAR (255) NOT NULL,
 	[Description]	NVARCHAR (255),
 	[Description2]	NVARCHAR (255),
 	[Description3]	NVARCHAR (255),

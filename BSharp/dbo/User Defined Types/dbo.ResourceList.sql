@@ -5,7 +5,7 @@
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
+	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
 	[UnitId]					INT					NOT NULL,
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.

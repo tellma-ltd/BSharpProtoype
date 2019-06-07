@@ -1,14 +1,14 @@
 ﻿CREATE TABLE [dbo].[AgentAccounts] (
-	[TenantId]					INT,
+	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						INT					IDENTITY,
 	[AgentId]					INT					NOT NULL,
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
 	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:General, Student, Employee: part-time, full-time
-	[IsActive]					BIT					NOT NULL DEFAULT (1),
-	[Name]						NVARCHAR (255)		NOT NULL DEFAULT (N''),
-	[Name2]						NVARCHAR (255),
-	[Name3]						NVARCHAR (255),
+	[IsActive]					BIT					NOT NULL DEFAULT 1,
+	[Name]						NVARCHAR (255)		NOT NULL DEFAULT N'',
+	[Name2]						NVARCHAR (255)		NOT NULL DEFAULT N'',
+	[Name3]						NVARCHAR (255)		NOT NULL DEFAULT N'',
 	[Code]						NVARCHAR (255), -- location code for storage locations
 	[Reference]					NVARCHAR (255),
 	[StartDate]					DATETIME2 (7)		DEFAULT (CONVERT (date, SYSDATETIME())),
@@ -28,12 +28,12 @@
 	[ShippingAddress]			NVARCHAR (255), -- default, the whole list is in a separate table
 	[BillingAddress]			NVARCHAR (255),
 
-	[CreditLine]				MONEY				DEFAULT(0),
+	[CreditLine]				MONEY				DEFAULT 0,
 
-	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL,
-	[CreatedById]				INT					NOT NULL,
-	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL, 
-	[ModifiedById]				INT					NOT NULL,
+	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
+	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_AgentAccounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [FK_AgentAccounts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_AgentAccounts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),

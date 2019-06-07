@@ -6,11 +6,10 @@ SET NOCOUNT ON;
 	DECLARE @ValidationErrors [dbo].[ValidationErrorList];
 
 	-- Cannot unsign unless in draft mode
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
+	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']',
-		N'Error_TheDocument0IsIn1Mode',
-		BE.[SerialNumber],
+		N'Error_TheDocumentIsIn0State',
 		BE.[DocumentState]
 	FROM @Entities FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]

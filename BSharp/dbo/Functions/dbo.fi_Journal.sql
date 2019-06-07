@@ -12,7 +12,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -40,9 +40,10 @@ RETURN
 		V.[Time],
 		V.[Value],
 		V.[ExpectedSettlingDate],
-		V.[Reference],
 		V.[Memo],
-		V.[RelatedReference],
+		-- Not happy about COALESCE, but 
+		-- In case of financial instruments, the external reference is a property of the Related Resource
+		COALESCE(RR.[Reference], V.[ExternalReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
 		V.[RelatedAgentAccountId],
 		V.[RelatedResponsibilityCenterId],
@@ -58,15 +59,16 @@ RETURN
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'OneTime'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR [DocumentDate] < @toDate)
-
+/* TODO: Uncomment when stabilized.
 	UNION ALL
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -94,9 +96,10 @@ RETURN
 		V.[Time],
 		V.[Value],
 		V.[ExpectedSettlingDate],
-		V.[Reference],
 		V.[Memo],
-		COALESCE(RR.[Reference], V.[RelatedReference]) AS [RelatedReference],
+		-- Not happy about COALESCE, but 
+		-- In case of financial instruments, the external reference is a property of the Related Resource
+		COALESCE(RR.[Reference], V.[ExternalReference]) AS [RelatedReference],
 		V.[RelatedResourceId],
 		V.[RelatedAgentAccountId],
 		V.[RelatedResponsibilityCenterId],
@@ -109,11 +112,11 @@ RETURN
 		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
-	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
-	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
-	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
+	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Daily'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(DAY, IL.I, [DocumentDate]) < @toDate)
@@ -123,7 +126,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -166,11 +169,11 @@ RETURN
 		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
-	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
-	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
-	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
+	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Weekly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(WEEK, IL.I, [DocumentDate]) < @toDate)
@@ -180,7 +183,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -223,11 +226,11 @@ RETURN
 		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
-	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
-	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
-	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
+	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Monthly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(MONTH, IL.I, [DocumentDate]) < @toDate)
@@ -237,7 +240,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -280,11 +283,11 @@ RETURN
 		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
-	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
-	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
-	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
+	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Quarterly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(QUARTER, IL.I, [DocumentDate]) < @toDate)
@@ -294,7 +297,7 @@ RETURN
 	SELECT 
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(NVARCHAR (255), V.[DocumentDate], 102) AS DocumentDate,
+		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -337,13 +340,14 @@ RETURN
 		V.[RelatedValue]
 	FROM dbo.[TransactionEntriesView] V
 	CROSS JOIN IntegerList IL
-	LEFT JOIN dbo.Resources R ON V.ResourceId = R.Id
-	LEFT JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	LEFT JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
-	LEFT JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	LEFT JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
+	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
+	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'Yearly'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR DATEADD(YEAR, IL.I, [DocumentDate]) < @toDate)
 	AND ([EndDate] IS NULL OR DATEADD(YEAR, IL.I, [DocumentDate]) < [EndDate])
+	*/
 ;

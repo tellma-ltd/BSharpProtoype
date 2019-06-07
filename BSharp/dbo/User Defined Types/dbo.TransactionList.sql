@@ -7,7 +7,7 @@
 	[Memo]				NVARCHAR (255),	
 --	[TransactionType]	NVARCHAR (255)		NOT NULL DEFAULT (N'manual-journals'),
 	[Frequency]			NVARCHAR (255)		NOT NULL DEFAULT (N'OneTime'), -- an easy way to define a recurrent document
-	[Repetitions]		INT					NOT NULL DEFAULT (0), -- time unit is function of frequency
+	[Repetitions]		INT					NOT NULL DEFAULT 0, -- time unit is function of frequency
 
 	[EntityState]		NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),

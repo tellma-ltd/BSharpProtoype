@@ -17,7 +17,7 @@ BEGIN
 
 	-- Validate
 	EXEC [dbo].[bll_Documents_Validate__Assign]
-		@Documents = @Documents,
+		@Entities = @Documents,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL

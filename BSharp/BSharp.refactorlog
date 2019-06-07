@@ -826,4 +826,39 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[IdList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="67280d64-2c43-4cb5-8fcc-d1342cc966e5" ChangeDateTime="06/07/2019 13:49:42">
+    <Property Name="ElementName" Value="[dbo].[IfrsAccountConceptsNoteConcepts]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IfrsAccountsIfrsNotes]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2c7684e2-3bf9-47ac-9e6d-3b00f30fd5e4" ChangeDateTime="06/07/2019 13:50:09">
+    <Property Name="ElementName" Value="[dbo].[IfrsAccountsIfrsNotes].[IfrsAccountConcept]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[IfrsAccountsIfrsNotes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IfrsAccountId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5a58dabd-ccd9-4ed2-8ebf-a304ad7401b7" ChangeDateTime="06/07/2019 13:50:38">
+    <Property Name="ElementName" Value="[dbo].[IfrsAccountsIfrsNotes].[IfrsNoteConcept]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[IfrsAccountsIfrsNotes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IfrsNoteId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="940cdfd7-0786-44ba-96cb-0f70341a0dd6" ChangeDateTime="06/07/2019 17:38:56">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntries].[RelatedReference]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionEntries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExternalReference]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d34e062e-af74-4ac0-a548-56ef7ca9352c" ChangeDateTime="06/07/2019 20:17:32">
+    <Property Name="ElementName" Value="[dbo].[Documents].[RelatedReference]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[String1]" />
+  </Operation>
 </Operations>

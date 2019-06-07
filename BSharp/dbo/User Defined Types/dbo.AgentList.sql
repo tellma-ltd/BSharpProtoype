@@ -1,7 +1,7 @@
 ﻿CREATE TYPE [dbo].[AgentList] AS TABLE (
 	[Index]						INT				IDENTITY(0, 1),
 	[Id]						INT,
-	[IsActive]					BIT					NOT NULL DEFAULT (1), -- 0 means the person is dead or the organization is close
+	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
@@ -9,7 +9,7 @@
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
 --	Common
 	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
-	[IsRelated]					BIT					NOT NULL DEFAULT (0),
+	[IsRelated]					BIT					NOT NULL DEFAULT 0,
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,
 	[Citizenship]				NCHAR(2),		-- ISO 3166-1 Alpha-2 code
@@ -48,7 +48,7 @@
 	[ContactPerson]				NVARCHAR (255),
 	[RegisteredAddress]			NVARCHAR (1024),
 	[OwnershipType]				NVARCHAR (255), -- Investment/Shareholder/SisterCompany/Other(Default) -- We Own shares in them, they own share in us, ...
-	[OwnershipPercent]			DECIMAL	DEFAULT(0), -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
+	[OwnershipPercent]			DECIMAL	DEFAULT 0, -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
 
 	[EntityState]				NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),

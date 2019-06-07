@@ -15,7 +15,7 @@ SET NOCOUNT ON;
 		USING (
 			SELECT
 				E.[Index], E.[Id], E.[ParentId],
-				HIERARCHYID::Parse('/' + CAST(-ABS(CHECKSUM(NewId()) % 2147483648) AS VARCHAR(30)) + '/') AS [Node],
+				HierarchyId::Parse('/' + CAST(-ABS(CHECKSUM(NewId()) % 2147483648) AS VARCHAR(30)) + '/') AS [Node],
 				E.[Name], E.[Name2], E.[Name3], E.[Code]
 			FROM @Entities E
 			WHERE [EntityState] IN (N'Inserted', N'Updated')

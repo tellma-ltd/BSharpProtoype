@@ -10,12 +10,12 @@ AS
 	SELECT 	
 		[Id],
 		[DocumentId],
-		DocumentDate,
+		[DocumentDate],
 		[SerialNumber],
+
 		[DocumentType],
 		[IsSystem],
 		[Direction],
-		[AccountId],
 		[IfrsAccountId],
 		[IfrsNoteId],
 		[ResponsibilityCenterId],

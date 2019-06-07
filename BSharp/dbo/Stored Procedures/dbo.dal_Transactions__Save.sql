@@ -95,7 +95,7 @@ BEGIN
 		SELECT
 			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[ResponsibilityCenterId], E.[Reference],
 			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[IfrsNoteId],
-			E.[RelatedReference], E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
+			E.ExternalReference, E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
 		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
@@ -103,7 +103,6 @@ BEGIN
 	WHEN MATCHED THEN
 		UPDATE SET 
 			t.[ResponsibilityCenterId]	= s.[ResponsibilityCenterId],
-			t.[Reference]				= s.[Reference],
 			t.[AccountId]				= s.[AccountId],
 			t.[AgentAccountId]			= s.[AgentAccountId],
 			t.[ResourceId]				= s.[ResourceId],
@@ -111,19 +110,19 @@ BEGIN
 			t.[MoneyAmount]				= s.[MoneyAmount],
 			t.[Value]					= s.[Value],
 			t.[IfrsNoteId]				= s.[IfrsNoteId],
-			t.[RelatedReference]		= s.[RelatedReference],
+			t.[ExternalReference]		= s.ExternalReference,
 			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
 			t.[RelatedMoneyAmount]		= s.[RelatedMoneyAmount],
 			t.[ModifiedAt]				= @Now,
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId], [Reference],
+		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId],
 				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IfrsNoteId],
-				[RelatedReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
-		VALUES (s.[DocumentId], s.[IsSystem], s.[ResponsibilityCenterId], s.[Reference],
+				[ExternalReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
+		VALUES (s.[DocumentId], s.[IsSystem], s.[ResponsibilityCenterId],
 				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[IfrsNoteId],
-				s.[RelatedReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
+				s.[ExternalReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
 
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;
