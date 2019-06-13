@@ -54,7 +54,7 @@ RETURN
 		V.[RelatedCount],
 		V.[RelatedTime],
 		V.[RelatedValue]
-	FROM dbo.[TransactionEntriesView] V
+	FROM dbo.[TransactionsEntriesView] V
 	JOIN dbo.Resources R ON V.ResourceId = R.Id
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
 	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id

@@ -4,7 +4,7 @@
 	[AgentId]					INT					NOT NULL,
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
-	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:General, Student, Employee: part-time, full-time
+	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:G/S, Student, Distributor; Supplier:G/S; Employee: part-time, full-time;
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	[Name]						NVARCHAR (255)		NOT NULL DEFAULT N'',
 	[Name2]						NVARCHAR (255)		NOT NULL DEFAULT N'',
@@ -25,7 +25,7 @@
 
 --	customer-accounts
 	[CustomerRating]			INT,			-- user defined list
-	[ShippingAddress]			NVARCHAR (255), -- default, the whole list is in a separate table
+	[ShippingAddress]			NVARCHAR (255), -- default, the full list is in a separate table
 	[BillingAddress]			NVARCHAR (255),
 
 	[CreditLine]				MONEY				DEFAULT 0,
@@ -35,12 +35,12 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
 	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_AgentAccounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentAccounts_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentAccounts_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [CK_AgentAccounts_AgentRelationType] CHECK ([AgentRelationType] IN (
+	CONSTRAINT [FK_AgentAccounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_AgentAccounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [CK_AgentAccounts__AgentRelationType] CHECK ([AgentRelationType] IN (
 			N'investor', N'investment' ,
 			N'cash', N'bank', N'customer', N'supplier',
-			N'employee', N'debtor', N'creditor', N'custodian',
+			N'employee', N'debtor', N'creditor', N'custodian', -- custodian for non cash resources
 			N'employer'
 	)),
 /*

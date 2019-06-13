@@ -6,7 +6,7 @@
 	[Direction]				SMALLINT		NOT NULL,
 	CONSTRAINT [PK_IfrsAccountsIfrsNotes] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_IfrsAccountsIfrsNotes_Direction] CHECK ([Direction] IN (-1, 0, +1)),
-	CONSTRAINT [FK_IfrsAccountsIfrsNotes_IfrsAccountId] FOREIGN KEY ([TenantId], [IfrsAccountId]) REFERENCES [dbo].[IfrsAccounts] ([TenantId], [Id]) ON DELETE CASCADE, 
+	CONSTRAINT [FK_IfrsAccountsIfrsNotes_IfrsAccountId] FOREIGN KEY ([TenantId], [IfrsAccountId]) REFERENCES [dbo].[IfrsAccounts] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE, 
 	CONSTRAINT [FK_IfrsAccountsIfrsNotes_IfrsNoteId] FOREIGN KEY ([TenantId], [IfrsNoteId]) REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id])
 );
 GO;

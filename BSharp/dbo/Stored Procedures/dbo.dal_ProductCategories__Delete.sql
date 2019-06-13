@@ -3,12 +3,7 @@
 AS
 	IF NOT EXISTS(SELECT * FROM @Entities) RETURN;
 
-	-- Given the Ids of deleted entities, make their children orphaned
-	UPDATE dbo.[ProductCategories]
-	SET ParentId = NULL
-	WHERE ParentId IN (SELECT [Id] FROM @Entities)
-
-	-- Delete the entites
+	-- Delete the entites, children Parent Id will be set to NULL
 	DELETE FROM [dbo].[ProductCategories]
 	WHERE [Id] IN (SELECT [Id] FROM @Entities);
 

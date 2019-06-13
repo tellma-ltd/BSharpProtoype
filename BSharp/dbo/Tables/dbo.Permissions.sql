@@ -14,8 +14,8 @@
 	CONSTRAINT [CK_Permissions_Level] CHECK ([Level] IN (N'Read', N'Create', N'ReadCreate', N'Update', N'Sign')),
 	CONSTRAINT [FK_Permissions_Roles] FOREIGN KEY ([TenantId], [RoleId]) REFERENCES [dbo].[Roles] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_Permissions_Views] FOREIGN KEY ([TenantId], [ViewId]) REFERENCES [dbo].[Views] ([TenantId], [Id]) ON DELETE CASCADE,
-	CONSTRAINT [FK_Permissions_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Permissions_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Permissions__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Permissions__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE INDEX [IX_Permissions__RoleId] ON [dbo].[Roles]([TenantId] ASC, [Id] ASC);

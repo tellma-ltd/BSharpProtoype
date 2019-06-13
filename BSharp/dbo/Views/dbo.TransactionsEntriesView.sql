@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[TransactionEntriesView]
+﻿CREATE VIEW [dbo].[TransactionsEntriesView]
 AS
 	SELECT
 		E.[Id],
@@ -36,7 +36,7 @@ AS
 		E.[Time],
 		E.[Value],
 		E.[ExpectedSettlingDate],
-		COALESCE(D.[Memo], E.[Memo]) AS [Memo], -- or is it COALESCE(E.[Memo], D.[Memo])?!
+		E.[Memo],
 		E.[ExternalReference],
 		E.[RelatedResourceId],
 		E.[RelatedAgentAccountId],

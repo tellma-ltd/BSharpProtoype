@@ -861,4 +861,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[String1]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0e8da431-3807-4976-a6ec-7e0d23a3c1eb" ChangeDateTime="06/08/2019 21:06:15">
+    <Property Name="ElementName" Value="[dbo].[Documents].[AgentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Documents]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[InquiringAgentId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2754ef31-5dd3-4ab5-ae2c-ee7f32d9b306" ChangeDateTime="06/09/2019 09:51:53">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntriesView]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[TransactionsEntriesView]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f8096917-65a6-455c-955a-c235ee03ef52" ChangeDateTime="06/10/2019 22:28:54">
+    <Property Name="ElementName" Value="[dbo].[DocumentTypes].[IsMainSourceDocument]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentTypes]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IsOriginalSourceDocument]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1a81c43d-d351-471d-9eea-4f3970984660" ChangeDateTime="06/13/2019 19:36:28">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntries].[ResourceNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionEntries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[InstanceCode]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="57bd8c98-3071-47cf-b47c-949c93dd681f" ChangeDateTime="06/13/2019 19:38:26">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntries].[BatchNumber]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TransactionEntries]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[BatchCode]" />
+  </Operation>
 </Operations>

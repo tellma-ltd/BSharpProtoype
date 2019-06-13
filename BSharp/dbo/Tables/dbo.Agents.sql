@@ -57,8 +57,8 @@
 	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
-	CONSTRAINT [FK_Agents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Agents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Agents__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Agents__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name]

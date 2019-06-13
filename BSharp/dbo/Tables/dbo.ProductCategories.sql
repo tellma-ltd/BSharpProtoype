@@ -17,7 +17,7 @@
 	[Node]				HIERARCHYID				NOT NULL,
 	[ParentNode]		AS [Node].GetAncestor(1),
 	CONSTRAINT [PK_ProductCategories] PRIMARY KEY NONCLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_ProductCategories__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ProductCategories] ([TenantId], [Id]),
+	CONSTRAINT [FK_ProductCategories__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ProductCategories] ([TenantId], [Id]) ON DELETE SET NULL,
 	CONSTRAINT [FK_ProductCategories__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_ProductCategories__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

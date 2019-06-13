@@ -15,13 +15,15 @@
 	-- In case of multiple candidate voucher references, we use the one whose checksum is easier to compute
 	-- If both are required, we concatenate with a special character ':'
 	[VoucherReference]						NVARCHAR (255),
-	[Memo]									NVARCHAR (255),
 	-- Dynamic properties defined by document type specification
 	[Lookup1Id]								INT, -- e.g., cash machine serial in the case of a sale
 	[Lookup2Id]								INT,
+	[Lookup3Id]								INT,
 	[String1]								NVARCHAR (255),
 	[String2]								NVARCHAR (255),
 	-- Additional properties to simplify data entry. No report should be based on them!!!
+	[Memo]									NVARCHAR (255),
+	[MemoIsCommon]							BIT				DEFAULT 1,
 	[CustomerAccountId]						INT,
 	[CustomerAccountIsCommon]				BIT				DEFAULT 1,
 	[SupplierAccountId]						INT, 
@@ -53,15 +55,16 @@
 	) PERSISTED,
 	-- Request specific, to acquire goods or services that require pre-authorization
 	-- purchase requisition, payment requesition, production request, maintenance request
+	[RequestingAgentId]						INT,
 	[NeededBy]								DATETIME2 (7),
 	-- Inquiry specific, to acquire information
 	-- request for purchase quotation, request for sales-quotation, customer inquiry
-	[AgentId]								INT,			-- person inquiring, person inquired, 
+	[InquiringAgentId]						INT,			-- person inquiring, person inquired, 
 	[ValidTill]								DATETIME2 (7),
 	-- Plan specific, for acquiring or dispensing goods and services
 	-- sales forecast, production plan, materials budget, expenses budget, capex budgets, 
 	--??
-
+	[PlanningAgentId]						INT,
 	-- Template specific, for modeling business transactions
 	-- employment agreement, sales price list, purchase price list, bill of material
 	-- ??
@@ -77,7 +80,7 @@
 	CONSTRAINT [FK_Documents_DocumentType] FOREIGN KEY ([TenantId], [DocumentType]) REFERENCES [dbo].[DocumentTypes] ([TenantId], [Id]) ON UPDATE CASCADE, 
 	CONSTRAINT [CK_Documents_DocumentDate] CHECK ([DocumentDate] < DATEADD(DAY, 1, GETDATE())) ,
 	CONSTRAINT [CK_Documents_DocumentState] CHECK ([DocumentState] IN (N'Void', N'Draft', N'Posted')),
-	CONSTRAINT [FK_Documents_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_Documents_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_Documents__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_Documents__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
  );
 GO

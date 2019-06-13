@@ -11,7 +11,7 @@
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]		INT					NOT NULL,
 	CONSTRAINT [PK_AgentsResources] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [FK_AgentsResources_AgentAccounts] FOREIGN KEY ([TenantId], [AgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id])ON DELETE CASCADE,
-	CONSTRAINT [FK_AgentsResources_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id])ON DELETE CASCADE
+	CONSTRAINT [FK_AgentsResources_AgentAccounts] FOREIGN KEY ([TenantId], [AgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_AgentsResources_Resources] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]) ON DELETE CASCADE
 );
 GO

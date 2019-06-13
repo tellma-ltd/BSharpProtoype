@@ -44,6 +44,7 @@ INSERT @DocumentTypes ([Id]) VALUES
 	(N'employees-leaves-daily'),
 	(N'salaries'),				--	(N'salaries')
 	(N'payroll-payments'),		--	(N'employees'), (N'employees-income-tax') 
+	
 	(N'purchasing-domestic'), --
 	(N'purchasing-international'), -- 
 	

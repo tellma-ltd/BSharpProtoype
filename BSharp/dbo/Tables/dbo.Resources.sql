@@ -14,6 +14,12 @@
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
+-- IsFungible = 1 <=> ResourceNumber is REQUIRED in table TransactionEntries
+-- IsFungible = 1 <=> ResourceNumber is OPTIONAL in table TemplateEntries, RequestEntries and PlanEntries
+	[IsFungible]				BIT					NOT NULL DEFAULT 0,
+-- IsBatch = 1 <=> BatchNumber is REQUIRED in table TransactionEntries
+-- IsBatch = 1 <=> BatchNumber is OPTIONAL in table TemplateEntries, RequestEntries and PlanEntries
+	[IsBatch]					BIT					NOT NULL DEFAULT 0,
 	[ValueMeasure]				NVARCHAR (255) NOT NULL, -- Currency, Mass, Volumne, Length, Count, Time, 
 	[UnitId]					INT					NOT NULL,
 	[CurrencyId]				INT, -- the unit If the resource has a financial meaure assigned to it.

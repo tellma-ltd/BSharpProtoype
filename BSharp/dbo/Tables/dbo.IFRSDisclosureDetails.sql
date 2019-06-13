@@ -9,9 +9,9 @@
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
 	[ModifiedById]		INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_IfrsDisclosureDetails] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_IfrsDisclosureDetails__IfrsDisclosures]	FOREIGN KEY ([TenantId], [IfrsDisclosureId])	REFERENCES [dbo].[IfrsDisclosures] ([TenantId], [Id]) ON DELETE CASCADE,
-	CONSTRAINT [FK_IfrsDisclosureDetails_CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_IfrsDisclosureDetails_ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_IfrsDisclosureDetails__IfrsDisclosures]	FOREIGN KEY ([TenantId], [IfrsDisclosureId])	REFERENCES [dbo].[IfrsDisclosures] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_IfrsDisclosureDetails__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_IfrsDisclosureDetails__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_IfrsDisclosureDetails__IfrsDisclosureId_ValidSince]

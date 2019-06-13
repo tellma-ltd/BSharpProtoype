@@ -66,7 +66,7 @@
 	[RelatedAgentAccountLabel3]	NVARCHAR (255),
 
 	CONSTRAINT [PK_IfrsAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
-	CONSTRAINT [FK_IfrsAccounts__IfrsConcepts]	FOREIGN KEY ([TenantId], [Id]) REFERENCES [dbo].[IfrsConcepts] ([TenantId], [Id]) ON DELETE CASCADE
+	CONSTRAINT [FK_IfrsAccounts__IfrsConcepts]	FOREIGN KEY ([TenantId], [Id]) REFERENCES [dbo].[IfrsConcepts] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE
 	);
 GO
 CREATE UNIQUE CLUSTERED INDEX IfrsAccounts__Node
