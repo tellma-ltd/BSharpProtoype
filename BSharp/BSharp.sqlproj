@@ -279,6 +279,7 @@
     <Build Include="dbo\Views\dbo.TransactionsEntriesView.sql" />
     <Build Include="dbo\Views\dbo.AccountsBalancesView.sql" />
     <Build Include="dbo\Tables\dbo.RequestLines.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__DeleteWithDescendants.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
