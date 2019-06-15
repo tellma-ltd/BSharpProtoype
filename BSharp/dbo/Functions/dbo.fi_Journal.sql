@@ -12,7 +12,7 @@ RETURN
 	SELECT
 		V.[Id],
 		V.[DocumentId],
-		CONVERT(DATE, V.[DocumentDate]) AS DocumentDate,
+		V.[DocumentDate],
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
@@ -20,46 +20,47 @@ RETURN
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],
+		V.[AgentId],
 		V.[IfrsNoteId],
 		V.[ResponsibilityCenterId],
-		-- [OperationId],
-		-- [ProductCategoryId],
-		-- [GeographicRegionId],
-		-- [CustomerSegmentId],
-		-- [TaxSegmentId],
-		V.[AgentAccountId],
 		V.[ResourceId],
+		V.[InstanceId],
+		V.[BatchCode],
 		V.[Quantity],
+-- because too many joins with table Measurement units affects performance, I will only add the 
+-- normalized quantities when needed
 		V.[MoneyAmount],
+		V.[MoneyAmount] * EU.[BaseAmount] / EU.[UnitAmount] As NormalizedMoneyAmount,
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
 		V.[Volume], 
-		V.[Volume] * VU.[BaseAmount] / VU.[UnitAmount] As NormalizedVolume,
-		V.[Count],
-		V.[Volume] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
+		--V.[Volume] * VU.[BaseAmount] / VU.[UnitAmount] As NormalizedVolume,
+		V.[Area],
+		V.[Length],
 		V.[Time],
+		V.[Count],
+		V.[Count] * CU.[BaseAmount] / CU.[UnitAmount] As NormalizedCount,
 		V.[Value],
-		V.[ExpectedSettlingDate],
 		V.[Memo],
-		-- Not happy about COALESCE, but 
-		-- In case of financial instruments, the external reference is a property of the Related Resource
-		COALESCE(RR.[Reference], V.[ExternalReference]) AS [RelatedReference],
+		V.[ExternalReference],
+		V.[AdditionalReference],
 		V.[RelatedResourceId],
-		V.[RelatedAgentAccountId],
-		V.[RelatedResponsibilityCenterId],
+		V.[RelatedAgentId],
+		--V.[RelatedResponsibilityCenterId],
 		V.[RelatedQuantity],
-		V.[RelatedMoneyAmount],
-		V.[RelatedMass],
-		V.[RelatedVolume],
-		V.[RelatedCount],
-		V.[RelatedTime],
-		V.[RelatedValue]
+		V.[RelatedMoneyAmount]
+		--V.[RelatedMass],
+		--V.[RelatedVolume],
+		--V.[RelatedCount],
+		--V.[RelatedTime],
+		--V.[RelatedValue]
 	FROM dbo.[TransactionsEntriesView] V
 	JOIN dbo.Resources R ON V.ResourceId = R.Id
+	JOIN dbo.MeasurementUnits EU ON R.CurrencyId = EU.Id
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
-	JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
+	--JOIN dbo.MeasurementUnits VU ON R.VolumeUnitId = VU.Id
 	JOIN dbo.MeasurementUnits CU ON R.CountUnitId = CU.Id
-	JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
+	--JOIN dbo.Resources RR ON V.RelatedResourceId = RR.Id
 	WHERE V.[Frequency]		= N'OneTime'
 	AND (@fromDate IS NULL OR [DocumentDate] >= @fromDate)
 	AND (@toDate IS NULL OR [DocumentDate] < @toDate)

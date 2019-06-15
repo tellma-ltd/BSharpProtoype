@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Unpost]
-	@Documents [dbo].[IndexedIdList] READONLY,
+	@Entities [dbo].[IndexedIdList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
@@ -9,26 +9,26 @@ BEGIN
 	-- if all documents are already posted, return
 	IF NOT EXISTS(
 		SELECT * FROM [dbo].[Documents]
-		WHERE [Id] IN (SELECT [Id] FROM @Documents)
+		WHERE [Id] IN (SELECT [Id] FROM @Entities)
 		AND [DocumentState] <> N'Draft'
 	)
 		RETURN;
 
 	-- Validate, checking available signatures for transaction type
 	EXEC [dbo].[bll_Transactions_Validate__Unpost]
-		@Entities = @Documents,
+		@Entities = @Entities,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 			
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents_State__Update]	@Documents = @Documents, @State = N'Draft';
+	EXEC [dbo].[dal_Documents_State__Update] @Entities = @Entities, @State = N'Draft';
 
 	IF (@ReturnEntities = 1)
 	BEGIN
 		INSERT INTO @Ids([Id])
 		SELECT [Id] 
-		FROM @Documents;
+		FROM @Entities;
 
 		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids, @ResultJson = @ResultJson OUTPUT;
 	END

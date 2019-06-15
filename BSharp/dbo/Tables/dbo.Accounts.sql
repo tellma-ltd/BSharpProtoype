@@ -10,6 +10,8 @@
 	[Name3]						NVARCHAR (255),
 	-- To import accounts, or to control sort order, a code is required. Otherwise, it is not.
 	[Code]						NVARCHAR (255),
+	[PartyReference]			NVARCHAR (255), -- how it is referred to by the other party
+	[AgentId]					INT,
 /*
 	An application-wide settings specify whether to activate the following columns:
 	[IsActiveIfrsNote], when wanting to generate specific Ifrs statements and notes
@@ -37,16 +39,11 @@
 	[ResponsibilityCenterIsFixed]BIT				NOT NULL DEFAULT 1,
 	[ResponsibilityCenterId]	INT,
 
--- These fields will show only if IsActiveAgentAccount, and if IfrsAccount specs require it
-	[AgentAccountIsFixed]		BIT					NOT NULL DEFAULT 1,
-	[AgentAccountId]			INT,
-
 -- These fields will show only if IsActiveResource, and if IfrsAccount specs require it
 	[ResourceIsFixed]			BIT					NOT NULL DEFAULT 1,
 	[ResourceId]				INT,
 
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
-
 	-- Audit details
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
@@ -56,7 +53,7 @@
 	CONSTRAINT [FK_Accounts__IfrsAccountId] FOREIGN KEY ([TenantId], [IfrsAccountId]) REFERENCES [dbo].[IfrsAccounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__IfrsNoteId] FOREIGN KEY ([TenantId], [IfrsNoteId]) REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResponsibilityCenterId] FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
-	CONSTRAINT [FK_Accounts__AgentAccountId] FOREIGN KEY ([TenantId], [AgentAccountId]) REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
+	CONSTRAINT [FK_Accounts__AgentId] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ResourceId] FOREIGN KEY ([TenantId], [ResourceId]) REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Accounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])

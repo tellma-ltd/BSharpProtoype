@@ -5,7 +5,11 @@
 	-- We should get all resources that are potentially salary components
 	@TransportationAllowanceResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
 	@OvertimeResourceId int -- 
-AS 
+AS
+/*
+Approach 1: Generate it from accounts whose IfrsAccountId has to do with employee benefits
+Approach 2 (Preferred): Use the paysheet line type
+*/
 BEGIN
 	SELECT
 		A.TaxIdentificationNumber As [Employee TIN],
@@ -46,8 +50,6 @@ BEGIN
 			THEN J.Direction * J.[Value] Else 0 
 			END) AS [Pension Contribution 11%]
 	FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[AgentAccounts] AA ON J.[RelatedAgentAccountId] = AA.Id
-	LEFT JOIN [dbo].[Agents] A ON AA.AgentId = A.Id
-	WHERE AA.AgentRelationType = N'employee'
+	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
 	GROUP BY A.TaxIdentificationNumber, A.[Name];
 END

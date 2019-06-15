@@ -1,11 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_TrialBalance] 
 /* 
-EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByAgent = 1, @ByResource = 1, @ByIfrsNote = 1, @PrintQuery = 1
+EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByResource = 1, @ByIfrsNote = 1, @PrintQuery = 1
 */	
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2020',
 	@ByResponsibilityCenter bit = 1,
-	@ByAgentAccount bit = 1,
 	@ByResource bit = 1,
 	@ByIfrsNote bit = 1,
 	@PrintQuery bit = 0
@@ -20,9 +19,6 @@ BEGIN
 	IF (@ByResponsibilityCenter = 1)
 		SET @Query = @Query + N'
 			S.[Name] As ResponsibilityCenter,'
-	IF (@ByAgentAccount = 1)
-		SET @Query = @Query + N'
-			C.[Name] As AgentAccount,'
 	IF (@ByResource = 1)
 		SET @Query = @Query + N'
 			R.[Name] As Resource,
@@ -34,40 +30,39 @@ BEGIN
 			Mass, Volume, Count, Usage,
 			(CASE WHEN T.Net > 0 THEN Net ELSE 0 END) As Debit,
 			(CASE WHEN T.Net < 0 THEN -Net ELSE 0 END) As Credit
-
 		FROM 
 		(
 			SELECT AccountId, '
 	IF (@ByResponsibilityCenter = 1) SET @Query = @Query + N'ResponsibilityCenterId, '
-	IF (@ByAgentAccount = 1) SET @Query = @Query + N'AgentAccountId, '
 	IF (@ByResource = 1) SET @Query = @Query + N'ResourceId, '
 	IF (@ByIfrsNote = 1) SET @Query = @Query + N'IfrsNoteId, '
 	SET @Query = @Query + N'
-			CAST(SUM([Direction] * [Mass]) AS money) AS Mass,	
-			CAST(SUM([Direction] * [Volume]) AS money) AS Volume,	
-			CAST(SUM([Direction] * [Count]) AS money) AS Count,	
-			CAST(SUM([Direction] * [Usage]) AS money) AS Usage,	
-			CAST(SUM([Direction] * [Value]) AS money) AS NET
-			FROM [dbo].[fi_Journal](@fromDate, @toDate) E
+			CAST(SUM([Direction] * [Mass]) AS money) AS [Mass],
+			CAST(SUM([Direction] * [Volume]) AS money) AS [Volume],	
+			CAST(SUM([Direction] * [Area]) AS money) AS [Area],
+			CAST(SUM([Direction] * [Length]) AS money) AS [Length],
+			CAST(SUM([Direction] * [Time]) AS money) AS [Time],
+			CAST(SUM([Direction] * [Count]) AS money) AS [Count],	
+			CAST(SUM([Direction] * [Value]) AS money) AS [Net]
+			FROM [dbo].[fi_Journal](@fromDate, @toDate)
 			GROUP BY AccountId'
 	IF (@ByResponsibilityCenter = 1) SET @Query = @Query + N', ResponsibilityCenterId'
-	IF (@ByAgentAccount = 1) SET @Query = @Query + N', AgentAccountId'
 	IF (@ByResource = 1) SET @Query = @Query + N', ResourceId'
 	IF (@ByIfrsNote = 1) SET @Query = @Query + N', IfrsNoteId'
 	SET @Query = @Query + N'		
 			HAVING 
-				SUM([Direction] * [Mass]) OR
-				SUM([Direction] * [Volume]) OR
-				SUM([Direction] * [Count]) OR
-				SUM([Direction] * [Usage]) OR
+				SUM([Direction] * [Mass]) <> 0 OR
+				SUM([Direction] * [Volume]) <> 0 OR
+				SUM([Direction] * [Area]) <> 0 OR
+				SUM([Direction] * [Length]) <> 0 OR
+				SUM([Direction] * [Time]) <> 0 OR
+				SUM([Direction] * [Count]) <> 0 OR
 				SUM([Direction] * [Value]) <> 0
 			OR 
 		) T 
 		JOIN [dbo].Accounts A ON T.AccountId = A.Id'
 	IF (@ByResponsibilityCenter = 1) SET @Query = @Query + N'
 		JOIN [dbo].[ResponsibilityCenters] S ON T.ResponsibilityCenterId = S.Id'
-	IF (@ByAgentAccount = 1) SET @Query = @Query + N'
-		JOIN [dbo].[AgentAccounts] AA ON T.AgentAccountId = C.Id'
 	IF (@ByResource = 1) SET @Query = @Query + N'
 		JOIN [dbo].[Resources] R ON T.ResourceId = R.Id
 		JOIN [dbo].[MeasurementUnits] MU ON R.MeasurementUnitId = MU.Id

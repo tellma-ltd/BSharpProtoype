@@ -3,7 +3,11 @@
 AS
 	IF NOT EXISTS(SELECT * FROM @Entities) RETURN;
 
-	-- Delete the entites, children Parent Id will be set to NULL
+	-- Delete the entites, after setting Parent Id of children to NULL
+	UPDATE [dbo].[ProductCategories]
+	SET [ParentId] = NULL
+	WHERE [ParentId] IN (SELECT [Id] FROM @Entities);
+
 	DELETE FROM [dbo].[ProductCategories]
 	WHERE [Id] IN (SELECT [Id] FROM @Entities);
 

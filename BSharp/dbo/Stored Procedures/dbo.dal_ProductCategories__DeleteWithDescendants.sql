@@ -3,7 +3,7 @@
 AS
 	IF NOT EXISTS(SELECT * FROM @Entities) RETURN;
 
-	-- Delete the entites, children Parent Id will be set to NULL
+	-- Delete the entites and their children
 	WITH EntitiesWithDescendants
 	AS (
 		SELECT T2.[Id]

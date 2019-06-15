@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[AgentAccounts] (
+﻿CREATE TABLE [dbo].[AgentRelations] (
 	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						INT					IDENTITY,
 	[AgentId]					INT					NOT NULL,
@@ -6,11 +6,7 @@
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
 	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:G/S, Student, Distributor; Supplier:G/S; Employee: part-time, full-time;
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
-	[Name]						NVARCHAR (255)		NOT NULL DEFAULT N'',
-	[Name2]						NVARCHAR (255)		NOT NULL DEFAULT N'',
-	[Name3]						NVARCHAR (255)		NOT NULL DEFAULT N'',
 	[Code]						NVARCHAR (255), -- location code for storage locations
-	[Reference]					NVARCHAR (255),
 	[StartDate]					DATETIME2 (7)		DEFAULT (CONVERT (date, SYSDATETIME())),
 --	employee-accounts
 	[JobTitle]					NVARCHAR (255), -- FK to table Jobs
@@ -34,10 +30,10 @@
 	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
 	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_AgentAccounts] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentAccounts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentAccounts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [CK_AgentAccounts__AgentRelationType] CHECK ([AgentRelationType] IN (
+	CONSTRAINT [PK_AgentRelations] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
+	CONSTRAINT [FK_AgentRelations__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [FK_AgentRelations__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	CONSTRAINT [CK_AgentRelations__AgentRelationType] CHECK ([AgentRelationType] IN (
 			N'investor', N'investment' ,
 			N'cash', N'bank', N'customer', N'supplier',
 			N'employee', N'debtor', N'creditor', N'custodian', -- custodian for non cash resources

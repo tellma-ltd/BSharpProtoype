@@ -14,7 +14,7 @@ Assumptions:
 	@CountUnit INT = 4 -- (SELECT [Id] FROM dbo.MeasurementUnits WHERE [Name] = N'ea');
 AS
 	WITH
-	Ifrs_FG AS (
+	Ifrs_FG AS ( -- Typically, there is ONE such node only.
 		SELECT [Node] 
 		FROM dbo.[IfrsAccounts] WHERE [Id] IN(N'FinishedGoods')
 	),
@@ -22,53 +22,42 @@ AS
 		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IfrsAccounts] I ON A.[IfrsAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM Ifrs_FG))	= 1
-	), /*
-	-- To avoid Ifrs, we need to define an account type:
-	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts
-		WHERE AccountType = N'FinishedGoods'
-	), */
-
+	),
 	OpeningBalances AS (
 		SELECT
-			J.AccountId,
-			SUM(J.[Count] * J.[Direction] * MU.[BaseAmount] / MU.[UnitAmount]) AS [Count]
-		FROM [dbo].[fi_Journal](NULL, @fromDate) J
-		JOIN [dbo].[Resources] R ON J.ResourceId = R.Id
-		JOIN [dbo].MeasurementUnits MU ON R.[MassUnitId] = MU.Id
-		WHERE J.AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
-		GROUP BY J.AccountId
-	),
-	OB2 AS (
-		SELECT AccountId, 
-			[Count] * (SELECT [UnitAmount]/[BaseAmount] FROM MeasurementUnits WHERE Id = @CountUnit) AS [Count]
-		FROM OpeningBalances
+			AccountId,
+			SUM([NormalizedCount] * [Direction]) AS [Count],
+			SUM([NormalizedMass] * [Direction]) AS [Mass]
+		FROM [dbo].[fi_Journal](NULL, @fromDate)
+		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
+		GROUP BY AccountId
 	),
 	Movements AS (
 		SELECT
-			J.AccountId,
-			SUM(CASE WHEN J.[Direction] > 0 THEN J.[Count] * MU.[BaseAmount] / MU.[UnitAmount] ELSE 0 END) AS CountIn,
-			SUM(CASE WHEN J.[Direction] < 0 THEN J.[Count] * MU.[BaseAmount] / MU.[UnitAmount] ELSE 0 END) AS CountOut		
-		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-		JOIN [dbo].[Resources] R ON J.ResourceId = R.Id
-		JOIN [dbo].MeasurementUnits MU ON R.[MassUnitId] = MU.Id
-		WHERE J.AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
-		GROUP BY J.AccountId
-	),
-	M2 AS (
-		SELECT AccountId, 
-		CountIn * (SELECT [UnitAmount]/[BaseAmount] FROM MeasurementUnits WHERE Id = @CountUnit) AS [CountIn],
-		CountOut * (SELECT [UnitAmount]/[BaseAmount] FROM MeasurementUnits WHERE Id = @CountUnit) AS [CountOut]
-		FROM Movements
+			AccountId,
+			SUM(CASE WHEN [Direction] > 0 THEN [NormalizedCount] ELSE 0 END) AS CountIn,
+			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedCount] ELSE 0 END) AS CountOut,	
+			SUM(CASE WHEN [Direction] > 0 THEN [NormalizedMass] ELSE 0 END) AS MassIn,
+			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedMass] ELSE 0 END) AS MassOut
+	
+		FROM [dbo].[fi_Journal](@fromDate, @toDate)
+		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
+		GROUP BY AccountId
 	),
 	FinishedGoodsRegsiter AS (
-		SELECT COALESCE(OpeningBalances.AccountId, Movements.AccountId) AS AccountId,
-			ISNULL(OpeningBalances.[Count],0) AS OpeningCount, 
+		SELECT
+			COALESCE(OpeningBalances.AccountId, Movements.AccountId) AS AccountId,
+			ISNULL(OpeningBalances.[Count],0) AS OpeningCount, ISNULL(OpeningBalances.[Mass],0) AS OpeningMass,
 			ISNULL(Movements.[CountIn],0) AS CountIn, ISNULL(Movements.[CountOut],0) AS CountOut,
-			ISNULL(OpeningBalances.[Count], 0) + ISNULL(Movements.[CountIn], 0) + ISNULL(Movements.[CountOut],0) AS EndingCount
-		FROM OB2 OpeningBalances
-		FULL OUTER JOIN M2 Movements ON OpeningBalances.AccountId = Movements.AccountId
+			ISNULL(Movements.[MassIn],0) AS MassIn, ISNULL(Movements.[MassOut],0) AS MassOut,
+			ISNULL(OpeningBalances.[Count], 0) + ISNULL(Movements.[CountIn], 0) - ISNULL(Movements.[CountOut],0) AS EndingCount,
+			ISNULL(OpeningBalances.[Mass], 0) + ISNULL(Movements.[MassIn], 0) - ISNULL(Movements.[MassOut],0) AS EndingMass
+		FROM OpeningBalances
+		FULL OUTER JOIN Movements ON OpeningBalances.AccountId = Movements.AccountId
 	)
-	SELECT FGR.AccountId, A.[Name], A.[Name2], FGR.OpeningCount, FGR.CountIn, FGR.CountOut, FGR.EndingCount
+	SELECT
+		FGR.AccountId, A.[Name], A.[Name2],
+		FGR.OpeningCount, FGR.CountIn, FGR.CountOut, FGR.EndingCount,
+		FGR.OpeningMass, FGR.MassIn, FGR.MassOut, FGR.EndingMass
 	FROM dbo.Accounts A
 	JOIN FinishedGoodsRegsiter FGR ON A.Id = FGR.AccountId

@@ -236,7 +236,7 @@
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoods_ResourceBased.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_WSI_FinishedGoods_AccountBased.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_ConsumablesServices.sql" />
-    <Build Include="dbo\Tables\dbo.AgentAccounts.sql" />
+    <Build Include="dbo\Tables\dbo.AgentRelations.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IfrsConcepts__Activate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_IfrsConcepts__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_IfrsConcepts__Activate.sql" />
@@ -280,6 +280,7 @@
     <Build Include="dbo\Views\dbo.AccountsBalancesView.sql" />
     <Build Include="dbo\Tables\dbo.RequestLines.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__DeleteWithDescendants.sql" />
+    <Build Include="dbo\Tables\dbo.ResourceInstances.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

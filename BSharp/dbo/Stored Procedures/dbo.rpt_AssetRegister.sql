@@ -2,6 +2,11 @@
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
 AS
+/*
+Since a resource is actually a "type" of foxid asset, then if we have 100 computers, they will appear in this
+report as ONE LINE.
+If we want each computer to appear on a separate line, we need to replace Resource with Instance.
+*/
 BEGIN
 	WITH IfrsFixedAssetAccounts	AS (
 		SELECT Id FROM dbo.[IfrsAccounts]
@@ -53,4 +58,5 @@ BEGIN
 			FAR.EndingCount, FAR.EndingServiceLife, FAR.EndingValue
 	FROM dbo.Resources R JOIN FixedAssetRegsiter FAR ON R.Id = FAR.ResourceId
 	JOIN [dbo].[MeasurementUnits] MU ON R.[MassUnitId] = MU.Id;
-END
+END;
+GO;

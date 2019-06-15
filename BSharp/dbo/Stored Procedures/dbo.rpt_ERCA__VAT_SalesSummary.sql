@@ -2,17 +2,20 @@
 	@fromDate Datetime = '01.01.2000', 
 	@toDate Datetime = '01.01.2100'
 AS
-SELECT 	A.[Name] As [Customer], 
+BEGIN
+	SELECT 
+		A.[Name] As [Customer], 
 		A.TaxIdentificationNumber As TIN, 
-		J.Reference As [Invoice #], J.RelatedReference As [Cash M/C #],
-		SUM(J.MoneyAmount) AS VAT,
-		SUM(J.RelatedMoneyAmount) AS [Taxable Amount],
-		J.DocumentDate As [Invoice Date],
-		J.[DocumentType], J.SerialNumber
-FROM dbo.fi_Journal(@fromDate, @toDate) J
-LEFT JOIN dbo.Resources R ON J.RelatedResourceId = R.Id 
-LEFT JOIN dbo.AgentAccounts AA ON J.RelatedAgentAccountId = AA.Id
-LEFT JOIN dbo.Agents A ON AA.AgentId = A.Id
-WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
-GROUP BY A.[Name], A.TaxIdentificationNumber, J.Reference, J.RelatedReference,
-		J.DocumentDate,	J.[DocumentType], J.SerialNumber
+		J.ExternalReference As [Invoice #], J.[AdditionalReference] As [Cash M/C #],
+		SUM(J.MoneyAmount) AS VAT, SUM(J.RelatedMoneyAmount) AS [Taxable Amount],
+		J.DocumentDate As [Invoice Date], J.DocumentId
+	FROM dbo.fi_Journal(@fromDate, @toDate) J
+	LEFT JOIN dbo.Agents A ON J.RelatedAgentId = A.Id
+	WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
+	GROUP BY
+		A.[Name],
+		A.TaxIdentificationNumber,
+		J.ExternalReference, J.[AdditionalReference],
+		J.DocumentDate,	J.[DocumentId]
+END;
+GO;

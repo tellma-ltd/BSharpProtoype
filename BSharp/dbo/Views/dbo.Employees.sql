@@ -5,7 +5,7 @@ FROM [dbo].[Agents]
 WHERE [PersonType] = N'Individual'
 AND [Id] IN (
 	SELECT [AgentId]
-	FROM dbo.AgentAccounts
+	FROM dbo.[AgentRelations]
 	WHERE [AgentRelationType] = N'employee'
 	AND [IsActive] = 1
 );

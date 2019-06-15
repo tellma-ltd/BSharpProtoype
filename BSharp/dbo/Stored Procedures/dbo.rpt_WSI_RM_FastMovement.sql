@@ -1,11 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_WSI_RM_FastMovement]
-/*
-Assumptions:
-1) Any inventory account is mapped to Ifrs concepts: Inventories, NonCurrentinventories, or their descendants
-2) All entries use a raw material resource. For balance migration, we need to add for every inventory account
-	a resource called non-specified (for that account), and migrate balances to it.
-
-*/
 	@fromDate Datetime = '01.01.2015', 
 	@toDate Datetime = '01.01.2020'
 AS
@@ -18,12 +11,7 @@ AS
 		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IfrsAccounts] I ON A.[IfrsAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM Ifrs_RM))	= 1
-	),/*
-	-- To avoid Ifrs, we need to define an account type:
-	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts
-		WHERE AccountType = N'RawMaterials'
-	), */
+	),
 	Movements AS (
 		SELECT TOP 10
 			J.ResourceId,	

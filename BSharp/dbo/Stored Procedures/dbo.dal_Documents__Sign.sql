@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Sign]
-	@Documents [dbo].[IndexedIdList] READONLY
+	@Entities [dbo].[IndexedIdList] READONLY
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
@@ -10,7 +10,7 @@ BEGIN
 	SET [SignedAt] = @Now
 	WHERE [Id] IN (
 		SELECT Max(Id) FROM dbo.Signatures
-		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
+		WHERE DocumentId IN (SELECT [Id] FROM @Entities)
 	)
 	AND [SignedById] = @UserId;
 
@@ -20,7 +20,7 @@ BEGIN
 	FROM Signatures
 	WHERE [Id] IN (
 		SELECT MAX(Id) As [Id] FROM dbo.Signatures
-		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
+		WHERE DocumentId IN (SELECT [Id] FROM @Entities)
 		GROUP BY DocumentId
 	)
 	AND [SignedById] <> @UserId
@@ -28,7 +28,7 @@ BEGIN
 	-- if never signed, add user signature
 	INSERT INTO dbo.Signatures([DocumentId])
 	SELECT [Id]
-	FROM @Documents
+	FROM @Entities
 	WHERE [Id] NOT IN (
 		SELECT [DocumentId] FROM dbo.Signatures 
 		WHERE [UnsignedAt] IS NOT NULL

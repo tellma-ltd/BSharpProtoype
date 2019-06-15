@@ -78,7 +78,7 @@
 	CONSTRAINT [FK_RequestLines__Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_RequestLines__IfrsNotes]	FOREIGN KEY ([TenantId], [IfrsNoteId])	REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_RequestLines__ResponsibilityCenters]	FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
-	CONSTRAINT [FK_RequestLines__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
+	CONSTRAINT [FK_RequestLines__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentRelations] ([TenantId], [Id]),
 	CONSTRAINT [FK_RequestLines__Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_RequestLines__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_RequestLines__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
@@ -92,4 +92,4 @@ GO
 CREATE INDEX [IX_RequestLines__AccountId] ON [dbo].[RequestLines]([TenantId] ASC, [AccountId] ASC);
 GO
 CREATE INDEX [IX_RequestLines__IfrsNoteId] ON [dbo].[RequestLines]([TenantId] ASC, [IfrsNoteId] ASC);
-GOO
+GO

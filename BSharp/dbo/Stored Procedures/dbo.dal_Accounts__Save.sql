@@ -16,10 +16,9 @@ SET NOCOUNT ON;
 		USING (
 			SELECT
 				[Index], [Id], [CustomClassificationId], [IfrsAccountId],
-				[Name], [Name2], [Name3], [Code],
+				[Name], [Name2], [Name3], [Code], [PartyReference], [AgentId],
 				[IfrsNoteIsFixed], [IfrsNoteId],
 				[ResponsibilityCenterIsFixed], [ResponsibilityCenterId],
-				[AgentAccountIsFixed], [AgentAccountId],
 				[ResourceIsFixed], [ResourceId]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -33,26 +32,24 @@ SET NOCOUNT ON;
 				t.[Name2]						= s.[Name2],
 				t.[Name3]						= s.[Name3],
 				t.[Code]						= s.[Code],
+				t.[PartyReference]			= s.[PartyReference],
+				t.[AgentId]						= s.[AgentId],
 				t.[IfrsNoteIsFixed]				= s.[IfrsNoteIsFixed],
 				t.[IfrsNoteId]					= s.[IfrsNoteId],
 				t.[ResponsibilityCenterIsFixed] = s.[ResponsibilityCenterIsFixed],
 				t.[ResponsibilityCenterId]		= s.[ResponsibilityCenterId],
-				t.[AgentAccountIsFixed]			= s.[AgentAccountIsFixed],
-				t.[AgentAccountId]				= s.[AgentAccountId],
 				t.[ResourceIsFixed]				= s.[ResourceIsFixed],
 				t.[ResourceId]					= s.[ResourceId],
 				t.[ModifiedAt]					= @Now,
 				t.[ModifiedById]				= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT ([CustomClassificationId], [IfrsAccountId],
-				[Name], [Name2], [Name3], [Code], [IfrsNoteIsFixed], [IfrsNoteId],
+				[Name], [Name2], [Name3], [Code], [PartyReference], [AgentId], [IfrsNoteIsFixed], [IfrsNoteId],
 				[ResponsibilityCenterIsFixed], [ResponsibilityCenterId],
-				[AgentAccountIsFixed], [AgentAccountId],
 				[ResourceIsFixed], [ResourceId])
 			VALUES (s.[CustomClassificationId], s.[IfrsAccountId],
-				s.[Name], s.[Name2], s.[Name3], s.[Code],s.[IfrsNoteIsFixed], s.[IfrsNoteId],
+				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[PartyReference], s.[AgentId], s.[IfrsNoteIsFixed], s.[IfrsNoteId],
 				s.[ResponsibilityCenterIsFixed], s.[ResponsibilityCenterId], 
-				s.[AgentAccountIsFixed], s.[AgentAccountId],
 				s.[ResourceIsFixed], s.[ResourceId])
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x

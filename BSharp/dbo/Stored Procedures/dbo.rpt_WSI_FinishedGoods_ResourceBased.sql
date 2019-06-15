@@ -9,52 +9,53 @@ Assumptions:
 	@fromDate Datetime = '01.01.2020',
 	@toDate Datetime = '01.01.2020'
 AS
+BEGIN
 	WITH
-	Ifrs_FG AS (
+	Ifrs_FG AS ( -- 
 		SELECT [Node] 
 		FROM dbo.[IfrsAccounts] WHERE [Id] IN(N'FinishedGoods')
 	),
-	FinishedGoodsAccounts AS (
+	FinishedGoodsAccounts AS ( -- Typically, there is ONE such node only.
 		SELECT A.[Id] FROM dbo.Accounts A
 		JOIN dbo.[IfrsAccounts] I ON A.[IfrsAccountId] = I.[Id]
 		WHERE I.[Node].IsDescendantOf((SELECT * FROM Ifrs_FG))	= 1
-	), /*
-	-- To avoid Ifrs, we need to define an account type:
-	FixedAssetAccounts AS (
-		SELECT [Id] FROM dbo.Accounts
-		WHERE AccountType = N'FinishedGoods'
-	), */
+	),
 	OpeningBalances AS (
 		SELECT
-			J.ResourceId,
-			SUM(J.[Count] * J.[Direction]) AS [Count]
-		FROM [dbo].[fi_Journal](NULL, @fromDate) J
-		WHERE J.AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
-		GROUP BY J.ResourceId
+			ResourceId,
+			SUM([NormalizedCount] * [Direction]) AS [Count],
+			SUM([NormalizedMass] * [Direction]) AS [Mass]
+		FROM [dbo].[fi_Journal](NULL, @fromDate)
+		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
+		GROUP BY ResourceId
 	),
 	Movements AS (
 		SELECT
-			J.ResourceId,
-			SUM(CASE WHEN J.[Direction] > 0 THEN J.[Count] * MU.[BaseAmount] / MU.[UnitAmount] ELSE 0 END) AS CountIn,
-			SUM(CASE WHEN J.[Direction] < 0 THEN J.[Count] * MU.[BaseAmount] / MU.[UnitAmount] ELSE 0 END) AS CountOut		
-		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
-		JOIN [dbo].[Resources] R ON J.ResourceId = R.Id
-		JOIN [dbo].MeasurementUnits MU ON R.[MassUnitId] = MU.Id
-		WHERE J.AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
-		GROUP BY J.ResourceId
+			ResourceId,
+			SUM(CASE WHEN [Direction] > 0 THEN [NormalizedCount] ELSE 0 END) AS CountIn,
+			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedCount] ELSE 0 END) AS CountOut,	
+			SUM(CASE WHEN [Direction] > 0 THEN [NormalizedMass] ELSE 0 END) AS MassIn,
+			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedMass] ELSE 0 END) AS MassOut
+		FROM [dbo].[fi_Journal](@fromDate, @toDate)
+		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
+		GROUP BY ResourceId
 	),
 	FinishedGoodsRegsiter AS (
-		SELECT COALESCE(OpeningBalances.ResourceId, Movements.ResourceId) AS ResourceId,
-			ISNULL(OpeningBalances.[Count],0) AS OpeningCount, 
+		SELECT
+			COALESCE(OpeningBalances.ResourceId, Movements.ResourceId) AS ResourceId,
+			ISNULL(OpeningBalances.[Count],0) AS OpeningCount, ISNULL(OpeningBalances.[Mass],0) AS OpeningMass,
 			ISNULL(Movements.[CountIn],0) AS CountIn, ISNULL(Movements.[CountOut],0) AS CountOut,
-			ISNULL(OpeningBalances.[Count], 0) + ISNULL(Movements.[CountIn], 0) + ISNULL(Movements.[CountOut],0) AS EndingCount
+			ISNULL(Movements.[MassIn],0) AS MassIn, ISNULL(Movements.[MassOut],0) AS MassOut,
+			ISNULL(OpeningBalances.[Count], 0) + ISNULL(Movements.[CountIn], 0) - ISNULL(Movements.[CountOut],0) AS EndingCount,
+			ISNULL(OpeningBalances.[Mass], 0) + ISNULL(Movements.[MassIn], 0) - ISNULL(Movements.[MassOut],0) AS EndingMass
 		FROM OpeningBalances
 		FULL OUTER JOIN Movements ON OpeningBalances.ResourceId = Movements.ResourceId
 	)
-
-	SELECT FGR.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2,
-		FGR.OpeningCount,
-		FGR.CountIn, FGR.CountOut, FGR.EndingCount
-	FROM dbo.Resources R 
-	JOIN FinishedGoodsRegsiter FGR ON R.Id = FGR.ResourceId
-	JOIN [dbo].[MeasurementUnits] MU ON R.[MassUnitId] = MU.Id;
+	SELECT
+		FGR.ResourceId, R.[Name], R.[Name2], 
+		FGR.OpeningCount, FGR.CountIn, FGR.CountOut, FGR.EndingCount,
+		FGR.OpeningMass, FGR.MassIn, FGR.MassOut, FGR.EndingMass
+	FROM dbo.Resources R
+	JOIN FinishedGoodsRegsiter FGR ON R.Id = FGR.ResourceId;
+END;
+GO;

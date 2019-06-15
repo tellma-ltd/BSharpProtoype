@@ -56,7 +56,7 @@ Produced = Sold + Closing - Opening
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_ResponsibilityCenters] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]) ON DELETE SET NULL,
+	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_ResponsibilityCenters__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_ResponsibilityCenters__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

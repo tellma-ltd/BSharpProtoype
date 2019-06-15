@@ -88,21 +88,21 @@ SET NOCOUNT ON;
 	JOIN dbo.[IfrsConcepts] IC ON N.Id = IC.Id
 	WHERE (IC.ExpiryDate < T.[DocumentDate]);
 	
-	-- Reference is required for selected account and direction, 
+	-- External Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].Reference',
+			CAST(E.[Index] AS NVARCHAR (255)) + '].ExternalReference',
 		N'Error_TheReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
-	WHERE (E.[Reference] IS NULL)
-	AND (E.[Direction] = 1 AND IA.[DebitReferenceSetting] = N'Required' OR
-		E.[Direction] = -1 AND IA.[CreditReferenceSetting] = N'Required')
+	WHERE (E.ExternalReference IS NULL)
+	AND (E.[Direction] = 1 AND IA.[DebitExternalReferenceSetting] = N'Required' OR
+		E.[Direction] = -1 AND IA.[CreditExternalReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
-	-- RelatedReference is required for selected account and direction, 
+	-- Additional Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
@@ -111,9 +111,9 @@ SET NOCOUNT ON;
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
-	WHERE (E.[ExternalReference] IS NULL)
-	AND (E.[Direction] = 1 AND IA.[DebitRelatedReferenceSetting] = N'Required' OR
-		E.[Direction] = -1 AND IA.[CreditRelatedReferenceSetting] = N'Required')
+	WHERE (E.[AdditionalReference] IS NULL)
+	AND (E.[Direction] = 1 AND IA.[DebitAdditionalReferenceSetting] = N'Required' OR
+		E.[Direction] = -1 AND IA.[CreditAdditionalReferenceSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 
 	-- RelatedAgent is required for selected account and direction, 
@@ -125,7 +125,7 @@ SET NOCOUNT ON;
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
 	JOIN dbo.[IfrsAccounts] IA ON A.IfrsAccountId = IA.Id
-	WHERE (E.[RelatedAgentAccountId] IS NULL)
+	WHERE (E.[RelatedAgentId] IS NULL)
 	AND (IA.[RelatedAgentAccountSetting] = N'Required')
 	AND (E.[EntityState] IN (N'Inserted', N'Updated'));
 	

@@ -59,17 +59,6 @@ SET NOCOUNT ON;
 	JOIN dbo.[ResponsibilityCenters] RC ON TE.ResponsibilityCenterId = RC.[Id]
 	WHERE (RC.[IsActive] = 0);
 
-	-- No inactive Agent Account
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
-	SELECT
-		'[' + ISNULL(CAST(FE.[Index] AS NVARCHAR (255)),'') + ']', 
-		N'Error_TheAgentAccount0IsInactive',
-		AA.[Name]
-	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[DocumentId]
-	JOIN dbo.[AgentAccounts] AA ON TE.ResponsibilityCenterId = AA.[Id]
-	WHERE (AA.[IsActive] = 0);
-
 	-- No inactive Resource
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT

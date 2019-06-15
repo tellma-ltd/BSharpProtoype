@@ -22,7 +22,7 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents__Sign] @Documents = @Entities;
+	EXEC [dbo].[dal_Documents__Sign] @Entities = @Entities;
 
 	-- Validate, checking available signatures for transaction type
 	EXEC [dbo].[bll_Transactions_Validate__Post]
@@ -32,7 +32,7 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents_State__Update]	@Documents = @Entities, @State = N'Posted';
+	EXEC [dbo].[dal_Documents_State__Update] @Entities = @Entities, @State = N'Posted';
 
 	IF (@ReturnEntities = 1)
 	BEGIN

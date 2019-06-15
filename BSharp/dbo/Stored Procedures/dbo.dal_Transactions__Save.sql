@@ -38,7 +38,7 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [DocumentDate], [VoucherNumber], [Memo], [Frequency], [Repetitions],
+				[Index], [Id], [DocumentDate], [VoucherReference], [Memo], [Frequency], [Repetitions],
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
 					-- max(Id) per transaction type.
 					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentType] = @TransactionType
@@ -50,7 +50,7 @@ BEGIN
 		THEN
 			UPDATE SET
 				t.[DocumentDate]	= s.[DocumentDate],
-				t.[VoucherReference]	= s.[VoucherNumber],
+				t.[VoucherReference]= s.[VoucherReference],
 				t.[Memo]			= s.[Memo],
 				t.[Frequency]		= s.[Frequency],
 				t.[Repetitions]		= s.[Repetitions],
@@ -62,7 +62,7 @@ BEGIN
 				[DocumentDate], [VoucherReference],[Memo],[Frequency],[Repetitions]
 			)
 			VALUES (
-				s.[DocumentDate], s.[VoucherNumber], s.[Memo], s.[Frequency], s.[Repetitions]
+				s.[DocumentDate], s.[VoucherReference], s.[Memo], s.[Frequency], s.[Repetitions]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -93,36 +93,50 @@ BEGIN
 	MERGE INTO [dbo].[TransactionEntries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[ResponsibilityCenterId], E.[Reference],
-			E.[AccountId], E.[AgentAccountId], E.[ResourceId], E.[Direction], E.[MoneyAmount], E.[Value], E.[IfrsNoteId],
-			E.ExternalReference, E.[RelatedAgentAccountId], E.[RelatedResourceId], E.[RelatedMoneyAmount]
+			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[Direction], E.[AccountId], E.[IfrsNoteId], E.[ResponsibilityCenterId],
+				E.[ResourceId], E.[InstanceId], E.[BatchCode], E.[DueDate], E.[Quantity],
+				E.[MoneyAmount], E.[Mass], E.[Volume], E.[Area], E.[Length], E.[Time], E.[Count], E.[Value], E.[Memo],
+				E.[ExternalReference], E.[AdditionalReference], 
+				E.[RelatedResourceId], E.[RelatedAgentId], E.[RelatedMoneyAmount]
 		FROM @Entries E
 		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
 		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON t.Id = s.Id
 	WHEN MATCHED THEN
-		UPDATE SET 
-			t.[ResponsibilityCenterId]	= s.[ResponsibilityCenterId],
+		UPDATE SET
+			t.[Direction]				= s.[Direction],	
 			t.[AccountId]				= s.[AccountId],
-			t.[AgentAccountId]			= s.[AgentAccountId],
-			t.[ResourceId]				= s.[ResourceId],
-			t.[Direction]				= s.[Direction],
-			t.[MoneyAmount]				= s.[MoneyAmount],
-			t.[Value]					= s.[Value],
 			t.[IfrsNoteId]				= s.[IfrsNoteId],
-			t.[ExternalReference]		= s.ExternalReference,
-			t.[RelatedAgentAccountId]	= s.[RelatedAgentAccountId],
+			t.[ResponsibilityCenterId]	= s.[ResponsibilityCenterId],
+			t.[ResourceId]				= s.[ResourceId],
+			t.[InstanceId]				= s.[InstanceId],
+			t.[BatchCode]				= s.[BatchCode],
+			t.[Quantity]				= s.[Quantity],
+			t.[MoneyAmount]				= s.[MoneyAmount],
+			t.[Mass]					= s.[Mass],
+			t.[Volume]					= s.[Volume],
+			t.[Area]					= s.[Area],
+			t.[Length]					= s.[Length],
+			t.[Time]					= s.[Time],
+			t.[Count]					= s.[Count],
+			t.[Value]					= s.[Value],
+			t.[Memo]					= s.[Memo],
+			t.[ExternalReference]		= s.[ExternalReference],
+			t.[AdditionalReference]		= s.[AdditionalReference],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
+			t.[RelatedAgentId]			= s.[RelatedAgentId],
 			t.[RelatedMoneyAmount]		= s.[RelatedMoneyAmount],
 			t.[ModifiedAt]				= @Now,
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([DocumentId], [IsSystem], [ResponsibilityCenterId],
-				[AccountId], [AgentAccountId], [ResourceId], [Direction], [MoneyAmount], [Value], [IfrsNoteId],
-				[ExternalReference], [RelatedAgentAccountId], [RelatedResourceId], [RelatedMoneyAmount])
-		VALUES (s.[DocumentId], s.[IsSystem], s.[ResponsibilityCenterId],
-				s.[AccountId], s.[AgentAccountId], s.[ResourceId], s.[Direction], s.[MoneyAmount], s.[Value], s.[IfrsNoteId],
-				s.[ExternalReference], s.[RelatedAgentAccountId], s.[RelatedResourceId], s.[RelatedMoneyAmount]);
-
+		INSERT ([DocumentId], [IsSystem], [Direction], [AccountId], [IfrsNoteId], [ResponsibilityCenterId],
+				[ResourceId], [InstanceId], [BatchCode], [Quantity],
+				[MoneyAmount], [Mass], [Volume], [Area], [Length], [Time], [Count],  [Value], [Memo],
+				[ExternalReference], [AdditionalReference], [RelatedResourceId], [RelatedAgentId], [RelatedMoneyAmount])
+		VALUES (s.[DocumentId], s.[IsSystem], s.[Direction], s.[AccountId], s.[IfrsNoteId], s.[ResponsibilityCenterId],
+				s.[ResourceId], s.[InstanceId], s.[BatchCode], s.[Quantity],
+				s.[MoneyAmount], s.[Mass], s.[Volume], s.[Area], s.[Length], s.[Time], s.[Count], s.[Value], s.[Memo],
+				s.[ExternalReference], s.[AdditionalReference], s.[RelatedResourceId], s.[RelatedAgentId], s.[RelatedMoneyAmount])
+		;
 	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;

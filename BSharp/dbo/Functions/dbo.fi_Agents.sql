@@ -7,7 +7,7 @@ RETURN
 	SELECT * FROM [dbo].[Agents]
 	WHERE [Id] IN (
 		SELECT [AgentId]
-		FROM dbo.AgentAccounts
+		FROM dbo.[AgentRelations]
 		WHERE (@AgentRelationType IS NULL OR [AgentRelationType] = @AgentRelationType)
 		AND (@IsActive IS NULL OR [IsActive] = @IsActive)
 	);

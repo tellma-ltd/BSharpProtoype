@@ -18,3 +18,4 @@ AS
 		[ModifiedById] INT '$.ModifiedById',
 		[EntityState] NVARCHAR (255) '$.EntityState'
 	);
+GO;

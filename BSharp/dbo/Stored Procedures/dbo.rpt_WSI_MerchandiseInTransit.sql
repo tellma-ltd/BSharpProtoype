@@ -8,8 +8,9 @@ Assumptions:
 */
 	@AsOfDate Datetime = '01.01.2020'
 AS
+BEGIN
 	WITH
-	Ifrs_MIT AS (
+	Ifrs_MIT AS ( -- Typically, there is ONE such node only.
 		SELECT [Node] 
 		FROM dbo.[IfrsAccounts] WHERE [Id] IN(N'CurrentInventoriesInTransit')
 	),
@@ -21,16 +22,16 @@ AS
 	Balances AS (
 		SELECT
 			J.ResourceId,
-			SUM(J.[Direction] * J.[MoneyAmount]) AS [MoneyAmount],
-			SUM(J.[Direction] * J.[Mass]) AS [Mass],
-			SUM(J.[Direction] * J.[Count]) AS [Count]
+			SUM(J.[Direction] * J.[NormalizedMoneyAmount]) AS [MoneyAmount],
+			SUM(J.[Direction] * J.[NormalizedMass]) AS [Mass],
+			SUM(J.[Direction] * J.[NormalizedCount]) AS [Count]
 
 		FROM [dbo].[fi_Journal](NULL, @AsOfDate) J
 		WHERE J.AccountId IN (SELECT Id FROM InventoriesInTransitAccounts)
 		GROUP BY J.ResourceId
 	)
-	SELECT B.ResourceId, R.[Name], R.[Name2], MU.[Name] As Unit, MU.Name2 As Unit2, MU.Name3 As Unit3,
-		B.[Count], B.[Mass], B.[MoneyAmount]
+	SELECT B.ResourceId, R.[Name], R.[Name2], R.[Name3], B.[MoneyAmount], B.[Mass], B.[Count]
 	FROM dbo.Resources R 
-	JOIN Balances B ON R.Id = B.ResourceId
-	JOIN [dbo].[MeasurementUnits] MU ON R.[MassUnitId] = MU.Id;
+	JOIN Balances B ON R.Id = B.ResourceId;
+END;
+GO;

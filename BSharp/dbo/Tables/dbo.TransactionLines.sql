@@ -78,7 +78,7 @@
 	CONSTRAINT [FK_TransactionLines__Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionLines__IfrsNotes]	FOREIGN KEY ([TenantId], [IfrsNoteId])	REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionLines__ResponsibilityCenters]	FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
-	CONSTRAINT [FK_TransactionLines__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentAccounts] ([TenantId], [Id]),
+	CONSTRAINT [FK_TransactionLines__AgentAccounts]	FOREIGN KEY ([TenantId], [AgentAccountId])	REFERENCES [dbo].[AgentRelations] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionLines__Resources]	FOREIGN KEY ([TenantId], [ResourceId])	REFERENCES [dbo].[Resources] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionLines__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionLines__ModifiedById]FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),

@@ -124,14 +124,4 @@ SET NOCOUNT ON;
 		HAVING COUNT(*) > 1
 	) OPTION(HASH JOIN);
 
-	-- Parent Resource must be active
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
-	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].InstanceOfId',
-		N'Error_TheParentResource0IsInactive',
-		FE.InstanceOfId
-	FROM @Entities FE 
-	JOIN [dbo].[Resources] BE ON FE.InstanceOfId = BE.Id
-	WHERE (BE.IsActive = 0);
-
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

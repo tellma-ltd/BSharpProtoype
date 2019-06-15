@@ -6,21 +6,26 @@
 	-- Common to all document types
 	[DocumentType]							NVARCHAR (255)	NOT NULL,	
 	[SerialNumber]							INT				NOT NULL,	-- auto generated, copied to paper if needed.
-	[DocumentDate]							DATETIME2 (7)	NOT NULL DEFAULT CONVERT (DATE, SYSDATETIME()),
+	[DocumentDate]							DATE			NOT NULL DEFAULT CONVERT (DATE, SYSDATETIME()),
 	[DocumentState]							NVARCHAR (255)	NOT NULL DEFAULT N'Draft', -- N'Void', N'InProcess', N'Completed' {Voucher: Posted, Request:Authorized, Inquiry:Resolved, Plan:Approved, Template:Accepted}
 	
 	-- for authenticiy when the original source document is not this record itself, but rather a paper
 	-- voucher or a record in another system such as a cash register. By writing the unique voucher
 	-- reference in the system, we can determine if any source document is missing or duplicated.
 	-- In case of multiple candidate voucher references, we use the one whose checksum is easier to compute
-	-- If both are required, we concatenate with a special character ':'
-	[VoucherReference]						NVARCHAR (255),
+	-- If both are required, we use the additional string columns
+	[VoucherTypeId]							INT, -- useful to allow multiple voucher types to be captures by one document
+	[VoucherReference]						NVARCHAR (255), -- must be fixed length to allow range checksum
+	-- The following might be an overkill, as it will take more time to enter vouchers in the system
+	[VoucherPreparedById]					INT,
+	[VoucherApprovedById]					INT,
+	[VoucherReviewedById]					INT,
 	-- Dynamic properties defined by document type specification
-	[Lookup1Id]								INT, -- e.g., cash machine serial in the case of a sale
-	[Lookup2Id]								INT,
-	[Lookup3Id]								INT,
-	[String1]								NVARCHAR (255),
-	[String2]								NVARCHAR (255),
+	[DocumentLookup1Id]						INT, -- e.g., cash machine serial in the case of a sale
+	[DocumentLookup2Id]						INT,
+	[DocumentLookup3Id]						INT,
+	[DocumentText1]							NVARCHAR (255),
+	[DocumentText2]							NVARCHAR (255),
 	-- Additional properties to simplify data entry. No report should be based on them!!!
 	[Memo]									NVARCHAR (255),
 	[MemoIsCommon]							BIT				DEFAULT 1,
@@ -83,4 +88,8 @@
 	CONSTRAINT [FK_Documents__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Documents__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
  );
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Documents__VoucherType_VoucherReference]
+  ON [dbo].[Documents]([TenantId], [VoucherTypeId], [VoucherReference])
+  WHERE [VoucherReference] IS NOT NULL AND [VoucherReference] <> N'';
 GO

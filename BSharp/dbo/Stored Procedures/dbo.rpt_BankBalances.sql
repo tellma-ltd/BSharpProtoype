@@ -9,10 +9,10 @@ BEGIN
 	FROM [dbo].[fi_Journal](NULL, @AsOfDate) J
 	JOIN dbo.Accounts Ac ON J.AccountId = Ac.Id
 	JOIN dbo.Resources R ON J.ResourceId = R.Id
-	JOIN dbo.AgentAccounts AA ON J.AgentAccountId = AA.Id
-	JOIN dbo.Agents Ag ON AA.AgentId = Ag.Id
+	JOIN dbo.Agents Ag ON Ac.AgentId = Ag.Id
 	WHERE Ac.[IfrsAccountId] = N'BalancesWithBanks'
 	GROUP BY
 		Ag.[Name], Ag.[Name2], Ag.[Name3],
 		R.[Name], R.[Name2], R.[Name3]
 END;
+GO;

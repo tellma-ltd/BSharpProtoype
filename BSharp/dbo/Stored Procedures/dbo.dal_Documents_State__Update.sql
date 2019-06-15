@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_State__Update]
-	@Documents [dbo].[IndexedIdList] READONLY,
+	@Entities [dbo].[IndexedIdList] READONLY,
 	@State NVARCHAR (255)
 AS
 BEGIN
@@ -12,7 +12,7 @@ BEGIN
 		ModifiedAt = @Now,
 		ModifiedById = @UserId
 	WHERE [Id] IN (
-		SELECT [Id] FROM @Documents
+		SELECT [Id] FROM @Entities
 	)
 	AND [DocumentState] <> @State;
 END;
