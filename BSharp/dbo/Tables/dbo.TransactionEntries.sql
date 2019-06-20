@@ -2,12 +2,12 @@
 --	These are for transactions only. If there are entries from requests or inquiries, etc=> other tables
 	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]					INT					IDENTITY,
-	[DocumentId]			INT					NOT NULL,
+	[TransactionLineId]		INT					NOT NULL,
+	[EntryNumber]			INT					NOT NULL,
 --	Upon posting the document, the auto generated entries will be MERGED with the present ones
---	based on TenantId, IsSystem, AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
+--	based on TenantId, AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
 --	to minimize Transaction Entries deletions
 --	It will be presented ORDER BY IsSystem, Direction, AccountId.Code, IfrsAccountId.Node, IfrsNoteId.Node, ResponsibilityCenterId.Node
-	[IsSystem]				BIT					NOT NULL DEFAULT 0,
 	[Direction]				SMALLINT			NOT NULL,
  -- Account selection enforces additional filters on the other columns
 	[AccountId]				INT					NOT NULL,
@@ -54,14 +54,8 @@
 -- Examples include supplier account in cash purchase, customer account in cash sales, employee account in cash payroll, 
 -- supplier account in VAT purchase entry, customer account in VAT sales entry, and WIP account in direct production.
 	[RelatedAgentId]		INT,
-	--[RelatedResponsibilityCenterId] INT, -- used in stock issues for consumption
 	[RelatedQuantity]		MONEY ,		-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
-	--[RelatedMass]			DECIMAL				NOT NULL DEFAULT 0, -- MassUnit, like LTZ bar
-	--[RelatedVolume]			DECIMAL				NOT NULL DEFAULT 0, -- VolumeUnit, possibly for shipping
-	--[RelatedCount]			DECIMAL				NOT NULL DEFAULT 0, -- CountUnit
-	--[RelatedTime]			DECIMAL				NOT NULL DEFAULT 0, -- ServiceTimeUnit
-	[RelatedValue]			VTYPE				NOT NULL DEFAULT 0, -- 
 -- for authenticity when the source document is the record itself, an entry has to be signed by:
 --	1) The Agent (of AgentAccount) in the case of Balance sheet account
 --	2) The revenue customer or expense consumer in the case of Profit/loss account
@@ -79,7 +73,7 @@
 
 	CONSTRAINT [PK_TransactionEntries] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [CK_TransactionEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
-	CONSTRAINT [FK_TransactionEntries__Documents]	FOREIGN KEY ([TenantId], [DocumentId])	REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_TransactionEntries__TRansactionLines]	FOREIGN KEY ([TenantId], [TransactionLineId])	REFERENCES [dbo].[TransactionLines] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_TransactionEntries__Accounts]	FOREIGN KEY ([TenantId], [AccountId])	REFERENCES [dbo].[Accounts] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__IfrsNotes]	FOREIGN KEY ([TenantId], [IfrsNoteId])	REFERENCES [dbo].[IfrsNotes] ([TenantId], [Id]),
 	CONSTRAINT [FK_TransactionEntries__ResponsibilityCenters]	FOREIGN KEY ([TenantId], [ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
@@ -90,7 +84,7 @@
 	CONSTRAINT [FK_TransactionEntries__SignedById]	FOREIGN KEY ([TenantId], [SignedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
-CREATE INDEX [IX_TransactionEntries__DocumentId] ON [dbo].[TransactionEntries]([TenantId] ASC, [DocumentId] ASC);
+CREATE INDEX [IX_TransactionEntries__DocumentId] ON [dbo].[TransactionEntries]([TenantId] ASC, [TransactionLineId] ASC);
 GO
 CREATE INDEX [IX_TransactionEntries__ResponsibilityCenterId] ON [dbo].[TransactionEntries]([TenantId] ASC, [ResponsibilityCenterId] ASC);
 GO

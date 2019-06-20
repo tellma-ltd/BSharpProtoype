@@ -4,7 +4,7 @@
 	[ResourceId]				INT					NOT NULL,
 --	Tag #, Coil #, Check #, LC #
 	[InstanceTypeId]			INT, -- Check, CPO, LT, LG, LC, Coil, SKD, ...
-	[InstanceCode]				NVARCHAR (255)		NOT NULL,
+	[Code]						NVARCHAR (255)		NOT NULL,
 	[ProductionDate]			DATE,
 	[ExpiryDate]				DATE,
 -- Case of Issued Payments

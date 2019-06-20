@@ -16,8 +16,8 @@
 	[EmployeeLabel]				NVARCHAR(255),
 	[FromCustodyAccountLabel]	NVARCHAR(255),
 	[ToCustodyAccountLabel]		NVARCHAR(255),
-	CONSTRAINT [PK_DocumentTypeSpecifications] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [CK_DocumentTypeSpecifications__DocumentCategory] CHECK (
+	CONSTRAINT [PK_DocumentTypes] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
+	CONSTRAINT [CK_DocumentTypes__DocumentCategory] CHECK (
 		[DocumentCategory] IN (N'Transaction', N'Request', N'Plan', N'Template')
 	)
 );

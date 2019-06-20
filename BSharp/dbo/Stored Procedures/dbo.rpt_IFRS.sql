@@ -47,7 +47,7 @@ BEGIN
 
 	INSERT INTO #Ifrs([Field], [Value])
 	SELECT [IfrsAccountId], SUM([Value] * [Direction])
-	FROM dbo.[fi_Journal](@fromDate, @toDate)
+	FROM dbo.[fi_JournalDetails](@fromDate, @toDate)
 	GROUP BY [IfrsAccountId];
 
 	SELECT * FROM #Ifrs;

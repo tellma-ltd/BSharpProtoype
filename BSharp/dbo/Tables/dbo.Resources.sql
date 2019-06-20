@@ -44,6 +44,9 @@
 	[CustomsReference]			NVARCHAR (255), -- how it is referred to by Customs
 	[UniversalProductCode]		NVARCHAR (255), -- for barcode readers
 	[PreferredSupplierId]		INT,			-- FK, Table Agents, specially for purchasing
+--	Useful for smart posting
+	[ExpenseAccountId]			INT,
+	[RevenueAccountId]			INT,
 	-- The following properties are user-defined, used for reporting
 	-- Examples for Steel finished goods are: Thickness, width, Grade,
 	[ResourceLookup1Id]			INT,			-- UDL 

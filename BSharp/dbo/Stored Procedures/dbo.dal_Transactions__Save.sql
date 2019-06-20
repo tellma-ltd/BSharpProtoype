@@ -93,13 +93,13 @@ BEGIN
 	MERGE INTO [dbo].[TransactionEntries] AS t
 	USING (
 		SELECT
-			E.[Id], II.[Id] AS [DocumentId], E.[IsSystem], E.[Direction], E.[AccountId], E.[IfrsNoteId], E.[ResponsibilityCenterId],
+			E.[Id], II.[Id] AS [DocumentId], E.[Direction], E.[AccountId], E.[IfrsNoteId], E.[ResponsibilityCenterId],
 				E.[ResourceId], E.[InstanceId], E.[BatchCode], E.[DueDate], E.[Quantity],
 				E.[MoneyAmount], E.[Mass], E.[Volume], E.[Area], E.[Length], E.[Time], E.[Count], E.[Value], E.[Memo],
 				E.[ExternalReference], E.[AdditionalReference], 
 				E.[RelatedResourceId], E.[RelatedAgentId], E.[RelatedMoneyAmount]
 		FROM @Entries E
-		JOIN @IndexedIds II ON E.DocumentIndex = II.[Index]
+		JOIN @IndexedIds II ON E.[TransactionLineIndex] = II.[Index]
 		WHERE E.[EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON t.Id = s.Id
 	WHEN MATCHED THEN
@@ -129,11 +129,11 @@ BEGIN
 			t.[ModifiedAt]				= @Now,
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([DocumentId], [IsSystem], [Direction], [AccountId], [IfrsNoteId], [ResponsibilityCenterId],
+		INSERT ([TransactionLineId], [Direction], [AccountId], [IfrsNoteId], [ResponsibilityCenterId],
 				[ResourceId], [InstanceId], [BatchCode], [Quantity],
 				[MoneyAmount], [Mass], [Volume], [Area], [Length], [Time], [Count],  [Value], [Memo],
 				[ExternalReference], [AdditionalReference], [RelatedResourceId], [RelatedAgentId], [RelatedMoneyAmount])
-		VALUES (s.[DocumentId], s.[IsSystem], s.[Direction], s.[AccountId], s.[IfrsNoteId], s.[ResponsibilityCenterId],
+		VALUES (s.[DocumentId], s.[Direction], s.[AccountId], s.[IfrsNoteId], s.[ResponsibilityCenterId],
 				s.[ResourceId], s.[InstanceId], s.[BatchCode], s.[Quantity],
 				s.[MoneyAmount], s.[Mass], s.[Volume], s.[Area], s.[Length], s.[Time], s.[Count], s.[Value], s.[Memo],
 				s.[ExternalReference], s.[AdditionalReference], s.[RelatedResourceId], s.[RelatedAgentId], s.[RelatedMoneyAmount])

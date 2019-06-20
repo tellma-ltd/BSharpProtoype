@@ -7,19 +7,13 @@ AS
 BEGIN
 	SELECT 	
 		[Id],
-		[DocumentId],
+		[TransactionLineId],
 		[DocumentDate],
 		[DocumentType],
 		[SerialNumber],
-		[IsSystem],
 		[Direction],
 		[IfrsNoteId],
 		[ResponsibilityCenterId],
-		-- [OperationId],
-		-- [ProductCategoryId],
-		-- [GeographicRegionId],
-		-- [CustomerSegmentId],
-		-- [TaxSegmentId],
 		[ResourceId],
 		[Quantity],
 		[MoneyAmount],
@@ -34,7 +28,7 @@ BEGIN
 		[Memo],
 		[ExternalReference],
 		[AdditionalReference]
-	FROM [dbo].[fi_Journal](@fromDate, @toDate)
+	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate)
 	WHERE [AccountId] = @AccountId;
 END;
 GO

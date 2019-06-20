@@ -7,11 +7,10 @@ AS
 BEGIN
 	SELECT 	
 		[Id],
-		[DocumentId],
+		[TransactionLineId],
 		[DocumentDate],
 		[DocumentType],
 		[SerialNumber],
-		[IsSystem],
 		[Direction],
 		[IfrsNoteId],
 		[ResponsibilityCenterId],
@@ -23,7 +22,7 @@ BEGIN
 		[RelatedResourceId] As [OtherPartyCurrency],
 		[RelatedAgentId] As [OtherParty],
 		[RelatedMoneyAmount] As [OtherPartyAmount]
-	FROM [dbo].[fi_Journal](@fromDate, @toDate)
+	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate)
 	WHERE [AccountId] = @AccountId;
 END;
 GO;

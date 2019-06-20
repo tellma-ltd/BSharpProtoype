@@ -11,7 +11,7 @@ AS
 		SUM(E.[Direction] * E.[Time]) AS [Time],
 		SUM(E.[Direction] * E.[Value]) AS [Value]
 	FROM dbo.[TransactionEntries] E
-	JOIN dbo.[Documents] D ON E.[DocumentId] = D.[Id]
+	JOIN dbo.[Documents] D ON E.[TransactionLineId] = D.[Id]
 	JOIN dbo.[DocumentTypes] DT ON D.[DocumentType] = DT.[Id]
 	WHERE DT.[DocumentCategory] = N'Transaction' AND D.[DocumentState] = N'Posted'
 	GROUP BY

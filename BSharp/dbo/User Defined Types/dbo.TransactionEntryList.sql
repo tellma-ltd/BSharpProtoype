@@ -1,9 +1,10 @@
 ﻿CREATE TYPE [dbo].[TransactionEntryList] AS TABLE (
 	[Index]					INT,
+	[TransactionLineIndex]	INT					NOT NULL,
 	[DocumentIndex]			INT					NOT NULL,
 	[Id]					INT,
-	[DocumentId]			INT,
-	[IsSystem]				BIT					NOT NULL DEFAULT 0,
+	[TransactionLineId]		INT,
+	[EntryNumber]			INT,
 	[Direction]				SMALLINT			NOT NULL,
 	[AccountId]				INT		NOT NULL,
 	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
@@ -32,7 +33,7 @@
 
 	[EntityState]			NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
 	PRIMARY KEY ([Index] ASC),
-	INDEX IX_TransactionEntryList_DocumentIndex ([DocumentIndex]),
+	INDEX IX_TransactionEntryList_TransactionLineIndex ([TransactionLineIndex]),
 	CHECK ([Direction] IN (-1, 1)),
 	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
 	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)

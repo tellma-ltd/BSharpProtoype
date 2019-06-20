@@ -75,7 +75,7 @@
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.Documents.sql" />
     <Build Include="dbo\Tables\dbo.Agents.sql" />
-    <Build Include="dbo\Tables\dbo.LineTypeSpecifications.sql" />
+    <Build Include="dbo\Tables\dbo.LineTypesSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
     <Build Include="dbo\Tables\dbo.DocumentAssignments.sql" />
     <Build Include="dbo\Tables\dbo.TransactionLines.sql" />
@@ -90,7 +90,7 @@
     <Build Include="dbo\Tables\dbo.ResponsibilityCenters.sql" />
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
-    <Build Include="dbo\Functions\dbo.fi_Journal.sql" />
+    <Build Include="dbo\Functions\dbo.fi_JournalDetails.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Transactions__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Post.sql" />
@@ -135,7 +135,7 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources_Validate__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.TransactionList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.TransactionWideLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IdList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Save.sql" />
@@ -167,8 +167,8 @@
     <None Include="Provisioning\08_MeasurementUnits.sql" />
     <None Include="Provisioning\012_IfrsNotes.sql" />
     <PostDeploy Include="Provisioning\00_Main.sql" />
-    <None Include="Provisioning\06_LineTypeSpecifications.sql" />
-    <None Include="Provisioning\05_DocumentTypes.sql" />
+    <None Include="Provisioning\05_LineTypeSpecifications.sql" />
+    <None Include="Provisioning\06_DocumentTypes.sql" />
     <Build Include="Security\bll.sql" />
     <Build Include="dbo\Tables\dbo.LineTypes.sql" />
     <Build Include="dbo\Functions\dbo.fe_EndDateTime__StartDateTime_Frequency_Duration.sql" />
@@ -276,11 +276,15 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Delete.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_ProductCategories_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Select.sql" />
-    <Build Include="dbo\Views\dbo.TransactionsEntriesView.sql" />
+    <Build Include="dbo\Views\dbo.TransactionsLinesEntriesDetailsView.sql" />
     <Build Include="dbo\Views\dbo.AccountsBalancesView.sql" />
     <Build Include="dbo\Tables\dbo.RequestLines.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__DeleteWithDescendants.sql" />
     <Build Include="dbo\Tables\dbo.ResourceInstances.sql" />
+    <Build Include="dbo\Views\dbo.TransactionsEntriesSummaryView.sql" />
+    <Build Include="dbo\Functions\dbo.fi_JournalSummary.sql" />
+    <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_TransactionWideLines__Unpivot.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -26,7 +26,7 @@ BEGIN
 			SUM(J.[Direction] * J.[NormalizedMass]) AS [Mass],
 			SUM(J.[Direction] * J.[NormalizedCount]) AS [Count]
 
-		FROM [dbo].[fi_Journal](NULL, @AsOfDate) J
+		FROM [dbo].[fi_JournalDetails](NULL, @AsOfDate) J
 		WHERE J.AccountId IN (SELECT Id FROM InventoriesInTransitAccounts)
 		GROUP BY J.ResourceId
 	)

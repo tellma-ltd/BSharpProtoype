@@ -25,7 +25,7 @@ BEGIN
 			J.ResourceId,
 			SUM(J.[NormalizedCount] * J.[Direction]) AS [Count],
 			SUM(J.[NormalizedMass] * J.[Direction]) AS [Mass]
-		FROM [dbo].[fi_Journal](NULL, @fromDate) J
+		FROM [dbo].[fi_JournalDetails](NULL, @fromDate) J
 		WHERE J.AccountId IN (SELECT Id FROM RawMaterialAccounts)
 		GROUP BY J.ResourceId
 	),
@@ -36,7 +36,7 @@ BEGIN
 			SUM(CASE WHEN J.[Direction] > 0 THEN J.[NormalizedMass] ELSE 0 END) AS MassIn,
 			SUM(CASE WHEN J.[Direction] < 0 THEN J.[NormalizedCount] ELSE 0 END) AS CountOut,			
 			SUM(CASE WHEN J.[Direction] < 0 THEN J.[NormalizedMass] ELSE 0 END) AS MassOut
-		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
+		FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
 		WHERE J.AccountId IN (SELECT Id FROM RawMaterialAccounts)
 		GROUP BY J.ResourceId
 	),

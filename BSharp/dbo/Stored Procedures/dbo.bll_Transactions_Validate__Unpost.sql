@@ -28,7 +28,7 @@ SET NOCOUNT ON;
 		N'Error_Account0IsInactive',
 		A.[Name]
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[DocumentId]
+	JOIN dbo.[TransactionEntries] E ON FE.[Id] = E.[TransactionLineId]
 	JOIN dbo.[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE (A.IsActive = 0);
 

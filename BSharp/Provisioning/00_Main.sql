@@ -21,5 +21,5 @@ SET @UserId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 --EXEC [dbo].[adm_Accounts_Notes__Update];
 --:r .\04_AccountsNotes.sql
 --:r .\05_DocumentTypes.sql
---:r .\06_LineTypeSpecifications.sql
+:r .\05_LineTypeSpecifications.sql
 --:r .\07_AccountSpecifications.sql

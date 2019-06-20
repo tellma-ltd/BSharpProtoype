@@ -25,7 +25,7 @@ BEGIN
 			ResourceId,
 			SUM([NormalizedCount] * [Direction]) AS [Count],
 			SUM([NormalizedMass] * [Direction]) AS [Mass]
-		FROM [dbo].[fi_Journal](NULL, @fromDate)
+		FROM [dbo].[fi_JournalDetails](NULL, @fromDate)
 		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
 		GROUP BY ResourceId
 	),
@@ -36,7 +36,7 @@ BEGIN
 			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedCount] ELSE 0 END) AS CountOut,	
 			SUM(CASE WHEN [Direction] > 0 THEN [NormalizedMass] ELSE 0 END) AS MassIn,
 			SUM(CASE WHEN [Direction] < 0 THEN [NormalizedMass] ELSE 0 END) AS MassOut
-		FROM [dbo].[fi_Journal](@fromDate, @toDate)
+		FROM [dbo].[fi_JournalDetails](@fromDate, @toDate)
 		WHERE AccountId IN (SELECT Id FROM FinishedGoodsAccounts)
 		GROUP BY ResourceId
 	),

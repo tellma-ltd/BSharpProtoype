@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[fi_Journal] (-- SELECT * FROM [dbo].[fi_Journal]('01.01.2015','01.01.2020')
+﻿CREATE FUNCTION [dbo].[fi_JournalDetails] (-- SELECT * FROM [dbo].[fi_Journal]('01.01.2015','01.01.2020')
 	@fromDate Datetime = '2000.01.01', 
 	@toDate Datetime = '2100.01.01'
 ) RETURNS TABLE
@@ -11,12 +11,12 @@ RETURN
 	)
 	SELECT
 		V.[Id],
+		V.[TransactionLineId],
 		V.[DocumentId],
 		V.[DocumentDate],
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
-		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],
@@ -34,7 +34,6 @@ RETURN
 		V.[Mass],
 		V.[Mass] * MU.[BaseAmount] / MU.[UnitAmount] As NormalizedMass,
 		V.[Volume], 
-		--V.[Volume] * VU.[BaseAmount] / VU.[UnitAmount] As NormalizedVolume,
 		V.[Area],
 		V.[Length],
 		V.[Time],
@@ -46,15 +45,9 @@ RETURN
 		V.[AdditionalReference],
 		V.[RelatedResourceId],
 		V.[RelatedAgentId],
-		--V.[RelatedResponsibilityCenterId],
 		V.[RelatedQuantity],
 		V.[RelatedMoneyAmount]
-		--V.[RelatedMass],
-		--V.[RelatedVolume],
-		--V.[RelatedCount],
-		--V.[RelatedTime],
-		--V.[RelatedValue]
-	FROM dbo.[TransactionsEntriesView] V
+	FROM dbo.[TransactionsLinesEntriesDetailsView] V
 	JOIN dbo.Resources R ON V.ResourceId = R.Id
 	JOIN dbo.MeasurementUnits EU ON R.CurrencyId = EU.Id
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id
@@ -73,7 +66,6 @@ RETURN
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
-		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],
@@ -131,7 +123,6 @@ RETURN
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
-		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],
@@ -188,7 +179,6 @@ RETURN
 		V.[SerialNumber],
 		V.[VoucherReference],
 		V.[DocumentType],
-		V.[IsSystem],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],

@@ -12,7 +12,7 @@
 	[VAT]					MONEY,
 	[TOT]					MONEY,
 	-- for employee agreement
-	[AgentAccountId]		INT,
+	[AgentId]				INT,
 	[MonthlyBasicSalary]	MONEY,
 	[HourlyOvertimeRate]	MONEY,
 	[DailyPerDiem]			MONEY,

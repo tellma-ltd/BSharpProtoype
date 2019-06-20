@@ -11,7 +11,7 @@ AS
 	) = 1
 )
 	SELECT
-			J.[DocumentId],
+			J.[TransactionLineId],
 			J.[DocumentType],
 			J.[SerialNumber],
 			J.[DocumentDate],
@@ -49,6 +49,6 @@ AS
 			R.[ResourceLookup2Id],
 			R.[ResourceLookup3Id],
 			R.[ResourceLookup4Id]
-	FROM dbo.fi_Journal(NULL, NULL) J
+	FROM dbo.[fi_JournalDetails](NULL, NULL) J
 	JOIN dbo.Resources R ON J.ResourceId = R.Id
 	WHERE J.IfrsAccountId IN (SELECT Id FROM IfrsInventoryAccounts);

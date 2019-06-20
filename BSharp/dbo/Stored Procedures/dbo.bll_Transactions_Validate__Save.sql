@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Transactions_Validate__Save]
 	@Transactions [dbo].[TransactionList] READONLY,
-	@Lines [dbo].[TransactionLineList] READONLY,
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -20,8 +19,8 @@ SET NOCOUNT ON;
 	-- (FE Check) If Resource = functional currency, the value must match the money amount
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
 	SELECT
-		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST([Index] AS NVARCHAR (255)) + ']',
+		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST([TransactionLineIndex] AS NVARCHAR (255)) + '].Amount' + CAST([EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheAmount0DoesNotMatchTheValue1',
 		[MoneyAmount],
 		[Value]
@@ -51,8 +50,8 @@ SET NOCOUNT ON;
 	-- TODO: Add the condition that Ifrs Note is enforced
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST([TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST([EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteIsRequired'
 	FROM @Entries E
 	JOIN dbo.Accounts A ON E.AccountId = A.Id
@@ -64,8 +63,8 @@ SET NOCOUNT ON;
 	-- Invalid Note Id
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteIsIncompatibleWithAccountClassification0',
 		A.[IfrsAccountId]
 	FROM @Entries E
@@ -78,8 +77,8 @@ SET NOCOUNT ON;
 	-- No expired Ifrs Note
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].IfrsNoteId',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteId0HasExpired',
 		IC.[Label]
 	FROM @Entries E
@@ -91,8 +90,8 @@ SET NOCOUNT ON;
 	-- External Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].ExternalReference',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].ExternalReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -105,8 +104,8 @@ SET NOCOUNT ON;
 	-- Additional Reference is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedReference',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -119,8 +118,8 @@ SET NOCOUNT ON;
 	-- RelatedAgent is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedAgentId',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedAgentId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedAgentIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -132,8 +131,8 @@ SET NOCOUNT ON;
 	-- RelatedResource is required for selected account and direction, 
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
-		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionEntries[' +
-			CAST(E.[Index] AS NVARCHAR (255)) + '].RelatedResourceId',
+		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
+			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedResourceId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedResourceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id

@@ -6,7 +6,7 @@ AS
 	ExpenseJournal AS (
 		SELECT J.[ResponsibilityCenterId], J.[IfrsNoteId], O.[Name], O.[Name2], O.[Name3],
 			SUM(J.[Direction] * J.[Value]) AS [Expense]
-		FROM [dbo].[fi_Journal](@fromDate, @toDate) J
+		FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
 		JOIN dbo.[ResponsibilityCenters] O ON J.[ResponsibilityCenterId] = O.Id
 		WHERE J.[IfrsNoteId] IN (
 			N'CostOfSales',
