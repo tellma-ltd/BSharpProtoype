@@ -3,11 +3,7 @@
 	[Id]						NVARCHAR (255), -- Ifrs Concept
 	[Node]						HIERARCHYID,
 	[ParentNode]				AS [Node].GetAncestor(1),
-/*
-	- Regulatory: Proposed by regulatory entity. We may have different flavors for different countries
-	- Amendment: Added for consistency, must be amended in the iXBRL tool. Mainly for members vs non members issue
-	- Extension: Added for business logic in B#. Is ignored by the iXBRL tool 
-*/
+
 	-- Aggregate means, it does not take direct entries, but rather used for aggregation only
 	-- IsAggergate = True If and only if isLeaf = False. We used IsAggregate instead since
 	-- a leaf is used in computer science to mean a node with no children. So, as we build the tree

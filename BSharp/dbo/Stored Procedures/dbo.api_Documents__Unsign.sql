@@ -8,9 +8,9 @@ BEGIN
 	DECLARE @Ids [dbo].[IdList];
 	-- if all documents are already unsigned, return
 	IF NOT EXISTS(
-		SELECT * FROM [dbo].[Documents]
-		WHERE [Id] IN (SELECT [Id] FROM @Documents)
-		AND [DocumentState] <> N'Draf'
+		SELECT * FROM [dbo].[DocumentSignatures]
+		WHERE [DocumentId] IN (SELECT [Id] FROM @Documents)
+		AND [RevokedById] IS NULL
 	)
 		RETURN;
 
@@ -23,6 +23,15 @@ BEGIN
 		RETURN;
 
 	EXEC [dbo].[dal_Documents__Unsign] @Documents = @Documents;
+	
+	-- get the documents whose state will change
+	DECLARE @TransitionedIds [dbo].[IdWithStateList];
+	/*
+	INSERT INTO @TransitionedIds([Id])
+	EXEC [dbo].[bll_Documents_State__Select]
+	*/
+	IF EXISTS(SELECT * FROM @TransitionedIds)
+		EXEC dal_Documents_State__Update @Entities = @TransitionedIds
 
 	IF (@ReturnEntities = 1)
 	BEGIN

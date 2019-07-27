@@ -11,9 +11,9 @@
 	[ModifiedAt]	DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
 	[ModifiedById]	INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [CK_Permissions_Level] CHECK ([Level] IN (N'Read', N'Create', N'ReadCreate', N'Update', N'Sign')),
-	CONSTRAINT [FK_Permissions_Roles] FOREIGN KEY ([TenantId], [RoleId]) REFERENCES [dbo].[Roles] ([TenantId], [Id]) ON DELETE CASCADE,
-	CONSTRAINT [FK_Permissions_Views] FOREIGN KEY ([TenantId], [ViewId]) REFERENCES [dbo].[Views] ([TenantId], [Id]) ON DELETE CASCADE,
+	CONSTRAINT [CK_Permissions__Level] CHECK ([Level] IN (N'Read', N'Create', N'ReadCreate', N'Update')),--, N'Sign')),
+	CONSTRAINT [FK_Permissions__Roles] FOREIGN KEY ([TenantId], [RoleId]) REFERENCES [dbo].[Roles] ([TenantId], [Id]) ON DELETE CASCADE,
+	CONSTRAINT [FK_Permissions__Views] FOREIGN KEY ([TenantId], [ViewId]) REFERENCES [dbo].[Views] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_Permissions__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Permissions__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

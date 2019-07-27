@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Transactions__Save]
 	@TransactionType NVARCHAR(255),
-	@Transactions [dbo].[TransactionList] READONLY,
+	@Transactions [dbo].[DocumentList] READONLY,
 	@Lines [dbo].[TransactionLineList] READONLY, 
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
@@ -16,19 +16,19 @@ BEGIN
 	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
 	AND [Id] > (
 		SELECT MAX([Id]) FROM dbo.Documents 
-		WHERE [DocumentType] = @TransactionType 
-		AND [DocumentState] <> N'Void'
+		WHERE [DocumentTypeId] = @TransactionType 
+		AND [State] <> N'Void'
 		);
 
 	-- Otherwise, mark as void
 	UPDATE [dbo].[Documents]
-	SET [DocumentState] = N'Void'
+	SET [State] = N'Void'
 	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted');
 
 	--DELETE FROM [dbo].[TransactionLines]
 	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
 
-	DELETE FROM [dbo].[TransactionEntries]
+	DELETE FROM [dbo].[DocumentLineEntries]
 	WHERE [Id] IN (SELECT [Id] FROM @Entries WHERE [EntityState] = N'Deleted');
 
 	INSERT INTO @IndexedIds([Index], [Id])
@@ -38,10 +38,10 @@ BEGIN
 		MERGE INTO [dbo].[Documents] AS t
 		USING (
 			SELECT 
-				[Index], [Id], [DocumentDate], [VoucherReference], [Memo], [Frequency], [Repetitions],
+				[Index], [Id], [DocumentDate], [VoucherNumericReference], [Memo], [Frequency], [Repetitions],
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
 					-- max(Id) per transaction type.
-					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentType] = @TransactionType
+					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentTypeId] = @TransactionType
 				) As [SerialNumber]
 			FROM @Transactions 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -50,7 +50,7 @@ BEGIN
 		THEN
 			UPDATE SET
 				t.[DocumentDate]	= s.[DocumentDate],
-				t.[VoucherReference]= s.[VoucherReference],
+				t.[VoucherNumericReference]= s.[VoucherNumericReference],
 				t.[Memo]			= s.[Memo],
 				t.[Frequency]		= s.[Frequency],
 				t.[Repetitions]		= s.[Repetitions],
@@ -59,10 +59,10 @@ BEGIN
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
 			INSERT (
-				[DocumentDate], [VoucherReference],[Memo],[Frequency],[Repetitions]
+				[DocumentDate], [VoucherNumericReference],[Memo],[Frequency],[Repetitions]
 			)
 			VALUES (
-				s.[DocumentDate], s.[VoucherReference], s.[Memo], s.[Frequency], s.[Repetitions]
+				s.[DocumentDate], s.[VoucherNumericReference], s.[Memo], s.[Frequency], s.[Repetitions]
 			)
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
@@ -90,7 +90,7 @@ BEGIN
 	--	INSERT ([DocumentId], [BaseLineId], [ScalingFactor], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
 	--	VALUES (s.[DocumentId], s.[BaseLineId], s.[ScalingFactor], s.[Memo], @Now, @UserId, @Now, @UserId);
 
-	MERGE INTO [dbo].[TransactionEntries] AS t
+	MERGE INTO [dbo].[DocumentLineEntries] AS t
 	USING (
 		SELECT
 			E.[Id], II.[Id] AS [DocumentId], E.[Direction], E.[AccountId], E.[IfrsNoteId], E.[ResponsibilityCenterId],
@@ -124,15 +124,15 @@ BEGIN
 			t.[ExternalReference]		= s.[ExternalReference],
 			t.[AdditionalReference]		= s.[AdditionalReference],
 			t.[RelatedResourceId]		= s.[RelatedResourceId],
-			t.[RelatedAgentId]			= s.[RelatedAgentId],
+			t.[RelatedAccountId]			= s.[RelatedAgentId],
 			t.[RelatedMoneyAmount]		= s.[RelatedMoneyAmount],
 			t.[ModifiedAt]				= @Now,
 			t.[ModifiedById]			= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([TransactionLineId], [Direction], [AccountId], [IfrsNoteId], [ResponsibilityCenterId],
+		INSERT ([DocumentLineId], [Direction], [AccountId], [IfrsNoteId], [ResponsibilityCenterId],
 				[ResourceId], [InstanceId], [BatchCode], [Quantity],
 				[MoneyAmount], [Mass], [Volume], [Area], [Length], [Time], [Count],  [Value], [Memo],
-				[ExternalReference], [AdditionalReference], [RelatedResourceId], [RelatedAgentId], [RelatedMoneyAmount])
+				[ExternalReference], [AdditionalReference], [RelatedResourceId], [RelatedAccountId], [RelatedMoneyAmount])
 		VALUES (s.[DocumentId], s.[Direction], s.[AccountId], s.[IfrsNoteId], s.[ResponsibilityCenterId],
 				s.[ResourceId], s.[InstanceId], s.[BatchCode], s.[Quantity],
 				s.[MoneyAmount], s.[Mass], s.[Volume], s.[Area], s.[Length], s.[Time], s.[Count], s.[Value], s.[Memo],

@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[DocumentAssignmentsHistory] (
+-- To be filled by a trigger on table DocumentsAssignments
 	[TenantId]		INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]			INT					IDENTITY,
 	[DocumentId]	INT					NOT NULL,

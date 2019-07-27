@@ -11,7 +11,7 @@ BEGIN
 		SUM(J.[RelatedMoneyAmount]) AS [Taxable Amount],
 		J.DocumentDate As [Invoice Date]
 	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
+	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAccountId] = A.Id
 	WHERE J.[IfrsAccountId] = N'CurrentValueAddedTaxReceivables'
 	-- No Ifrs?: J.AccountType = N'CurrentValueAddedTaxReceivables'
 	AND J.Direction = 1

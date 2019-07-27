@@ -13,8 +13,8 @@ RETURN
 		V.[DocumentId],
 		V.[DocumentDate],
 		V.[SerialNumber],
-		V.[VoucherReference],
-		V.[DocumentType],
+		V.[VoucherNumericReference],
+		V.[DocumentTypeId],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsNoteId],
@@ -40,7 +40,7 @@ RETURN
 		V.[ExternalReference],
 		V.[AdditionalReference],
 		V.[RelatedResourceId],
-		V.[RelatedAgentId],
+		V.[RelatedAccountId],
 		V.[RelatedQuantity],
 		V.[RelatedMoneyAmount]
 	FROM dbo.[TransactionsEntriesSummaryView] V

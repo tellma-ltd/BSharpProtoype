@@ -65,7 +65,7 @@ DELETE FROM @AgentsDTO;
 INSERT INTO @AgentsDTO (
 	[Id], [AgentType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], [EntityState])
 SELECT
-	[Id], [PersonType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
+	[Id], [AgentType], [Name], [Code], [IsRelated], [TaxIdentificationNumber], [Address], [Title], [Gender], [BirthDateTime], N'Unchanged'
 FROM [dbo].[Agents]
 WHERE [Name] Like N'%Akra' OR [Name] Like N'Y%';
 

@@ -78,7 +78,7 @@
     <Build Include="dbo\Tables\dbo.LineTypesSpecifications.sql" />
     <Build Include="dbo\Tables\dbo.LocalUsers.sql" />
     <Build Include="dbo\Tables\dbo.DocumentAssignments.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionLines.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentLines.sql" />
     <Build Include="dbo\Tables\dbo.IfrsAccounts.sql" />
     <Build Include="dbo\Tables\dbo.IfrsNotes.sql" />
     <Build Include="dbo\Tables\dbo.Reconciliation.sql" />
@@ -134,7 +134,7 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Select.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources_Validate__Save.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TransactionList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
     <Build Include="dbo\User Defined Types\dbo.TransactionWideLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Select.sql" />
     <Build Include="dbo\User Defined Types\dbo.IdList.sql" />
@@ -194,7 +194,7 @@
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Sign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Sign.sql" />
-    <Build Include="dbo\Tables\dbo.Signatures.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentSignatures.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Unsign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Unsign.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Unsign.sql" />
@@ -225,7 +225,7 @@
     <Build Include="dbo\Stored Procedures\dbo.api_Views__Deactivate.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Views__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Views__Save.sql" />
-    <Build Include="dbo\Tables\dbo.TransactionEntries.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentLineEntries.sql" />
     <Build Include="dbo\User Defined Types\dbo.TransactionEntryList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_MeasurementUnits__Select.sql" />
     <Build Include="dbo\Tables\dbo.RoleMemberships.sql" />
@@ -278,13 +278,18 @@
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Select.sql" />
     <Build Include="dbo\Views\dbo.TransactionsLinesEntriesDetailsView.sql" />
     <Build Include="dbo\Views\dbo.AccountsBalancesView.sql" />
-    <Build Include="dbo\Tables\dbo.RequestLines.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__DeleteWithDescendants.sql" />
     <Build Include="dbo\Tables\dbo.ResourceInstances.sql" />
     <Build Include="dbo\Views\dbo.TransactionsEntriesSummaryView.sql" />
     <Build Include="dbo\Functions\dbo.fi_JournalSummary.sql" />
     <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_TransactionWideLines__Unpivot.sql" />
+    <Build Include="dbo\Tables\dbo.DocumentStatesHistory.sql" />
+    <Build Include="dbo\Tables\dbo.VoucherBooklets.sql" />
+    <Build Include="dbo\Tables\dbo.Workflows.sql" />
+    <Build Include="dbo\Tables\dbo.WorkflowSignatories.sql" />
+    <Build Include="dbo\Tables\dbo.VoucherTypes.sql" />
+    <Build Include="dbo\User Defined Types\dbo.IdWithStateList.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

@@ -11,8 +11,8 @@ AS
 	) = 1
 )
 	SELECT
-			J.[TransactionLineId],
-			J.[DocumentType],
+			J.[DocumentLineId],
+			J.[DocumentTypeId],
 			J.[SerialNumber],
 			J.[DocumentDate],
 			J.[Id],
@@ -38,10 +38,10 @@ AS
 			J.[Time],
 			J.[Value],
 			J.[IfrsNoteId],
-			J.[VoucherReference],
+			J.[VoucherNumericReference],
 			J.[Memo],
 			J.[RelatedResourceId],
-			J.[RelatedAgentId],
+			J.[RelatedAccountId],
 			J.[RelatedMoneyAmount],
 			R.ResourceType,
 			R.[UnitId],

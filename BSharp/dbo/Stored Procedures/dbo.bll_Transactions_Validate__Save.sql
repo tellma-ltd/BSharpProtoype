@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Transactions_Validate__Save]
-	@Transactions [dbo].[TransactionList] READONLY,
+	@Transactions [dbo].[DocumentList] READONLY,
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -44,7 +44,7 @@ SET NOCOUNT ON;
 		N'Error_CannotOnlySaveADocumentInDraftState'
 	FROM @Transactions FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.[DocumentState] <> N'Draft')
+	WHERE (BE.[State] <> N'Draft')
 	
 	-- Note Id is missing when required
 	-- TODO: Add the condition that Ifrs Note is enforced

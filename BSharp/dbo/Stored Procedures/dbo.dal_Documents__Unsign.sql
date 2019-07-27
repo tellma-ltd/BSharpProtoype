@@ -7,15 +7,15 @@ BEGIN
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 	-- if last signed by same user, hard delete the signature
-	DELETE FROM dbo.Signatures
+	DELETE FROM dbo.[DocumentSignatures]
 	WHERE [Id] IN (
-		SELECT Max(Id) FROM dbo.Signatures
+		SELECT Max(Id) FROM dbo.[DocumentSignatures]
 		WHERE DocumentId IN (SELECT [Id] FROM @Documents)
 	)
-	AND [SignedById] = @UserId;
+	AND [ActorId] = @UserId;
 
 	-- else, soft delete the signature
-	UPDATE dbo.Signatures
-	SET [UnsignedAt] = @Now
-	WHERE [SignedById] = @UserId;
+	UPDATE dbo.[DocumentSignatures]
+	SET [RevokedAt] = @Now
+	WHERE [ActorId] = @UserId;
 END;

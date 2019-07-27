@@ -3,6 +3,7 @@
 	[Id]				NVARCHAR (255), -- Ifrs Concept
 	[ParentId]			NVARCHAR (255),
 	[IsAggregate]		BIT					NOT NULL DEFAULT 1,
+-- ForDebit and ForCredit might be concluded from IfrsAccountIfrsNotes table
 --	If [ForDebit] = 1, Note can be used with Debit entries
 	[ForDebit]			BIT					NOT NULL DEFAULT 1,
 --	If [ForCredit] = 1, Note can be used with Credit entries

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[LocalUsers] (
-	[TenantId]			INT							DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
+	[TenantId]			INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]				INT				IDENTITY(1,1),
 	[Name]				NVARCHAR (255)	NOT NULL,
 	[Name2]				NVARCHAR (255),

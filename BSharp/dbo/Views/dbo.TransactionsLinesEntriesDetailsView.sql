@@ -2,12 +2,12 @@
 AS
 	SELECT
 		E.[Id],
-		E.[TransactionLineId],
+		E.[DocumentLineId],
 		L.[DocumentId],
-		D.[DocumentType],
+		D.[DocumentTypeId],
 		D.[SerialNumber],
 		D.[DocumentDate],
-		D.[VoucherReference],
+		D.[VoucherNumericReference],
 		D.[DocumentLookup1Id],
 		D.[DocumentLookup2Id],
 		D.[DocumentLookup3Id],
@@ -41,21 +41,20 @@ AS
 		E.[ExternalReference],
 		E.[AdditionalReference],
 		E.[RelatedResourceId],
-		E.[RelatedAgentId],
+		E.[RelatedAccountId],
 		E.[RelatedQuantity],
 		E.[RelatedMoneyAmount],
-		E.[SignedAt],
-		E.[SignedById],
+
 		E.[CreatedAt],
 		E.[CreatedById],
 		E.[ModifiedAt],
 		E.[ModifiedById]
 	FROM 
-		[dbo].[TransactionEntries] E
-		JOIN [dbo].[TransactionLines] L ON E.TransactionLineId = L.Id
+		[dbo].[DocumentLineEntries] E
+		JOIN [dbo].[DocumentLines] L ON E.[DocumentLineId] = L.Id
 		JOIN [dbo].[Documents] D ON L.[DocumentId] = D.[Id]
-		JOIN dbo.[DocumentTypes] DT ON D.[DocumentType] = DT.[Id]
+		JOIN dbo.[DocumentTypes] DT ON D.[DocumentTypeId] = DT.[Id]
 		JOIN [dbo].[Accounts] A ON E.[AccountId] = A.[Id]
 	WHERE
-		DT.[DocumentCategory] = N'Transaction' AND D.[DocumentState] = N'Posted';
+		D.[State] = N'Posted';
 GO;

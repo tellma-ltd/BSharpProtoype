@@ -7,9 +7,9 @@ AS
 BEGIN
 	SELECT 	
 		[Id],
-		[TransactionLineId],
+		[DocumentLineId],
 		[DocumentDate],
-		[DocumentType],
+		[DocumentTypeId],
 		[SerialNumber],
 		[Direction],
 		[IfrsNoteId],

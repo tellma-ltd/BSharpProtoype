@@ -55,21 +55,22 @@ Produced = Sold + Closing - Opening
 	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_ResponsibilityCenters] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	CONSTRAINT [PK_ResponsibilityCenters] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
+	CONSTRAINT [CK_ResponsibilityCenters__ResponsibilityDomain] CHECK ([ResponsibilityDomain] IN (N'Investment', N'Profit', N'Revenue', N'Cost')),
 	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
 	CONSTRAINT [FK_ResponsibilityCenters__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_ResponsibilityCenters__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name]
-  ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name] ASC);
+  ON [dbo].[ResponsibilityCenters]([TenantId], [Name]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name2]
-  ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([TenantId], [Name2]) WHERE [Name2] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name3]
-  ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Name3] ASC) WHERE [Name3] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([TenantId], [Name3]) WHERE [Name3] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Code]
-  ON [dbo].[ResponsibilityCenters]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
 GO

@@ -10,9 +10,9 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + ']',
 		N'Error_TheDocumentIsIn0State',
-		BE.[DocumentState]
+		BE.[State]
 	FROM @Entities FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
-	WHERE (BE.[DocumentState] <> N'Draft');
+	WHERE (BE.[State] <> N'Draft');
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);

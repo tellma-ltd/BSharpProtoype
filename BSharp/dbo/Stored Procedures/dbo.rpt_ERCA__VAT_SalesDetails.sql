@@ -9,6 +9,6 @@ SELECT
 	R.[Name] As [Description]
 FROM dbo.[fi_JournalDetails](@fromDate, @toDate) J
 LEFT JOIN dbo.Resources R ON J.RelatedResourceId = R.Id 
-LEFT JOIN dbo.Agents A ON J.RelatedAgentId = A.Id
+LEFT JOIN dbo.Agents A ON J.[RelatedAccountId] = A.Id
 WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
 GO;

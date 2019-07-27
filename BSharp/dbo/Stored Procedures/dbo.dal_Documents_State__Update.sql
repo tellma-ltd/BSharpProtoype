@@ -1,18 +1,17 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents_State__Update]
-	@Entities [dbo].[IndexedIdList] READONLY,
+	@Entities [dbo].[IdWithStateList] READONLY,
 	@State NVARCHAR (255)
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
-	UPDATE dbo.Documents
+	UPDATE D
 	SET
-		[DocumentState] = @State,
+		[State] = E.[State],
 		ModifiedAt = @Now,
 		ModifiedById = @UserId
-	WHERE [Id] IN (
-		SELECT [Id] FROM @Entities
-	)
-	AND [DocumentState] <> @State;
+	FROM dbo.Documents D
+	JOIN @Entities E ON D.Id = E.[Id]
+	Where D.[State] <> E.[State];
 END;

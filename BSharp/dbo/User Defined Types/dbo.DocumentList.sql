@@ -1,10 +1,13 @@
-﻿CREATE TYPE [dbo].[TransactionList] AS TABLE (
+﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
 	[Index]									INT,
 	[Id]									INT,
-	[DocumentType]							NVARCHAR (255)		NOT NULL, -- selected when inserted. Cannot update.
+	[DocumentTypeId]						NVARCHAR (255)		NOT NULL, -- selected when inserted. Cannot update.
 	[DocumentDate]							DATE				NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
-	[VoucherTypeId]							INT,
-	[VoucherReference]						NVARCHAR (255),		-- Overridden by the one in entries. Useful when operating in paper-first mode.
+	[State]									NVARCHAR (255)		NOT NULL DEFAULT N'Draft', 
+	[EvidenceTypeId]						NVARCHAR(255)		NOT NULL,
+	[VoucherBookletId]						INT, -- each range might be dedicated for a special purpose
+	[VoucherNumericReference]				INT, -- must fall between RangeStarts and RangeEnds of the booklet
+	[BlobName]								NVARCHAR(255),		-- for attachments including videos, images, and audio messages
 	[DocumentLookup1Id]						INT, -- e.g., cash machine serial in the case of a sale
 	[DocumentLookup2Id]						INT,
 	[DocumentLookup3Id]						INT,
@@ -20,10 +23,10 @@
 	[EmployeeAccountIsCommon]				BIT				DEFAULT 1,
 	[CurrencyId]							INT, 
 	[CurrencyIsCommon]						BIT				DEFAULT 1,
-	[SourceCustodianAccountId]				INT, 
-	[SourceCustodianAccountIsCommon]		BIT				DEFAULT 1,
-	[DestinationCustodianAccountId]			INT, 
-	[DestinationCustodianAccountIsCommon]	BIT				DEFAULT 1,
+	[SourceStockAccountId]					INT, 
+	[SourceStockAccountIdIsCommon]			BIT				DEFAULT 1,
+	[DestinationStockAccountId]				INT, 
+	[DestinationStockAccountIdIsCommon]		BIT				DEFAULT 1,
 	[InvoiceReference]						NVARCHAR (255),
 	[InvoiceReferenceIsCommon]				BIT				DEFAULT 1,
 

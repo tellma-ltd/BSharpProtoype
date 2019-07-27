@@ -13,7 +13,7 @@ SET NOCOUNT ON;
 	FROM @Entities
 	WHERE [Id] IN (
 		SELECT [Id] FROM [dbo].[Documents]
-		WHERE [DocumentState] <> N'Draft'
+		WHERE [State] <> N'Draft'
 	);
 
 	-- Cannot post with no entries
@@ -23,7 +23,7 @@ SET NOCOUNT ON;
 		N'Error_TheTransactionHasNoEntries'
 	FROM @Entities 
 	WHERE [Id] NOT IN (
-		SELECT [TransactionLineId] FROM dbo.[TransactionEntries]
+		SELECT [DocumentLineId] FROM dbo.[DocumentLineEntries]
 	);
 
 	-- Cannot post a non-balanced transaction
@@ -33,7 +33,7 @@ SET NOCOUNT ON;
 		N'Error_TransactionHasDebitCreditDifference0',
 		SUM([Direction] * [Value])
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[TransactionLineId]
+	JOIN dbo.[DocumentLineEntries] TE ON FE.[Id] = TE.[DocumentLineId]
 	GROUP BY FE.[Index]
 	HAVING SUM([Direction] * [Value]) <> 0;
 
@@ -44,7 +44,7 @@ SET NOCOUNT ON;
 		N'Error_TheAccount0IsInactive',
 		A.[Name]
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[TransactionLineId]
+	JOIN dbo.[DocumentLineEntries] TE ON FE.[Id] = TE.[DocumentLineId]
 	JOIN dbo.[Accounts] A ON TE.[AccountId] = A.[Id]
 	WHERE (A.[IsActive] = 0);
 
@@ -55,7 +55,7 @@ SET NOCOUNT ON;
 		N'Error_TheResponsibilityCenter0IsInactive',
 		RC.[Name]
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[TransactionLineId]
+	JOIN dbo.[DocumentLineEntries] TE ON FE.[Id] = TE.[DocumentLineId]
 	JOIN dbo.[ResponsibilityCenters] RC ON TE.ResponsibilityCenterId = RC.[Id]
 	WHERE (RC.[IsActive] = 0);
 
@@ -66,7 +66,7 @@ SET NOCOUNT ON;
 		N'Error_TheResource0IsInactive',
 		R.[Name]
 	FROM @Entities FE
-	JOIN dbo.[TransactionEntries] TE ON FE.[Id] = TE.[TransactionLineId]
+	JOIN dbo.[DocumentLineEntries] TE ON FE.[Id] = TE.[DocumentLineId]
 	JOIN dbo.[Resources] R ON TE.ResponsibilityCenterId = R.[Id]
 	WHERE (R.[IsActive] = 0);
 

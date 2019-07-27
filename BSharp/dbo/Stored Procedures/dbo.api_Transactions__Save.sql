@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Transactions__Save]
-	@Transactions [dbo].[TransactionList] READONLY,
+	@Transactions [dbo].[DocumentList] READONLY,
 	@WideLines [dbo].[TransactionWideLineList] READONLY, 
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1

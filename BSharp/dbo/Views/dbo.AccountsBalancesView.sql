@@ -10,10 +10,10 @@ AS
 		SUM(E.[Direction] * E.[Count]) AS [Count],
 		SUM(E.[Direction] * E.[Time]) AS [Time],
 		SUM(E.[Direction] * E.[Value]) AS [Value]
-	FROM dbo.[TransactionEntries] E
-	JOIN dbo.[Documents] D ON E.[TransactionLineId] = D.[Id]
-	JOIN dbo.[DocumentTypes] DT ON D.[DocumentType] = DT.[Id]
-	WHERE DT.[DocumentCategory] = N'Transaction' AND D.[DocumentState] = N'Posted'
+	FROM dbo.[DocumentLineEntries] E
+	JOIN dbo.[Documents] D ON E.[DocumentLineId] = D.[Id]
+	JOIN dbo.[DocumentTypes] DT ON D.[DocumentTypeId] = DT.[Id]
+	WHERE D.[State] = N'Posted'
 	GROUP BY
 		D.[TenantId], E.[AccountId], E.[ResponsibilityCenterId],
 		E.[ResourceId], E.[InstanceId], E.[BatchCode]

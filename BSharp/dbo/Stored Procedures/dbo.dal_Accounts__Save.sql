@@ -18,7 +18,7 @@ SET NOCOUNT ON;
 				[Index], [Id], [CustomClassificationId], [IfrsAccountId],
 				[Name], [Name2], [Name3], [Code], [PartyReference], [AgentId],
 				[IfrsNoteIsFixed], [IfrsNoteId],
-				[ResponsibilityCenterIsFixed], [ResponsibilityCenterId],
+				[ResponsibilityCenterId],
 				[ResourceIsFixed], [ResourceId]
 			FROM @Entities 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
@@ -36,7 +36,6 @@ SET NOCOUNT ON;
 				t.[AgentId]						= s.[AgentId],
 				t.[IfrsNoteIsFixed]				= s.[IfrsNoteIsFixed],
 				t.[IfrsNoteId]					= s.[IfrsNoteId],
-				t.[ResponsibilityCenterIsFixed] = s.[ResponsibilityCenterIsFixed],
 				t.[ResponsibilityCenterId]		= s.[ResponsibilityCenterId],
 				t.[ResourceIsFixed]				= s.[ResourceIsFixed],
 				t.[ResourceId]					= s.[ResourceId],
@@ -45,11 +44,11 @@ SET NOCOUNT ON;
 		WHEN NOT MATCHED THEN
 			INSERT ([CustomClassificationId], [IfrsAccountId],
 				[Name], [Name2], [Name3], [Code], [PartyReference], [AgentId], [IfrsNoteIsFixed], [IfrsNoteId],
-				[ResponsibilityCenterIsFixed], [ResponsibilityCenterId],
+				[ResponsibilityCenterId],
 				[ResourceIsFixed], [ResourceId])
 			VALUES (s.[CustomClassificationId], s.[IfrsAccountId],
 				s.[Name], s.[Name2], s.[Name3], s.[Code], s.[PartyReference], s.[AgentId], s.[IfrsNoteIsFixed], s.[IfrsNoteId],
-				s.[ResponsibilityCenterIsFixed], s.[ResponsibilityCenterId], 
+				s.[ResponsibilityCenterId], 
 				s.[ResourceIsFixed], s.[ResourceId])
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x

@@ -10,7 +10,7 @@ BEGIN
 	IF NOT EXISTS(
 		SELECT * FROM [dbo].[Documents]
 		WHERE [Id] IN (SELECT [Id] FROM @Entities)
-		AND [DocumentState] <> N'Draft'
+		AND [State] <> N'Draft'
 	)
 		RETURN;
 

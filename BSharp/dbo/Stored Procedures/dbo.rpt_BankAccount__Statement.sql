@@ -7,20 +7,20 @@ AS
 BEGIN
 	SELECT 	
 		[Id],
-		[TransactionLineId],
+		[DocumentLineId],
 		[DocumentDate],
-		[DocumentType],
+		[DocumentTypeId],
 		[SerialNumber],
 		[Direction],
 		[IfrsNoteId],
 		[ResponsibilityCenterId],
 		[MoneyAmount],
 		[Value],
-		[VoucherReference] As [CPV_CRV_Ref],
+		[VoucherNumericReference] As [CPV_CRV_Ref],
 		[Memo],
 		[ExternalReference] As [CheckRef],
 		[RelatedResourceId] As [OtherPartyCurrency],
-		[RelatedAgentId] As [OtherParty],
+		[RelatedAccountId] As [OtherParty],
 		[RelatedMoneyAmount] As [OtherPartyAmount]
 	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate)
 	WHERE [AccountId] = @AccountId;

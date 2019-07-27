@@ -33,6 +33,5 @@
 	CONSTRAINT [PK_ResourceInstances] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [FK_ResourceInstances__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_ResourceInstances__ModifiedById]	FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
-
 );
 GO;

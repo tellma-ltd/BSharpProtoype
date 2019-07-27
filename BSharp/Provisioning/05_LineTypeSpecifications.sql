@@ -9,11 +9,11 @@ INSERT @LineTypes ([Id]) VALUES
 
 	-- cash payments and receipts are assumed to be in the transaction currency
 	-- any currency conversions, bank fees, are to be added by a manual JV tab
-	(N'CashReceipt.Functional'),			-- [received from:RelatedAgentAccount], [currency], amount, received in:AgentAccount, details:RelatedResource, memo
+	(N'CashReceipt.Functional'),			-- [received from:RelatedAccountAccount], [currency], amount, received in:AgentAccount, details:RelatedResource, memo
 		(N'CheckReceipt.Functional'),		-- check receipt in hand
 		(N'BankReceipt.Functional'),		-- direct deposit in bank	
 
-	(N'CashIssue.Functional'),				-- [paid to:RelatedAgentAccount], [currency], amount, paid from:AgentAccount, details:RelatedResource, memo
+	(N'CashIssue.Functional'),				-- [paid to:RelatedAccountAccount], [currency], amount, paid from:AgentAccount, details:RelatedResource, memo
 		(N'CheckIssueToBeneficiary.Functional'),			-- existing or new
 		(N'BankIssue.Functional'),			-- direct transfer
 
@@ -36,7 +36,7 @@ INSERT @LineTypes ([Id]) VALUES
 	-- any currency conversions is to be added by a manual JV tab
 	(N'CustomerTaxWithholding'),			-- [customer], [currency], [invoice], taxable amount, percent withheld, {amount withheld}
 
-	(N'GoodIssueWithInvoice'),				-- [customer], [currency], [warehouse], [invoice], [machine], item, qty, unit price, {total price}, percent VAT, {VAT}, {line total}
+	(N'GoodIssueWithInvoice.Functional'),	-- [customer], [currency], [warehouse], [invoice], [machine], item, qty, unit price, {total price}, percent VAT, {VAT}, {line total}
 	(N'ServiceIssueWithInvoice'),			-- [customer], [currency], [invoice], [machine], item, qty, unit price, {total price}, percent VAT, {VAT}, {line total}
 	(N'LeaseOutIssueWithInvoice'),			-- [customer], [currency], [invoice], [machine], lease starts, ppe, qty, {lease ends}, unit price, {total price}, percent VAT, {VAT}, {line total}
 	(N'GoodServiceInvoiceWithoutIssue'),	-- [customer], [currency], [invoice], [machine], item, qty, unit price, {total price}, percent VAT, {VAT}, {line total}
@@ -71,15 +71,13 @@ INSERT @LineTypes ([Id]) VALUES
 	
 	-- cash payments and receipts are assumed to be in the transaction currency
 	-- any currency conversions, bank fees, are to be added by a manual JV tab
-	(N'GoodReceipt'),						-- [received from:RelatedAgentAccount], item, Qty, received in:[ToCustodianAccount:AgentAccount], Batch:RelatedResource, memo
-	(N'GoodIssue'),							-- [issued to:RelatedAgentAccount], item, Qty, issued from:[FromCustodianAccount:AgentAccount], Batch:RelatedResource, memo
+	(N'GoodReceipt'),						-- [received from:RelatedAccountAccount], item, Qty, received in:[ToCustodianAccount:AgentAccount], Batch:RelatedResource, memo
+	(N'GoodIssue'),							-- [issued to:RelatedAccountAccount], item, Qty, issued from:[FromCustodianAccount:AgentAccount], Batch:RelatedResource, memo
 	(N'GoodConsumption'),					-- [responsibility center], item, qty, [consumed by:AgentAccount]
 	(N'GoodTransfer'),						-- [FromCustodyAccount],[ToCustodyAccount], item, qty, batch details
-	(N'LaborReceipt'),						-- [received from:RelatedAgentAccount], item, Qty, received in:[ToCustodianAccount:AgentAccount], Batch:RelatedResource, memo
-	(N'LaborIssue'),						-- [issued to:RelatedAgentAccount], item, Qty, issued from:[FromCustodianAccount:AgentAccount], Batch:RelatedResource, memo
-	(N'LaborConsumption')					-- [responsibility center], item, qty, [consumed by:AgentAccount]
-	;
-
+	(N'LaborReceipt'),						-- [received from:RelatedAccountAccount], item, Qty, received in:[ToCustodianAccount:AgentAccount], Batch:RelatedResource, memo
+	(N'LaborIssue'),						-- [issued to:RelatedAccountAccount], item, Qty, issued from:[FromCustodianAccount:AgentAccount], Batch:RelatedResource, memo
+	(N'LaborConsumption');					-- [responsibility center], item, qty, [consumed by:AgentAccount]
 DECLARE @WideLineTypesSpecifications TABLE (
 	[LineTypeId]					NVARCHAR (255) PRIMARY KEY,
 
@@ -122,33 +120,33 @@ DECLARE @WideLineTypesSpecifications TABLE (
 	[QuantityIsVisible1]			BIT				NOT NULL DEFAULT 0,
 	[QuantityExpression1]			NVARCHAR (255),
 	[QuantityEntryNumber1]			INT,
-	[Quantity1]						VTYPE,
+	--[Quantity1]						VTYPE,
 
-	[MoneyAmountIsVisible1]			BIT				NOT NULL DEFAULT 0,
+	[MoneyAmountIsVisible1]			BIT				DEFAULT 0,
 	[MoneyAmountExpression1]		NVARCHAR (255),
 	[MoneyAmountEntryNumber1]		INT,
 
-	[MassIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[MassIsVisible1]				BIT				DEFAULT 0,
 	[MassExpression1]				NVARCHAR (255),
 	[MassEntryNumber1]				INT,
 
-	[VolumeIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[VolumeIsVisible1]				BIT				DEFAULT 0,
 	[VolumeExpression1]				NVARCHAR (255),
 	[VolumeEntryNumber1]			INT,
 
-	[AreaIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[AreaIsVisible1]				BIT				DEFAULT 0,
 	[AreaExpression1]				NVARCHAR (255),
 	[AreaEntryNumber1]				INT,
 
-	[LengthIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[LengthIsVisible1]				BIT				DEFAULT 0,
 	[LengthExpression1]				NVARCHAR (255),
 	[LengthEntryNumber1]			INT,
 
-	[TimeIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[TimeIsVisible1]				BIT				DEFAULT 0,
 	[TimeExpression1]				NVARCHAR (255),
 	[TimeEntryNumber1]				INT,
 
-	[CountIsVisible1]				BIT				NOT NULL DEFAULT 0,
+	[CountIsVisible1]				BIT				DEFAULT 0,
 	[CountExpression1]				NVARCHAR (255),
 	[CountEntryNumber1]				INT,
 	[Count1]						INT,
@@ -157,7 +155,7 @@ DECLARE @WideLineTypesSpecifications TABLE (
 	[ValueExpression1]				NVARCHAR (255),
 	[ValueEntryNumber1]				INT,
 
-	[MemoIsVisible1]				BIT					NOT NULL DEFAULT 0,
+	[MemoIsVisible1]				BIT				NOT NULL DEFAULT 0,
 	[MemoExpression1]				NVARCHAR (255),
 	[MemoEntryNumber1]				INT,
 
@@ -171,9 +169,9 @@ DECLARE @WideLineTypesSpecifications TABLE (
 
 	[RelatedResourceId1]			INT, -- Good, Service, Labor, Machine usage
 
-	[RelatedAgentIsVisible1]		BIT				NOT NULL DEFAULT 0,
-	[RelatedAgentExpression1]		NVARCHAR (255),
-	[RelatedAgentEntryNumber1]		INT,
+	[RelatedAccountIsVisible1]		BIT				NOT NULL DEFAULT 0,
+	[RelatedAccountExpression1]		NVARCHAR (255),
+	[RelatedAccountEntryNumber1]		INT,
 		
 	[RelatedQuantity1]				MONEY ,			-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount1]			MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
@@ -217,33 +215,33 @@ DECLARE @WideLineTypesSpecifications TABLE (
 	[QuantityIsVisible2]			BIT				NOT NULL DEFAULT 0,
 	[QuantityExpression2]			NVARCHAR (255),
 	[QuantityEntryNumber2]			INT,
-	[Quantity2]						VTYPE,
+--	[Quantity2]						VTYPE,
 
 	[MoneyAmountIsVisible2]			BIT				NOT NULL DEFAULT 0,
 	[MoneyAmountExpression2]		NVARCHAR (255),
 	[MoneyAmountEntryNumber2]		INT,
 
-	[MassIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[MassIsVisible2]				BIT,
 	[MassExpression2]				NVARCHAR (255),
 	[MassEntryNumber2]				INT,
 
-	[VolumeIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[VolumeIsVisible2]				BIT,
 	[VolumeExpression2]				NVARCHAR (255),
 	[VolumeEntryNumber2]			INT,
 
-	[AreaIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[AreaIsVisible2]				BIT,
 	[AreaExpression2]				NVARCHAR (255),
 	[AreaEntryNumber2]				INT,
 
-	[LengthIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[LengthIsVisible2]				BIT,
 	[LengthExpression2]				NVARCHAR (255),
 	[LengthEntryNumber2]			INT,
 
-	[TimeIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[TimeIsVisible2]				BIT,
 	[TimeExpression2]				NVARCHAR (255),
 	[TimeEntryNumber2]				INT,
 
-	[CountIsVisible2]				BIT				NOT NULL DEFAULT 0,
+	[CountIsVisible2]				BIT,
 	[CountExpression2]				NVARCHAR (255),
 	[CountEntryNumber2]				INT,
 	[Count2]						INT,
@@ -266,12 +264,12 @@ DECLARE @WideLineTypesSpecifications TABLE (
 
 	[RelatedResourceId2]			INT, -- Good, Service, Labor, Machine usage
 
-	[RelatedAgentIsVisible2]		BIT				NOT NULL DEFAULT 0,
-	[RelatedAgentExpression2]		NVARCHAR (255),
-	[RelatedAgentEntryNumber2]		INT,
+	[RelatedAccountIsVisible2]		BIT				NOT NULL DEFAULT 0,
+	[RelatedAccountExpression2]		NVARCHAR (255),
+	[RelatedAccountEntryNumber2]		INT,
 
 	[RelatedQuantity2]				MONEY ,			-- used in Tax accounts, to store the quantiy of taxable item
-	[RelatedMoneyAmount2]			MONEY 				NOT NULL DEFAULT 0 -- e.g., amount subject to tax
+	[RelatedMoneyAmount2]			MONEY 			NOT NULL DEFAULT 0 -- e.g., amount subject to tax
 );
 -- ManualLine
 INSERT INTO @WideLineTypesSpecifications (
@@ -289,12 +287,16 @@ INSERT INTO @WideLineTypesSpecifications (
 	N'ManualLine',
 	1, N'Specified',
 	1, N'Specified',
+	NULL, N'Specified', -- Ifrs Note, depends on Account
 	1, N'Specified',
 	1, N'Specified',
 	1, N'Specified',
-	1, N'Specified',
-	1, N'Specified',
-	1, N'Specified',
+	-- additional resource properties (money amount, mass, volume, area, length, ...)
+	-- are either not defined, defined at a rate set by resource, or specified by user.
+	-- if not defined, they will be invisible. If defined at a rate set by resource, they will be readonly
+	-- if specified by user, they will be editable.
+	NULL, N'Specified', -- Money amount, depends on resource
+	NULL, N'Specified', -- Mass, depends on resource
 	1, N'Specified'
 );
 -- CashReceipt.Functional
@@ -309,13 +311,13 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1]
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1]
 ) VALUES (
 	N'CashReceipt.Functional', 
 	0, N'Constant', +1,
 	1, N'Specified', N'CashOnHand',
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 
+	0, N'!Account.ResponsibilityCenterId', 
 	0, N'Constant', dbo.fn_FunctionalCurrency(), -- Currency
 	1, N'Specified', -- Quantity
 	0, N'!Quantity', 1,
@@ -332,27 +334,27 @@ INSERT INTO @WideLineTypesSpecifications (
 	[ResponsibilityCenterIdIsVisible1], [ResponsibilityCenterIdExpression1], [ResponsibilityCenterIdEntryNumber1],
 	[ResourceIdIsVisible1], [ResourceIdExpression1], [ResourceId1],
 	[InstanceIdIsVisible1], [InstanceIdExpression1],
-	[QuantityIsVisible1], [QuantityExpression1], [Quantity1],
+	[QuantityIsVisible1], [QuantityExpression1], [QuantityEntryNumber1],
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[CountIsVisible1], [CountExpression1], [Count1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1],
 	[ExternalReferenceIsVisible1], [ExternalReferenceExpression1], [ExternalReferenceEntryNumber1]
 ) VALUES (
 	N'CheckReceipt.Functional', 
 	0, N'Constant', 1, -- Direction
 	1, N'Specified', N'BalancesWithBanks', -- Account
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,  -- RC
+	0, N'!Account.ResponsibilityCenterId', 1,  -- RC
 	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'SpecifiedNew', -- Check details
-	0, N'Constant', 1, -- Quantity
+	0, N'!Instance.Amount', 1, -- Quantity
 	0, N'!Instance.Amount', 1, -- Money Quantity
 	0, N'Constant', 1, -- ONE Check
 	0, N'!Instance.Amount', 1, -- Value
 	1, N'Specified', -- Memo
-	1, N'Specified', -- Relared Agent
+	1, N'Specified', -- Relared Account
 	0, N'!Instance.Code', 1
 );
 --		BankReceipt.Functional
@@ -367,14 +369,14 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1],
 	[ExternalReferenceIsVisible1], [ExternalReferenceExpression1]
 ) VALUES (
 	N'BankReceipt.Functional', 
 	0, N'Constant', 1,
 	1, N'Specified', N'BalancesWithBanks',
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
+	0, N'!Account.ResponsibilityCenterId', 1,
 	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'Specified', -- Quantity
 	0, N'!Quantity', 1,
@@ -395,14 +397,14 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1]
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1]
 )	
 VALUES (
 	N'CashIssue.Functional', 
 	0, N'Constant', -1,
 	1, N'Specified', N'CashOnHand',
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 
+	0, N'!Account.ResponsibilityCenterId', 
 	0, N'Constant', dbo.fn_FunctionalCurrency(), -- Currency
 	1, N'Specified', -- Quantity
 	0, N'!Quantity', 1,
@@ -424,7 +426,7 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1],
 	[ExternalReferenceIsVisible1], [ExternalReferenceExpression1]
 )	
 VALUES (
@@ -432,9 +434,9 @@ VALUES (
 	0, N'Constant', -1, -- Direction
 	1, N'Specified', N'BalancesWithBanks', -- Account
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1, 
+	0, N'!Account.ResponsibilityCenterId', 1, 
 	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
-	1, N'Specified', -- Quantity: TODO: 1 or ?
+	1, N'Specified', -- Quantity: Amount
 	0, N'!Quantity', 1, -- Money Quantity
 	0, N'!Quantity', 1, -- Value
 	1, N'Specified',
@@ -453,7 +455,7 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1],
 	[ExternalReferenceIsVisible1], [ExternalReferenceExpression1]
 )	
 VALUES (
@@ -461,7 +463,7 @@ VALUES (
 	0, N'Constant', -1,
 	1, N'Specified', N'BalancesWithBanks',
 	1, N'Specified', -- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
+	0, N'!Account.ResponsibilityCenterId', 1,
 	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'Specified', -- Quantity
 	0, N'!Quantity', 1,
@@ -482,7 +484,7 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1], [RelatedAgentEntryNumber1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1], [RelatedAccountEntryNumber1],
 
 	[DirectionIsVisible2], [DirectionExpression2], [Direction2],
 	[AccountIdIsVisible2], [AccountIdExpression2], [AccountIdFilter2],
@@ -493,31 +495,31 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible2], [MoneyAmountExpression2], [MoneyAmountEntryNumber2],
 	[ValueIsVisible2], [ValueExpression2], [ValueEntryNumber2],
 	[MemoIsVisible2], [MemoExpression2], [MemoEntryNumber2],
-	[RelatedAgentIsVisible2], [RelatedAgentExpression2], [RelatedAgentEntryNumber2]
+	[RelatedAccountIsVisible2], [RelatedAccountExpression2], [RelatedAccountEntryNumber2]
 )	
 VALUES (
 	N'CashTransferToBank.Functional', 
 	0, N'Constant', 1, -- Direction
 	1, N'Specified', N'BalancesWithBanks', -- Account
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 1,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'Specified', -- Quantity
 	0, N'!Quantity', 1, -- Money Amount
 	0, N'!Quantity', 1, -- Value
 	1, N'Specified', -- Memo
-	0, N'!Account.Agent', 2, -- Related Agent
+	0, N'!Account', 2, -- Related Agent
 
 	0, N'Constant', -1, --  Direction
 	1, N'Specified', N'CashOnHand', -- Account
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 2,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 2,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	0, N'!Quantity', 1,
 	0, N'!Quantity', 1,
 	0, N'!Quantity', 1,
 	0, N'!Memo', 1,
-	0, N'!Account.Agent', 1
+	0, N'!Account', 1
 )
 --		BankTransferToBank.Functional
 INSERT INTO @WideLineTypesSpecifications (
@@ -531,7 +533,7 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1], [RelatedAgentEntryNumber1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1], [RelatedAccountEntryNumber1],
 
 	[DirectionIsVisible2], [DirectionExpression2], [Direction2],
 	[AccountIdIsVisible2], [AccountIdExpression2], [AccountIdFilter2],
@@ -542,31 +544,31 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible2], [MoneyAmountExpression2], [MoneyAmountEntryNumber2],
 	[ValueIsVisible2], [ValueExpression2], [ValueEntryNumber2],
 	[MemoIsVisible2], [MemoExpression2], [MemoEntryNumber2],
-	[RelatedAgentIsVisible2], [RelatedAgentExpression2], [RelatedAgentEntryNumber2]
+	[RelatedAccountIsVisible2], [RelatedAccountExpression2], [RelatedAccountEntryNumber2]
 )	
 VALUES (
 	N'BankTransferToBank.Functional', 
 	0, N'Constant', 1,
 	1, N'Specified', N'BalancesWithBanks', -- Destination
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 1,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'Specified', -- Amount
 	0, N'!Quantity', 1,
 	0, N'!Quantity', 1,
 	1, N'Specified', -- memo
-	0, N'!Account.Agent', 2,
+	0, N'!Account', 2,
 
 	0, N'Constant', -1,
 	1, N'Specified', N'BalancesWithBanks', -- Source
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 2,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 2,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	0, N'!Quantity', 1,
 	0, N'!Quantity', 1,
 	0, N'!Quantity', 1,
 	0, N'!Memo', 1,
-	0, N'!Account.Agent', 1
+	0, N'!Account', 1
 )
 --		CheckTransferToBank.Functional
 INSERT INTO @WideLineTypesSpecifications (
@@ -580,7 +582,7 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1], [RelatedAgentEntryNumber1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1], [RelatedAccountEntryNumber1],
 	[ExternalReferenceIsVisible1], [ExternalReferenceExpression1],[ExternalReferenceEntryNumber1],
 
 	[DirectionIsVisible2], [DirectionExpression2], [Direction2],
@@ -589,39 +591,39 @@ INSERT INTO @WideLineTypesSpecifications (
 	[ResponsibilityCenterIdIsVisible2], [ResponsibilityCenterIdExpression2], [ResponsibilityCenterIdEntryNumber2],
 	[ResourceIdIsVisible2], [ResourceIdExpression2], [ResourceId2],
 	[InstanceIdIsVisible2], [InstanceIdExpression2],
-	[QuantityIsVisible2], [QuantityExpression2], [Quantity2],
+	[QuantityIsVisible2], [QuantityExpression2], [QuantityEntryNumber2],
 	[MoneyAmountIsVisible2], [MoneyAmountExpression2], [MoneyAmountEntryNumber2],
 	[CountIsVisible2], [CountExpression2], [Count2],
 	[ValueIsVisible2], [ValueExpression2], [ValueEntryNumber2],
 	[MemoIsVisible2], [MemoExpression2], [MemoEntryNumber2],
-	[RelatedAgentIsVisible2], [RelatedAgentExpression2], [RelatedAgentEntryNumber2]
+	[RelatedAccountIsVisible2], [RelatedAccountExpression2], [RelatedAccountEntryNumber2]
 )	
 VALUES (
 	N'CheckTransferToBank.Functional', 
 	0, N'Constant', 1,
 	1, N'Specified', N'BalancesWithBanks', -- Destination
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 1,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	0, N'!Instance.Amount', 2, -- Amount
 	0, N'!Instance.Amount', 2,
 	0, N'!Instance.Amount', 2,
 	1, N'Specified', -- memo
-	0, N'!Account.Agent', 2,
+	0, N'!Account', 2,
 	0, N'!Instance.Code', 2,
 
 	0, N'Constant', -1,
 	1, N'Specified', N'CashOnHand', -- Source
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 2,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 2,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'SpecifiedExisting',
-	0, N'Constant', 1,
+	0, N'!Instance.Amount', 2,
 	0, N'!Instance.Amount', 2,
 	0, N'Constant', 1,
 	0, N'!Instance.Amount', 2,
 	0, N'!Memo', 1,
-	0, N'!Account.Agent', 1
+	0, N'!Account', 1
 )
 --		CheckTransferToCustody (e.g., to Purchasing)
 INSERT INTO @WideLineTypesSpecifications (
@@ -632,12 +634,12 @@ INSERT INTO @WideLineTypesSpecifications (
 	[ResponsibilityCenterIdIsVisible1], [ResponsibilityCenterIdExpression1], [ResponsibilityCenterIdEntryNumber1],
 	[ResourceIdIsVisible1], [ResourceIdExpression1], [ResourceId1],
 	[InstanceIdIsVisible1], [InstanceIdExpression1],
-	[QuantityIsVisible1], [QuantityExpression1], [Quantity1],
+	[QuantityIsVisible1], [QuantityExpression1], [QuantityEntryNumber1],
 	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
 	[CountIsVisible1], [CountExpression1], [Count1],
 	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
 	[MemoIsVisible1], [MemoExpression1],
-	[RelatedAgentIsVisible1], [RelatedAgentExpression1], [RelatedAgentEntryNumber1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1], [RelatedAccountEntryNumber1],
 
 	[DirectionIsVisible2], [DirectionExpression2], [Direction2],
 	[AccountIdIsVisible2], [AccountIdExpression2], [AccountIdFilter2],
@@ -648,36 +650,109 @@ INSERT INTO @WideLineTypesSpecifications (
 	[MoneyAmountIsVisible2], [MoneyAmountExpression2], [MoneyAmountEntryNumber2],
 	[ValueIsVisible2], [ValueExpression2], [ValueEntryNumber2],
 	[MemoIsVisible2], [MemoExpression2], [MemoEntryNumber2],
-	[RelatedAgentIsVisible2], [RelatedAgentExpression2], [RelatedAgentEntryNumber2],
+	[RelatedAccountIsVisible2], [RelatedAccountExpression2], [RelatedAccountEntryNumber2],
 	[ExternalReferenceIsVisible2], [ExternalReferenceExpression2], [ExternalReferenceEntryNumber2]
 ) VALUES (
 	N'CheckTransferToCustody.Functional',
 	0, N'Constant', 1,
 	1, N'Specified', N'CashOnHand', -- Destination
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 1,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 1,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	1, N'SpecifiedNew',
-	0, N'Constant', 1, -- Quantity
+	0, N'!Instance.Amount', 1, -- Quantity
 	0, N'!Instance.Amount', 1, -- Money Amount
 	0, N'Constant', 1, -- Count
 	0, N'!Instance.Amount', 1, -- Value
 	1, N'Specified', -- memo
-	0, N'!Account.Agent', 2,
+	0, N'!Account', 2,
 
 	0, N'Constant', -1,
 	1, N'Specified', N'BalancesWithBanks', -- Source
 	0, N'Constant', N'InternalCashTransfer',-- IfrsNote
-	0, N'!Account.ResponsibilityCenter', 2,
-	0, N'!Constant', dbo.fn_FunctionalCurrency(),-- Currency
+	0, N'!Account.ResponsibilityCenterId', 2,
+	0, N'Constant', dbo.fn_FunctionalCurrency(),-- Currency
 	0, N'!Instance.Amount', 1,
 	0, N'!Instance.Amount', 1,
 	0, N'!Instance.Amount', 1,
 	0, N'!Memo', 1,
-	0, N'!Account.Agent', 1,
+	0, N'!Account', 1,
 	0, N'!Instance.Code', 1 -- 
 );
+--		GoodIssueWithInvoice
+INSERT INTO @WideLineTypesSpecifications(
+	[LineTypeId],
+	[DirectionIsVisible1], [DirectionExpression1], [Direction1],
+	[AccountIdIsVisible1], [AccountIdExpression1], [AccountIdFilter1],
+	[IfrsNoteIdIsVisible1], [IfrsNoteIdExpression1], [IfrsNoteId1],
+	[ResponsibilityCenterIdIsVisible1], [ResponsibilityCenterIdExpression1], [ResponsibilityCenterIdEntryNumber1],
+	[ResourceIdIsVisible1], [ResourceIdExpression1], [ResourceId1],
+	[InstanceIdIsVisible1], [InstanceIdExpression1],
+	[QuantityIsVisible1], [QuantityExpression1], [QuantityEntryNumber1],
+	[MoneyAmountIsVisible1], [MoneyAmountExpression1], [MoneyAmountEntryNumber1],
+	[CountIsVisible1], [CountExpression1], [Count1],
+	[ValueIsVisible1], [ValueExpression1], [ValueEntryNumber1],
+	[MemoIsVisible1], [MemoExpression1],
+	[RelatedAccountIsVisible1], [RelatedAccountExpression1], [RelatedAccountEntryNumber1]
+) VALUES (
+	N'GoodIssueWithInvoice.Functional', -- Dr. COGS, Cr. Inventory, Cr. Revenues, Cr. VAT Sales
+	0, N'Constant', 1, -- Direction, Dr. COGS
+	0, N'!Resource.ExpenseAccountId', 1, -- COGS Account
+	0, N'Constant', N'CostOfSales',-- IfrsNote
+	NULL, N'Document!ResponsibilityCenterId', -- Responsibility Center
+	0, N'!ResourceId', 2,-- Item
+	0, N'!Quantity', 2, -- Quantity
+	-- Other measures depends on resource.
+	0, N'!Mass', 2, -- Mass
+	0, N'!Volume', 2, -- volume
+	0, N'!Area', 2, -- Area
+	-- etc...
+	0, N'!Value', 2, -- Value
+	0, N'!Memo', 2, -- memo
+-- Not sure when do we need to store the customer account here.
+--	0, N'!RelatedAccount', 2, -- what do we need this for? Do we analyze profit per customer?!
 
+	0, N'Constant', -1, -- Direction, Cr. Warehouse
+	NULL, N'!Document.SourceCustodianAccountId', N'FinishedGoods', -- Warehouse Account
+	0, N'Constant', N'InventoryIssueToSaleExtension',-- IfrsNote, extension useful to generate reports
+	0, N'!Account.ResponsibilityCenterId', 2,
+	1, N'Specified', -- Item
+	1, N'Specified', -- Quantity
+-- Other measures depend on resource, and they affect the debit line
+	NULL, N'Specified', -- Mass
+	NULL, N'Specified', -- volume
+	NULL, N'Specified', -- Area
+	-- etc...
+	0, N'Costed', 1, -- Value, using the inventory costing method
+	1, N'Specified', -- memo
+	-- depends on whether IsCommonCustomerAccountId is true or false.
+	NULL, N'!Document.CustomerAccountId', 
+
+	0, N'Constant', -1, -- Direction, Cr. VAT
+	1, N'Specified', N'CurrentValueAddedTaxPayables', -- VAT Account
+	0, N'!Account.ResponsibilityCenterId', 3,
+	0, N'Constant', dbo.fn_FunctionalCurrency(), -- Resource
+	1, N'Specified', -- Quantity: VAT
+	0, N'!Quantity', 3, -- Value,d
+	1, N'Specified', -- memo
+	-- depends on whether IsCommonInvoiceReference is true or false.
+	NULL, N'!Document.InvoiceReference', -- ExternalReference
+	0, N'!ResourceId', 2, -- RelatedResource
+	-- depends on whether IsCommonCustomerAccountId is true or false.
+	NULL, N'!Document.CustomerAccountId', -- Related Account
+
+	0, N'Constant', -1, -- Direction, Cr. Revenues
+	0, N'!Resource.RevenueAccountId', 1, -- Sales Account
+	0, N'!ResponsibilityCenterId', 1,
+	0, N'Constant', dbo.fn_FunctionalCurrency(), -- Resource
+	1, N'Specified', -- Quantity: Price (VAT excl.)
+	0, N'!Quantity', 3, -- Value,d
+	1, N'Specified', -- memo
+	-- depends on whether IsCommonInvoiceReference is true or false.
+	NULL, N'!Document.StockIssueVoucherReference', -- ExternalReference
+	-- depends on whether IsCommonCustomerAccountId is true or false.
+	NULL, N'!Document.CustomerAccountId' -- Related Account
+);
 MERGE dbo.LineTypes AS t
 USING (
 	SELECT [id], [DocumentCategory] FROM @LineTypes
@@ -732,8 +807,8 @@ SELECT
 	[AdditionalReferenceIsVisible1] AS [AdditionalReferenceIsVisible],
 	[AdditionalReferenceExpression1] AS [AdditionalReferenceExpression],
 	[AdditionalReferenceEntryNumber1] AS [AdditionalReferenceEntryNumber],
-	[RelatedResourceId1] AS [RelatedResourceId], [RelatedAgentIsVisible1] AS [RelatedAgentIsVisible],
-	[RelatedAgentExpression1] AS [RelatedAgentExpression],[RelatedAgentEntryNumber1] AS [RelatedAgentEntryNumber],
+	[RelatedResourceId1] AS [RelatedResourceId], [RelatedAccountIsVisible1] AS [RelatedAccountIsVisible],
+	[RelatedAccountExpression1] AS [RelatedAccountExpression],[RelatedAccountEntryNumber1] AS [RelatedAccountEntryNumber],
 	[RelatedQuantity1] AS [RelatedQuantity], [RelatedMoneyAmount1] AS [RelatedMoneyAmount]
 FROM @WideLineTypesSpecifications 
 UNION ALL
@@ -754,9 +829,10 @@ SELECT
 	[ValueExpression2], [ValueEntryNumber2], [MemoIsVisible2], [MemoExpression2], [MemoEntryNumber2],
 	[ExternalReferenceIsVisible2], [ExternalReferenceExpression2], [ExternalReferenceEntryNumber2],
 	[AdditionalReferenceIsVisible2], [AdditionalReferenceExpression2], [AdditionalReferenceEntryNumber2],
-	[RelatedResourceId2], [RelatedAgentIsVisible2],	[RelatedAgentExpression2], [RelatedAgentEntryNumber2],
+	[RelatedResourceId2], [RelatedAccountIsVisible2],	[RelatedAccountExpression2], [RelatedAccountEntryNumber2],
 	[RelatedQuantity2], [RelatedMoneyAmount2]
-FROM @WideLineTypesSpecifications 
+FROM @WideLineTypesSpecifications
+WHERE [AccountIdExpression2] IS NOT NULL
 ) AS s
 ON s.[LineTypeId] = t.[LineTypeId]  AND s.[EntryNumber] = t.[EntryNumber]
 WHEN MATCHED THEN
@@ -826,9 +902,9 @@ UPDATE SET
 	t.[AdditionalReferenceExpression] = s.[AdditionalReferenceExpression],
 	t.[AdditionalReferenceEntryNumber] = s.[AdditionalReferenceEntryNumber],
 	t.[RelatedResourceId] = s.[RelatedResourceId],
-	t.[RelatedAgentIsVisible] = s.[RelatedAgentIsVisible],
-	t.[RelatedAgentExpression] = s.[RelatedAgentExpression],
-	t.[RelatedAgentEntryNumber] = s.[RelatedAgentEntryNumber],
+	t.[RelatedAccountIsVisible] = s.[RelatedAccountIsVisible],
+	t.[RelatedAccountExpression] = s.[RelatedAccountExpression],
+	t.[RelatedAccountEntryNumber] = s.[RelatedAccountEntryNumber],
 	t.[RelatedQuantity] = s.[RelatedQuantity],
 	t.[RelatedMoneyAmount] = s.[RelatedMoneyAmount]
 WHEN NOT MATCHED BY SOURCE THEN
@@ -850,7 +926,7 @@ INSERT ([LineTypeId], [EntryNumber], [DirectionIsVisible], [DirectionExpression]
 	[ValueExpression], [ValueEntryNumber], [MemoIsVisible], [MemoExpression], [MemoEntryNumber],
 	[ExternalReferenceIsVisible], [ExternalReferenceExpression], [ExternalReferenceEntryNumber],
 	[AdditionalReferenceIsVisible], [AdditionalReferenceExpression], [AdditionalReferenceEntryNumber],
-	[RelatedResourceId], [RelatedAgentIsVisible],	[RelatedAgentExpression], [RelatedAgentEntryNumber],
+	[RelatedResourceId], [RelatedAccountIsVisible],	[RelatedAccountExpression], [RelatedAccountEntryNumber],
 	[RelatedQuantity], [RelatedMoneyAmount]
 	)
 VALUES(s.[LineTypeId], s.[EntryNumber], s.[DirectionIsVisible], s.[DirectionExpression], s.[DirectionEntryNumber],
@@ -869,6 +945,6 @@ VALUES(s.[LineTypeId], s.[EntryNumber], s.[DirectionIsVisible], s.[DirectionExpr
 	s.[ValueExpression], s.[ValueEntryNumber], s.[MemoIsVisible], s.[MemoExpression], s.[MemoEntryNumber],
 	s.[ExternalReferenceIsVisible], s.[ExternalReferenceExpression], s.[ExternalReferenceEntryNumber],
 	s.[AdditionalReferenceIsVisible], s.[AdditionalReferenceExpression], s.[AdditionalReferenceEntryNumber],
-	s.[RelatedResourceId], s.[RelatedAgentIsVisible],	s.[RelatedAgentExpression], s.[RelatedAgentEntryNumber],
+	s.[RelatedResourceId], s.[RelatedAccountIsVisible],	s.[RelatedAccountExpression], s.[RelatedAccountEntryNumber],
 	s.[RelatedQuantity], s.[RelatedMoneyAmount]
 );

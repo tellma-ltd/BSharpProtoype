@@ -1,24 +1,30 @@
 ﻿CREATE TABLE [dbo].[DocumentTypes] (
--- table managed by Banan, except for the BIT column
+-- table managed by Banan
+-- Note that, in steel production: CTS, HSP, and SM are considered 3 different document types.
 	[TenantId]					INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						NVARCHAR (255),
-	[DocumentCategory]			NVARCHAR (255),
--- if it is not the main source document, then the VoucherReference field will become visible
--- for the user to enter the reference from the supporting source document.
-	[IsOriginalSourceDocument]	BIT				DEFAULT 0, -- <=> IsVoucherReferenceRequired
-	[DefaultVoucherTypeId]		INT,		-- should we infer it from previous data entry?
-	[VoucherReferenceLength]	INT,
-	[Description]				NVARCHAR (255),
+-- The choice of booleans should form a connected tree. For example, in Cut to Size, and
+-- assuming that the B# document is not a source document, the true values are: 
+-- (starting) (Draft), IsPosted, IsDeclined.
+-- The list of possible states can be also deduced from the workflow (ToState).
+/*
+	[IsRequestedOrVoid]			BIT				DEFAULT (1),
+	[IsAuthorizedOrRejected]	BIT				DEFAULT (1),
+	[IsCompletedOrFailed]		BIT				DEFAULT (1),
+	[IsPostedOrInvalid]			BIT				DEFAULT (1),
+*/
+	[IsSourceDocument]			BIT				DEFAULT (1), -- <=> IsVoucherReferenceRequired
+	[Code]						NVARCHAR (255)	NOT NULL,
+	[Description]				NVARCHAR (255)	NOT NULL,
 	[Description2]				NVARCHAR (255),
 	[Description3]				NVARCHAR (255),
-	[CustomerLabel]				NVARCHAR(255),
-	[SupplierLabel]				NVARCHAR(255),
-	[EmployeeLabel]				NVARCHAR(255),
-	[FromCustodyAccountLabel]	NVARCHAR(255),
-	[ToCustodyAccountLabel]		NVARCHAR(255),
-	CONSTRAINT [PK_DocumentTypes] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [CK_DocumentTypes__DocumentCategory] CHECK (
-		[DocumentCategory] IN (N'Transaction', N'Request', N'Plan', N'Template')
-	)
+	-- UI Specs
+	[DefaultVoucherTypeId]		NVARCHAR (255),
+	[CustomerLabel]				NVARCHAR (255),
+	[SupplierLabel]				NVARCHAR (255),
+	[EmployeeLabel]				NVARCHAR (255),
+	[FromCustodyAccountLabel]	NVARCHAR (255),
+	[ToCustodyAccountLabel]		NVARCHAR (255),
+	CONSTRAINT [PK_DocumentTypes] PRIMARY KEY CLUSTERED ([TenantId], [Id])
 );
 GO;

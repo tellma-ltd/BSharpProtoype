@@ -18,14 +18,14 @@
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Roles__Name]
-  ON [dbo].[Roles]([TenantId] ASC, [Name] ASC);
+  ON [dbo].[Roles]([TenantId], [Name]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Roles__Name2]
-  ON [dbo].[Roles]([TenantId] ASC, [Name2] ASC) WHERE [Name2] IS NOT NULL;
+  ON [dbo].[Roles]([TenantId], [Name2]) WHERE [Name2] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Roles__Name3]
-  ON [dbo].[Roles]([TenantId] ASC, [Name3] ASC) WHERE [Name3] IS NOT NULL;
+  ON [dbo].[Roles]([TenantId], [Name3]) WHERE [Name3] IS NOT NULL;
 GO
 CREATE UNIQUE INDEX [IX_Roles__Code]
-  ON [dbo].[Roles]([TenantId] ASC, [Code] ASC) WHERE [Code] IS NOT NULL;
+  ON [dbo].[Roles]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
 GO

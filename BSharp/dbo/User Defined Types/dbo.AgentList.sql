@@ -8,7 +8,7 @@
 	[Code]						NVARCHAR (255),
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
 --	Common
-	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
+	[AgentType]					NVARCHAR (255),  -- 'Individual', 'Machine', 'Organization' Organization includes Dept, Team
 	[IsRelated]					BIT					NOT NULL DEFAULT 0,
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,

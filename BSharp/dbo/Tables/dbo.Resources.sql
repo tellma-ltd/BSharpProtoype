@@ -14,12 +14,10 @@
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
--- IsFungible = 1 <=> ResourceNumber is REQUIRED in table TransactionEntries
--- IsFungible = 1 <=> ResourceNumber is OPTIONAL in table TemplateEntries, RequestEntries and PlanEntries
+-- IsFungible = 0 <=> ResourceInstance is REQUIRED in table TransactionEntries when Document in Completed state
 -- HasInstance, IsIdentifiable, IsSpecifiable
 	[IsFungible]				BIT					NOT NULL DEFAULT 0,
--- IsBatch = 1 <=> BatchNumber is REQUIRED in table TransactionEntries
--- IsBatch = 1 <=> BatchNumber is OPTIONAL in table TemplateEntries, RequestEntries and PlanEntries
+-- IsBatch = 1 <=> BatchNumber is REQUIRED in table TransactionEntries when Document in Completed state
 -- HasBatch, IsTrackable, 
 	[IsBatch]					BIT					NOT NULL DEFAULT 0,
 	[ValueMeasure]				NVARCHAR (255)		NOT NULL, -- Currency, Mass, Volumne, Area, Length, Count, Time, 
@@ -58,7 +56,8 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_Resources__MeasurementUnit] FOREIGN KEY ([TenantId], [MassUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]) ON UPDATE CASCADE,
+	CONSTRAINT [FK_Resources__MassUnitId] FOREIGN KEY ([TenantId], [MassUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]),
+	CONSTRAINT [FK_Resources__VolumeUnitId] FOREIGN KEY ([TenantId], [VolumeUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]),
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name]
@@ -87,5 +86,5 @@ ALTER TABLE [dbo].[Resources] ADD CONSTRAINT [CK_Resources__UnitId] CHECK (
 			WHEN [ValueMeasure] = N'Count' THEN [CountUnitId]
 		END
 	)
-)
+);
 GO

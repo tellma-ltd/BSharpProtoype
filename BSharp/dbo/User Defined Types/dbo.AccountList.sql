@@ -12,7 +12,6 @@
 	[AgentId]					INT,
 	[IfrsNoteIsFixed]			BIT					NOT NULL DEFAULT 0,
 	[IfrsNoteId]				NVARCHAR (255),		-- includes Expense by function
-	[ResponsibilityCenterIsFixed]BIT				NOT NULL DEFAULT 1,
 	[ResponsibilityCenterId]	INT,
 	[ResourceIsFixed]			BIT					NOT NULL DEFAULT 1,
 	[ResourceId]				INT,

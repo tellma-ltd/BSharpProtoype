@@ -2,7 +2,7 @@
 	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[FunctionalCurrencyId]	INT,
 	-- The date before which data is frozen.
-	[ArchiveDate]			Date		NOT NULL DEFAULT ('1900.01.01'),
+	[ArchiveDate]			Date				NOT NULL DEFAULT ('1900.01.01'),
 	[TenantLanguage2]		NVARCHAR (255),
 	[TenantLanguage3]		NVARCHAR (255),
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),

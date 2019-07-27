@@ -3,13 +3,14 @@
 	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[Id]						INT					IDENTITY,
 	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
-	[Name]						NVARCHAR (255)		NOT NULL,
+	[Name]						NVARCHAR (255)		NOT NULL, -- legal name
 	[Name2]						NVARCHAR (255),
 	[Name3]						NVARCHAR (255),
+	--[ShortName]					NVARCHAR (255),		-- Nickname
 	[Code]						NVARCHAR (255),
 	[SystemCode]				NVARCHAR (255), -- some used are anoymous, self, parent
 --	Common
-	[PersonType]				NVARCHAR (255),  -- 'Individual', 'Organization' Organization includes Dept, Team
+	[AgentType]					NVARCHAR (255),  -- 'Individual', 'Machine' (software), 'Organization' (Dept, Team)
 	[IsRelated]					BIT					NOT NULL DEFAULT 0,
 	[TaxIdentificationNumber]	NVARCHAR (255),
 	[IsLocal]					BIT,
@@ -56,7 +57,7 @@
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
 	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [CK_Agents_AgentType] CHECK ([PersonType] IN (N'Individual', N'Organization')), -- Organization includes Dept, Team
+	CONSTRAINT [CK_Agents_AgentType] CHECK ([AgentType] IN (N'Individual', N'Organization', N'Machine')), -- Organization includes Dept, Team
 	CONSTRAINT [FK_Agents__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_Agents__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

@@ -8,14 +8,14 @@ BEGIN
 		A.TaxIdentificationNumber As TIN, 
 		J.ExternalReference As [Invoice #], J.[AdditionalReference] As [Cash M/C #],
 		SUM(J.MoneyAmount) AS VAT, SUM(J.RelatedMoneyAmount) AS [Taxable Amount],
-		J.DocumentDate As [Invoice Date], J.[TransactionLineId]
+		J.DocumentDate As [Invoice Date], J.[DocumentLineId]
 	FROM dbo.[fi_JournalDetails](@fromDate, @toDate) J
-	LEFT JOIN dbo.Agents A ON J.RelatedAgentId = A.Id
+	LEFT JOIN dbo.Agents A ON J.[RelatedAccountId] = A.Id
 	WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
 	GROUP BY
 		A.[Name],
 		A.TaxIdentificationNumber,
 		J.ExternalReference, J.[AdditionalReference],
-		J.DocumentDate,	J.[TransactionLineId]
+		J.DocumentDate,	J.[DocumentLineId]
 END;
 GO;

@@ -12,9 +12,9 @@ BEGIN
 		J.[MoneyAmount] As [Tax Withheld], 
 		J.[ExternalReference] As [Receipt Number], 
 		J.DocumentDate As [Receipt Date],
-		J.[TransactionLineId] -- for navigation
+		J.[DocumentLineId] -- for navigation
 	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
-	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAgentId] = A.Id
+	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAccountId] = A.Id
 	WHERE J.[IfrsAccountId] = N'CurrentWithholdingTaxPayable'
 	AND J.Direction = -1;
 END;

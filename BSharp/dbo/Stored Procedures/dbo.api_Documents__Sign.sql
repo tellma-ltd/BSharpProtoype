@@ -1,5 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Sign]
 	@Entities [dbo].[IndexedIdList] READONLY,
+	@State NVARCHAR(255),
+	@ReasonId INT,
+	@ReasonDetails	NVARCHAR(1024),
+	@ActorId INT,
+	@RoleId INT,
+	@EvidenceType NVARCHAR(255),
+
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
 	@ReturnEntities bit = 1,
 	@ResultJson NVARCHAR(MAX) OUTPUT
@@ -12,7 +19,23 @@ BEGIN
 	IF @ValidationErrorsJson IS NOT NULL
 		RETURN;
 
-	EXEC [dbo].[dal_Documents__Sign] @Entities = @Entities;
+	EXEC [dbo].[dal_Documents__Sign]
+		@Entities = @Entities,
+		@State = @State,
+		@ReasonId = @ReasonId,
+		@ReasonDetails = @ReasonDetails,
+		@ActorId = @ActorId,
+		@RoleId = @RoleId,
+		@EvidenceType = @EvidenceType
+
+	-- get the documents whose state will change
+	DECLARE @TransitionedIds [dbo].[IdWithStateList];
+	/*
+	INSERT INTO @TransitionedIds([Id])
+	EXEC [dbo].[bll_Documents_State__Select]
+	*/
+	IF EXISTS(SELECT * FROM @TransitionedIds)
+		EXEC dal_Documents_State__Update @Entities = @TransitionedIds
 
 	IF (@ReturnEntities = 1)
 	BEGIN

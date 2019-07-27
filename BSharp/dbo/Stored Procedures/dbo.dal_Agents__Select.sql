@@ -6,7 +6,7 @@ AS
 		SELECT
 			-- Common
 			[Id], [IsActive], [Name], [Name2], [Name3], [Code], [SystemCode],
-			[PersonType], [IsRelated], [TaxIdentificationNumber], [IsLocal], [Citizenship],
+			[AgentType], [IsRelated], [TaxIdentificationNumber], [IsLocal], [Citizenship],
 			[Facebook], [Instagram], [Twitter], [PreferredContactChannel1], [PreferredContactAddress1],
 			[PreferredContactChannel2], [PreferredContactAddress2],
 			[BankId], [BankAccountNumber],
