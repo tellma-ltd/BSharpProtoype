@@ -1,8 +1,5 @@
-﻿-- A transaction line does not have to result in balanced set of entries. It is up to the designer to 
--- choose a balanced set of lines, or compensate using a JV debit/credit line.
-DECLARE @LineTypes TABLE(
-	[id]				NVARCHAR (255) PRIMARY KEY,
-	[DocumentCategory]	NVARCHAR (255) NOT NULL DEFAULT N'Transaction'
+﻿DECLARE @LineTypes TABLE(
+	[id]				NVARCHAR (255) PRIMARY KEY
 );
 INSERT @LineTypes ([Id]) VALUES
 	(N'ManualLine'),						-- Account, Direction, amount, Resource, Agent Account, ...

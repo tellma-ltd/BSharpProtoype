@@ -1,11 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[api_Transactions__Post]
 	@Entities [dbo].[IndexedIdList] READONLY,
-	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnEntities bit = 1,
-	@ResultJson NVARCHAR(MAX) = NULL OUTPUT
+	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @Ids [dbo].[IdList];
 	-- if all documents are already posted, return
 	IF NOT EXISTS(
 		SELECT * FROM [dbo].[Documents]
@@ -33,13 +30,4 @@ BEGIN
 		RETURN;
 
 	EXEC [dbo].[dal_Documents_State__Update] @Entities = @Entities, @State = N'Posted';
-
-	IF (@ReturnEntities = 1)
-	BEGIN
-		INSERT INTO @Ids([Id])
-		SELECT [Id] 
-		FROM @Entities;
-
-		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids, @ResultJson = @ResultJson OUTPUT;
-	END
 END;

@@ -412,8 +412,8 @@ UPDATE SET
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[Node], [Id], [Node], [IsActive], [IfrsType],-- [AccountSpecification],
+    INSERT ([Node], [Id], [Node], [IsActive], [IfrsType],-- [AccountSpecification],
 			[IsLeaf])
-    VALUES (@TenantId, 	s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
+    VALUES (s.[Id], s.[Name], s.[Code], s.[IsActive], s.[AccountType], --s.[AccountSpecification], 
 		s.[IsExtensible]);
 --OUTPUT deleted.*, $action, inserted.*; -- Does not work with triggers

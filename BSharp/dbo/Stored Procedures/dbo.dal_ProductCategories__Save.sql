@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_ProductCategories__Save]
-	@Entities [ProductCategoryList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Entities [ProductCategoryList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -67,5 +66,3 @@ SET NOCOUNT ON;
 	MERGE INTO [dbo].[ProductCategories] As t
 	USING Paths As s ON (t.[Id] = s.[Id])
 	WHEN MATCHED THEN UPDATE SET t.[Node] = s.[Node];
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

@@ -138,28 +138,28 @@ SELECT
 	@MaterialsAndPurchasing = (SELECT [Id] FROM [dbo].[Agents] WHERE [Name] = N'Materials & Purchasing Department');
 
 INSERT INTO dbo.AgentsResources(
-	[TenantId], [AgentId], [RelationType],	[ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
-	(@TenantId, @MohamadAkra, N'Employee',		@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
-	(@TenantId, @AhmadAkra, N'Employee',		@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId),
-	(@TenantId, @TizitaNigussie, N'Employee',	@ROvertime,		200,		@Now,		@UserId, @Now,		@UserId),
-	(@TenantId, @TizitaNigussie, N'Employee',	@LaborDaily,	250,		@Now,		@UserId, @Now,		@UserId);
+	[AgentId], [RelationType],	[ResourceId], [UnitCost], CreatedAt, CreatedById, ModifiedAt, ModifiedById) VALUES
+	(@MohamadAkra, N'Employee',		@HOvertime,		450,		@Now,		@UserId, @Now,		@UserId),
+	(@AhmadAkra, N'Employee',		@ROvertime,		400,		@Now,		@UserId, @Now,		@UserId),
+	(@TizitaNigussie, N'Employee',	@ROvertime,		200,		@Now,		@UserId, @Now,		@UserId),
+	(@TizitaNigussie, N'Employee',	@LaborDaily,	250,		@Now,		@UserId, @Now,		@UserId);
 
 BEGIN -- Users
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
-	INSERT INTO [dbo].[LocalUsers]([TenantId], [Id], [Name], [AgentId]) VALUES
-	(@TenantId, N'system@banan-it.com', N'B#', NULL),
-	(@TenantId, N'mohamad.akra@banan-it.com', N'Mohamad Akra', @MohamadAkra),
-	(@TenantId, N'ahmad.akra@banan-it.com', N'Ahmad Akra', @AhmadAkra),
-	(@TenantId, N'badegek@gmail.com', N'Badege', @BadegeKebede),
-	(@TenantId, N'mintewelde00@gmail.com', N'Tizita', @TizitaNigussie),
-	(@TenantId, N'ashenafi935@gmail.com', N'Ashenafi', @Ashenafi),
-	(@TenantId, N'yisak.tegene@gmail.com', N'Yisak', @YisakTegene),
-	(@TenantId, N'zewdnesh.hora@gmail.com', N'Zewdinesh Hora', @ZewdineshHora),
-	(@TenantId, N'tigistnegash74@gmail.com', N'Tigist', @TigistNegash),
-	(@TenantId, N'roman.zen12@gmail.com', N'Roman', @RomanZenebe),
-	(@TenantId, N'mestawetezige@gmail.com', N'Mestawet', @Mestawet),
-	(@TenantId, N'ayelech.hora@gmail.com', N'Ayelech', @AyelechHora),
-	(@TenantId, N'info@banan-it.com', N'Banan IT', NULL)
+	INSERT INTO [dbo].[LocalUsers]([Id], [Name], [AgentId]) VALUES
+	(N'system@banan-it.com', N'B#', NULL),
+	(N'mohamad.akra@banan-it.com', N'Mohamad Akra', @MohamadAkra),
+	(N'ahmad.akra@banan-it.com', N'Ahmad Akra', @AhmadAkra),
+	(N'badegek@gmail.com', N'Badege', @BadegeKebede),
+	(N'mintewelde00@gmail.com', N'Tizita', @TizitaNigussie),
+	(N'ashenafi935@gmail.com', N'Ashenafi', @Ashenafi),
+	(N'yisak.tegene@gmail.com', N'Yisak', @YisakTegene),
+	(N'zewdnesh.hora@gmail.com', N'Zewdinesh Hora', @ZewdineshHora),
+	(N'tigistnegash74@gmail.com', N'Tigist', @TigistNegash),
+	(N'roman.zen12@gmail.com', N'Roman', @RomanZenebe),
+	(N'mestawetezige@gmail.com', N'Mestawet', @Mestawet),
+	(N'ayelech.hora@gmail.com', N'Ayelech', @AyelechHora),
+	(N'info@banan-it.com', N'Banan IT', NULL)
 END
 
 --		SELECT @MohamadAkra AS MA, @AhmadAkra AS AA, @TigistNegash AS TN, @TizitaNigussie As Tiz;

@@ -1,12 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[api_Operation__SetOperatingSegment]
 	@OperationId INT,
-	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnEntities bit = 1,
-	@ResultsJson NVARCHAR(MAX) OUTPUT
+	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @Id int, @Ids [dbo].[IdList];
+DECLARE @Id int;
 -- Validate
 	--EXEC [dbo].[bll_Operation_Validate__SetOperatingSegment]
 	--	@Entity = @OperationId,
@@ -20,14 +18,4 @@ DECLARE @Id int, @Ids [dbo].[IdList];
 	-- run it recusrivsely
 	EXEC [dbo].[dal_Operation__SetOperatingSegment]
 			@OperationId = @Id;
-
-	IF (@ReturnEntities = 1)
-	BEGIN	
-		INSERT INTO @Ids([Id])
-		SELECT [Id] FROM dbo.[ResponsibilityCenters];
-
-		EXEC [dbo].[dal_ResponsibilityCenters__Select]
-			@Ids = @Ids,
-			@ResultsJson = @ResultsJson OUTPUT;
-	END
 END;	

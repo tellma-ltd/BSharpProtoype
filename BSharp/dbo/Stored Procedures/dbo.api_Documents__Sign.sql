@@ -5,11 +5,7 @@
 	@ReasonDetails	NVARCHAR(1024),
 	@ActorId INT,
 	@RoleId INT,
-	@EvidenceType NVARCHAR(255),
-
-	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnEntities bit = 1,
-	@ResultJson NVARCHAR(MAX) OUTPUT
+	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 	EXEC [dbo].[bll_Documents_Validate__Sign]
@@ -25,8 +21,7 @@ BEGIN
 		@ReasonId = @ReasonId,
 		@ReasonDetails = @ReasonDetails,
 		@ActorId = @ActorId,
-		@RoleId = @RoleId,
-		@EvidenceType = @EvidenceType
+		@RoleId = @RoleId
 
 	-- get the documents whose state will change
 	DECLARE @TransitionedIds [dbo].[IdWithStateList];
@@ -36,15 +31,4 @@ BEGIN
 	*/
 	IF EXISTS(SELECT * FROM @TransitionedIds)
 		EXEC dal_Documents_State__Update @Entities = @TransitionedIds
-
-	IF (@ReturnEntities = 1)
-	BEGIN
-		DECLARE @Ids [dbo].[IdList];
-		
-		INSERT INTO @Ids([Id])
-		SELECT [Id] 
-		FROM @Entities;
-
-		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids, @ResultJson = @ResultJson OUTPUT;
-	END
 END;

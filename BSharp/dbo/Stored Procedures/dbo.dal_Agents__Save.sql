@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Agents__Save]
-	@Entities [AgentList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Entities [AgentList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -95,4 +94,3 @@ SET NOCOUNT ON;
 				s.[OrganizationType], s.[WebSite], s.[ContactPerson], s.[RegisteredAddress], s.[OwnershipType], s.[OwnershipPercent])
 		OUTPUT s.[Index], inserted.[Id] 
 	) AS x;
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds	FOR JSON PATH);

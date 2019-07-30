@@ -54,6 +54,6 @@ ON (s.[AccountId] = t.[AccountId] AND s.[NoteId] = s.[NoteId] AND s.[Direction] 
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId],	[IfrsAccountId], [IfrsNoteId], [Direction])
-    VALUES (@TenantId, s.[AccountId], s.[NoteId], s.[Direction])
+    INSERT ([IfrsAccountId], [IfrsNoteId], [Direction])
+    VALUES (s.[AccountId], s.[NoteId], s.[Direction])
 OPTION (RECOMPILE);

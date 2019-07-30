@@ -1,5 +1,4 @@
 ﻿EXEC sp_set_session_context 'Tenantid', 106;
-DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 DECLARE @UserId int;
 IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])

@@ -3,7 +3,6 @@
 	@Permissions [dbo].[PermissionList] READONLY
 AS
 BEGIN
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
@@ -24,10 +23,10 @@ BEGIN
 	--		t.[ModifiedById]	= @UserId
 	WHEN NOT MATCHED THEN
 		INSERT (
-			[TenantId], [Id], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
+			[Id], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById]
 		)
 		VALUES (
-			@TenantId, s.[Id], @Now,		@UserId,		@Now,		@UserId
+			s.[Id], @Now,		@UserId,		@Now,		@UserId
 		);
 
 		MERGE INTO [dbo].[Permissions] AS t
@@ -45,6 +44,6 @@ BEGIN
 				t.[ModifiedAt]	= @Now,
 				t.[ModifiedById]	= @UserId
 		WHEN NOT MATCHED THEN
-			INSERT ([TenantId], [ViewId], [Level],	[Criteria], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
-			VALUES (@TenantId, s.[ViewId], s.[Level], s.[Criteria], s.[Memo], @Now,		@UserId,		@Now,		@UserId);
+			INSERT ([ViewId], [Level],	[Criteria], [Memo], [CreatedAt], [CreatedById], [ModifiedAt], [ModifiedById])
+			VALUES (s.[ViewId], s.[Level], s.[Criteria], s.[Memo], @Now,		@UserId,		@Now,		@UserId);
 END;

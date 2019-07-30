@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Resources__Save]
-	@Resources [dbo].[ResourceList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Resources [dbo].[ResourceList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -73,5 +72,3 @@ SET NOCOUNT ON;
 				s.[ResourceLookup1Id], s.[ResourceLookup2Id], s.[ResourceLookup3Id], s.[ResourceLookup4Id])
 			OUTPUT s.[Index], inserted.[Id] 
 	) As x;
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_IfrsDisclosureDetails__Save]
-	@Entities [IfrsDisclosureDetailList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Entities [IfrsDisclosureDetailList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -34,6 +33,4 @@ SET NOCOUNT ON;
 			INSERT ([IfrsDisclosureId], [Value], [ValidSince])
 			VALUES (s.[IfrsDisclosureId], s.[Value], s.[ValidSince])
 		OUTPUT s.[Index], inserted.[Id] 
-	) As x
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
+	) As x;

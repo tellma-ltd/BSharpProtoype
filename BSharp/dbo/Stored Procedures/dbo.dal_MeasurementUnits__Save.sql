@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_MeasurementUnits__Save]
-	@Entities [MeasurementUnitList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Entities [MeasurementUnitList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -42,5 +41,3 @@ SET NOCOUNT ON;
 		OUTPUT s.[Index], inserted.[Id] 
 	) As x
 	OPTION (RECOMPILE);
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);

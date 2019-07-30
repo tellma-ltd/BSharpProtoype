@@ -18,7 +18,6 @@ BEGIN -- reset Identities
 	DECLARE @fromDate Datetime, @toDate Datetime;
 	EXEC sp_set_session_context 'TenantId', 106;
 	EXEC sp_set_session_context 'Debug', 1;
-	DECLARE @TenantId int = CONVERT(INT, SESSION_CONTEXT(N'TenantId'));
 	DECLARE @UserId int;
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
 	BEGIN

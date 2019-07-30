@@ -2,7 +2,6 @@
 	@Settings [SettingList] READONLY
 AS
 SET NOCOUNT ON;
-	DECLARE @IndexedIds [dbo].[IndexedIdList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 

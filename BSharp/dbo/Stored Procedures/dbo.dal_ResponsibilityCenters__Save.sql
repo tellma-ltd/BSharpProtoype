@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[dal_ResponsibilityCenters__Save]
-	@Entities [ResponsibilityCenterList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Entities [ResponsibilityCenterList] READONLY
 AS
 SET NOCOUNT ON;
 	DECLARE @IndexedIds [dbo].[IndexedIdList];
@@ -54,6 +53,4 @@ SET NOCOUNT ON;
 		FROM @Entities O
 		JOIN @IndexedIds IIParent ON IIParent.[Index] = O.ParentIndex
 		JOIN @IndexedIds II ON II.[Index] = O.[Index]
-	) T ON BE.Id = T.[Id]
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
+	) T ON BE.Id = T.[Id];

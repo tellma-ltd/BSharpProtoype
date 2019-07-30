@@ -92,8 +92,8 @@ ON s.Id = t.Id
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId], [Id], [Description], [Description2], [Description3])
-    VALUES (@TenantId, s.[Id], s.[Description], s.[Description2], a.[Description3]);
+    INSERT ([Id], [Description], [Description2], [Description3])
+    VALUES (s.[Id], s.[Description], s.[Description2], a.[Description3]);
 
 MERGE [dbo].LineTypes AS t
 USING @LineTypes AS s
@@ -101,5 +101,5 @@ ON s.Id = t.Id
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 WHEN NOT MATCHED BY TARGET THEN
-    INSERT ([TenantId], [Id], [Description], [Description2], [Description3])
-    VALUES (@TenantId, s.[Id], s.[Description], s.[Description2], s.[Description3]);
+    INSERT ([Id], [Description], [Description2], [Description3])
+    VALUES (s.[Id], s.[Description], s.[Description2], s.[Description3]);

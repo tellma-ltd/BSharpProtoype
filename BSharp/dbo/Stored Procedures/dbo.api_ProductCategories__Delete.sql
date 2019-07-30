@@ -4,7 +4,6 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @Ids [dbo].[IdList];
 -- Validate
 
 	EXEC [dbo].[bll_ProductCategories_Validate__Delete]

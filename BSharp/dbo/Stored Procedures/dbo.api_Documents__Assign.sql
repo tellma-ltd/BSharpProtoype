@@ -5,8 +5,6 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @Ids [dbo].[IdList];
-
 	-- if all documents are already assigned to the assignee, return
 	IF NOT EXISTS(
 		SELECT * FROM [dbo].[DocumentAssignments]

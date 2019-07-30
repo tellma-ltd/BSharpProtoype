@@ -1,8 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[api_Transactions__Save]
 	@Transactions [dbo].[DocumentList] READONLY,
 	@WideLines [dbo].[TransactionWideLineList] READONLY, 
-	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT,
-	@ReturnEntities bit = 1
+	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
@@ -37,13 +36,4 @@ BEGIN
 		@Lines = @Lines,
 		@Entries = @Entries,
 		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
-
-	IF (@ReturnEntities = 1)
-	BEGIN
-		INSERT INTO @Ids([Id])
-		SELECT [Id] 
-		FROM OpenJson(@IndexedIdsJson) WITH ([Index] INT, [Id] INT);
-
-		EXEC [dbo].[dal_Documents__Select] @Ids = @Ids;
-	END;
 END;
