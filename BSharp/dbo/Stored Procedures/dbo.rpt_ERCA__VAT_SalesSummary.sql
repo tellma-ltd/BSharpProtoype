@@ -12,6 +12,7 @@ BEGIN
 	FROM dbo.[fi_JournalDetails](@fromDate, @toDate) J
 	LEFT JOIN dbo.Agents A ON J.[RelatedAccountId] = A.Id
 	WHERE IfrsAccountId = N'CurrentValueAddedTaxPayables'
+	AND J.Direction = -1
 	GROUP BY
 		A.[Name],
 		A.TaxIdentificationNumber,

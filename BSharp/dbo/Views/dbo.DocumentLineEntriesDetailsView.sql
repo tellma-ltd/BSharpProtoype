@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[TransactionsLinesEntriesDetailsView]
+﻿CREATE VIEW [dbo].[DocumentLineEntriesDetailsView]
 AS
 	SELECT
 		E.[Id],

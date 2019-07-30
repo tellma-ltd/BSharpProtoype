@@ -11,7 +11,7 @@ INSERT INTO @ESave (
 (@EIdx + 1, @DIdx,				@WSI,	N'IssuedCapital',		@MohamadAkra,	@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity'),
 (@EIdx + 2, @DIdx,				@WSI,	N'IssuedCapital',		@AhmadAkra,		@CommonStock,	-1,		1000,	2350000,	N'IssueOfEquity');
 
-EXEC [dbo].[api_Transactions__Save]
+EXEC [dbo].[api_Documents__Save]
 	@Documents = @DSave, @Entries = @ESave,
 	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
 	@ResultJson = @ResultJson OUTPUT;

@@ -1,9 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[dal_Transactions__Save]
-	@TransactionType NVARCHAR(255),
-	@Transactions [dbo].[DocumentList] READONLY,
-	@Lines [dbo].[TransactionLineList] READONLY, 
-	@Entries [dbo].[TransactionEntryList] READONLY,
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+﻿CREATE PROCEDURE [dbo].[dal_Document__Save]
+	@DocumentTypeId NVARCHAR(255),
+	@Documents [dbo].[DocumentList] READONLY,
+	@Lines [dbo].[DocumentLineList] READONLY, 
+	@Entries [dbo].[TransactionEntryList] READONLY
 AS
 BEGIN
 	DECLARE @IndexedIds [dbo].[IndexedIdList], @LinesIndexedIds [dbo].[IndexedIdList];
@@ -13,17 +12,17 @@ BEGIN
 
 	-- Delete only if the last one of its type
 	DELETE FROM [dbo].[Documents]
-	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted')
+	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted')
 	AND [Id] > (
 		SELECT MAX([Id]) FROM dbo.Documents 
-		WHERE [DocumentTypeId] = @TransactionType 
+		WHERE [DocumentTypeId] = @DocumentTypeId 
 		AND [State] <> N'Void'
 		);
 
 	-- Otherwise, mark as void
 	UPDATE [dbo].[Documents]
 	SET [State] = N'Void'
-	WHERE [Id] IN (SELECT [Id] FROM @Transactions WHERE [EntityState] = N'Deleted');
+	WHERE [Id] IN (SELECT [Id] FROM @Documents WHERE [EntityState] = N'Deleted');
 
 	--DELETE FROM [dbo].[TransactionLines]
 	--WHERE [Id] IN (SELECT [Id] FROM @Lines WHERE [EntityState] = N'Deleted');
@@ -41,9 +40,9 @@ BEGIN
 				[Index], [Id], [DocumentDate], [VoucherNumericReference], [Memo], [Frequency], [Repetitions],
 				ROW_Number() OVER (PARTITION BY [EntityState] ORDER BY [Index]) + (
 					-- max(Id) per transaction type.
-					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentTypeId] = @TransactionType
+					SELECT ISNULL(MAX([Id]), 0) FROM dbo.Documents WHERE [DocumentTypeId] = @DocumentTypeId
 				) As [SerialNumber]
-			FROM @Transactions 
+			FROM @Documents 
 			WHERE [EntityState] IN (N'Inserted', N'Updated')
 		) AS s ON (t.Id = s.Id)
 		WHEN MATCHED
@@ -71,8 +70,7 @@ BEGIN
 	SELECT Id, @UserId
 	FROM @IndexedIds
 
-
-	--MERGE INTO [dbo].[TransactionLines] AS t
+	--MERGE INTO [dbo].[DocumentLines] AS t
 	--USING (
 	--	SELECT L.[Index], L.[Id], II.[Id] AS [DocumentId], [BaseLineId], [ScalingFactor], [Memo]
 	--	FROM @Lines L
@@ -138,5 +136,4 @@ BEGIN
 				s.[MoneyAmount], s.[Mass], s.[Volume], s.[Area], s.[Length], s.[Time], s.[Count], s.[Value], s.[Memo],
 				s.[ExternalReference], s.[AdditionalReference], s.[RelatedResourceId], s.[RelatedAgentId], s.[RelatedMoneyAmount])
 		;
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;

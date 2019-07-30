@@ -17,6 +17,7 @@ RETURN
 		V.[SerialNumber],
 		V.[VoucherNumericReference],
 		V.[DocumentTypeId],
+		V.[LineTypeId],
 		V.[Direction],
 		V.[AccountId],
 		V.[IfrsAccountId],
@@ -24,6 +25,7 @@ RETURN
 		V.[IfrsNoteId],
 		V.[ResponsibilityCenterId],
 		V.[ResourceId],
+		R.[UnitId],
 		V.[InstanceId],
 		V.[BatchCode],
 		V.[Quantity],
@@ -47,7 +49,7 @@ RETURN
 		V.[RelatedAccountId],
 		V.[RelatedQuantity],
 		V.[RelatedMoneyAmount]
-	FROM dbo.[TransactionsLinesEntriesDetailsView] V
+	FROM dbo.[DocumentLineEntriesDetailsView] V
 	JOIN dbo.Resources R ON V.ResourceId = R.Id
 	JOIN dbo.MeasurementUnits EU ON R.CurrencyId = EU.Id
 	JOIN dbo.MeasurementUnits MU ON R.MassUnitId = MU.Id

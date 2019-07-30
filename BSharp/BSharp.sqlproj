@@ -91,8 +91,8 @@
     <Build Include="dbo\Functions\dbo.fn_FunctionalCurrency.sql" />
     <Build Include="dbo\Functions\dbo.fn_CurrencyExchange.sql" />
     <Build Include="dbo\Functions\dbo.fi_JournalDetails.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.dal_Transactions__Save.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_Documents__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_Documents_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.rpt_TrialBalance.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Documents__Assign.sql" />
@@ -131,9 +131,9 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_Resources__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Resources_Validate__Save.sql" />
     <Build Include="dbo\User Defined Types\dbo.DocumentList.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TransactionWideLineList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentWideLineList.sql" />
     <Build Include="dbo\User Defined Types\dbo.IdList.sql" />
-    <Build Include="dbo\Stored Procedures\dbo.api_Transactions__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_Documents__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_Transactions_Validate__Post.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_Documents_State__Update.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_Operation__SetOperatingSegment.sql" />
@@ -262,13 +262,13 @@
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__Delete.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_ProductCategories_Validate__Save.sql" />
     <Build Include="dbo\Stored Procedures\dbo.api_ProductCategories__Select.sql" />
-    <Build Include="dbo\Views\dbo.TransactionsLinesEntriesDetailsView.sql" />
+    <Build Include="dbo\Views\dbo.DocumentLineEntriesDetailsView.sql" />
     <Build Include="dbo\Views\dbo.AccountsBalancesView.sql" />
     <Build Include="dbo\Stored Procedures\dbo.dal_ProductCategories__DeleteWithDescendants.sql" />
     <Build Include="dbo\Tables\dbo.ResourceInstances.sql" />
     <Build Include="dbo\Views\dbo.TransactionsEntriesSummaryView.sql" />
     <Build Include="dbo\Functions\dbo.fi_JournalSummary.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TransactionLineList.sql" />
+    <Build Include="dbo\User Defined Types\dbo.DocumentLineList.sql" />
     <Build Include="dbo\Stored Procedures\dbo.bll_TransactionWideLines__Unpivot.sql" />
     <Build Include="dbo\Tables\dbo.DocumentStatesHistory.sql" />
     <Build Include="dbo\Tables\dbo.VoucherBooklets.sql" />
@@ -276,6 +276,16 @@
     <Build Include="dbo\Tables\dbo.WorkflowSignatories.sql" />
     <Build Include="dbo\Tables\dbo.VoucherTypes.sql" />
     <Build Include="dbo\User Defined Types\dbo.IdWithStateList.sql" />
+    <Build Include="dbo\Tables\dbo.Plans.sql" />
+    <Build Include="dbo\Tables\dbo.ResourceLookup1s.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.rpt_Production__Actual_vs_Planned.sql" />
+    <Build Include="dbo\Functions\dbo.fn_MeasurementUnitRatio.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ResourceLookups1__Save.sql" />
+    <Build Include="dbo\User Defined Types\dbo.ResourceLookupList.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.bll_ResourceLookup1s_Validate__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ResourceLooup1s__Save.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.api_ResourceLookup1s__Activate.sql" />
+    <Build Include="dbo\Stored Procedures\dbo.dal_ResourceLookup1s__Activate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">

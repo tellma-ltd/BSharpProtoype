@@ -14,7 +14,7 @@
 	-- For a source document, SignedAt = Now(). For a copy, it is manually entered.
 	[SignedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	-- For a source document, ActorId is the userId. Else, it is editable.
-	[ActorId]					INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[AgentId]					INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	-- Role Id is selected from a choice list of the actor's roles of the actor that are compatible with workflow
 	[RoleId]					INT,
 
@@ -27,7 +27,7 @@
 	CONSTRAINT [PK_DocumentSignatures] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
 	CONSTRAINT [FK_DocumentSignatures__Documents] FOREIGN KEY ([TenantId], [DocumentId]) REFERENCES [dbo].[Documents] ([TenantId], [Id]) ON DELETE CASCADE,
 	CONSTRAINT [CK_DocumentSignatures__State] CHECK ([State] IN (N'Void', N'Requested', N'Rejected', N'Authorized', N'Failed', N'Completed', N'Invalid', N'Posted')),
-	CONSTRAINT [FK_DocumentSignatures__ActorId] FOREIGN KEY ([TenantId], [ActorId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]),
+	CONSTRAINT [FK_DocumentSignatures__AgentId] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]),
 	CONSTRAINT [FK_DocumentSignatures__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
 	CONSTRAINT [FK_DocumentSignatures__RevokedById] FOREIGN KEY ([TenantId], [RevokedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
 );

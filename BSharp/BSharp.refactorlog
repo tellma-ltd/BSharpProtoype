@@ -1232,4 +1232,74 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[DocumentList]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f6891c27-c6e8-44f4-893e-e901a5062bb2" ChangeDateTime="07/30/2019 18:06:30">
+    <Property Name="ElementName" Value="[dbo].[DocumentSignatures].[ActorId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DocumentSignatures]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[AgentId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f6638197-7011-45f2-82e5-d1aedc7d2bc9" ChangeDateTime="07/30/2019 21:53:23">
+    <Property Name="ElementName" Value="[dbo].[api_Transactions__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[api_Documents__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a18d0708-d495-4c5c-bf9a-357ffc57ca45" ChangeDateTime="07/30/2019 21:55:49">
+    <Property Name="ElementName" Value="[dbo].[dal_Transactions__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[dal_Document__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6dda9699-e67e-4d05-be43-8535f657b612" ChangeDateTime="07/30/2019 21:56:31">
+    <Property Name="ElementName" Value="[dbo].[bll_Transactions_Validate__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_Documents_Validate__Save]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2aff0a77-94fd-4dcf-ad7f-937b23bf2390" ChangeDateTime="07/30/2019 21:59:09">
+    <Property Name="ElementName" Value="[dbo].[TransactionLineList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentLineList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0b5854a0-9c36-4f3f-9ed7-947ff476b6eb" ChangeDateTime="07/30/2019 21:59:50">
+    <Property Name="ElementName" Value="[dbo].[TransactionWideLineList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentWideLineList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="29278628-e60e-4f18-ae9c-f15899fccb33" ChangeDateTime="07/30/2019 22:00:35">
+    <Property Name="ElementName" Value="[dbo].[TransactionsLinesEntriesDetailsView]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentsLinesEntriesDetailsView]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="51506cb4-4a31-481e-b0ea-cc6324e619d7" ChangeDateTime="07/30/2019 22:00:54">
+    <Property Name="ElementName" Value="[dbo].[DocumentsLinesEntriesDetailsView]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DocumentLineEntriesDetailsView]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="44d69675-c069-48ac-b526-651d8a4c064e" ChangeDateTime="07/30/2019 22:09:39">
+    <Property Name="ElementName" Value="[dbo].[ResourceLookup1List]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ResourceLookupList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="64d1d00d-d313-4d0d-ba72-ce2f86037ba0" ChangeDateTime="07/30/2019 22:17:27">
+    <Property Name="ElementName" Value="[dbo].[bll_ResourceLookups_Validate__Save]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_ResourceLookup1s_Validate__Save]" />
+  </Operation>
 </Operations>

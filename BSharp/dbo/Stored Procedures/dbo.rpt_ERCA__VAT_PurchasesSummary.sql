@@ -13,7 +13,6 @@ BEGIN
 	FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
 	LEFT JOIN [dbo].[Agents] A ON J.[RelatedAccountId] = A.Id
 	WHERE J.[IfrsAccountId] = N'CurrentValueAddedTaxReceivables'
-	-- No Ifrs?: J.AccountType = N'CurrentValueAddedTaxReceivables'
 	AND J.Direction = 1
 	GROUP BY A.[Name], A.TaxIdentificationNumber, J.ExternalReference, J.AdditionalReference, J.DocumentDate;
 END;

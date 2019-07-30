@@ -1,14 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_NegativeInventories]
 	@AsOfDate Datetime = '01.01.2020'
 AS
-WITH IfrsInventoryAccounts
-AS
-(
-	SELECT Id FROM dbo.[IfrsAccounts]
-	WHERE [Node].IsDescendantOf(
-		(SELECT [Node] FROM dbo.IfrsAccounts WHERE Id = N'Inventories')
-	) = 1
-)
+	WITH IfrsInventoryAccounts AS (
+		SELECT Id FROM dbo.[IfrsAccounts]
+		WHERE [Node].IsDescendantOf(
+			(SELECT [Node] FROM dbo.IfrsAccounts WHERE Id = N'Inventories')
+		) = 1
+	)
 	SELECT
 			[AccountId],
 			[ResponsibilityCenterId],

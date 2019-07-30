@@ -1,14 +1,16 @@
 ﻿CREATE TABLE [dbo].[Resources] (
+	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
+	[Id]						INT					IDENTITY,
 /*
 	Money,
 	Intangible [rights,..]
-	Material/Good [RM, WIP, FG, ]
-	PPE (Service)
+	Material/Good [RM, WIP, FG, TM]
+	PPE (leases, investments ?)
 	Biological
+	Lease services
 	Employee Job
+	general services
 */
-	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						INT					IDENTITY,
 	[ResourceType]				NVARCHAR (255)		NOT NULL,
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
@@ -46,7 +48,8 @@
 	[ExpenseAccountId]			INT,
 	[RevenueAccountId]			INT,
 	-- The following properties are user-defined, used for reporting
-	-- Examples for Steel finished goods are: Thickness, width, Grade,
+	-- Examples for Steel finished goods are: Thickness and width. For cars: make and model.
+	[ProductCategoryId]			INT,
 	[ResourceLookup1Id]			INT,			-- UDL 
 	[ResourceLookup2Id]			INT,			-- UDL 
 	[ResourceLookup3Id]			INT,			-- UDL 
@@ -58,6 +61,9 @@
 	CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
 	CONSTRAINT [FK_Resources__MassUnitId] FOREIGN KEY ([TenantId], [MassUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]),
 	CONSTRAINT [FK_Resources__VolumeUnitId] FOREIGN KEY ([TenantId], [VolumeUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]),
+	-- repeat for all lookups
+	CONSTRAINT [FK_Resources__ProductCategoryId] FOREIGN KEY ([TenantId], [ProductCategoryId]) REFERENCES [dbo].[ProductCategories] ([TenantId], [Id]),
+	CONSTRAINT [FK_Resources__ResourceLookup1Id] FOREIGN KEY ([TenantId], [ResourceLookup1Id]) REFERENCES [dbo].[ResourceLookup1s] ([TenantId], [Id]),
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name]

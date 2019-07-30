@@ -4,6 +4,6 @@
 RETURNS TABLE
 AS
 RETURN
-	SELECT	[RoleId], [ActorId], [SignedAt], [RevokedAt], [RevokedById]
+	SELECT	[RoleId], [AgentId], [SignedAt], [RevokedAt], [RevokedById]
 	FROM [dbo].[DocumentSignatures]
 	WHERE DocumentId = @DocumentId;

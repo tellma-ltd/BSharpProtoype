@@ -2,19 +2,20 @@
 	@fromDate Datetime = '01.01.2020',
 	@toDate Datetime = '01.01.2020'
 AS
-	WITH
-	ExpenseJournal AS (
-		SELECT J.[ResponsibilityCenterId], J.[IfrsNoteId], O.[Name], O.[Name2], O.[Name3],
+BEGIN
+	WITH ExpenseJournal AS (
+		SELECT
+			J.[ResponsibilityCenterId], J.[IfrsNoteId], RC.[Name], RC.[Name2], RC.[Name3],
 			SUM(J.[Direction] * J.[Value]) AS [Expense]
 		FROM [dbo].[fi_JournalDetails](@fromDate, @toDate) J
-		JOIN dbo.[ResponsibilityCenters] O ON J.[ResponsibilityCenterId] = O.Id
+		JOIN dbo.[ResponsibilityCenters] RC ON J.[ResponsibilityCenterId] = RC.Id
 		WHERE J.[IfrsNoteId] IN (
 			N'CostOfSales',
 			N'DistributionCosts',
 			N'AdministrativeExpense',
 			N'OtherExpenseByFunction'
 		)
-		GROUP BY J.[ResponsibilityCenterId], J.[IfrsNoteId], O.[Name], O.[Name2], O.[Name3]
+		GROUP BY J.[ResponsibilityCenterId], J.[IfrsNoteId], RC.[Name], RC.[Name2], RC.[Name3]
 	)
 	SELECT * FROM ExpenseJournal
 	PIVOT (
@@ -23,3 +24,4 @@ AS
 			[CostOfSales], [DistributionCosts], [AdministrativeExpense], [OtherExpenseByFunction]
 		)
 	) AS pvt;
+END;

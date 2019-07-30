@@ -1,4 +1,4 @@
-﻿CREATE TYPE [dbo].[TransactionWideLineList] AS TABLE (
+﻿CREATE TYPE [dbo].[DocumentWideLineList] AS TABLE (
 	[Index]					INT,
 	[TransactionLineIndex]	INT,
 	[DocumentIndex]			INT				NOT NULL,

@@ -1,12 +1,12 @@
-﻿CREATE PROCEDURE [dbo].[api_Transactions__Save]
-	@Transactions [dbo].[DocumentList] READONLY,
-	@WideLines [dbo].[TransactionWideLineList] READONLY, 
+﻿CREATE PROCEDURE [dbo].[api_Documents__Save]
+	@Documents [dbo].[DocumentList] READONLY,
+	@WideLines [dbo].[DocumentWideLineList] READONLY, 
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @IndexedIdsJson NVARCHAR(MAX), @Ids [dbo].[IdList];
+	DECLARE @Ids [dbo].[IdList];
 	DECLARE @ResultJson NVARCHAR(MAX);
-	DECLARE @Lines dbo.TransactionLineList;
+	DECLARE @Lines dbo.[DocumentLineList];
 	DECLARE @Entries dbo.TransactionEntryList;
 	
 	EXEC [dbo].[bll_TransactionWideLines__Unpivot] -- UI logic to fill missing fields, and unpivot
@@ -18,8 +18,8 @@ BEGIN
 	INSERT INTO @Entries SELECT * FROM dbo.[fw_TransactionEntries__Json](@ResultJson);
 */
 	--Validate Domain rules
-	EXEC [dbo].[bll_Transactions_Validate__Save]
-		@Transactions = @Transactions,
+	EXEC [dbo].[bll_Documents_Validate__Save]
+		@Documents = @Documents,
 		@Entries = @Entries,
 		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT;
 
@@ -31,9 +31,8 @@ BEGIN
 	--SELECT * FROM @EntriesLocal;
 	-- Validate business rules (read from the table)
 
-	EXEC [dbo].[dal_Transactions__Save]
-		@Transactions = @Transactions,
+	EXEC [dbo].[dal_Document__Save]
+		@Documents = @Documents,
 		@Lines = @Lines,
-		@Entries = @Entries,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
+		@Entries = @Entries
 END;

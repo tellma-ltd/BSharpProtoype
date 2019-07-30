@@ -3,7 +3,7 @@
 	@State NVARCHAR(255),
 	@ReasonId INT,
 	@ReasonDetails	NVARCHAR(1024),
-	@ActorId INT,
+	@AgentId INT,
 	@RoleId INT,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -20,7 +20,7 @@ BEGIN
 		@State = @State,
 		@ReasonId = @ReasonId,
 		@ReasonDetails = @ReasonDetails,
-		@ActorId = @ActorId,
+		@AgentId = @AgentId,
 		@RoleId = @RoleId
 
 	-- get the documents whose state will change

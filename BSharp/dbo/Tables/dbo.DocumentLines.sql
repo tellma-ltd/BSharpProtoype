@@ -7,7 +7,7 @@
 	[LineTypeId]			NVARCHAR (255)		NOT NULL, -- specifies the number of entries
 	[TemplateLineId]		INT, -- depending on the line type, the user may/may not be allowed to edit
 	[ScalingFactor]			FLOAT, -- Qty sold for Price list, Qty produced for BOM
-
+	[AgentId]				INT, -- useful for storing the conversion agent in conversion transactions
 -- for auditing
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
 	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),

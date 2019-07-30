@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[bll_Transactions_Validate__Save]
-	@Transactions [dbo].[DocumentList] READONLY,
+﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Save]
+	@Documents [dbo].[DocumentList] READONLY,
 	@Entries [dbo].[TransactionEntryList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
@@ -13,7 +13,7 @@ SET NOCOUNT ON;
 		'[' + CAST([Index] AS NVARCHAR (255)) + '].DocumentDate',
 		N'Error_TheTransactionDate0IsInTheFuture',
 		[DocumentDate]
-	FROM @Transactions
+	FROM @Documents
 	WHERE ([DocumentDate] > DATEADD(DAY, 1, @Now)) -- More accurately, FE.[DocumentDate] > CONVERT(DATE, SWITCHOFFSET(@Now, user_time_zone)) 
 
 	-- (FE Check) If Resource = functional currency, the value must match the money amount
@@ -34,7 +34,7 @@ SET NOCOUNT ON;
 		'[' + CAST([Index] AS NVARCHAR (255)) + '].DocumentDate',
 		N'Error_TheTransactionDateIsBeforeArchiveDate0',
 		(SELECT TOP 1 ArchiveDate FROM dbo.Settings)
-	FROM @Transactions
+	FROM @Documents
 	WHERE [DocumentDate] < (SELECT TOP 1 ArchiveDate FROM dbo.Settings) 
 	
 	-- (FE Check, DB IU trigger) Cannot save a document not in draft state
@@ -42,7 +42,7 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].DocumentState',
 		N'Error_CannotOnlySaveADocumentInDraftState'
-	FROM @Transactions FE
+	FROM @Documents FE
 	JOIN [dbo].[Documents] BE ON FE.[Id] = BE.[Id]
 	WHERE (BE.[State] <> N'Draft')
 	
@@ -82,7 +82,7 @@ SET NOCOUNT ON;
 		N'Error_TheIfrsNoteId0HasExpired',
 		IC.[Label]
 	FROM @Entries E
-	JOIN @Transactions T ON E.[DocumentIndex] = T.[Index]
+	JOIN @Documents T ON E.[DocumentIndex] = T.[Index]
 	JOIN dbo.[IfrsNotes] N ON E.[IfrsNoteId] = N.Id
 	JOIN dbo.[IfrsConcepts] IC ON N.Id = IC.Id
 	WHERE (IC.ExpiryDate < T.[DocumentDate]);

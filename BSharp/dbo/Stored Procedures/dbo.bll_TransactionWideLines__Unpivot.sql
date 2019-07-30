@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[bll_TransactionWideLines__Unpivot]
-		@WideLines dbo.TransactionWideLineList READONLY,
+		@WideLines dbo.[DocumentWideLineList] READONLY,
 		@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
-	DECLARE @Lines dbo.TransactionLineList;
+	DECLARE @Lines dbo.[DocumentLineList];
 	DECLARE @Entries dbo.TransactionEntryList;
 
 	INSERT INTO @Lines(

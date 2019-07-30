@@ -4,7 +4,7 @@
 	@State NVARCHAR(255),
 	@ReasonId INT,
 	@ReasonDetails	NVARCHAR(1024),
-	@ActorId INT,
+	@AgentId INT,
 	@RoleId INT,
 	@SignedAt DATETIMEOFFSET(7)
 AS
@@ -13,9 +13,9 @@ BEGIN
 	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 	INSERT INTO dbo.[DocumentSignatures] (
-		[DocumentId], [State], [ReasonId], [ReasonDetails], [ActorId], [RoleId], [SignedAt]
+		[DocumentId], [State], [ReasonId], [ReasonDetails], [AgentId], [RoleId], [SignedAt]
 	)
 	SELECT
-		[Id],		@State,		@ReasonId, @ReasonDetails,	@ActorId,	@RoleId, @SignedAt
+		[Id],		@State,		@ReasonId, @ReasonDetails,	@AgentId,	@RoleId, @SignedAt
 	FROM @Entities
 END;
