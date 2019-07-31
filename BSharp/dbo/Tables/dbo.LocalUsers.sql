@@ -1,15 +1,18 @@
 ﻿CREATE TABLE [dbo].[LocalUsers] (
-	[TenantId]			INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]				INT				IDENTITY(1,1),
-	[Name]				NVARCHAR (255)	NOT NULL,
+	[TenantId]			INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
+	[Id]				UNIQUEIDENTIFIER	PRIMARY KEY NONCLUSTERED,
+	[Name]				NVARCHAR (255)		NOT NULL,
 	[Name2]				NVARCHAR (255),
 	[Name3]				NVARCHAR (255),
-	[PreferredLanguage] NCHAR(2)		NOT NULL DEFAULT (N'en'), 
+	[PreferredLanguage] NCHAR(2)			NOT NULL DEFAULT (N'en'), 
 	[ProfilePhoto]		VARBINARY (MAX),
-	[AgentId]			INT,
-	CONSTRAINT [PK_LocalUsers] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
-	CONSTRAINT [FK_LocalUsers_Agents] FOREIGN KEY ([TenantId], [AgentId]) REFERENCES [dbo].[Agents] ([TenantId], [Id]) ON UPDATE CASCADE,
+	[AgentId]			UNIQUEIDENTIFIER,
+	[SortKey]			DECIMAL (9,4),
+	CONSTRAINT [FK_LocalUsers_Agents] FOREIGN KEY ([AgentId]) REFERENCES [dbo].[Agents] ([Id]) ON UPDATE CASCADE,
 );
+GO
+CREATE CLUSTERED INDEX [IX_LocalUsers__TenantId_SortKey]
+  ON [dbo].[LocalUsers]([TenantId],[SortKey]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Users__Name]
   ON [dbo].[LocalUsers]([TenantId] ASC, [Name] ASC);

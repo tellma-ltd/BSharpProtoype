@@ -33,12 +33,12 @@
 -- Tracking additive measures
 	[Quantity]				VTYPE				NOT NULL DEFAULT 0, -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
 	[MoneyAmount]			MONEY				NOT NULL DEFAULT 0, -- Amount in foreign Currency 
-	[Mass]					DECIMAL				NOT NULL DEFAULT 0, -- MassUnit, like LTZ bar, cement bag, etc
-	[Volume]				DECIMAL				NOT NULL DEFAULT 0, -- VolumeUnit, possibly for shipping
-	[Area]					DECIMAL				NOT NULL DEFAULT 0, -- Area Unit, possibly for lands
-	[Length]				DECIMAL				NOT NULL DEFAULT 0, -- Length Unit, possibly for cables or pipes
-	[Time]					DECIMAL				NOT NULL DEFAULT 0, -- ServiceTimeUnit
-	[Count]					DECIMAL				NOT NULL DEFAULT 0, -- CountUnit
+	[Mass]					DECIMAL (18,2)		NOT NULL DEFAULT 0, -- MassUnit, like LTZ bar, cement bag, etc
+	[Volume]				DECIMAL (18,2)		NOT NULL DEFAULT 0, -- VolumeUnit, possibly for shipping
+	[Area]					DECIMAL (18,2)		NOT NULL DEFAULT 0, -- Area Unit, possibly for lands
+	[Length]				DECIMAL (18,2)		NOT NULL DEFAULT 0, -- Length Unit, possibly for cables or pipes
+	[Time]					DECIMAL (18,2)		NOT NULL DEFAULT 0, -- ServiceTimeUnit
+	[Count]					DECIMAL (18,2)		NOT NULL DEFAULT 0, -- CountUnit
 	[Value]					VTYPE				NOT NULL DEFAULT 0, -- equivalent in functional currency
 -- Additional information to satisfy reporting requirements
 	[Memo]					NVARCHAR (255), -- a textual description for statements and reports

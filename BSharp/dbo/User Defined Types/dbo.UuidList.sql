@@ -1,0 +1,4 @@
+﻿CREATE TYPE [dbo].[UuidList] AS TABLE (
+	[Id] UNIQUEIDENTIFIER,
+	PRIMARY KEY ([Id])
+);

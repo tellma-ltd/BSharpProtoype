@@ -29,10 +29,10 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Code',
 		N'Error_TheCode0IsUsed',
-		FE.Code AS Argument0
+		FE.[SortKey] AS Argument0
 	FROM @Entities FE 
-	JOIN [dbo].[ResourceLookup1s] BE ON FE.Code = BE.Code
-	WHERE FE.[Code] IS NOT NULL
+	JOIN [dbo].[ResourceLookup1s] BE ON FE.[SortKey] = BE.Code
+	WHERE FE.[SortKey] IS NOT NULL
 	AND ((FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id))
 	OPTION(HASH JOIN);
 
@@ -41,13 +41,13 @@ SET NOCOUNT ON;
 	SELECT
 		'[' + CAST([Index] AS NVARCHAR (255)) + '].Code',
 		N'Error_TheCode0IsDuplicated',
-		[Code]
+		[SortKey]
 	FROM @Entities
-	WHERE [Code] IN (
-		SELECT [Code]
+	WHERE [SortKey] IN (
+		SELECT [SortKey]
 		FROM @Entities
-		WHERE [Code] IS NOT NULL
-		GROUP BY [Code]
+		WHERE [SortKey] IS NOT NULL
+		GROUP BY [SortKey]
 		HAVING COUNT(*) > 1
 	) OPTION(HASH JOIN);
 

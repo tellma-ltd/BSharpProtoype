@@ -50,7 +50,7 @@
 	-- The following properties are user-defined, used for reporting
 	-- Examples for Steel finished goods are: Thickness and width. For cars: make and model.
 	[ProductCategoryId]			INT,
-	[ResourceLookup1Id]			INT,			-- UDL 
+	[ResourceLookup1Id]			UNIQUEIDENTIFIER,			-- UDL 
 	[ResourceLookup2Id]			INT,			-- UDL 
 	[ResourceLookup3Id]			INT,			-- UDL 
 	[ResourceLookup4Id]			INT,			-- UDL 
@@ -63,7 +63,7 @@
 	CONSTRAINT [FK_Resources__VolumeUnitId] FOREIGN KEY ([TenantId], [VolumeUnitId]) REFERENCES [dbo].[MeasurementUnits] ([TenantId], [Id]),
 	-- repeat for all lookups
 	CONSTRAINT [FK_Resources__ProductCategoryId] FOREIGN KEY ([TenantId], [ProductCategoryId]) REFERENCES [dbo].[ProductCategories] ([TenantId], [Id]),
-	CONSTRAINT [FK_Resources__ResourceLookup1Id] FOREIGN KEY ([TenantId], [ResourceLookup1Id]) REFERENCES [dbo].[ResourceLookup1s] ([TenantId], [Id]),
+	CONSTRAINT [FK_Resources__ResourceLookup1Id] FOREIGN KEY ([ResourceLookup1Id]) REFERENCES [dbo].[ResourceLookup1s] ([Id]),
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resources__Name]
