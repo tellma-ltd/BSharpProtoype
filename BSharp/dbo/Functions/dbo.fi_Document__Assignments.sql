@@ -1,5 +1,5 @@
 ﻿CREATE FUNCTION [dbo].[fi_Document__Assignments] (
-	@DocumentId INT
+	@DocumentId UNIQUEIDENTIFIER
 )
 RETURNS TABLE
 AS

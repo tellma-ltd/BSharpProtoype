@@ -2,8 +2,8 @@
 /* 
 EXEC [dbo].[rpt_TrialBalance] @fromDate = '01.01.2015', @toDate = '01.01.2020', @ByResource = 1, @ByIfrsNote = 1, @PrintQuery = 1
 */	
-	@fromDate Datetime = '01.01.2000', 
-	@toDate Datetime = '01.01.2020',
+	@fromDate Date = '01.01.2000', 
+	@toDate Date = '01.01.2020',
 	@ByResponsibilityCenter bit = 1,
 	@ByResource bit = 1,
 	@ByIfrsNote bit = 1,

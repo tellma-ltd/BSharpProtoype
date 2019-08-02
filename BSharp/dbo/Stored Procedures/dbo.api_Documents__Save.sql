@@ -4,12 +4,12 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-	DECLARE @Ids [dbo].[IdList];
+	DECLARE @Ids [dbo].[UuidList];
 	DECLARE @ResultJson NVARCHAR(MAX);
 	DECLARE @Lines dbo.[DocumentLineList];
-	DECLARE @Entries dbo.TransactionEntryList;
+	DECLARE @Entries dbo.DocumentLineEntryList;
 	
-	EXEC [dbo].[bll_TransactionWideLines__Unpivot] -- UI logic to fill missing fields, and unpivot
+	EXEC [dbo].[bll_DocumentWideLines__Unpivot] -- UI logic to fill missing fields, and unpivot
 		@WideLines = @WideLines,
 		@ResultJson = @ResultJson OUTPUT;
 

@@ -1,9 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Operation__SetOperatingSegment]
-	@OperationId int
+	@OperationId UNIQUEIDENTIFIER
 AS
-	DECLARE @Id int, @Ids [dbo].[IdList], @NextIds [dbo].[IdList];
+	DECLARE @Id UNIQUEIDENTIFIER, @Ids [dbo].[UuidList], @NextIds [dbo].[UuidList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
 	--UPDATE dbo.[ResponsibilityCenters]
 	--SET
@@ -14,7 +14,7 @@ AS
 	--AND [IsOperatingSegment] = 0;
 
 -- Reset all ancestors up to the root
-	DECLARE @ParentId int
+	DECLARE @ParentId UNIQUEIDENTIFIER
 	SELECT @ParentId = ParentId
 	FROM dbo.[ResponsibilityCenters]
 	WHERE Id = @OperationId

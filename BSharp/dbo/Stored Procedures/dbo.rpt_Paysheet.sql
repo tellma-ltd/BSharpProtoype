@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_Paysheet]
-	@fromDate Datetime = '01.01.2000', 
-	@toDate Datetime = '01.01.2100',
-	@BasicSalaryResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [SystemCode] = N'Basic')
+	@fromDate Date = '01.01.2000', 
+	@toDate Date = '01.01.2100',
+	@BasicSalaryResourceId UNIQUEIDENTIFIER, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [SystemCode] = N'Basic')
 	-- We should get all resources that are potentially salary components
-	@TransportationAllowanceResourceId int, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
-	@OvertimeResourceId int -- 
+	@TransportationAllowanceResourceId UNIQUEIDENTIFIER, -- (SELECT MIN([Id]) FROM dbo.Resources WHERE [Name] = N'Transportation')
+	@OvertimeResourceId UNIQUEIDENTIFIER -- 
 AS
 /*
 Approach 1: Generate it from accounts whose IfrsAccountId has to do with employee benefits

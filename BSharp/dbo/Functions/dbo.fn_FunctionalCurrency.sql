@@ -1,8 +1,8 @@
 ﻿CREATE FUNCTION [dbo].[fn_FunctionalCurrency]()
-RETURNS INT
+RETURNS UNIQUEIDENTIFIER
 AS
 BEGIN
-	DECLARE @Result INT;
+	DECLARE @Result UNIQUEIDENTIFIER;
 
 	SELECT @Result = FunctionalCurrencyId
 	FROM dbo.Settings

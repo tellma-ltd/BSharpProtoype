@@ -1,9 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Unsign]
-	@Documents [dbo].[IndexedIdList] READONLY
+	@Documents [dbo].[UuidList] READONLY
 AS
 BEGIN
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
 	-- if last signed by same user, hard delete the signature
 	DELETE FROM dbo.[DocumentSignatures]

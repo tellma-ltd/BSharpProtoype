@@ -1,28 +1,26 @@
 ﻿CREATE TABLE [dbo].[TemplateLines] (
-	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]					INT IDENTITY,
-	[DocumentId]			INT					NOT NULL,
+	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
+	[DocumentId]			UNIQUEIDENTIFIER	NOT NULL,
 	[TemplateLineType]		NVARCHAR (255)		NOT NULL,
 	[ValidFrom]				DATETIME2(7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	-- for sales/purchase price lists
-	[ResourceId]			INT,
+	[ResourceId]			UNIQUEIDENTIFIER,
 	[Quantity]				MONEY				DEFAULT 1,
 	[Price]					MONEY,
-	[Currency]				INT,
+	[Currency]				UNIQUEIDENTIFIER,
 	[VAT]					MONEY,
 	[TOT]					MONEY,
 	-- for employee agreement
-	[AgentId]				INT,
+	[AgentId]				UNIQUEIDENTIFIER,
 	[MonthlyBasicSalary]	MONEY,
 	[HourlyOvertimeRate]	MONEY,
 	[DailyPerDiem]			MONEY,
 
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_TemplateLines] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC)
+	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 )
 GO
-CREATE INDEX [IX_TemplateLines__DocumentId] ON [dbo].[TemplateLines]([TenantId] ASC, [DocumentId] ASC);
+CREATE INDEX [IX_TemplateLines__DocumentId] ON [dbo].[TemplateLines]([DocumentId]);
 GO

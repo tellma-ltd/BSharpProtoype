@@ -1,16 +1,16 @@
-﻿CREATE TYPE [dbo].[TransactionEntryList] AS TABLE (
+﻿CREATE TYPE [dbo].DocumentLineEntryList AS TABLE (
 	[Index]					INT,
-	[TransactionLineIndex]	INT					NOT NULL,
+	[DocumentLineIndex]		INT					NOT NULL,
 	[DocumentIndex]			INT					NOT NULL,
-	[Id]					INT,
-	[TransactionLineId]		INT,
+	[Id]					UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
+	[DocumentLineId]		UNIQUEIDENTIFIER,
 	[EntryNumber]			INT,
 	[Direction]				SMALLINT			NOT NULL,
-	[AccountId]				INT		NOT NULL,
+	[AccountId]				UNIQUEIDENTIFIER		NOT NULL,
 	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
-	[ResponsibilityCenterId]INT,				-- called SegmentId in B10. When not needed, we use the entity itself.
-	[ResourceId]			INT,				-- NUll because it may be specified by Account				
-	[InstanceId]			INT,
+	[ResponsibilityCenterId]UNIQUEIDENTIFIER,				-- called SegmentId in B10. When not needed, we use the entity itself.
+	[ResourceId]			UNIQUEIDENTIFIER,				-- NUll because it may be specified by Account				
+	[InstanceId]			UNIQUEIDENTIFIER,
 	[BatchCode]				NVARCHAR (255),
 	[DueDate]				DATE,
 	[Quantity]				VTYPE				NOT NULL DEFAULT 0, --  measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
@@ -26,15 +26,14 @@
 	[ExternalReference]		NVARCHAR (255),
 	[AdditionalReference]	NVARCHAR (255),
 
-	[RelatedResourceId]		INT, -- Good, Service, Labor, Machine usage
-	[RelatedAgentId]		INT,
+	[RelatedResourceId]		UNIQUEIDENTIFIER, -- Good, Service, Labor, Machine usage
+	[RelatedAgentId]		UNIQUEIDENTIFIER,
 	[RelatedQuantity]		MONEY ,			-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
 
 	[EntityState]			NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY ([Index] ASC),
-	INDEX IX_TransactionEntryList_TransactionLineIndex ([TransactionLineIndex]),
+	PRIMARY KEY ([Index]),
+	INDEX IX_TransactionEntryList_TransactionLineIndex ([DocumentLineIndex]),
 	CHECK ([Direction] IN (-1, 1)),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
-	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

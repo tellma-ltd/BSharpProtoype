@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Unsign]
-	@Documents [dbo].[IndexedIdList] READONLY,
+	@Documents [dbo].[UuidList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -22,7 +22,7 @@ BEGIN
 	EXEC [dbo].[dal_Documents__Unsign] @Documents = @Documents;
 	
 	-- get the documents whose state will change
-	DECLARE @TransitionedIds [dbo].[IdWithStateList];
+	DECLARE @TransitionedIds [dbo].[UiidWithStateList];
 	/*
 	INSERT INTO @TransitionedIds([Id])
 	EXEC [dbo].[bll_Documents_State__Select]

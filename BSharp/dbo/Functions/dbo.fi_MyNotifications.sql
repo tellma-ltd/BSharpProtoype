@@ -7,5 +7,5 @@ RETURN
 	WHERE RecipientId = (
 		SELECT [AgentId]
 		FROM dbo.LocalUsers 
-		WHERE [Id] = CONVERT(INT, SESSION_CONTEXT(N'UserId'))
+		WHERE [Id] = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'))
 	);

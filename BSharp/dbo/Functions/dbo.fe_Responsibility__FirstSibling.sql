@@ -1,7 +1,7 @@
 ﻿CREATE FUNCTION [dbo].[fe_ResponsibilityCenter__FirstSibling] ( -- TODO: still needed?
-	@OperationId int
+	@OperationId UNIQUEIDENTIFIER
 )
-RETURNS INT
+RETURNS UNIQUEIDENTIFIER
 AS
 BEGIN
 	RETURN 

@@ -1,18 +1,18 @@
 ﻿DECLARE @AccountSpecifications AS TABLE (
 	[AccountId]				NVARCHAR (255),
 	[Direction]				SMALLINT,
-	[CustodyLabel]			NVARCHAR (255), -- Needed when hovering over the column.
+	[CustodyLabel]			NVARCHAR (50), -- Needed when hovering over the column.
 	[CustodyFilter]			NVARCHAR (255), -- JS code, affecting the 
-	[ResourceLabel]			NVARCHAR (255),
+	[ResourceLabel]			NVARCHAR (50),
 	[ResourceFilter]		NVARCHAR (255),
-	[AmountLabel]			NVARCHAR (255),
-	[ReferenceLabel]		NVARCHAR (255),
+	[AmountLabel]			NVARCHAR (50),
+	[ReferenceLabel]		NVARCHAR (50),
 	[RelatedReferenceLabel]	NVARCHAR (255),
-	[RelatedAgentLabel]		NVARCHAR (255),
+	[RelatedAgentLabel]		NVARCHAR (50),
 	[RelatedAgentFilter]	NVARCHAR (255),
-	[RelatedResourceLabel]	NVARCHAR (255),
+	[RelatedResourceLabel]	NVARCHAR (50),
 	[RelatedResourceFilter]	NVARCHAR (255),
-	[RelatedAmountLabel]	NVARCHAR (255)
+	[RelatedAmountLabel]	NVARCHAR (50)
 	PRIMARY KEY NONCLUSTERED ([AccountId], [Direction])
 );
 INSERT INTO @AccountSpecifications(

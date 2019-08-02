@@ -33,8 +33,7 @@ Produced = Sold + Closing - Opening
 
 */
 -- some operations are used in the line corresponding to production event
-	[TenantId]				INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]					INT					IDENTITY,
+	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
 	[ResponsibilityDomain]	NVARCHAR (255)		NOT NULL, -- Investment, Profit, Revenue, Cost
 	[Name]					NVARCHAR (255)		NOT NULL,
 	[Name2]					NVARCHAR (255),
@@ -42,35 +41,34 @@ Produced = Sold + Closing - Opening
 -- (Ifrs 8) Profit or Investment Center, Performance regularly reviewed by CODM, discrete financial information is available
 	[IsOperatingSegment]	BIT					NOT NULL DEFAULT 0, -- on each path from root to leaf, at most one O/S
 	[IsActive]				BIT					NOT NULL DEFAULT 1,
-	[ParentId]				INT, -- Only leaves can have data. Parents are represented by an extra leaf.
+	[ParentId]				UNIQUEIDENTIFIER, -- Only leaves can have data. Parents are represented by an extra leaf.
 	[Code]					NVARCHAR (255),
 -- Optional. used for convenient reporting
-	[OperationId]			INT, -- e.g., general, admin, S&M, HR, finance, production, maintenance
-	[ProductCategoryId]		INT, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
-	[GeographicRegionId]	INT, -- e.g., general, Oromia, Merkato, Kersa
-	[CustomerSegmentId]		INT, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
-	[TaxSegmentId]			INT, -- e.g., general, existing (30%), expansion (0%)
+	[OperationId]			UNIQUEIDENTIFIER, -- e.g., general, admin, S&M, HR, finance, production, maintenance
+	[ProductCategoryId]		UNIQUEIDENTIFIER, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
+	[GeographicRegionId]	UNIQUEIDENTIFIER, -- e.g., general, Oromia, Merkato, Kersa
+	[CustomerSegmentId]		UNIQUEIDENTIFIER, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
+	[TaxSegmentId]			UNIQUEIDENTIFIER, -- e.g., general, existing (30%), expansion (0%)
 
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_ResponsibilityCenters] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
+	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [CK_ResponsibilityCenters__ResponsibilityDomain] CHECK ([ResponsibilityDomain] IN (N'Investment', N'Profit', N'Revenue', N'Cost')),
-	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([TenantId], [ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([TenantId], [Id]),
-	CONSTRAINT [FK_ResponsibilityCenters__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_ResponsibilityCenters__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([Id]),
+	CONSTRAINT [FK_ResponsibilityCenters__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_ResponsibilityCenters__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name]
-  ON [dbo].[ResponsibilityCenters]([TenantId], [Name]);
+  ON [dbo].[ResponsibilityCenters]([Name]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name2]
-  ON [dbo].[ResponsibilityCenters]([TenantId], [Name2]) WHERE [Name2] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([Name2]) WHERE [Name2] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Name3]
-  ON [dbo].[ResponsibilityCenters]([TenantId], [Name3]) WHERE [Name3] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([Name3]) WHERE [Name3] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ResponsibilityCenters__Code]
-  ON [dbo].[ResponsibilityCenters]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
+  ON [dbo].[ResponsibilityCenters]([Code]) WHERE [Code] IS NOT NULL;
 GO

@@ -4,7 +4,6 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE  @IndexedIdsJson NVARCHAR(MAX);
 
 -- Validate
 /*	EXEC [dbo].[bll_Settings_Validate__Save]
@@ -16,7 +15,6 @@ DECLARE  @IndexedIdsJson NVARCHAR(MAX);
 		RETURN;
 		/*
 	EXEC [dbo].[dal_Settings__Save]
-		@Settings = @Settings,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
+		@Settings = @Settings
 	*/
 END;

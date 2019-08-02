@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[ResponsibilityCenterList] AS TABLE (
-	[Index]					INT				IDENTITY(0, 1),
-	[Id]					INT	,
+	[Index]					INT	PRIMARY KEY	IDENTITY(0, 1),
+	[Id]					UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
 	[ResponsibilityDomain]	NVARCHAR (255)		NOT NULL, -- Investment, Profit, Revenue, Cost
 	[Name]					NVARCHAR (255)		NOT NULL,
 	[Name2]					NVARCHAR (255),
@@ -9,20 +9,18 @@
 	[IsOperatingSegment]	BIT					NOT NULL DEFAULT 0, -- on each path from root to leaf, at most one O/S
 	[IsActive]				BIT					NOT NULL DEFAULT 1,
 	[ParentIndex]			INT,
-	[ParentId]				INT,  
+	[ParentId]				UNIQUEIDENTIFIER,  
 	[Code]					NVARCHAR (255),
 -- Optional. used for convenient reporting
-	[OperationId]			INT, -- e.g., general, admin, S&M, HR, finance, production, maintenance
-	[ProductCategoryId]		INT, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
-	[GeographicRegionId]	INT, -- e.g., general, Oromia, Merkato, Kersa
-	[CustomerSegmentId]		INT, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
-	[TaxSegmentId]			INT, -- e.g., general, existing (30%), expansion (0%)
+	[OperationId]			UNIQUEIDENTIFIER, -- e.g., general, admin, S&M, HR, finance, production, maintenance
+	[ProductCategoryId]		UNIQUEIDENTIFIER, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
+	[GeographicRegionId]	UNIQUEIDENTIFIER, -- e.g., general, Oromia, Merkato, Kersa
+	[CustomerSegmentId]		UNIQUEIDENTIFIER, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
+	[TaxSegmentId]			UNIQUEIDENTIFIER, -- e.g., general, existing (30%), expansion (0%)
 
 	[EntityState]			NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY ([Index] ASC),
 	INDEX IX_ResponsibilityCenterList__Code ([Code]),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
-	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );
 
 

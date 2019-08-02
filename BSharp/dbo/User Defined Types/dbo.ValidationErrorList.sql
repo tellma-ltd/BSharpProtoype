@@ -6,5 +6,5 @@
 	[Argument2]		NVARCHAR (255),
 	[Argument3]		NVARCHAR (255),
 	[Argument4]		NVARCHAR (255)
-	PRIMARY KEY ([Key] ASC, [ErrorName] ASC)
+	PRIMARY KEY ([Key], [ErrorName])
 );

@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[Agents] (
 --	These includes all the natural and legal persons with which the business entity may interact
-	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						UNIQUEIDENTIFIER	PRIMARY KEY NONCLUSTERED,
+	[Id]						UNIQUEIDENTIFIER	PRIMARY KEY,
 	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL, -- legal name
 	[Name2]						NVARCHAR (255),
@@ -53,27 +52,26 @@
 	[OwnershipPercent]			DECIMAL	DEFAULT 0, -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
-	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_Agents] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
+	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [CK_Agents_AgentType] CHECK ([AgentType] IN (N'Individual', N'Organization', N'Machine')), -- Organization includes Dept, Team
 	CONSTRAINT [FK_Agents__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
 	CONSTRAINT [FK_Agents__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id])
 );
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name]
-  ON [dbo].[Agents]([TenantId], [Name]);
+  ON [dbo].[Agents]([Name]);
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name2]
-  ON [dbo].[Agents]([TenantId], [Name2]) WHERE [Name2] IS NOT NULL;
+  ON [dbo].[Agents]([Name2]) WHERE [Name2] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Name3]
-  ON [dbo].[Agents]([TenantId], [Name3]) WHERE [Name3] IS NOT NULL;
+  ON [dbo].[Agents]([Name3]) WHERE [Name3] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__Code]
-  ON [dbo].[Agents]([TenantId], [Code]) WHERE [Code] IS NOT NULL;
+  ON [dbo].[Agents]([Code]) WHERE [Code] IS NOT NULL;
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Agents__SystemCode]
-  ON [dbo].[Agents]([TenantId], [Code]) WHERE [SystemCode] IS NOT NULL;
+  ON [dbo].[Agents]([Code]) WHERE [SystemCode] IS NOT NULL;
  GO

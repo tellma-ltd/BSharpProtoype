@@ -4,7 +4,6 @@
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @IndexedIdsJson NVARCHAR(MAX);
 -- Validate
 	EXEC [dbo].[bll_Resources_Validate__Save]
 		@Entities = @Entities,

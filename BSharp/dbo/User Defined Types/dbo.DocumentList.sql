@@ -1,31 +1,31 @@
 ﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
 	[Index]									INT,
-	[Id]									INT,
+	[Id]									UNIQUEIDENTIFIER NOT NULL,
 	[DocumentTypeId]						NVARCHAR (255)		NOT NULL, -- selected when inserted. Cannot update.
 	[DocumentDate]							DATE				NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	[State]									NVARCHAR (255)		NOT NULL DEFAULT N'Draft', 
 	[EvidenceTypeId]						NVARCHAR(255)		NOT NULL,
-	[VoucherBookletId]						INT, -- each range might be dedicated for a special purpose
+	[VoucherBookletId]						UNIQUEIDENTIFIER, -- each range might be dedicated for a special purpose
 	[VoucherNumericReference]				INT, -- must fall between RangeStarts and RangeEnds of the booklet
 	[BlobName]								NVARCHAR(255),		-- for attachments including videos, images, and audio messages
-	[DocumentLookup1Id]						INT, -- e.g., cash machine serial in the case of a sale
-	[DocumentLookup2Id]						INT,
-	[DocumentLookup3Id]						INT,
+	[DocumentLookup1Id]						UNIQUEIDENTIFIER, -- e.g., cash machine serial in the case of a sale
+	[DocumentLookup2Id]						UNIQUEIDENTIFIER,
+	[DocumentLookup3Id]						UNIQUEIDENTIFIER,
 	[DocumentText1]							NVARCHAR (255),
 	[DocumentText2]							NVARCHAR (255),
 	[Memo]									NVARCHAR (255),	
 	[MemoIsCommon]							BIT				DEFAULT 1,
-	[CustomerAccountId]						INT,
+	[CustomerAccountId]						UNIQUEIDENTIFIER,
 	[CustomerAccountIsCommon]				BIT				DEFAULT 1,
-	[SupplierAccountId]						INT, 
+	[SupplierAccountId]						UNIQUEIDENTIFIER, 
 	[SupplierAccountIsCommon]				BIT				DEFAULT 1,
-	[EmployeeAccountId]						INT, 
+	[EmployeeAccountId]						UNIQUEIDENTIFIER, 
 	[EmployeeAccountIsCommon]				BIT				DEFAULT 1,
-	[CurrencyId]							INT, 
+	[CurrencyId]							UNIQUEIDENTIFIER, 
 	[CurrencyIsCommon]						BIT				DEFAULT 1,
-	[SourceStockAccountId]					INT, 
+	[SourceStockAccountId]					UNIQUEIDENTIFIER, 
 	[SourceStockAccountIdIsCommon]			BIT				DEFAULT 1,
-	[DestinationStockAccountId]				INT, 
+	[DestinationStockAccountId]				UNIQUEIDENTIFIER, 
 	[DestinationStockAccountIdIsCommon]		BIT				DEFAULT 1,
 	[InvoiceReference]						NVARCHAR (255),
 	[InvoiceReferenceIsCommon]				BIT				DEFAULT 1,
@@ -34,8 +34,7 @@
 	[Repetitions]		INT					NOT NULL DEFAULT 0, -- time unit is function of frequency
 
 	[EntityState]		NVARCHAR (255)		NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY ([Index] ASC),
+	PRIMARY KEY ([Index]),
 	CHECK ([Frequency] IN (N'OneTime', N'Daily', N'Weekly', N'Monthly', N'Quarterly', N'Yearly')),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
-	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

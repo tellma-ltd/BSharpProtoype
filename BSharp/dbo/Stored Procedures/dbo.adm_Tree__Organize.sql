@@ -9,22 +9,22 @@ AS
 */
 -- @Entities is only used for illustration. Usually, it is replaced with the actual db table name.
 	DECLARE @Entities TABLE (
-		[Id] INT,
+		[Id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID(),
 		[Node] HIERARCHYID,
 		[Name] NVARCHAR(255),
 		[Code] NVARCHAR(255)
 	);
 	INSERT INTO @Entities (
-	[Id], [Name],						[Node],			[Code]) VALUES
-	(1, N'Hollow Section Product',		'/1/',			N'1'),
-	(2, N'Circular Hollow Section',		'/1/1/',		N'11'),
-	(13, N'Rectangular Hollow Section',	'/1/2/',		N'12'),
-	(14, N'Square Hollow Section',		'/1/3/',		N'13'),
-	(26, N'LTZ Products',				'/3/',			N'2'),
-	(27, N'L Bars',						'/3/1/',		N'21'),
-	(28, N'T Bars',						'/3/2/',		N'22'),
-	(39, N'Z Bars',						'/3/3/',		N'23'),
-	(40, N'Sheet Metals',				'/4/',			N'3');
+	[Name],						[Node],			[Code]) VALUES
+	(N'Hollow Section Product',		'/1/',			N'1'),
+	(N'Circular Hollow Section',		'/1/1/',		N'11'),
+	(N'Rectangular Hollow Section',	'/1/2/',		N'12'),
+	(N'Square Hollow Section',		'/1/3/',		N'13'),
+	(N'LTZ Products',				'/3/',			N'2'),
+	(N'L Bars',						'/3/1/',		N'21'),
+	(N'T Bars',						'/3/2/',		N'22'),
+	(N'Z Bars',						'/3/3/',		N'23'),
+	(N'Sheet Metals',				'/4/',			N'3');
 
 	--SELECT  *, [Node].ToString() As [Path] FROM @Entities;-- ORDER BY [Node].GetLevel(), [Node];
 

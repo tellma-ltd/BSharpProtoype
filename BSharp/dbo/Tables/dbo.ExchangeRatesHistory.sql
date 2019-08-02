@@ -7,5 +7,5 @@
 	[CreatedById]		INT		NOT NULL,
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL, 
 	[ModifiedById]		INT		NOT NULL,
-	CONSTRAINT [PK_ExchangeRatesHistory] PRIMARY KEY CLUSTERED ([Date] ASC, [BaseCurrency] ASC, [TargetCurrency] ASC)
+	CONSTRAINT [PK_ExchangeRatesHistory] PRIMARY KEY CLUSTERED ([Date], [BaseCurrency], [TargetCurrency])
 );

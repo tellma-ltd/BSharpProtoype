@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_Production__Actual_vs_Planned]
 	@FromDate Date,
 	@ToDate Date,
-	@MassUnitId INT,
-	@CountUnitId INT
+	@MassUnitId UNIQUEIDENTIFIER,
+	@CountUnitId UNIQUEIDENTIFIER
 AS
 BEGIN
 	-- Code commented since we are using ResourceType to distinguish
@@ -57,7 +57,7 @@ BEGIN
 		FROM PlannedDetails
 		GROUP BY ResourceLookup1Id
 	)
-	SELECT RL.Id, RL.Code, RL.[Name],
+	SELECT RL.Id, RL.SortKey, RL.[Name],
 		A.[Mass] AS MassActual, P.Mass As MassPlanned, A.Mass/P.Mass * 100 As [PercentOfMassPlanned],
 		A.[Count] AS CountActual, P.[Count] AS CountPlanned, A.[Count]/P.[Count] * 100 As [PercentOfCountPlanned]
 	FROM dbo.ResourceLookup1s RL

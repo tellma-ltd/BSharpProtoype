@@ -16,7 +16,6 @@ BEGIN -- reset Identities
 	DECLARE @DebugAgents bit = 0, @DebugPlaces bit = 0;
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
-	EXEC sp_set_session_context 'TenantId', 106;
 	EXEC sp_set_session_context 'Debug', 1;
 	DECLARE @UserId int;
 	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
@@ -29,7 +28,7 @@ BEGIN -- reset Identities
 		SELECT @UserId = [Id] FROM dbo.LocalUsers WHERE [Name] = N'Dr. Akra';
 
 	EXEC sp_set_session_context 'UserId', @UserId;
-	SET @UserId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	SET @UserId = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
 END
 

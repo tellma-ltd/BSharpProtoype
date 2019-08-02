@@ -1302,4 +1302,39 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[bll_ResourceLookup1s_Validate__Save]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="1d1d2d57-2c57-4044-8c92-dd5a08bc445f" ChangeDateTime="08/02/2019 15:29:55">
+    <Property Name="ElementName" Value="[dbo].[IndexedIdList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[IndexedUuidList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e77c43a8-0eb4-40c6-9787-361dc0c2c5d1" ChangeDateTime="08/02/2019 15:47:59">
+    <Property Name="ElementName" Value="[dbo].[IdList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[UuidList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d87ef5ce-028e-43fd-81f1-e0c29b53144a" ChangeDateTime="08/02/2019 15:55:08">
+    <Property Name="ElementName" Value="[dbo].[TransactionEntryList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="DocumentLineEntryList" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="aa8851b2-ce78-4cf1-a912-1b0acb344d54" ChangeDateTime="08/02/2019 16:12:12">
+    <Property Name="ElementName" Value="[dbo].[IdWithStateList]" />
+    <Property Name="ElementType" Value="SqlTableType" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[UiidWithStateList]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a730dc56-7932-4e13-91ec-0e613fabe2f8" ChangeDateTime="08/02/2019 17:02:09">
+    <Property Name="ElementName" Value="[dbo].[bll_TransactionWideLines__Unpivot]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[bll_DocumentWideLines__Unpivot]" />
+  </Operation>
 </Operations>

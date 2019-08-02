@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_WSI_RM_FastMovement]
-	@fromDate Datetime = '01.01.2015', 
-	@toDate Datetime = '01.01.2020'
+	@fromDate Date = '01.01.2015', 
+	@toDate Date = '01.01.2020'
 AS
 	WITH
 	Ifrs_RM AS (

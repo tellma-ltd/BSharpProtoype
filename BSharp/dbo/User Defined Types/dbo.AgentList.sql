@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[AgentList] AS TABLE (
 	[Index]						INT				IDENTITY(0, 1),
-	[Id]						INT,
+	[Id]						UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
 	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
@@ -51,8 +51,7 @@
 	[OwnershipPercent]			DECIMAL	DEFAULT 0, -- If investment, how much the entity owns in this agent. If shareholder, how much he owns in the entity
 
 	[EntityState]				NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY ([Index] ASC),
+	PRIMARY KEY ([Index]),
 	INDEX IX_AgentList__Code ([Code]),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
-	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

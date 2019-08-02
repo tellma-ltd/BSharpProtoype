@@ -2,14 +2,9 @@
 	@Entities [ResourceLookupList] READONLY
 AS
 SET NOCOUNT ON;
-	--DECLARE @IndexedIds [dbo].[IndexedIdList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
-	--INSERT INTO @IndexedIds([Index], [Id])
-	--SELECT x.[Index], x.[Id]
-	--FROM
-	--(
 	MERGE INTO [dbo].ResourceLookup1s AS t
 	USING (
 		SELECT [Index], [Id], [SortKey], [Name], [Name2], [Name3]
@@ -28,6 +23,4 @@ SET NOCOUNT ON;
 	WHEN NOT MATCHED THEN
 		INSERT ([Name], [Name2], [Name3], [SortKey])
 		VALUES (s.[Name], s.[Name2], s.[Name3], s.[SortKey])
-	--	OUTPUT s.[Index], inserted.[Id] 
-	--) As x
 	OPTION (RECOMPILE);

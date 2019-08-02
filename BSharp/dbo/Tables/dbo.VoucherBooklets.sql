@@ -3,8 +3,7 @@
 -- Note that, in steel production: CTS, HSP, and SM are considered 3 different document types not 3 booklets.
 -- When different booklets of the same type have different specification, such as a specific site
 -- ot a specific set of raw materials, we assign a specification code for the voucher range.
-	[TenantId]					INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						NVARCHAR (255),
+	[Id]						UNIQUEIDENTIFIER PRIMARY KEY,
 	[VoucherTypeId]				NVARCHAR (255),
 --	[Specification]				NVARCHAR (255)	NOT NULL DEFAULT (N''), -- multiple booklets may share the same specification, e.g., Expansion
 	[StringPrefix]				NVARCHAR (255)	NOT NULL DEFAULT (N''), -- visible for IsSourceDocument = 0
@@ -12,7 +11,6 @@
 	[RangeStarts]				INT				DEFAULT (1),
 	[RangeEnds]					INT				DEFAULT (2147483647),
 	[IsActive]					BIT				DEFAULT (1),
-	CONSTRAINT [PK_VoucherBooklets] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_VoucherBooklets__VoucherTypeId] FOREIGN KEY ([TenantId], [VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([TenantId], [Id]) ON UPDATE CASCADE, 
+	CONSTRAINT [FK_VoucherBooklets__VoucherTypeId] FOREIGN KEY ([VoucherTypeId]) REFERENCES [dbo].[VoucherTypes] ([Id]) ON UPDATE CASCADE, 
 );
 GO;

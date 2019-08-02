@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_ConsumablesServices]
-	@fromDate Datetime = '01.01.2020',
-	@toDate Datetime = '01.01.2020'
+	@fromDate Date = '01.01.2020',
+	@toDate Date = '01.01.2020'
 AS
 BEGIN
 	WITH ExpenseJournal AS (

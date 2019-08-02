@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_ERCA__VAT_SalesDetails] -- used for online submission
-	@fromDate Datetime = '01.01.2000', 
-	@toDate Datetime = '01.01.2100'
+	@fromDate Date = '01.01.2000', 
+	@toDate Date = '01.01.2100'
 AS
 BEGIN
 	SELECT

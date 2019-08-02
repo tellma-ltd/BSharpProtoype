@@ -1,7 +1,5 @@
 ﻿CREATE TABLE [dbo].[AgentRelations] (
-	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						INT					IDENTITY,
-	[AgentId]					INT					NOT NULL,
+	[AgentId]					UNIQUEIDENTIFIER	NOT NULL,
 	-- for every customer, supplier, and employee account types: sales, purchase and employment
 	[AgentRelationType]			NVARCHAR (255)		NOT NULL,
 	[AgentSubRelationType]		NVARCHAR (255),		-- Customer:G/S, Student, Distributor; Supplier:G/S; Employee: part-time, full-time;
@@ -27,12 +25,12 @@
 	[CreditLine]				MONEY				DEFAULT 0,
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
-	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_AgentRelations] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentRelations__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_AgentRelations__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
+	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	CONSTRAINT [PK_AgentRelations] PRIMARY KEY NONCLUSTERED ([AgentId], [AgentRelationType]),
+	CONSTRAINT [FK_AgentRelations__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_AgentRelations__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
 	CONSTRAINT [CK_AgentRelations__AgentRelationType] CHECK ([AgentRelationType] IN (
 			N'investor', N'investment' ,
 			N'cash', N'bank', N'customer', N'supplier',

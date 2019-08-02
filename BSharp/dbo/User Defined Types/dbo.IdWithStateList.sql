@@ -1,4 +1,4 @@
-﻿CREATE TYPE [dbo].[IdWithStateList] AS TABLE (
-	[Id]	INT PRIMARY KEY,
+﻿CREATE TYPE [dbo].[UiidWithStateList] AS TABLE (
+	[Id]	UNIQUEIDENTIFIER PRIMARY KEY,
 	[State]	NVARCHAR(255)
 );

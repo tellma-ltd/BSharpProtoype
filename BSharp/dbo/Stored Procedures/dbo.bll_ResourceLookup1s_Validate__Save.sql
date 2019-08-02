@@ -24,33 +24,6 @@ SET NOCOUNT ON;
 	AND Id NOT IN (SELECT Id from [dbo].[ResourceLookup1s])
 	OPTION(HASH JOIN);
 
-	-- Code must not be already in the back end
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
-	SELECT
-		'[' + CAST(FE.[Index] AS NVARCHAR (255)) + '].Code',
-		N'Error_TheCode0IsUsed',
-		FE.[SortKey] AS Argument0
-	FROM @Entities FE 
-	JOIN [dbo].[ResourceLookup1s] BE ON FE.[SortKey] = BE.Code
-	WHERE FE.[SortKey] IS NOT NULL
-	AND ((FE.[EntityState] = N'Inserted') OR (FE.Id <> BE.Id))
-	OPTION(HASH JOIN);
-
-	-- Code must not be duplicated in the uploaded list
-	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
-	SELECT
-		'[' + CAST([Index] AS NVARCHAR (255)) + '].Code',
-		N'Error_TheCode0IsDuplicated',
-		[SortKey]
-	FROM @Entities
-	WHERE [SortKey] IN (
-		SELECT [SortKey]
-		FROM @Entities
-		WHERE [SortKey] IS NOT NULL
-		GROUP BY [SortKey]
-		HAVING COUNT(*) > 1
-	) OPTION(HASH JOIN);
-
 	-- Name must not exist in the db
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT 

@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Sign]
-	@Entities [dbo].[IndexedIdList] READONLY,
+	@Entities [dbo].[UuidList] READONLY,
 	@State NVARCHAR(255),
 	@ReasonId INT,
 	@ReasonDetails	NVARCHAR(1024),
-	@AgentId INT,
-	@RoleId INT,
+	@AgentId UNIQUEIDENTIFIER,
+	@RoleId UNIQUEIDENTIFIER,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
@@ -24,7 +24,7 @@ BEGIN
 		@RoleId = @RoleId
 
 	-- get the documents whose state will change
-	DECLARE @TransitionedIds [dbo].[IdWithStateList];
+	DECLARE @TransitionedIds [dbo].[UiidWithStateList];
 	/*
 	INSERT INTO @TransitionedIds([Id])
 	EXEC [dbo].[bll_Documents_State__Select]

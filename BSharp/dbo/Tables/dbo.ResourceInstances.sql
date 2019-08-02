@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[ResourceInstances] (
-	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						INT					IDENTITY,
+	[Id]						UNIQUEIDENTIFIER PRIMARY KEY,
 	[ResourceId]				INT					NOT NULL,
 --	Tag #, Coil #, Check #, LC #
 	[InstanceTypeId]			INT, -- Check, CPO, LT, LG, LC, Coil, SKD, ...
@@ -18,20 +17,19 @@
 	[InstanceString2]			NVARCHAR (255),
 	-- Examples of the following properties are given for SKD
 	-- However, they could also work for company vehicles, using Year, Make, and Model for Lookups
-	[InstanceLookup1Id]			INT,			-- External Color
-	[InstanceLookup2Id]			INT,			-- Internal Color
-	[InstanceLookup3Id]			INT,			-- Leather type
-	[InstanceLookup4Id]			INT,			-- Tire type
-	[InstanceLookup5Id]			INT,			-- Audio system
+	[InstanceLookup1Id]			UNIQUEIDENTIFIER,			-- External Color
+	[InstanceLookup2Id]			UNIQUEIDENTIFIER,			-- Internal Color
+	[InstanceLookup3Id]			UNIQUEIDENTIFIER,			-- Leather type
+	[InstanceLookup4Id]			UNIQUEIDENTIFIER,			-- Tire type
+	[InstanceLookup5Id]			UNIQUEIDENTIFIER,			-- Audio system
 	-- ...
 --
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_ResourceInstances] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_ResourceInstances__CreatedById]	FOREIGN KEY ([TenantId], [CreatedById])	REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_ResourceInstances__ModifiedById]	FOREIGN KEY ([TenantId], [ModifiedById])REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	CONSTRAINT [FK_ResourceInstances__CreatedById]	FOREIGN KEY ([CreatedById])	REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_ResourceInstances__ModifiedById]	FOREIGN KEY ([ModifiedById])REFERENCES [dbo].[LocalUsers] ([Id])
 );
 GO;

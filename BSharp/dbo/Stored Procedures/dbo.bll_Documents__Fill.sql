@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents__Fill] -- UI logic to fill missing fields
 	@Transactions [dbo].[DocumentList] READONLY, 
 	@Lines [dbo].[DocumentWideLineList] READONLY, 
-	@Entries [dbo].[TransactionEntryList] READONLY,
+	@Entries [dbo].DocumentLineEntryList READONLY,
 	@DocumentLineTypes [dbo].[DocumentLineTypeList] READONLY,
 	@ResultJson NVARCHAR(MAX) OUTPUT
 AS
@@ -209,7 +209,7 @@ BEGIN	-- Smart Posting
 		[RelatedResourceId], [RelatedAgentAccountId], [RelatedMoneyAmount], [RelatedMass],
 		[RelatedVolume], [RelatedCount], [RelatedTime], [RelatedValue], [EntityState])
 		-- I used the sort key in order to make the entries grouped together in the same order as the DLT.
-	SELECT ROW_NUMBER() OVER(ORDER BY S.[DocumentIndex] ASC, DLT.[SortKey] ASC, S.[Direction] DESC), S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType],
+	SELECT ROW_NUMBER() OVER(ORDER BY S.[DocumentIndex], DLT.[SortKey], S.[Direction] DESC), S.[DocumentIndex], S.[Id], S.[DocumentId], S.[LineType],
 		S.[Direction], S.[AccountId], S.[ResponsibilityCenterId], S.[NoteId], S.[AgentAccountId], S.[ResourceId],
 		SUM(S.[MoneyAmount]), SUM(S.[Mass]), SUM(S.[Volume]), SUM(S.[Count]), SUM(S.[Time]), SUM(S.[Value]), 
 		S.[ExpectedClosingDate], S.[Reference], S.[Memo], S.[RelatedReference],

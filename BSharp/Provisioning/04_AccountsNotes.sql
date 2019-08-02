@@ -2,7 +2,7 @@
 	[AccountId]		NVARCHAR (255)		NOT NULL,
 	[NoteId]		NVARCHAR (255)		NOT NULL,
 	[Direction]		SMALLINT			NOT NULL,
-  PRIMARY KEY ([AccountId] ASC, [NoteId] ASC, [Direction] ASC)
+  PRIMARY KEY ([AccountId], [NoteId], [Direction])
 );
 INSERT INTO @AccountsNotes([AccountId], [NoteId], [Direction])
 SELECT A.[Node] As AccountId, N.[Id] AS [NoteId], N.Direction

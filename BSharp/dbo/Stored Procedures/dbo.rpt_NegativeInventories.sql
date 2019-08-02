@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_NegativeInventories]
-	@AsOfDate Datetime = '01.01.2020'
+	@AsOfDate Date = '01.01.2020'
 AS
 	WITH IfrsInventoryAccounts AS (
 		SELECT Id FROM dbo.[IfrsAccounts]

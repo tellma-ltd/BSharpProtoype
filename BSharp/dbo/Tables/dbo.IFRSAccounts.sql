@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[IfrsAccounts] (
-	[TenantId]					INT								DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						NVARCHAR (255), -- Ifrs Concept
+	[Id]						NVARCHAR (255) PRIMARY KEY NONCLUSTERED, -- Ifrs Concept
 	[Node]						HIERARCHYID,
 	[ParentNode]				AS [Node].GetAncestor(1),
 
@@ -61,10 +60,9 @@
 	[RelatedAgentAccountLabel2]	NVARCHAR (255),
 	[RelatedAgentAccountLabel3]	NVARCHAR (255),
 
-	CONSTRAINT [PK_IfrsAccounts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
-	CONSTRAINT [FK_IfrsAccounts__IfrsConcepts]	FOREIGN KEY ([TenantId], [Id]) REFERENCES [dbo].[IfrsConcepts] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT [FK_IfrsAccounts__IfrsConcepts]	FOREIGN KEY ([Id]) REFERENCES [dbo].[IfrsConcepts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 	);
 GO
 CREATE UNIQUE CLUSTERED INDEX IfrsAccounts__Node
-ON [dbo].[IfrsAccounts]([TenantId], [Node]);  
+ON [dbo].[IfrsAccounts]([Node]);  
 GO

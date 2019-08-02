@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[api_Documents__Assign] 
-	@Documents [dbo].[IndexedIdList] READONLY,
-	@AssigneeId INT,
+	@Documents [dbo].[UuidList] READONLY,
+	@AssigneeId UNIQUEIDENTIFIER,
 	@Comment NVARCHAR(1024),
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS

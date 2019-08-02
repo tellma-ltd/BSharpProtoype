@@ -1,14 +1,13 @@
 ﻿CREATE TYPE [dbo].[DocumentLineList] AS TABLE (
 	[Index]					INT,
 	[DocumentIndex]			INT				NOT NULL,
-	[Id]					INT,
-	[DocumentId]			INT,
+	[Id]					UNIQUEIDENTIFIER NOT NULL,
+	[DocumentId]			UNIQUEIDENTIFIER NOT NULL,
 	[LineTypeId]			NVARCHAR (255)	NOT NULL,
-	[TemplateLineId]		INT,
+	[TemplateLineId]		UNIQUEIDENTIFIER,
 	[ScalingFactor]			FLOAT,
 	
 	[EntityState]		NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
-	PRIMARY KEY ([Index] ASC),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted')),
-	CHECK ([EntityState] <> N'Inserted' OR [Id] IS NULL)
+	PRIMARY KEY ([Index]),
+	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
 );

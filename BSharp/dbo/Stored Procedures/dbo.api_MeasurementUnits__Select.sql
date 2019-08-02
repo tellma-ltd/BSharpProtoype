@@ -2,7 +2,7 @@
 	@SearchCriteria NVARCHAR(1024)
 AS
 -- user has read permissions?
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 IF NOT EXISTS(
 		SELECT P.* 
 		FROM dbo.[Permissions] P

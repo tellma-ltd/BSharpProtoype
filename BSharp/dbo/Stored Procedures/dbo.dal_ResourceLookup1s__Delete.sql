@@ -3,7 +3,7 @@
 	@IsDeleted BIT = 1
 AS
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
 	MERGE INTO [dbo].ResourceLookup1s AS t
 	USING (
@@ -15,4 +15,4 @@ AS
 		UPDATE SET 
 			t.[IsDeleted]	= @IsDeleted,
 			t.[ModifiedAt]	= @Now,
-			t.[ModifiedById]	= @UserId;
+			t.[ModifiedById]= @UserId;

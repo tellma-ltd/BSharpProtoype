@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[bll_TransactionWideLines__Unpivot]
+﻿CREATE PROCEDURE [dbo].[bll_DocumentWideLines__Unpivot]
 		@WideLines dbo.[DocumentWideLineList] READONLY,
 		@ResultJson NVARCHAR(MAX) = NULL OUTPUT
 AS
 	DECLARE @Lines dbo.[DocumentLineList];
-	DECLARE @Entries dbo.TransactionEntryList;
+	DECLARE @Entries dbo.DocumentLineEntryList;
 
 	INSERT INTO @Lines(
 		[Index], [Id], [DocumentIndex], [DocumentId], [LineTypeId], [TemplateLineId], [ScalingFactor]
@@ -13,15 +13,15 @@ AS
 	FROM @WideLines;
 
 	INSERT INTO @Entries(
-	[Index], [TransactionLineIndex], [DocumentIndex], [Id],
-	[TransactionLineId], [EntryNumber], [Direction], [AccountId], [IfrsNoteId],
+	[Index], [DocumentLineIndex], [DocumentIndex], [Id],
+	[DocumentLineId], [EntryNumber], [Direction], [AccountId], [IfrsNoteId],
 	[ResponsibilityCenterId], [ResourceId], [InstanceId], [BatchCode], [DueDate], [Quantity],
 	[MoneyAmount], [Mass], [Volume], [Area], [Length], [Time], [Count], [Value], [Memo],
 	[ExternalReference], [AdditionalReference], [RelatedResourceId], [RelatedAgentId],
 	[RelatedQuantity], [RelatedMoneyAmount], [EntityState])
 	SELECT
-	[Index], [TransactionLineIndex], [DocumentIndex], [Id],
-	[TransactionLineId], 1, [Direction1], [AccountId1], [IfrsNoteId1],
+	[Index], [DocumentLineIndex], [DocumentIndex], [Id],
+	[DocumentLineId], 1, [Direction1], [AccountId1], [IfrsNoteId1],
 	[ResponsibilityCenterId1], [ResourceId1], [InstanceId1], [BatchCode1], [DueDate1], [Quantity1],
 	[MoneyAmount1], [Mass1], [Volume1], [Area1], [Length1], [Time1], [Count1], [Value1], [Memo1],
 	[ExternalReference1], [AdditionalReference1], [RelatedResourceId1], [RelatedAgentId1],
@@ -29,8 +29,8 @@ AS
 	FROM @WideLines
 	UNION
 	SELECT
-	[Index], [TransactionLineIndex], [DocumentIndex], [Id],
-	[TransactionLineId], 2, [Direction2], [AccountId2], [IfrsNoteId2],
+	[Index], [DocumentLineIndex], [DocumentIndex], [Id],
+	[DocumentLineId], 2, [Direction2], [AccountId2], [IfrsNoteId2],
 	[ResponsibilityCenterId2], [ResourceId2], [InstanceId2], [BatchCode2], [DueDate2], [Quantity2],
 	[MoneyAmount2], [Mass2], [Volume2], [Area2], [Length2], [Time2], [Count2], [Value2], [Memo2],
 	[ExternalReference2], [AdditionalReference2], [RelatedResourceId2], [RelatedAgentId2],
@@ -50,21 +50,21 @@ AS
 				WHEN LTS.AccountIdExpression = N'Account' THEN (
 						SELECT AccountId FROM @Entries EI
 						WHERE EI.EntryNumber = LTS.AccountIdEntryNumber
-						AND EI.TransactionLineIndex = E.TransactionLineIndex
+						AND EI.DocumentLineIndex = E.DocumentLineIndex
 					)
 				WHEN LTS.AccountIdExpression = N'Resource.ExpenseAccountId' THEN (
 						SELECT R.ExpenseAccountId
 						FROM @Entries EI
 						JOIN dbo.Resources R ON EI.ResourceId = R.Id
 						WHERE EI.EntryNumber = LTS.ResourceIdEntryNumber
-						AND EI.TransactionLineIndex = E.TransactionLineIndex
+						AND EI.DocumentLineIndex = E.DocumentLineIndex
 					)
 				WHEN LTS.AccountIdExpression = N'Resource.RevenueAccountId' THEN (
 						SELECT R.RevenueAccountId
 						FROM @Entries EI
 						JOIN dbo.Resources R ON EI.ResourceId = R.Id
 						WHERE EI.EntryNumber = LTS.ResourceIdEntryNumber
-						AND EI.TransactionLineIndex = E.TransactionLineIndex
+						AND EI.DocumentLineIndex = E.DocumentLineIndex
 					)
 				ELSE E.AccountId END,
 			E.Quantity = CASE 
@@ -72,16 +72,16 @@ AS
 				WHEN LTS.QuantityExpression = N'Quantity' THEN (
 						SELECT Quantity FROM @Entries EI
 						WHERE EI.EntryNumber = LTS.QuantityEntryNumber
-						AND EI.TransactionLineIndex = E.TransactionLineIndex
+						AND EI.DocumentLineIndex = E.DocumentLineIndex
 					)
 				WHEN LTS.QuantityExpression = N'Net' THEN (
 						SELECT ABS(SUM([Direction] * [Quantity])) FROM @Entries EI
 						WHERE EI.EntryNumber <> LTS.QuantityEntryNumber
-						AND EI.TransactionLineIndex = E.TransactionLineIndex
+						AND EI.DocumentLineIndex = E.DocumentLineIndex
 					)
 				ELSE E.Quantity END
 		FROM @Entries E
-		JOIN @Lines L ON E.[TransactionLineIndex] = L.[Index]
+		JOIN @Lines L ON E.[DocumentLineIndex] = L.[Index]
 		JOIN dbo.LineTypesSpecifications LTS
 		ON L.[LineTypeId] = LTS.[LineTypeId] AND E.EntryNumber = LTS.EntryNumber
 		WHERE E.EntryNumber = @EntryNumber;
@@ -94,4 +94,4 @@ AS
 		E.Mass = E.[Count] * R.UnitMass,
 		E.Volume = E.[Count] * R.UnitVolume
 	FROM @Entries E JOIN dbo.Resources R ON E.ResourceId = R.Id
-	WHERE R.ValueMeasure = N'Count'
+	WHERE R.ValueMeasure = N'Count';

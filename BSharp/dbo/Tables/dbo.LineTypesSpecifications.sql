@@ -1,5 +1,4 @@
 ﻿CREATE TABLE [dbo].[LineTypesSpecifications] (
-	[TenantId]						INT						DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
 	[LineTypeId]					NVARCHAR (255),
 	[EntryNumber]					INT,
 
@@ -110,6 +109,6 @@
 	[RelatedQuantity]				MONEY ,			-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]			MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
 
-    CONSTRAINT [PK_LineTypeSpecifications] PRIMARY KEY CLUSTERED ([TenantId] ASC, [LineTypeId] ASC, [EntryNumber] ASC),
-	CONSTRAINT [FK_LineTypeSpecifications_LineTypes] FOREIGN KEY ([TenantId], [LineTypeId]) REFERENCES [dbo].[LineTypes] ([TenantId], [Id]) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT [PK_LineTypeSpecifications] PRIMARY KEY CLUSTERED ([LineTypeId], [EntryNumber]),
+	CONSTRAINT [FK_LineTypeSpecifications_LineTypes] FOREIGN KEY ([LineTypeId]) REFERENCES [dbo].[LineTypes] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );

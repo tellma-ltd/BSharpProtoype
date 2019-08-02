@@ -1,16 +1,14 @@
 ﻿CREATE TABLE [dbo].[Notifications] ( -- TODO: Is it needed?
-	[TenantId]			INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]				INT					IDENTITY,
-	[RecipientId]		INT					NOT NULL, -- An agent ... Even those without AVATAR can be notified.
+	[Id]				UNIQUEIDENTIFIER PRIMARY KEY,
+	[RecipientId]		UNIQUEIDENTIFIER	NOT NULL, -- An agent ... Even those without AVATAR can be notified.
 	[ContactChannel]	NVARCHAR (255)		NOT NULL,
 	[ContactAddress]	NVARCHAR (255)		NOT NULL,
 	[Message]			NVARCHAR (1024),
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]		INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED ([TenantId] ASC, [Id] ASC),
+	[CreatedById]		UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [CK_Notifications_Channel] CHECK ([ContactChannel] IN (N'Sms', N'Email', N'Messenger', N'WhatsApp')),
-	CONSTRAINT [FK_Notifications_RecipientId] FOREIGN KEY ([TenantId], [RecipientId]) REFERENCES [dbo].[Agents] ([TenantId], [Id])
+	CONSTRAINT [FK_Notifications_RecipientId] FOREIGN KEY ([RecipientId]) REFERENCES [dbo].[Agents] ([Id])
 );
 GO
-CREATE INDEX [IX_Notifications__RecipientId] ON [dbo].[Notifications]([TenantId] ASC, [RecipientId] ASC);
+CREATE INDEX [IX_Notifications__RecipientId] ON [dbo].[Notifications]([RecipientId]);
 GO

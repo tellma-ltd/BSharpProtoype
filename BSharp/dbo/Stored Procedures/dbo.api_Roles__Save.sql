@@ -4,7 +4,6 @@
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
-DECLARE @IndexedIdsJson NVARCHAR(MAX);
 	--Validate Domain rules
 	EXEC [dbo].[bll_Roles_Validate__Save]
 		@Roles = @Roles,
@@ -18,6 +17,5 @@ DECLARE @IndexedIdsJson NVARCHAR(MAX);
 
 	EXEC [dbo].[dal_Roles__Save]
 		@Roles = @Roles,
-		@Permissions = @Permissions,
-		@IndexedIdsJson = @IndexedIdsJson OUTPUT;
+		@Permissions = @Permissions
 END;

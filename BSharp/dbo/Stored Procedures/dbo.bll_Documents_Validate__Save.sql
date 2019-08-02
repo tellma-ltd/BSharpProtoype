@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Save]
 	@Documents [dbo].[DocumentList] READONLY,
-	@Entries [dbo].[TransactionEntryList] READONLY,
+	@Entries [dbo].DocumentLineEntryList READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;
@@ -20,7 +20,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0], [Argument1])
 	SELECT
 		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST([TransactionLineIndex] AS NVARCHAR (255)) + '].Amount' + CAST([EntryNumber] AS NVARCHAR(255)),
+			CAST([DocumentLineIndex] AS NVARCHAR (255)) + '].Amount' + CAST([EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheAmount0DoesNotMatchTheValue1',
 		[MoneyAmount],
 		[Value]
@@ -51,7 +51,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST([DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST([TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST([EntryNumber] AS NVARCHAR(255)),
+			CAST([DocumentLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST([EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteIsRequired'
 	FROM @Entries E
 	JOIN dbo.Accounts A ON E.AccountId = A.Id
@@ -64,7 +64,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteIsIncompatibleWithAccountClassification0',
 		A.[IfrsAccountId]
 	FROM @Entries E
@@ -78,7 +78,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName], [Argument0])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].IfrsNoteId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheIfrsNoteId0HasExpired',
 		IC.[Label]
 	FROM @Entries E
@@ -91,7 +91,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].ExternalReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].ExternalReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -105,7 +105,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].RelatedReference' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedReferenceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -119,7 +119,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedAgentId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].RelatedAgentId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedAgentIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id
@@ -132,7 +132,7 @@ SET NOCOUNT ON;
 	INSERT INTO @ValidationErrors([Key], [ErrorName])
 	SELECT
 		'[' + CAST(E.[DocumentIndex] AS NVARCHAR (255)) + '].TransactionWideLines[' +
-			CAST(E.[TransactionLineIndex] AS NVARCHAR (255)) + '].RelatedResourceId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
+			CAST(E.[DocumentLineIndex] AS NVARCHAR (255)) + '].RelatedResourceId' + CAST(E.[EntryNumber] AS NVARCHAR(255)),
 		N'Error_TheRelatedResourceIsNotSpecified'
 	FROM @Entries E
 	JOIN dbo.[Accounts] A On E.AccountId = A.Id

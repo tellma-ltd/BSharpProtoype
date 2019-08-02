@@ -1,6 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[fi_JournalSummary] (
-	@fromDate Datetime = '2000.01.01', 
-	@toDate Datetime = '2100.01.01'
+	@fromDate Date = '2000.01.01', 
+	@toDate Date = '2100.01.01'
 ) RETURNS TABLE
 AS
 RETURN

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_ERCA__VAT_PurchasesSummary]
-	@fromDate Datetime = '01.01.2015', 
-	@toDate Datetime = '01.01.2020'
+	@fromDate Date = '01.01.2015', 
+	@toDate Date = '01.01.2020'
 AS 
 BEGIN
 	SELECT

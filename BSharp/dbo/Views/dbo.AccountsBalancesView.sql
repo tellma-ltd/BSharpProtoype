@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [dbo].[AccountsBalancesView]
 AS
 	SELECT
-		D.[TenantId], E.[AccountId], E.[ResponsibilityCenterId],
+		E.[AccountId], E.[ResponsibilityCenterId],
 		E.[ResourceId], E.[InstanceId], E.[BatchCode], 
 		SUM(E.[Direction] * E.[Quantity]) AS [Quantity],
 		SUM(E.[Direction] * E.[MoneyAmount]) AS [MoneyAmount],
@@ -15,7 +15,7 @@ AS
 	JOIN dbo.[DocumentTypes] DT ON D.[DocumentTypeId] = DT.[Id]
 	WHERE D.[State] = N'Posted'
 	GROUP BY
-		D.[TenantId], E.[AccountId], E.[ResponsibilityCenterId],
+		E.[AccountId], E.[ResponsibilityCenterId],
 		E.[ResourceId], E.[InstanceId], E.[BatchCode]
 	HAVING
 		SUM(E.[Direction] * E.[Quantity]) <> 0 OR

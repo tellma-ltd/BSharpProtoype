@@ -2,9 +2,9 @@
 	@Entities [ProductCategoryList] READONLY
 AS
 SET NOCOUNT ON;
-	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @IndexedIds [dbo].[IndexedUuidList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
 	INSERT INTO @IndexedIds([Index], [Id])
 	SELECT x.[Index], x.[Id]

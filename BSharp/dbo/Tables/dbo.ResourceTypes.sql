@@ -1,8 +1,7 @@
 ﻿CREATE TABLE [dbo].[ResourceTypes] (
 -- table managed by Banan
 -- Note that, in steel production: CTS, HSP, and SM are considered 3 different document types.
-	[TenantId]					INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						NVARCHAR (255),
+	[Id]						NVARCHAR (255) PRIMARY KEY,
 -- The choice of booleans should form a connected tree. For example, in Cut to Size, and
 -- assuming that the B# document is not a source document, the true values are: 
 -- (starting) (Draft), IsPosted, IsDeclined.
@@ -21,8 +20,7 @@
 	-- UI Specs
 	[DefaultVoucherTypeId]		NVARCHAR (255),
 
-	[FromCustodyAccountLabel]	NVARCHAR (255),
-	[ToCustodyAccountLabel]		NVARCHAR (255),
-	CONSTRAINT [PK_DResourceTypes] PRIMARY KEY CLUSTERED ([TenantId], [Id])
+	[FromCustodyAccountLabel]	NVARCHAR (50),
+	[ToCustodyAccountLabel]		NVARCHAR (50)
 );
 GO;

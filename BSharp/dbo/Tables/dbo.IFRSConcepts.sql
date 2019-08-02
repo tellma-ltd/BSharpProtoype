@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [dbo].[IfrsConcepts] (
-	[TenantId]					INT					DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]						NVARCHAR (255), -- Ifrs Concept
+	[Id]						NVARCHAR (255) PRIMARY KEY NONCLUSTERED, -- Ifrs Concept
 /*
 	- Regulatory: Proposed by regulatory entity. We may have different flavors for different countries
 	- Amendment: Added for consistency, must be amended in the iXBRL tool. Mainly for members vs non members issue
@@ -18,12 +17,11 @@
 	[ExpiryDate]				DATETIME2(7)		NOT NULL DEFAULT('9999-12-31 23:59:59'),
 --	
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
-	[ModifiedById]				INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 
-	CONSTRAINT [PK_IfrsConcepts] PRIMARY KEY NONCLUSTERED ([TenantId] ASC, [Id]),
 	CONSTRAINT [CK_IfrsConcepts__IfrsType] CHECK ([IfrsType] IN (N'Amendment', N'Extension', N'Regulatory')),
-	CONSTRAINT [FK_IfrsConcepts__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_IfrsConcepts__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	CONSTRAINT [FK_IfrsConcepts__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_IfrsConcepts__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id])
 	);

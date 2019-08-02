@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_Documents_Validate__Assign]
-	@Entities [dbo].[IndexedIdList] READONLY,
+	@Entities [dbo].[IndexedUuidList] READONLY,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 SET NOCOUNT ON;

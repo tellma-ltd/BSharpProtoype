@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_AssetRegister]
-	@fromDate Datetime = '01.01.2015', 
-	@toDate Datetime = '01.01.2020'
+	@fromDate Date = '01.01.2015', 
+	@toDate Date = '01.01.2020'
 AS
 /*
 Since a resource is actually a "type" of foxid asset, then if we have 100 computers, they will appear in this

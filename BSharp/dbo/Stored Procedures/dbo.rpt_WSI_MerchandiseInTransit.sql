@@ -6,7 +6,7 @@ Assumptions:
 	a resource called non-specified (for that account), and migrate balances to it.
 
 */
-	@AsOfDate Datetime = '01.01.2020'
+	@AsOfDate Date = '01.01.2020'
 AS
 BEGIN
 	WITH

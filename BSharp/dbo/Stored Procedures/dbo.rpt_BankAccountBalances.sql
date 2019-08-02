@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_BankAccountBalances]
-	@AsOfDate Datetime = '01.01.2020'
+	@AsOfDate Date = '01.01.2020'
 AS
 BEGIN
 	SELECT

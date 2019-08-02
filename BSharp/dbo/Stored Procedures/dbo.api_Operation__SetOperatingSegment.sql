@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[api_Operation__SetOperatingSegment]
-	@OperationId INT,
+	@OperationId UNIQUEIDENTIFIER,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN
 SET NOCOUNT ON;
-DECLARE @Id int;
+DECLARE @Id UNIQUEIDENTIFIER;
 -- Validate
 	--EXEC [dbo].[bll_Operation_Validate__SetOperatingSegment]
 	--	@Entity = @OperationId,

@@ -7,7 +7,7 @@
 	[Label]						NVARCHAR (1024)		NOT NULL,
 	[ForDebit]					BIT					NOT NULL DEFAULT 1,
 	[ForCredit]					BIT					NOT NULL DEFAULT 1
-	PRIMARY KEY NONCLUSTERED ([Id] ASC)
+	PRIMARY KEY NONCLUSTERED ([Id])
 );
 
 INSERT INTO @IfrsNotes([IfrsType], IsActive, [ForDebit], [ForCredit], [Node], [Id], [Label]) VALUES

@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [dbo].[TransactionsEntriesSummaryView]
 AS
 	SELECT
-		ROW_NUMBER() OVER(ORDER BY L.[DocumentId] ASC,
+		ROW_NUMBER() OVER(ORDER BY L.[DocumentId],
 			SUM(E.[Direction] * E.[Value]) DESC) AS [Id],
 		L.[DocumentId],
 		D.[DocumentTypeId],

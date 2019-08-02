@@ -9,9 +9,9 @@ Assumptions:
 	instructions again.
 
 */
-	@fromDate Datetime = '01.01.2020',
-	@toDate Datetime = '01.01.2020',
-	@CountUnit INT = 4 -- (SELECT [Id] FROM dbo.MeasurementUnits WHERE [Name] = N'ea');
+	@fromDate Date = '01.01.2020',
+	@toDate Date = '01.01.2020',
+	@CountUnit INT
 AS
 	WITH
 	Ifrs_FG AS ( -- Typically, there is ONE such node only.

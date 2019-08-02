@@ -1,5 +1,5 @@
 ﻿CREATE FUNCTION [dbo].[fn_MeasurementUnitRatio] (
-	@MeasurementUnitId INT
+	@MeasurementUnitId UNIQUEIDENTIFIER
 )
 RETURNS DECIMAL
 AS

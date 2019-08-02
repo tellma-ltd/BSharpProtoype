@@ -1,17 +1,15 @@
 ﻿CREATE TABLE [dbo].[RoleMemberships] (
-	[TenantId]			INT				DEFAULT CONVERT(INT, SESSION_CONTEXT(N'TenantId')),
-	[Id]				INT				IDENTITY,
-	[Userid]			INT				NOT NULL,
-	[RoleId]			INT				NOT NULL,
+	[Id]				UNIQUEIDENTIFIER	PRIMARY KEY,
+	[Userid]			UNIQUEIDENTIFIER	NOT NULL,
+	[RoleId]			UNIQUEIDENTIFIER	NOT NULL,
 	[Memo]				NVARCHAR (255),
 	[CreatedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]		INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]		UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]		DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]		INT					NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
-	CONSTRAINT [PK_RoleMemberships] PRIMARY KEY CLUSTERED ([TenantId], [Id]),
-	CONSTRAINT [FK_RoleMemberships__UserId] FOREIGN KEY ([TenantId], [Userid]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_RoleMemberships__RoleId] FOREIGN KEY ([TenantId], [RoleId]) REFERENCES [dbo].[Roles] ([TenantId], [Id]),
-	CONSTRAINT [FK_RoleMemberships__CreatedById] FOREIGN KEY ([TenantId], [CreatedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id]),
-	CONSTRAINT [FK_RoleMemberships__ModifiedById] FOREIGN KEY ([TenantId], [ModifiedById]) REFERENCES [dbo].[LocalUsers] ([TenantId], [Id])
+	[ModifiedById]		UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	CONSTRAINT [FK_RoleMemberships__UserId] FOREIGN KEY ([Userid]) REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_RoleMemberships__RoleId] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Roles] ([Id]),
+	CONSTRAINT [FK_RoleMemberships__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
+	CONSTRAINT [FK_RoleMemberships__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id])
 );
 GO

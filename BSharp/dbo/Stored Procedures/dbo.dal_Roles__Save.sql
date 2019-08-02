@@ -1,12 +1,11 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Roles__Save]
 	@Roles [dbo].[RoleList] READONLY, 
-	@Permissions [dbo].[PermissionList] READONLY, 
-	@IndexedIdsJson NVARCHAR(MAX) OUTPUT
+	@Permissions [dbo].[PermissionList] READONLY
 AS
 BEGIN
-	DECLARE @IndexedIds [dbo].[IndexedIdList];
+	DECLARE @IndexedIds [dbo].[IndexedUuidList];
 	DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-	DECLARE @UserId INT = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
+	DECLARE @UserId UNIQUEIDENTIFIER = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
 
 	DELETE FROM [dbo].[Permissions]
 	WHERE [Id] IN (SELECT [Id] FROM @Permissions WHERE [EntityState] = N'Deleted');
@@ -60,6 +59,4 @@ BEGIN
 	WHEN NOT MATCHED THEN
 		INSERT ([RoleId],	[ViewId],	[Level],	[Criteria], [Memo])
 		VALUES (s.[RoleId], s.[ViewId], s.[Level], s.[Criteria], s.[Memo]);
-
-	SELECT @IndexedIdsJson = (SELECT * FROM @IndexedIds FOR JSON PATH);
 END;
