@@ -1,7 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
-	DECLARE @MeasurementUnitsDTO [dbo].MeasurementUnitList;
-	DECLARE @ETBUnit int, @USDUnit int, @eaUnit int, @pcsUnit int, @shareUnit int, @kgUnit int,
-			@wmoUnit int, @hrUnit int, @yrUnit int, @dayUnit int, @moUnit int;
+	DECLARE @MeasurementUnitsDTO [dbo].MeasurementUnitList, @MeasurementUnitsIds dbo.[IndexedUuidList];
+	DECLARE @ETBUnit UNIQUEIDENTIFIER, @USDUnit UNIQUEIDENTIFIER, @eaUnit UNIQUEIDENTIFIER, @pcsUnit UNIQUEIDENTIFIER, @shareUnit UNIQUEIDENTIFIER, @kgUnit UNIQUEIDENTIFIER,
+			@wmoUnit UNIQUEIDENTIFIER, @hrUnit UNIQUEIDENTIFIER, @yrUnit UNIQUEIDENTIFIER, @dayUnit UNIQUEIDENTIFIER, @moUnit UNIQUEIDENTIFIER;
 END
 BEGIN -- Inserting
 	INSERT INTO @MeasurementUnitsDTO (
@@ -34,23 +34,19 @@ BEGIN -- Inserting
 
 	EXEC [dbo].[api_MeasurementUnits__Save]
 		@Entities = @MeasurementUnitsDTO,
-		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-		@ResultsJson = @ResultsJson OUTPUT
+		@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
 	IF @ValidationErrorsJson IS NOT NULL 
 	BEGIN
 		Print 'MeasurementUnits: Place 1'
 		GOTO Err_Label;
 	END
-
-	IF @DebugMeasurementUnits = 1
-		SELECT * FROM dbo.[fr_MeasurementUnits__Json](@ResultsJson);
 END
 
 -- Display units whose code starts with m
 DELETE FROM @MeasurementUnitsDTO;
-INSERT INTO @MeasurementUnitsDTO ([Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [EntityState])
-SELECT [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], N'Unchanged'
+INSERT INTO @MeasurementUnitsDTO ([Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [IsDirty])
+SELECT [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], 0
 FROM [dbo].MeasurementUnits
 WHERE [Name] Like 'm%';
 
@@ -67,20 +63,14 @@ UPDATE @MeasurementUnitsDTO
 SET 
 --	[Name] = N'pcs',
 	[Description] = N'Metric Ton',
-	[EntityState] = N'Updated'
+	[IsDirty] = 1
 WHERE [Name] = N'mt';
 
--- Deleting
-UPDATE @MeasurementUnitsDTO 
-SET 
-	[EntityState] = N'Deleted'
-WHERE [Name] = N'min';-- Deleting the minute
-
+DELETE FROM @MeasurementUnitsDTO WHERE [IsDirty] = 0;-- [EntityState] = N'Unchanged';
 -- Calling Save API
 EXEC [dbo].[api_MeasurementUnits__Save]
 	@Entities = @MeasurementUnitsDTO,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
 IF @ValidationErrorsJson IS NOT NULL
 BEGIN
@@ -88,11 +78,30 @@ BEGIN
 	GOTO Err_Label;
 END
 
-IF @DebugMeasurementUnits = 1
-	SELECT * FROM dbo.[fr_MeasurementUnits__Json](@ResultsJson);
+DELETE FROM @MeasurementUnitsDTO;
+INSERT INTO @MeasurementUnitsDTO ([Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], [IsDirty])
+SELECT [Id], [Code], [UnitType], [Name], [Description], [UnitAmount], [BaseAmount], 0
+FROM [dbo].MeasurementUnits
+WHERE [Name] Like 'm%';
 
-IF @DebugMeasurementUnits = 1
-	SELECT * FROM [dbo].MeasurementUnits;
+-- Calling Delete API
+INSERT INTO @MeasurementUnitsIds([Index], [Id]) SELECT [Index], [Id] FROM @MeasurementUnitsDTO
+EXEC [dbo].[api_MeasurementUnits__Delete]
+	@Ids = @MeasurementUnitsIds,
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
+
+IF @ValidationErrorsJson IS NOT NULL
+BEGIN
+	Print 'MeasurementUnits: Place 3'
+	GOTO Err_Label;
+END
+
+	SELECT MU.Code, MU.[Name], MU.[Description], MU.BaseAmount, MU.IsActive, 
+	LUC.[Name] AS CreatedBy, MU.CreatedAt, LUM.[Name] AS ModifiedBy, MU.ModifiedAt, IsDeleted
+	FROM [dbo].MeasurementUnits MU
+	JOIN dbo.LocalUsers LUC ON MU.CreatedById = LUC.Id
+	JOIN dbo.LocalUsers LUM ON MU.ModifiedById = LUM.Id
+--	WHERE IsDeleted = 0;
 
 SELECT
 	@ETBUnit = (SELECT [Id] FROM [dbo].MeasurementUnits	WHERE [Name] = N'ETB'),

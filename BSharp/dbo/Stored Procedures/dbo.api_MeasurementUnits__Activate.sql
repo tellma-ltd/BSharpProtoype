@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[api_MeasurementUnits__Activate]
-	@Ids [dbo].[UuidList] READONLY,
+	@Ids [dbo].[IndexedUuidList] READONLY,
 	@IsActive BIT,
 	@ValidationErrorsJson NVARCHAR(MAX) = NULL OUTPUT
 AS

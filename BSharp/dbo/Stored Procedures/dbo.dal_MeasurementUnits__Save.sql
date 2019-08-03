@@ -7,9 +7,8 @@ SET NOCOUNT ON;
 
 	MERGE INTO [dbo].MeasurementUnits AS t
 	USING (
-		SELECT [Index], [Id], [Code], [UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount]
+		SELECT [Id], [Code], [UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount]
 		FROM @Entities 
-		WHERE [EntityState] IN (N'Inserted', N'Updated')
 	) AS s ON (t.Id = s.Id)
 	WHEN MATCHED 
 	THEN
@@ -27,6 +26,6 @@ SET NOCOUNT ON;
 			t.[ModifiedAt]		= @Now,
 			t.[ModifiedById]	= @UserId
 	WHEN NOT MATCHED THEN
-		INSERT ([UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount], [Code])
-		VALUES (s.[UnitType], s.[Name], s.[Name2], s.[Name3], s.[Description], s.[Description2], s.[Description3], s.[UnitAmount], s.[BaseAmount], s.[Code])
+		INSERT ([Id], [UnitType], [Name], [Name2], [Name3], [Description], [Description2], [Description3], [UnitAmount], [BaseAmount], [Code])
+		VALUES (s.[Id], s.[UnitType], s.[Name], s.[Name2], s.[Name3], s.[Description], s.[Description2], s.[Description3], s.[UnitAmount], s.[BaseAmount], s.[Code])
 	OPTION (RECOMPILE);

@@ -19,34 +19,30 @@ INSERT INTO @IfrsDisclosureDetailsDTO
 
 EXEC [dbo].[api_IfrsDisclosureDetails__Save]
 	@Entities = @IfrsDisclosureDetailsDTO,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
 IF @ValidationErrorsJson IS NOT NULL 
 BEGIN
 	Print 'Place: Inserting IfrsConcepts'
 	GOTO Err_Label;
 END
---SELECT * FROM [dbo].[IfrsDisclosureDetails];
-
+UPDATE @IfrsDisclosureDetailsDTO SET [IsDirty] = 0;
 UPDATE @IfrsDisclosureDetailsDTO
-SET ValidSince = N'2018.08.01', EntityState = N'Updated', [Id] = [Index]
+SET ValidSince = N'2018.08.01', [IsDirty] = 1
 WHERE [Index] IN (2, 3, 6);
 
 UPDATE @IfrsDisclosureDetailsDTO
-SET ValidSince = N'2018.09.15', EntityState = N'Updated', [Id] = [Index]
+SET ValidSince = N'2018.09.15', [IsDirty] = 1
 WHERE [Index] IN (5);
 
-UPDATE @IfrsDisclosureDetailsDTO SET EntityState = N'Unchanged', [Id] = [Index]
-WHERE EntityState = N'Inserted';
+DELETE @IfrsDisclosureDetailsDTO WHERE [IsDirty] = 0
 
 INSERT INTO @IfrsDisclosureDetailsDTO ([IfrsDisclosureId],[Value], [ValidSince]) Values
 (N'AddressOfRegisteredOfficeOfEntity', N'Addis Abab, N/S/L, Woreda:01, House:New', N'2018.08.01');
 
 EXEC [dbo].[api_IfrsDisclosureDetails__Save]
 	@Entities = @IfrsDisclosureDetailsDTO,
-	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT,
-	@ResultsJson = @ResultsJson OUTPUT
+	@ValidationErrorsJson = @ValidationErrorsJson OUTPUT
 
 IF @DebugIfrsConcepts = 1
 	EXEC rpt_Ifrs @fromDate = '2018.07.01', @toDate = '2019.06.30';
@@ -58,4 +54,11 @@ BEGIN
 END
 
 --IF @DebugSettings = 1
-	SELECT * FROM [dbo].[IfrsDisclosureDetails];
+	SELECT
+		IDD.IfrsDisclosureId,  IDD.[Value], IDD.ValidSince,
+		LUC.[Name] AS CreatedBy, IDD.CreatedAt, LUM.[Name] AS ModifiedBy, IDD.ModifiedAt
+	FROM [dbo].[IfrsDisclosureDetails] IDD
+	JOIN dbo.LocalUsers LUC ON IDD.CreatedById = LUC.Id
+	JOIN dbo.LocalUsers LUM ON IDD.ModifiedById = LUM.Id
+	WHERE IsDeleted = 0;
+	;

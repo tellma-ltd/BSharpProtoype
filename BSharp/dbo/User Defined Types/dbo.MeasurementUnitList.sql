@@ -1,5 +1,5 @@
 ﻿CREATE TYPE [dbo].[MeasurementUnitList] AS TABLE (
-	[Index]			INT				IDENTITY(0, 1),
+	[Index]			INT	PRIMARY KEY			IDENTITY(0, 1),
 	[Id]			UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
 	[UnitType]		NVARCHAR (255)	NOT NULL,
 	[Name]			NVARCHAR (255)	NOT NULL,
@@ -10,11 +10,11 @@
 	[Description3]	NVARCHAR (255),
 	[UnitAmount]	FLOAT (53)		NOT NULL,
 	[BaseAmount]	FLOAT (53)		NOT NULL,
-	[EntityState]	NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),
+	[IsDirty]		BIT				NOT NULL DEFAULT 0,
 	[Code]			NVARCHAR (255),
-	PRIMARY KEY ([Index]),
 	INDEX IX_MeasurementUnitList__Code ([Code]),
 	INDEX IX_MeasurementUnitList__Name ([Name]),
-	CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money')),
-	CHECK ([EntityState] IN (N'Unchanged', N'Inserted', N'Updated', N'Deleted'))
+	INDEX IX_MeasurementUnitList__Name2 ([Name2]),
+	INDEX IX_MeasurementUnitList__Name3 ([Name3]),
+	CHECK ([UnitType] IN (N'Pure', N'Time', N'Distance', N'Count', N'Mass', N'Volume', N'Money'))
 );

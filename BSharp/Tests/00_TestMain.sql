@@ -1,15 +1,6 @@
 ﻿SET NOCOUNT ON;
 BEGIN -- reset Identities
 	-- Just for debugging convenience. Even though we are roling the transaction, the identities are changing
-	IF NOT EXISTS(SELECT * FROM [dbo].[IfrsDisclosureDetails])	DBCC CHECKIDENT ('[dbo].[IfrsDisclosureDetails]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[MeasurementUnits])	DBCC CHECKIDENT ('[dbo].[MeasurementUnits]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[ProductCategories])	DBCC CHECKIDENT ('[dbo].[ProductCategories]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[ResponsibilityCenters])	DBCC CHECKIDENT ('[dbo].[ResponsibilityCenters]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Agents])				DBCC CHECKIDENT ('[dbo].[Agents]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Resources])			DBCC CHECKIDENT ('[dbo].[Resources]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[DocumentLineEntries])	DBCC CHECKIDENT ('[dbo].[TransactionEntries]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[DocumentLines])	DBCC CHECKIDENT ('[dbo].[TransactionLines]', RESEED, 0) WITH NO_INFOMSGS;
-	IF NOT EXISTS(SELECT * FROM [dbo].[Documents])			DBCC CHECKIDENT ('[dbo].[Documents]', RESEED, 0) WITH NO_INFOMSGS;
 	DECLARE @ValidationErrorsJson nvarchar(max), @ResultsJson nvarchar(max);
 	DECLARE @DebugIfrsConcepts bit = 0, @DebugMeasurementUnits bit = 0;
 	DECLARE @DebugProductCategories bit = 0, @DebugOperations bit = 1, @DebugResources bit = 0;
@@ -17,15 +8,9 @@ BEGIN -- reset Identities
 	DECLARE @LookupsSelect bit = 0;
 	DECLARE @fromDate Datetime, @toDate Datetime;
 	EXEC sp_set_session_context 'Debug', 1;
-	DECLARE @UserId int;
-	IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers])
-	BEGIN
-		INSERT INTO [dbo].[LocalUsers]([Name], [AgentId]) VALUES
-		(N'Dr. Akra', NULL); -- N'DESKTOP-V0VNDC4\Mohamad Akra'
-		 SET @UserId = SCOPE_IDENTITY();
-	END
-	ELSE
-		SELECT @UserId = [Id] FROM dbo.LocalUsers WHERE [Name] = N'Dr. Akra';
+	DECLARE @UserId UNIQUEIDENTIFIER;
+
+	SELECT @UserId = [Id] FROM dbo.LocalUsers WHERE [Name] = N'Dr. Akra';
 
 	EXEC sp_set_session_context 'UserId', @UserId;
 	SET @UserId = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
@@ -34,9 +19,9 @@ END
 
 BEGIN TRY
 	BEGIN TRANSACTION
-		--:r .\01_IfrsConcepts.sql
-		--:r .\02_MeasurementUnits.sql
-		:r .\03_ProductCategories.sql
+		:r .\01_IfrsConcepts.sql
+		:r .\02_MeasurementUnits.sql
+		--:r .\03_ProductCategories.sql
 		--:r .\03_Operations.sql
 		--:r .\04_Resources.sql
 		--:r .\05_Agents.sql
@@ -62,6 +47,7 @@ BEGIN TRY
 	--SELECT * from dbo.fi_Account__Statement(N'DistributionCosts', @SalesDepartment, @Goff, @fromDate, @toDate) ORDER BY StartDateTime;
 	--SELECT * FROM dbo.fi_ERCA__EmployeeIncomeTax('2018.02.01', '2018.03.01');
 	--SELECT * FROM dbo.fi_Paysheet(default, default, '2018.02', @Basic, @Transportation);
+Finish:
 	ROLLBACK;
 END TRY
 BEGIN CATCH

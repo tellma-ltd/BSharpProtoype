@@ -16,6 +16,6 @@ SET NOCOUNT ON;
 	JOIN [dbo].[IfrsDisclosureDetails] BE 
 	ON FE.[IfrsDisclosureId] = BE.[IfrsDisclosureId]
 	AND FE.[ValidSince] = BE.[ValidSince]
-	WHERE (FE.EntityState = N'Inserted');
+	WHERE (FE.[Id] <> BE.[Id]);
 
 	SELECT @ValidationErrorsJson = (SELECT * FROM @ValidationErrors	FOR JSON PATH);
