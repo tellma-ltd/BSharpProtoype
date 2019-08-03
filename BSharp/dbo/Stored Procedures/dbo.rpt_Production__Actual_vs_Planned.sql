@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_Production__Actual_vs_Planned]
 	@FromDate Date,
 	@ToDate Date,
-	@MassUnitId UNIQUEIDENTIFIER,
-	@CountUnitId UNIQUEIDENTIFIER
+	@MassUnitId INT,
+	@CountUnitId INT
 AS
 BEGIN
 	-- Code commented since we are using ResourceType to distinguish

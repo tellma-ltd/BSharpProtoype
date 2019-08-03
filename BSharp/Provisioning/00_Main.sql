@@ -1,5 +1,5 @@
 ﻿DECLARE @Now DATETIMEOFFSET(7) = SYSDATETIMEOFFSET();
-DECLARE @UserId UNIQUEIDENTIFIER = NEWID();
+DECLARE @UserId INT = 7; -- 007
 IF NOT EXISTS(SELECT * FROM [dbo].[LocalUsers] WHERE [Name] = N'Dr. Akra')
 BEGIN
 	INSERT INTO [dbo].[LocalUsers](Id, [Name], [AgentId]) VALUES
@@ -8,7 +8,7 @@ END
 ELSE
 SELECT @UserId = [Id] FROM dbo.LocalUsers WHERE [Name] = N'Dr. Akra';
 EXEC sp_set_session_context 'UserId', @UserId;
-SET @UserId = CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'));
+SET @UserId = CONVERT(INT, SESSION_CONTEXT(N'UserId'));
 
 :r .\01_IfrsConcepts.sql
 :r .\011_IfrsDisclosures.sql

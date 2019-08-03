@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Settings] ( -- TODO: Make it wide table, up to 30,0000 columns
-	[FunctionalCurrencyId]	UNIQUEIDENTIFIER,
+	[FunctionalCurrencyId]	INT,
 	-- The date before which data is frozen.
 	[ArchiveDate]			Date				NOT NULL DEFAULT ('1900.01.01'),
 	[TenantLanguage2]		NVARCHAR (255),
@@ -22,9 +22,9 @@
 	[InstanceLookup1sLabel2]NVARCHAR (50),
 	[InstanceLookup1sLabel3]NVARCHAR (50),
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId'))
+	[ModifiedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId'))
 	CONSTRAINT [FK_Settings__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),
 	CONSTRAINT [FK_Settings__ModifiedById] FOREIGN KEY ([ModifiedById]) REFERENCES [dbo].[LocalUsers] ([Id])
 );

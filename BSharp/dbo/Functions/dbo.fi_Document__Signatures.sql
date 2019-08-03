@@ -1,5 +1,5 @@
 ﻿CREATE FUNCTION [dbo].[fi_Document__Signatures] (
-	@DocumentId UNIQUEIDENTIFIER
+	@DocumentId INT
 )
 RETURNS TABLE
 AS

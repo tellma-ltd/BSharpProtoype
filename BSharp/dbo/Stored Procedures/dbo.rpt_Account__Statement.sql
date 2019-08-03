@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[rpt_Account__Statement]
 -- EXEC [dbo].[rpt_Account__Statement](104, '01.01.2015', '01.01.2020')
-	@AccountId UNIQUEIDENTIFIER,
+	@AccountId INT,
 	@fromDate Date = '01.01.2000', 
 	@toDate Date = '01.01.2100'
 AS

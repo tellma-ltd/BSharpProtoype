@@ -1,7 +1,7 @@
 ﻿BEGIN -- Cleanup & Declarations
 	DECLARE @MeasurementUnitsDTO [dbo].MeasurementUnitList, @MeasurementUnitsIds dbo.[IndexedUuidList];
-	DECLARE @ETBUnit UNIQUEIDENTIFIER, @USDUnit UNIQUEIDENTIFIER, @eaUnit UNIQUEIDENTIFIER, @pcsUnit UNIQUEIDENTIFIER, @shareUnit UNIQUEIDENTIFIER, @kgUnit UNIQUEIDENTIFIER,
-			@wmoUnit UNIQUEIDENTIFIER, @hrUnit UNIQUEIDENTIFIER, @yrUnit UNIQUEIDENTIFIER, @dayUnit UNIQUEIDENTIFIER, @moUnit UNIQUEIDENTIFIER;
+	DECLARE @ETBUnit INT, @USDUnit INT, @eaUnit INT, @pcsUnit INT, @shareUnit INT, @kgUnit INT,
+			@wmoUnit INT, @hrUnit INT, @yrUnit INT, @dayUnit INT, @moUnit INT;
 END
 BEGIN -- Inserting
 	INSERT INTO @MeasurementUnitsDTO (

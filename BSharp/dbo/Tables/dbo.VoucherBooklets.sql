@@ -3,7 +3,7 @@
 -- Note that, in steel production: CTS, HSP, and SM are considered 3 different document types not 3 booklets.
 -- When different booklets of the same type have different specification, such as a specific site
 -- ot a specific set of raw materials, we assign a specification code for the voucher range.
-	[Id]						UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]						INT PRIMARY KEY,
 	[VoucherTypeId]				NVARCHAR (255),
 --	[Specification]				NVARCHAR (255)	NOT NULL DEFAULT (N''), -- multiple booklets may share the same specification, e.g., Expansion
 	[StringPrefix]				NVARCHAR (255)	NOT NULL DEFAULT (N''), -- visible for IsSourceDocument = 0

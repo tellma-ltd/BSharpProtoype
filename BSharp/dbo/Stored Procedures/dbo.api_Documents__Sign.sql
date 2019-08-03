@@ -3,8 +3,8 @@
 	@State NVARCHAR(255),
 	@ReasonId INT,
 	@ReasonDetails	NVARCHAR(1024),
-	@AgentId UNIQUEIDENTIFIER,
-	@RoleId UNIQUEIDENTIFIER,
+	@AgentId INT,
+	@RoleId INT,
 	@ValidationErrorsJson NVARCHAR(MAX) OUTPUT
 AS
 BEGIN

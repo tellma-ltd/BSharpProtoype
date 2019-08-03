@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[DocumentLineEntries] (
 --	These are for transactions only. If there are entries from requests or inquiries, etc=> other tables
-	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
-	[DocumentLineId]		UNIQUEIDENTIFIER	NOT NULL,
+	[Id]					INT PRIMARY KEY,
+	[DocumentLineId]		INT	NOT NULL,
 	[EntryNumber]			INT					NOT NULL,
 --	Upon posting the document, the auto generated entries will be MERGED with the present ones
 --	based on AccountId, IfrsAccountId, IfrsNoteId, ResponsibilityCenterId, AgentAccountId, ResourceId
@@ -9,21 +9,21 @@
 --	It will be presented ORDER BY IsSystem, Direction, AccountId.Code, IfrsAccountId.Node, IfrsNoteId.Node, ResponsibilityCenterId.Node
 	[Direction]				SMALLINT			NOT NULL,
  -- Account selection enforces additional filters on the other columns
-	[AccountId]				UNIQUEIDENTIFIER	NOT NULL,
+	[AccountId]				INT	NOT NULL,
 -- Analysis of accounts including: cash, non current assets, equity, and expenses. Can be updated after posting
 	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
 -- The business segment that "owns" the asset/liablity, and whose performance is assessed by the revenue/expense
 -- I propose making it part of the account, especially to track budget. Jiad complained about opening accounts
 -- also, smart sales posting is easier since a resource can tell the nature of expense, but not the responsibility center
-	[ResponsibilityCenterId]UNIQUEIDENTIFIER,	-- called SegmentId in B10. When not needed, we use the entity itself.
+	[ResponsibilityCenterId]INT,	-- called SegmentId in B10. When not needed, we use the entity itself.
 -- Resource is defined as
 --	The actual asset, liability
 --	The good/service sold for revenues and direct expenses
 --	The good/service consumed for indirect expenses
-	[ResourceId]			UNIQUEIDENTIFIER		NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'FunctionalCurrencyId')),
+	[ResourceId]			INT		NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'FunctionalCurrencyId')),
 --	steel rolls:coil #, car:VIN, merchandise:EPC, check:BankCode+AccNumber+CheckNumber.
 --	AVCO is run either at the resource level or at the number level (specified costing)
-	[InstanceId]			UNIQUEIDENTIFIER,
+	[InstanceId]			INT,
 --  Used for tracking of raw materials, production supplies, and finished goods.
 --	We always show the non zero balances per triplet (ResourceId, ResourceNumber, BatchNumber)
 --	Manufacturing and expiry date apply to the composite pair (ResourceId and BatchCode)
@@ -52,18 +52,18 @@
 -- for debiting VAT purchase account, related resource is the good/service purchased
 -- for crediting VAT Sales account, related resource is the good/service sold
 -- for crediting VAT purchase, debiting VAT sales, or liability account: related resource is N/A
-	[RelatedResourceId]		UNIQUEIDENTIFIER, -- Good, Service, Labor, Machine usage
+	[RelatedResourceId]		INT, -- Good, Service, Labor, Machine usage
 -- The related account is the implicit  account that had two entries, one debiting and one crediting and hence removed
 -- Examples include supplier account in cash purchase, customer account in cash sales, employee account in cash payroll, 
 -- supplier account in VAT purchase entry, customer account in VAT sales entry, and WIP account in direct production.
-	[RelatedAccountId]		UNIQUEIDENTIFIER,
+	[RelatedAccountId]		INT,
 	[RelatedQuantity]		MONEY ,		-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
 -- for auditing
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 
 	CONSTRAINT [CK_DocumentLineEntries__Direction]	CHECK ([Direction] IN (-1, 1)),
 	CONSTRAINT [FK_DocumentLineEntries__DocumentLineId]	FOREIGN KEY ([DocumentLineId])	REFERENCES [dbo].[DocumentLines] ([Id]) ON DELETE CASCADE,

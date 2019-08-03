@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[dal_Documents__Assign]
 	@Documents [dbo].[UuidList] READONLY,
-	@AssigneeId UNIQUEIDENTIFIER,
+	@AssigneeId INT,
 	@Comment NVARCHAR(1024)
 AS
 BEGIN

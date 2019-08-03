@@ -1,5 +1,5 @@
 ﻿DECLARE @IfrsConcepts AS TABLE (
-	[Pk]				UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWSEQUENTIALID(),
+	[Pk]				INT IDENTITY(1,1) PRIMARY KEY,
 	[Id]				NVARCHAR (255)		,--NONUNIQUE INDEX IX_@IfrsConcepts__Id,		-- Ifrs Concept
 	[IfrsType]			NVARCHAR (255)		DEFAULT (N'Regulatory') NOT NULL, -- N'Amendment', N'Extension', N'Regulatory'
 	[IsActive]			BIT					NOT NULL DEFAULT 1,

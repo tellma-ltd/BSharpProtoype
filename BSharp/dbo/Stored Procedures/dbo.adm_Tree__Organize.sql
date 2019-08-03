@@ -9,7 +9,7 @@ AS
 */
 -- @Entities is only used for illustration. Usually, it is replaced with the actual db table name.
 	DECLARE @Entities TABLE (
-		[Id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID(),
+		[Id] INT DEFAULT 0,
 		[Node] HIERARCHYID,
 		[Name] NVARCHAR(255),
 		[Code] NVARCHAR(255)

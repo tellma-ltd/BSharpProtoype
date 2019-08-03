@@ -1,13 +1,13 @@
 ﻿CREATE TABLE [dbo].[Plans] (
-	[Id]						UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]						INT PRIMARY KEY,
 	[Activity]					NVARCHAR(255), -- Sale, Production, Consumption, 
 	[FromDate]					DATE				NOT NULL,
 	[ToDate]					DATE				NOT NULL,
-	[ResponsibilityCenterId]	UNIQUEIDENTIFIER	NOT NULL,
-	[ResourceLookup1Id]			UNIQUEIDENTIFIER,			-- UDL 
-	[ResourceLookup2Id]			UNIQUEIDENTIFIER,			-- UDL 
-	[ResourceLookup3Id]			UNIQUEIDENTIFIER,			-- UDL 
-	[ResourceLookup4Id]			UNIQUEIDENTIFIER,			-- UDL 
+	[ResponsibilityCenterId]	INT	NOT NULL,
+	[ResourceLookup1Id]			INT,			-- UDL 
+	[ResourceLookup2Id]			INT,			-- UDL 
+	[ResourceLookup3Id]			INT,			-- UDL 
+	[ResourceLookup4Id]			INT,			-- UDL 
 
 	[DailyProduction]			DECIMAL,
 	[Quantity]					VTYPE				NOT NULL DEFAULT 0, -- measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
@@ -21,9 +21,9 @@
 	[Value]						VTYPE				NOT NULL DEFAULT 0, -- equivalent in functional currency
 
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
-	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]				INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [CK_Plans__FromDate_ToDate] CHECK ([FromDate] >= [ToDate]),
 	CONSTRAINT [FK_Plans__ResponsibilityCenterId]	FOREIGN KEY ([ResponsibilityCenterId])	REFERENCES [dbo].[ResponsibilityCenters] ([Id])
 )

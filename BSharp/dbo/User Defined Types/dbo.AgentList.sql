@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[AgentList] AS TABLE (
 	[Index]						INT				IDENTITY(0, 1),
-	[Id]						UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
+	[Id]						INT NOT NULL DEFAULT 0,
 	[IsActive]					BIT					NOT NULL DEFAULT 1, -- 0 means the person is dead or the organization is close
 	[Name]						NVARCHAR (255)		NOT NULL,
 	[Name2]						NVARCHAR (255),
@@ -26,7 +26,7 @@
 	[TitleId]					INT,			-- LKT
 	[Gender]					INT,			-- ISO/IEC 5218. 0=unknown, 1=Male, 2=Female, 9=N/A
 	[ResidentialAddress]		NVARCHAR (1024), -- in the country language
-	[ImageId]					UNIQUEIDENTIFIER,
+	[ImageId]					INT,
 --	--	Social
 	[MaritalStatus]				INT,			-- LKT
 	[NumberOfChildren]			TINYINT,

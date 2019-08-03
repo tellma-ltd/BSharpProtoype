@@ -1,31 +1,31 @@
 ﻿CREATE TYPE [dbo].[DocumentList] AS TABLE (
 	[Index]									INT,
-	[Id]									UNIQUEIDENTIFIER NOT NULL,
+	[Id]									INT NOT NULL,
 	[DocumentTypeId]						NVARCHAR (255)		NOT NULL, -- selected when inserted. Cannot update.
 	[DocumentDate]							DATE				NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	[State]									NVARCHAR (255)		NOT NULL DEFAULT N'Draft', 
 	[EvidenceTypeId]						NVARCHAR(255)		NOT NULL,
-	[VoucherBookletId]						UNIQUEIDENTIFIER, -- each range might be dedicated for a special purpose
+	[VoucherBookletId]						INT, -- each range might be dedicated for a special purpose
 	[VoucherNumericReference]				INT, -- must fall between RangeStarts and RangeEnds of the booklet
 	[BlobName]								NVARCHAR(255),		-- for attachments including videos, images, and audio messages
-	[DocumentLookup1Id]						UNIQUEIDENTIFIER, -- e.g., cash machine serial in the case of a sale
-	[DocumentLookup2Id]						UNIQUEIDENTIFIER,
-	[DocumentLookup3Id]						UNIQUEIDENTIFIER,
+	[DocumentLookup1Id]						INT, -- e.g., cash machine serial in the case of a sale
+	[DocumentLookup2Id]						INT,
+	[DocumentLookup3Id]						INT,
 	[DocumentText1]							NVARCHAR (255),
 	[DocumentText2]							NVARCHAR (255),
 	[Memo]									NVARCHAR (255),	
 	[MemoIsCommon]							BIT				DEFAULT 1,
-	[CustomerAccountId]						UNIQUEIDENTIFIER,
+	[CustomerAccountId]						INT,
 	[CustomerAccountIsCommon]				BIT				DEFAULT 1,
-	[SupplierAccountId]						UNIQUEIDENTIFIER, 
+	[SupplierAccountId]						INT, 
 	[SupplierAccountIsCommon]				BIT				DEFAULT 1,
-	[EmployeeAccountId]						UNIQUEIDENTIFIER, 
+	[EmployeeAccountId]						INT, 
 	[EmployeeAccountIsCommon]				BIT				DEFAULT 1,
-	[CurrencyId]							UNIQUEIDENTIFIER, 
+	[CurrencyId]							INT, 
 	[CurrencyIsCommon]						BIT				DEFAULT 1,
-	[SourceStockAccountId]					UNIQUEIDENTIFIER, 
+	[SourceStockAccountId]					INT, 
 	[SourceStockAccountIdIsCommon]			BIT				DEFAULT 1,
-	[DestinationStockAccountId]				UNIQUEIDENTIFIER, 
+	[DestinationStockAccountId]				INT, 
 	[DestinationStockAccountIdIsCommon]		BIT				DEFAULT 1,
 	[InvoiceReference]						NVARCHAR (255),
 	[InvoiceReferenceIsCommon]				BIT				DEFAULT 1,

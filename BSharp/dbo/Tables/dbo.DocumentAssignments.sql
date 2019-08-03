@@ -1,14 +1,14 @@
 ﻿CREATE TABLE [dbo].[DocumentAssignments] (
 -- When document is assigned to someone, who in turn can only post or assign to someone else
 -- if the assignee does not open the document, any user can still forward it to someone else
-	[DocumentId]	UNIQUEIDENTIFIER Primary Key,
+	[DocumentId]	INT Primary Key,
 -- If the document gets posted or void, this record will be deleted, and recorded in DocumentAssignmentsHistory
 -- If it is in draft, it will be automatically assigned to the person who moved it to draft.
-	[AssigneeId]	UNIQUEIDENTIFIER	NOT NULL,
+	[AssigneeId]	INT	NOT NULL,
 -- When moved to draft mode, the comment is automatically To be completed in the user primary language
 	[Comment]		NVARCHAR (1024),
 	[CreatedAt]		DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]	UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]	INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 -- The first time the assignee calls the API to select the document, OpenedAt gets set
 	[OpenedAt]		DATETIMEOFFSET (7),
 	CONSTRAINT [FK_DocumentAssignments__DocumentId] FOREIGN KEY ([DocumentId]) REFERENCES [dbo].[Documents] ([Id]) ON DELETE CASCADE,

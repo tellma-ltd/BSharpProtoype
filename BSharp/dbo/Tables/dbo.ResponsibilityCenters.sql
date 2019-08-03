@@ -33,7 +33,7 @@ Produced = Sold + Closing - Opening
 
 */
 -- some operations are used in the line corresponding to production event
-	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]					INT PRIMARY KEY,
 	[ResponsibilityDomain]	NVARCHAR (255)		NOT NULL, -- Investment, Profit, Revenue, Cost
 	[Name]					NVARCHAR (255)		NOT NULL,
 	[Name2]					NVARCHAR (255),
@@ -41,19 +41,19 @@ Produced = Sold + Closing - Opening
 -- (Ifrs 8) Profit or Investment Center, Performance regularly reviewed by CODM, discrete financial information is available
 	[IsOperatingSegment]	BIT					NOT NULL DEFAULT 0, -- on each path from root to leaf, at most one O/S
 	[IsActive]				BIT					NOT NULL DEFAULT 1,
-	[ParentId]				UNIQUEIDENTIFIER, -- Only leaves can have data. Parents are represented by an extra leaf.
+	[ParentId]				INT, -- Only leaves can have data. Parents are represented by an extra leaf.
 	[Code]					NVARCHAR (255),
 -- Optional. used for convenient reporting
-	[OperationId]			UNIQUEIDENTIFIER, -- e.g., general, admin, S&M, HR, finance, production, maintenance
-	[ProductCategoryId]		UNIQUEIDENTIFIER, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
-	[GeographicRegionId]	UNIQUEIDENTIFIER, -- e.g., general, Oromia, Merkato, Kersa
-	[CustomerSegmentId]		UNIQUEIDENTIFIER, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
-	[TaxSegmentId]			UNIQUEIDENTIFIER, -- e.g., general, existing (30%), expansion (0%)
+	[OperationId]			INT, -- e.g., general, admin, S&M, HR, finance, production, maintenance
+	[ProductCategoryId]		INT, -- e.g., general, sales, services OR, Steel, Real Estate, Coffee, ..
+	[GeographicRegionId]	INT, -- e.g., general, Oromia, Merkato, Kersa
+	[CustomerSegmentId]		INT, -- e.g., general, then corporate, individual or M, F or Adult youth, etc...
+	[TaxSegmentId]			INT, -- e.g., general, existing (30%), expansion (0%)
 
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [CK_ResponsibilityCenters__ResponsibilityDomain] CHECK ([ResponsibilityDomain] IN (N'Investment', N'Profit', N'Revenue', N'Cost')),
 	CONSTRAINT [FK_ResponsibilityCenters__ParentId] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[ResponsibilityCenters] ([Id]),
 	CONSTRAINT [FK_ResponsibilityCenters__CreatedById] FOREIGN KEY ([CreatedById]) REFERENCES [dbo].[LocalUsers] ([Id]),

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[IfrsAccountsIfrsNotes] (
-	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]					INT PRIMARY KEY,
 	[IfrsAccountId]			NVARCHAR (255)	NOT NULL,
 	[IfrsNoteId]			NVARCHAR (255)	NOT NULL,
 	[Direction]				SMALLINT		NOT NULL,

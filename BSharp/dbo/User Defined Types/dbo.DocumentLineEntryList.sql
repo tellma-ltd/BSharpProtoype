@@ -2,15 +2,15 @@
 	[Index]					INT,
 	[DocumentLineIndex]		INT					NOT NULL,
 	[DocumentIndex]			INT					NOT NULL,
-	[Id]					UNIQUEIDENTIFIER NOT NULL DEFAULT NEWSEQUENTIALID(),
-	[DocumentLineId]		UNIQUEIDENTIFIER,
+	[Id]					INT NOT NULL DEFAULT 0,
+	[DocumentLineId]		INT,
 	[EntryNumber]			INT,
 	[Direction]				SMALLINT			NOT NULL,
-	[AccountId]				UNIQUEIDENTIFIER		NOT NULL,
+	[AccountId]				INT		NOT NULL,
 	[IfrsNoteId]			NVARCHAR (255),		-- Note that the responsibility center might define the Ifrs Note
-	[ResponsibilityCenterId]UNIQUEIDENTIFIER,				-- called SegmentId in B10. When not needed, we use the entity itself.
-	[ResourceId]			UNIQUEIDENTIFIER,				-- NUll because it may be specified by Account				
-	[InstanceId]			UNIQUEIDENTIFIER,
+	[ResponsibilityCenterId]INT,				-- called SegmentId in B10. When not needed, we use the entity itself.
+	[ResourceId]			INT,				-- NUll because it may be specified by Account				
+	[InstanceId]			INT,
 	[BatchCode]				NVARCHAR (255),
 	[DueDate]				DATE,
 	[Quantity]				VTYPE				NOT NULL DEFAULT 0, --  measure on which the value is based. If it is MassMeasure then [Mass] must equal [ValueMeasure] and so on.
@@ -26,8 +26,8 @@
 	[ExternalReference]		NVARCHAR (255),
 	[AdditionalReference]	NVARCHAR (255),
 
-	[RelatedResourceId]		UNIQUEIDENTIFIER, -- Good, Service, Labor, Machine usage
-	[RelatedAgentId]		UNIQUEIDENTIFIER,
+	[RelatedResourceId]		INT, -- Good, Service, Labor, Machine usage
+	[RelatedAgentId]		INT,
 	[RelatedQuantity]		MONEY ,			-- used in Tax accounts, to store the quantiy of taxable item
 	[RelatedMoneyAmount]	MONEY 				NOT NULL DEFAULT 0, -- e.g., amount subject to tax
 

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[bll_SalesOrder__Discount]
-	@FunctionId UNIQUEIDENTIFIER,
+	@FunctionId INT,
 	@Discount	DECIMAL  = NULL OUTPUT
 AS
 -- Execute with readonly privilige

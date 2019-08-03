@@ -1,4 +1,4 @@
 ﻿CREATE TYPE [dbo].[IndexedUuidList] AS TABLE (
 	[Index]	INT PRIMARY KEY,
-	[Id]	UNIQUEIDENTIFIER NOT NULL
+	[Id]	INT NOT NULL
 );

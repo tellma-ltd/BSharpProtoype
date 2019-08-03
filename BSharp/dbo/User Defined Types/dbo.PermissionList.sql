@@ -1,8 +1,8 @@
 ﻿CREATE TYPE [dbo].[PermissionList] AS TABLE (
 	[Index]			INT,
 	[HeaderIndex]	INT				NOT NULL,
-	[Id]			UNIQUEIDENTIFIER NOT NULL,
-	[RoleId]		UNIQUEIDENTIFIER,
+	[Id]			INT NOT NULL,
+	[RoleId]		INT,
 	[ViewId]		NVARCHAR (255)	NOT NULL,
 	[Level]			NVARCHAR (255)	NOT NULL,
 	[Criteria]		NVARCHAR(1024), -- compiles into LINQ expression to filter the applicability

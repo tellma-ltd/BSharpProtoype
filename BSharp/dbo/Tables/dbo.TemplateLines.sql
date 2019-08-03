@@ -1,25 +1,25 @@
 ﻿CREATE TABLE [dbo].[TemplateLines] (
-	[Id]					UNIQUEIDENTIFIER PRIMARY KEY,
-	[DocumentId]			UNIQUEIDENTIFIER	NOT NULL,
+	[Id]					INT PRIMARY KEY,
+	[DocumentId]			INT	NOT NULL,
 	[TemplateLineType]		NVARCHAR (255)		NOT NULL,
 	[ValidFrom]				DATETIME2(7)		NOT NULL DEFAULT (CONVERT (date, SYSDATETIME())),
 	-- for sales/purchase price lists
-	[ResourceId]			UNIQUEIDENTIFIER,
+	[ResourceId]			INT,
 	[Quantity]				MONEY				DEFAULT 1,
 	[Price]					MONEY,
-	[Currency]				UNIQUEIDENTIFIER,
+	[Currency]				INT,
 	[VAT]					MONEY,
 	[TOT]					MONEY,
 	-- for employee agreement
-	[AgentId]				UNIQUEIDENTIFIER,
+	[AgentId]				INT,
 	[MonthlyBasicSalary]	MONEY,
 	[HourlyOvertimeRate]	MONEY,
 	[DailyPerDiem]			MONEY,
 
 	[CreatedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]			DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]			UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]			INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 )
 GO
 CREATE INDEX [IX_TemplateLines__DocumentId] ON [dbo].[TemplateLines]([DocumentId]);

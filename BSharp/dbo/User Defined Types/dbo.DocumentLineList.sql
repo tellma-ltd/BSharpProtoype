@@ -1,10 +1,10 @@
 ﻿CREATE TYPE [dbo].[DocumentLineList] AS TABLE (
 	[Index]					INT,
 	[DocumentIndex]			INT				NOT NULL,
-	[Id]					UNIQUEIDENTIFIER NOT NULL,
-	[DocumentId]			UNIQUEIDENTIFIER NOT NULL,
+	[Id]					INT NOT NULL,
+	[DocumentId]			INT NOT NULL,
 	[LineTypeId]			NVARCHAR (255)	NOT NULL,
-	[TemplateLineId]		UNIQUEIDENTIFIER,
+	[TemplateLineId]		INT,
 	[ScalingFactor]			FLOAT,
 	
 	[EntityState]		NVARCHAR (255)	NOT NULL DEFAULT(N'Inserted'),

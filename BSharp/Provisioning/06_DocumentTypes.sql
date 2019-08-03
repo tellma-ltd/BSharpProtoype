@@ -2,8 +2,8 @@
 	[id] NVARCHAR (255)			PRIMARY KEY,
 	[DocumentCategory]			NVARCHAR(255) DEFAULT(N'Transaction'),
 	[IsOriginalSourceDocument]	BIT				DEFAULT 0, -- <=> IsVoucherReferenceRequired
-	[DefaultVoucherTypeId]		UNIQUEIDENTIFIER,		-- should we infer it from previous data entry?
-	[VoucherReferenceLength]	UNIQUEIDENTIFIER,
+	[DefaultVoucherTypeId]		INT,		-- should we infer it from previous data entry?
+	[VoucherReferenceLength]	INT,
 	[Description]				NVARCHAR(1024), 
 	[Description2]				NVARCHAR(1024),
 	[Description3]				NVARCHAR(1024),

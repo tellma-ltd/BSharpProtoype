@@ -1,11 +1,11 @@
 ﻿CREATE TABLE [dbo].[LocalUsers] (
-	[Id]				UNIQUEIDENTIFIER	PRIMARY KEY NONCLUSTERED,
+	[Id]				INT	PRIMARY KEY NONCLUSTERED,
 	[Name]				NVARCHAR (255)		NOT NULL,
 	[Name2]				NVARCHAR (255),
 	[Name3]				NVARCHAR (255),
 	[PreferredLanguage] NCHAR(2)			NOT NULL DEFAULT (N'en'), 
 	[ProfilePhoto]		VARBINARY (MAX),
-	[AgentId]			UNIQUEIDENTIFIER,
+	[AgentId]			INT,
 	[SortKey]			DECIMAL (9,4),
 	CONSTRAINT [FK_LocalUsers_Agents] FOREIGN KEY ([AgentId]) REFERENCES [dbo].[Agents] ([Id]) ON UPDATE CASCADE,
 );

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Accounts] (
-	[Id]						UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]						INT PRIMARY KEY,
 	-- For Trial balance reporting based on a custom classification
-	[CustomClassificationId]	UNIQUEIDENTIFIER,
+	[CustomClassificationId]	INT,
 	-- For IFRS reporting
 	[IfrsAccountId]				NVARCHAR (255), -- Ifrs Concept
 	[Name]						NVARCHAR (255)		NOT NULL,
@@ -10,7 +10,7 @@
 	-- To import accounts, or to control sort order, a code is required. Otherwise, it is not.
 	[Code]						NVARCHAR (255), -- how it is referred to by the business entity
 	[PartyReference]			NVARCHAR (255), -- how it is referred to by the other party
-	[AgentId]					UNIQUEIDENTIFIER,
+	[AgentId]					INT,
 /*
 	An application-wide settings specify whether to activate the following columns:
 	[IsActiveIfrsNote], when wanting to generate specific Ifrs statements and notes
@@ -33,11 +33,11 @@
 	[IfrsNoteIsFixed]			BIT					NOT NULL DEFAULT 0,
 	[IfrsNoteId]				NVARCHAR (255),		-- includes Expense by function
 
-	[ResponsibilityCenterId]	UNIQUEIDENTIFIER,
+	[ResponsibilityCenterId]	INT,
 
 -- These fields will show only if IsActiveResource, and if IfrsAccount specs require it
 	[ResourceIsFixed]			BIT					NOT NULL DEFAULT 1,
-	[ResourceId]				UNIQUEIDENTIFIER,
+	[ResourceId]				INT,
 	-- To transfer a document from requested to authorized, we need an evidence that the responsible actor
 	-- has authorized it. If responsibility changes frequently, we use roles. 
 	-- However, if responsibility center can be external to account, we may have to move these
@@ -45,14 +45,14 @@
 	[ResponsibleActorId]		INT, -- e.g., Ashenafi
 	[ResponsibleRoleId]			INT, -- e.g., Marketing Dept Manager
 	[CustodianActorId]			INT, -- Alex
-	[CustodianRoleId]			UNIQUEIDENTIFIER, -- Raw Materials Warehouse Keeper
+	[CustodianRoleId]			INT, -- Raw Materials Warehouse Keeper
 
 	[IsActive]					BIT					NOT NULL DEFAULT 1,
 	-- Audit details
 	[CreatedAt]					DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]				INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]				DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[ModifiedById]				UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]				INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	CONSTRAINT [FK_Accounts__IfrsAccountId] FOREIGN KEY ([IfrsAccountId]) REFERENCES [dbo].[IfrsAccounts] ([Id]),
 	CONSTRAINT [FK_Accounts__IfrsNoteId] FOREIGN KEY ([IfrsNoteId]) REFERENCES [dbo].[IfrsNotes] ([Id]),
 	CONSTRAINT [FK_Accounts__ResponsibilityCenterId] FOREIGN KEY ([ResponsibilityCenterId]) REFERENCES [dbo].[ResponsibilityCenters] ([Id]),

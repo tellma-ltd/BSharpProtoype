@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Documents] (
 --	This table for all business documents that are routed for requisition, authorization, completion, and posting.
 --	Its scope is 
-	[Id]									UNIQUEIDENTIFIER PRIMARY KEY,
+	[Id]									INT PRIMARY KEY,
 	-- Common to all document types
 	[DocumentTypeId]						NVARCHAR (255)	NOT NULL,	
 	[SerialNumber]							INT				NOT NULL,	-- auto generated, copied to paper if needed.
@@ -11,32 +11,32 @@
 	-- For a source socument, Evidence type == Authentication. Else source document, Attachment, trust
 	[EvidenceTypeId]						NVARCHAR(255)		NOT NULL,
 	-- When evidence type = source document
-	[VoucherBookletId]						UNIQUEIDENTIFIER, -- each range might be dedicated for a special purpose
+	[VoucherBookletId]						INT, -- each range might be dedicated for a special purpose
 	[VoucherNumericReference]				INT, -- must fall between RangeStarts and RangeEnds of the booklet
 	-- when evidence type = attachment or evidence type = source document (take snapshot of it)
 	[BlobName]								NVARCHAR(255),		-- for attachments including videos, images, and audio messages
 	-- Dynamic properties defined by document type specification
-	[DocumentLookup1Id]						UNIQUEIDENTIFIER, -- e.g., cash machine serial in the case of a sale
-	[DocumentLookup2Id]						UNIQUEIDENTIFIER,
-	[DocumentLookup3Id]						UNIQUEIDENTIFIER,
+	[DocumentLookup1Id]						INT, -- e.g., cash machine serial in the case of a sale
+	[DocumentLookup2Id]						INT,
+	[DocumentLookup3Id]						INT,
 	[DocumentText1]							NVARCHAR (255),
 	[DocumentText2]							NVARCHAR (255),
 	-- Additional properties to simplify data entry. No report should be based on them!!!
 	[Memo]									NVARCHAR (255),
 	[MemoIsCommon]							BIT				DEFAULT 1,
-	[CustomerAccountId]						UNIQUEIDENTIFIER,
+	[CustomerAccountId]						INT,
 	[CustomerAccountIsCommon]				BIT				DEFAULT 1,
-	[SupplierAccountId]						UNIQUEIDENTIFIER, 
+	[SupplierAccountId]						INT, 
 	[SupplierAccountIsCommon]				BIT				DEFAULT 1,
-	[EmployeeAccountId]						UNIQUEIDENTIFIER, 
+	[EmployeeAccountId]						INT, 
 	[EmployeeAccountIsCommon]				BIT				DEFAULT 1,
-	[CurrencyId]							UNIQUEIDENTIFIER, 
+	[CurrencyId]							INT, 
 	[CurrencyIsCommon]						BIT				DEFAULT 1,
 	-- For non cash items, as cash is usually one line only.
 	-- We are using "Stock", which includes "Farm/livestock" and any other non-cash custody.
-	[SourceStockAccountId]					UNIQUEIDENTIFIER, 
+	[SourceStockAccountId]					INT, 
 	[SourceStockAccountIdIsCommon]			BIT				DEFAULT 1,
-	[DestinationStockAccountId]				UNIQUEIDENTIFIER, 
+	[DestinationStockAccountId]				INT, 
 	[DestinationStockAccountIdIsCommon]		BIT				DEFAULT 1,
 	[InvoiceReference]						NVARCHAR (255),
 	[InvoiceReferenceIsCommon]				BIT				DEFAULT 1,
@@ -59,9 +59,9 @@
 	[NeededBy]								DATE, -- 
 	-- Offer expiry date can be put on the generated template (expires in two weeks from above date)
 	[CreatedAt]								DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-	[CreatedById]							UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[CreatedById]							INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	[ModifiedAt]							DATETIMEOFFSET(7)	NOT NULL DEFAULT SYSDATETIMEOFFSET(), 
-	[ModifiedById]							UNIQUEIDENTIFIER	NOT NULL DEFAULT CONVERT(UNIQUEIDENTIFIER, SESSION_CONTEXT(N'UserId')),
+	[ModifiedById]							INT	NOT NULL DEFAULT CONVERT(INT, SESSION_CONTEXT(N'UserId')),
 	-- If the company is in Alofi, and the server is hosted in Apia, the server time will be one day behind
 	-- So, the user will not be able to enter transactions unless DocumentDate is allowed 1d future 
 	
